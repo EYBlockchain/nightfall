@@ -2213,7 +2213,7 @@ Suppose Bob (now the owner of $\alpha$ because he knows the secret key $sk^{Z,(n
 Then he will need to effectively `reveal' the contents of his token commitment $Z_B$ in order to convince the Shield contract that he is indeed entitled to withdraw $\alpha$ from escrow.
 We call this act of converting from a `private' token commitment back to its `public' counterpart a `\textbf{burn}'.\\
 \\
-Note that by burning a token commitment, Bob is relvealing information which was previously private; namely, the asset $\alpha$. Bob could continue to use an anonymous Ethereum address when calling the `burn' transaction, but analytics of public ERC-721 transactions thereafter will likely eventually reveal that it was Bob who burned $\alpha$. We'll have Bob use his public Ethereum address `burn', for simplicity.\\
+Note that by burning a token commitment, Bob is revealing information which was previously private; namely, the asset $\alpha$. Bob could continue to use an anonymous Ethereum address when calling the `burn' transaction, but analytics of public ERC-721 transactions thereafter will likely eventually reveal that it was Bob who burned $\alpha$. We'll have Bob use his public Ethereum address `burn', for simplicity.\\
 \\
 
 \noindent
