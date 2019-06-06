@@ -22,6 +22,10 @@ export class MintPublicTokenComponent implements OnInit {
    * Flag for http request
    */
   isRequesting = false;
+  /**
+   * For Xcert token imprint
+   */
+  tokenImprint: string;
 
   /**
    * Non Fungeble Token name , read from ERC-721 contract.
@@ -43,10 +47,11 @@ export class MintPublicTokenComponent implements OnInit {
    */
   mintToken() {
       this.isRequesting = true;
-      this.tokenApiService.mintNFToken(this.tokenURI).subscribe(tokenDetails => {
+      this.tokenApiService.mintNFToken(this.tokenImprint).subscribe(tokenDetails => {
         this.isRequesting = false;
         this.toastr.success('Token Minted is Successfully');
         this.tokenURI = undefined;
+        this.tokenImprint = undefined;
         this.router.navigate(['token/public/list']);
       }, error => {
         this.isRequesting = false;

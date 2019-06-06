@@ -23,24 +23,31 @@
         </div>
         <div class="box-body">
           <div class="row form-group">
-            <div class="col-md-12">
-              <label for="name">Enter Token URI</label>
+            <div class="col-md-6">
+              <label for="name">Enter token imprint</label>
               <input
                 type="text"
-                autoFocus
                 class="form-control text-box"
-                [(ngModel)]="tokenURI"
-                (keydown)="$event.keyCode == 13 ? mintToken() : null"
-                placeholder="Please enter token URI"
+                [(ngModel)]="tokenImprint"
+                placeholder="Please enter token imprint"
                 required
               />
             </div>
+          <div class="col-md-6">
+            <p>For testing you can input: 0x0000000000000000000000000000000000000000000000000000000000000000. Otherwise you can learn what an imprint is and why it is important <a href="https://docs.0xcert.org/guide/certification.html" target="_blank">here</a>.</p>
           </div>
+        </div>
+
+        <div class="row form-group">
+            <div class="col-md-12">
+                <p>Token URI will get automatically generated based on token ID which at the current stage is automatically generated.</p>
+            </div>
+        </div>
           <div class="col-md-12">
             <div class="row">
               <button
                 class="btn btn-md btn-primary"
-                [disabled]="!tokenURI"
+                [disabled]="!tokenImprint"
                 type="button"
                 (click)="mintToken()"
               >
