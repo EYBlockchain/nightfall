@@ -149,14 +149,14 @@ export class TokenApiService {
  /**
   * Method to initiate a HTTP request to mint ERC-721 token.
   * 
-  * @param tokenURI {String} Token name
+  * @param tokenImprint {String} Token imprint
   */
-  mintNFToken (tokenURI: string) {
+  mintNFToken (tokenImprint: string) {
     const httpOptions = {
       headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
     };
 
-    const body = { tokenURI };
+    const body = { tokenImprint };
 
     const url = config.apiGateway.root + 'nft/mint';
 
