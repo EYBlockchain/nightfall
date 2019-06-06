@@ -415,12 +415,12 @@ app.route('/address/coin').get(async (req, res) => {
 app.route('/nft/mint').post(async (req, res) => {
   const { address } = req.headers;
 
-  const { tokenID, tokenURI } = req.body;
+  const { tokenID, tokenImprint } = req.body;
 
   const response = new Response();
 
   try {
-    await nfController.mintNFToken(tokenID, tokenURI, address);
+    await nfController.mintNFToken(tokenID, tokenImprint, address);
 
     response.statusCode = 200;
     response.data = {
