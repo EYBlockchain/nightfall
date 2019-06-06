@@ -15,7 +15,8 @@ const offchain = require('../rest/offchain');
 			password: 'alicesPassword'
 		}
 	 * req.body {
-	 		tokenURI: 'unique token URI'
+	 		tokenURI: 'unique token URI',
+	 		tokenImprint: 'token imprint'
 		}
 	 * @param {*} req
 	 * @param {*} res
@@ -26,6 +27,7 @@ export async function mintNFToken(req, res, next) {
     tokenID:
       req.body.tokenID || `0x${(Math.random() * 1000000000000000000000000000000e46).toString(16)}`,
     tokenURI: req.body.tokenURI || '',
+    tokenImprint: req.body.tokenImprint,
   };
 
   try {
@@ -33,8 +35,8 @@ export async function mintNFToken(req, res, next) {
 
     const user = await db.fetchUser(req.user);
 
-    await db.addNFToken(req.user, {
-      uri: reqBody.tokenURI,
+    await db.addNFToken(req.user, {      
+      uri: `http://nightfall.docker/nft/metadata/${reqBody.tokenID}`, // Token uri gets automatically assigned based on tokenID in the smart contract.
       token_id: reqBody.tokenID,
       shield_contract_address: user.selected_token_shield_contract,
       is_minted: true,
