@@ -7,7 +7,7 @@ pragma solidity ^0.5.8;
 import "./Ownable.sol";
 import "./Verifier_Registry.sol"; //we import the implementation to have visibility of its 'getters'
 import "./Verifier_Interface.sol";
-import "./FToken.sol";
+import "./ERC20Interface.sol";
 
 contract FTokenShield is Ownable {
 
@@ -66,7 +66,7 @@ depth row  width  st#     end#
 
   Verifier_Registry public verifierRegistry; //the Verifier Registry contract
   Verifier_Interface private verifier; //the verification smart contract
-  FToken private fToken; //the  ERC-20 token contract
+  ERC20Interface private fToken; //the  ERC-20 token contract
 
   //following registration of the vkId's with the Verifier Registry, we hard code their vkId's in setVkIds
   bytes32 public mintVkId;
@@ -77,7 +77,7 @@ depth row  width  st#     end#
       _owner = msg.sender;
       verifierRegistry = Verifier_Registry(_verifierRegistry);
       verifier = Verifier_Interface(_verifier);
-      fToken = FToken(_fToken);
+      fToken = ERC20Interface(_fToken);
   }
 
   /**
