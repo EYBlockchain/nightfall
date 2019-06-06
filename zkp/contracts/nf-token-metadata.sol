@@ -1,54 +1,53 @@
-/**
- * @title ERC-721 Non-Fungible Token Standard basic implementation
- * @dev see https://eips.ethereum.org/EIPS/eip-721
- * Implementation of 0xcert RC1 used. Custom changes made by Chaitanya-Konda
-
- The MIT License
-
-Copyright (c) 2017-2018 0xcert, d.o.o. https://0xcert.org
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in
-all copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-THE SOFTWARE.
- */
-
 pragma solidity 0.5.8;
 
-import "./ERC721Interface.sol";
-import "./ERC721TokenReceiver.sol";
+import "./erc721.sol";
+import "./erc721-metadata.sol";
+import "./erc721-token-receiver.sol";
 import "./SafeMath.sol";
 import "./SupportsInterface.sol";
 import "./AddressUtils.sol";
 
 /**
- * @dev Implementation of ERC-721 non-fungible token standard.
+ * @dev Optional metadata implementation for ERC-721 non-fungible token standard.
  */
-contract NFToken is
-  ERC721Interface,
+contract NFTokenMetadata is
+  ERC721,
+  ERC721Metadata,
   SupportsInterface
 {
   using SafeMath for uint256;
   using AddressUtils for address;
 
   /**
+   * @dev Error constants.
+   */
+  string constant ZERO_ADDRESS = "004001";
+  string constant NOT_VALID_NFT = "004002";
+  string constant NOT_OWNER_OR_OPERATOR = "004003";
+  string constant NOT_OWNER_APPROWED_OR_OPERATOR = "004004";
+  string constant NOT_ABLE_TO_RECEIVE_NFT = "004005";
+  string constant NFT_ALREADY_EXISTS = "004006";
+
+  /**
    * @dev Magic value of a smart contract that can recieve NFT.
    * Equal to: bytes4(keccak256("onERC721Received(address,address,uint256,bytes)")).
    */
-  bytes4 internal constant MAGIC_ON_ERC721_RECEIVED = 0x150b7a02;
+  bytes4 constant MAGIC_ON_ERC721_RECEIVED = 0x150b7a02;
+
+  /**
+   * @dev A descriptive name for a collection of NFTs.
+   */
+  string internal nftName;
+
+  /**
+   * @dev An abbreviated name for NFTs.
+   */
+  string internal nftSymbol;
+
+  /**
+   * @dev URI base for NFT metadata. NFT URI is made from base + NFT id.
+   */
+  string public uriBase;
 
   /**
    * @dev A mapping from NFT ID to the address that owns it.
@@ -63,7 +62,7 @@ contract NFToken is
    /**
    * @dev Mapping from owner address to count of his tokens.
    */
-  mapping (address => uint256) private ownerToNFTokenCount;
+  mapping (address => uint256) internal ownerToNFTokenCount;
 
   /**
    * @dev Mapping from owner address to mapping of operator addresses.
@@ -77,7 +76,7 @@ contract NFToken is
    * transfer, the approved address for that NFT (if any) is reset to none.
    * @param _from Sender of NFT (if address is zero address it indicates token creation).
    * @param _to Receiver of NFT (if address is zero address it indicates token destruction).
-   * @param _tokenId The NFT that got transferred.
+   * @param _tokenId The NFT that got transfered.
    */
   event Transfer(
     address indexed _from,
@@ -114,79 +113,24 @@ contract NFToken is
   );
 
   /**
-   * @dev Guarantees that the msg.sender is an owner or operator of the given NFT.
-   * @param _tokenId ID of the NFT to validate.
-   */
-  modifier canOperate(
-    uint256 _tokenId
-  )
-  {
-    address tokenOwner = idToOwner[_tokenId];
-    require(tokenOwner == msg.sender || ownerToOperators[tokenOwner][msg.sender]);
-    _;
-  }
-
-  /**
-   * @dev Guarantees that the msg.sender is allowed to transfer NFT.
-   * @param _tokenId ID of the NFT to transfer.
-   */
-  modifier canTransfer(
-    uint256 _tokenId
-  )
-  {
-    address tokenOwner = idToOwner[_tokenId];
-    require(
-      tokenOwner == msg.sender
-      || idToApproval[_tokenId] == msg.sender
-      || ownerToOperators[tokenOwner][msg.sender]
-    );
-    _;
-  }
-
-  /**
-   * @dev Guarantees that _tokenId is a valid Token.
-   * @param _tokenId ID of the NFT to validate.
-   */
-  modifier validNFToken(
-    uint256 _tokenId
-  )
-  {
-    require(idToOwner[_tokenId] != address(0));
-    _;
-  }
-
-  /**
    * @dev Contract constructor.
+   * @notice When implementing this contract don't forget to set nftName, nftSymbol and uriBase.
    */
   constructor()
     public
   {
-    supportedInterfaces[0x80ac58cd] = true; // ERC-721
+    supportedInterfaces[0x80ac58cd] = true; // ERC721
+    supportedInterfaces[0x5b5e139f] = true; // ERC721Metadata
   }
 
   /**
-   * added by Chaitanya-Konda
-   * @dev Mints a new NFT.
-   * @notice This function calls the internal _mint function.
-   * @param _tokenId of the NFT to be minted by the msg.sender.
-   */
-  /* function mint( //Function overloading isn't properly supported by Truffle
-    uint256 _tokenId
-  )
-    external
-  {
-    _mint(msg.sender, _tokenId);
-  } */
-
-  /**
-   * @dev Transfers the ownership of an NFT from one address to another address. This function can
-   * be changed to payable.
+   * @dev Transfers the ownership of an NFT from one address to another address.
    * @notice Throws unless `msg.sender` is the current owner, an authorized operator, or the
    * approved address for this NFT. Throws if `_from` is not the current owner. Throws if `_to` is
    * the zero address. Throws if `_tokenId` is not a valid NFT. When transfer is complete, this
-   * function checks if `_to` is a smart contract (code size > 0). If so, it calls
-   * `onERC721Received` on `_to` and throws if the return value is not
-   * `bytes4(keccak256("onERC721Received(address,uint256,bytes)"))`.
+   * function checks if `_to` is a smart contract (code size > 0). If so, it calls 
+   * `onERC721Received` on `_to` and throws if the return value is not 
+   * `bytes4(keccak256("onERC721Received(address,address,uint256,bytes)"))`.
    * @param _from The current owner of the NFT.
    * @param _to The new owner.
    * @param _tokenId The NFT to transfer.
@@ -204,10 +148,9 @@ contract NFToken is
   }
 
   /**
-   * @dev Transfers the ownership of an NFT from one address to another address. This function can
-   * be changed to payable.
+   * @dev Transfers the ownership of an NFT from one address to another address.
    * @notice This works identically to the other function with an extra data parameter, except this
-   * function just sets data to ""
+   * function just sets data to "".
    * @param _from The current owner of the NFT.
    * @param _to The new owner.
    * @param _tokenId The NFT to transfer.
@@ -225,7 +168,7 @@ contract NFToken is
   /**
    * @dev Throws unless `msg.sender` is the current owner, an authorized operator, or the approved
    * address for this NFT. Throws if `_from` is not the current owner. Throws if `_to` is the zero
-   * address. Throws if `_tokenId` is not a valid NFT. This function can be changed to payable.
+   * address. Throws if `_tokenId` is not a valid NFT.
    * @notice The caller is responsible to confirm that `_to` is capable of receiving NFTs or else
    * they maybe be permanently lost.
    * @param _from The current owner of the NFT.
@@ -238,18 +181,12 @@ contract NFToken is
     uint256 _tokenId
   )
     external
-    canTransfer(_tokenId)
-    validNFToken(_tokenId)
   {
-    address tokenOwner = idToOwner[_tokenId];
-    require(tokenOwner == _from);
-    require(_to != address(0));
-
-    _transfer(_to, _tokenId);
+    _transferFrom(_from, _to, _tokenId);
   }
 
   /**
-   * @dev Set or reaffirm the approved address for an NFT. This function can be changed to payable.
+   * @dev Set or reaffirm the approved address for an NFT.
    * @notice The zero address indicates there is no approved address. Throws unless `msg.sender` is
    * the current NFT owner, or an authorized operator of the current owner.
    * @param _approved Address to be approved for the given NFT ID.
@@ -260,11 +197,13 @@ contract NFToken is
     uint256 _tokenId
   )
     external
-    canOperate(_tokenId)
-    validNFToken(_tokenId)
   {
+    // can operate
     address tokenOwner = idToOwner[_tokenId];
-    require(_approved != tokenOwner);
+    require(
+      tokenOwner == msg.sender || ownerToOperators[tokenOwner][msg.sender],
+      NOT_OWNER_OR_OPERATOR
+    );
 
     idToApproval[_tokenId] = _approved;
     emit Approval(tokenOwner, _approved, _tokenId);
@@ -300,8 +239,8 @@ contract NFToken is
     view
     returns (uint256)
   {
-    require(_owner != address(0));
-    return _getOwnerNFTCount(_owner);
+    require(_owner != address(0), ZERO_ADDRESS);
+    return ownerToNFTokenCount[_owner];
   }
 
   /**
@@ -318,23 +257,23 @@ contract NFToken is
     returns (address _owner)
   {
     _owner = idToOwner[_tokenId];
-    require(_owner != address(0));
+    require(_owner != address(0), NOT_VALID_NFT);
   }
 
   /**
    * @dev Get the approved address for a single NFT.
    * @notice Throws if `_tokenId` is not a valid NFT.
    * @param _tokenId ID of the NFT to query the approval of.
-   * @return Address that _tokenId is approved for.
+   * @return Address that _tokenId is approved for. 
    */
   function getApproved(
     uint256 _tokenId
   )
     external
     view
-    validNFToken(_tokenId)
     returns (address)
   {
+    require(idToOwner[_tokenId] != address(0), NOT_VALID_NFT);
     return idToApproval[_tokenId];
   }
 
@@ -356,121 +295,165 @@ contract NFToken is
   }
 
   /**
-   * @dev Actually preforms the transfer.
-   * @notice Does NO checks.
-   * @param _to Address of a new owner.
-   * @param _tokenId The NFT that is being transferred.
+   * @dev Returns a descriptive name for a collection of NFTs.
+   * @return Representing name. 
    */
-  function _transfer(
-    address _to,
-    uint256 _tokenId
-  )
-    internal
+  function name()
+    external
+    view
+    returns (string memory _name)
   {
-    address from = idToOwner[_tokenId];
-    _clearApproval(_tokenId);
-
-    _removeNFToken(from, _tokenId);
-    _addNFToken(_to, _tokenId);
-
-    emit Transfer(from, _to, _tokenId);
+    _name = nftName;
   }
 
   /**
-   * @dev Mints a new NFT.
-   * @notice This is an internal function which should be called from user-implemented external
-   * mint function. Its purpose is to show and properly initialize data structures when using this
-   * implementation.
-   * @param _to The address that will own the minted NFT.
-   * @param _tokenId of the NFT to be minted by the msg.sender.
+   * @dev Returns an abbreviated name for NFTs.
+   * @return Representing symbol. 
    */
-  function _mint(
+  function symbol()
+    external
+    view
+    returns (string memory _symbol)
+  {
+    _symbol = nftSymbol;
+  }
+
+  /**
+   * @notice A distinct Uniform Resource Identifier (URI) for a given asset.
+   * @dev Throws if `_tokenId` is not a valid NFT. URIs are defined in RFC 3986. The URI may point
+   * to a JSON file that conforms to the "ERC721 Metadata JSON Schema".
+   * @param _tokenId Id for which we want URI.
+   * @return URI of _tokenId.
+   */
+  function tokenURI(
+    uint256 _tokenId
+  )
+    external
+    view
+    returns (string memory)
+  {
+    require(idToOwner[_tokenId] != address(0), NOT_VALID_NFT);
+    if (bytes(uriBase).length > 0)
+    {
+      return string(abi.encodePacked(uriBase, _uint2str(_tokenId)));
+    }
+    return "";
+  }
+
+  /**
+   * @dev Set a distinct URI (RFC 3986) base for all nfts.
+   * @notice this is a internal function which should be called from user-implemented external
+   * function. Its purpose is to show and properly initialize data structures when using this
+   * implementation.
+   * @param _uriBase String representing RFC 3986 URI base.
+   */
+  function _setUriBase(
+    string memory _uriBase
+  )
+    internal
+  {
+    uriBase = _uriBase;
+  }
+
+  /**
+   * @dev Creates a new NFT.
+   * @notice This is a private function which should be called from user-implemented external
+   * function. Its purpose is to show and properly initialize data structures when using this
+   * implementation.
+   * @param _to The address that will own the created NFT.
+   * @param _tokenId of the NFT to be created by the msg.sender.
+   */
+  function _create(
     address _to,
     uint256 _tokenId
   )
     internal
   {
-    require(_to != address(0));
-    require(idToOwner[_tokenId] == address(0));
+    require(_to != address(0), ZERO_ADDRESS);
+    require(idToOwner[_tokenId] == address(0), NFT_ALREADY_EXISTS);
 
-    _addNFToken(_to, _tokenId);
+    // add NFT
+    idToOwner[_tokenId] = _to;
+    ownerToNFTokenCount[_to] = ownerToNFTokenCount[_to].add(1);
 
     emit Transfer(address(0), _to, _tokenId);
   }
 
   /**
-   * @dev Burns a NFT.
-   * @notice This is an internal function which should be called from user-implemented external burn
-   * function. Its purpose is to show and properly initialize data structures when using this
-   * implementation. Also, note that this burn implementation allows the minter to re-mint a burned
-   * NFT.
-   * @param _tokenId ID of the NFT to be burned.
+   * @dev Destroys a NFT.
+   * @notice This is a private function which should be called from user-implemented external
+   * destroy function. Its purpose is to show and properly initialize data structures when using this
+   * implementation.
+   * @param _tokenId ID of the NFT to be destroyed.
    */
-  function _burn(
+  function _destroy(
     uint256 _tokenId
   )
     internal
-    validNFToken(_tokenId)
   {
-    address tokenOwner = idToOwner[_tokenId];
-    _clearApproval(_tokenId);
-    _removeNFToken(tokenOwner, _tokenId);
-    emit Transfer(tokenOwner, address(0), _tokenId);
-  }
+    // valid NFT
+    address owner = idToOwner[_tokenId];
+    require(owner != address(0), NOT_VALID_NFT);
 
-  /**
-   * @dev Removes a NFT from owner.
-   * @notice Use and override this function with caution. Wrong usage can have serious consequences.
-   * @param _from Address from wich we want to remove the NFT.
-   * @param _tokenId Which NFT we want to remove.
-   */
-  function _removeNFToken(
-    address _from,
-    uint256 _tokenId
-  )
-    internal
-  {
-    require(idToOwner[_tokenId] == _from);
-    ownerToNFTokenCount[_from] = ownerToNFTokenCount[_from] - 1;
+    // clear approval
+    if (idToApproval[_tokenId] != address(0))
+    {
+      delete idToApproval[_tokenId];
+    }
+
+    // remove NFT
+    assert(ownerToNFTokenCount[owner] > 0);
+    ownerToNFTokenCount[owner] = ownerToNFTokenCount[owner] - 1;
     delete idToOwner[_tokenId];
+
+    emit Transfer(owner, address(0), _tokenId);
   }
 
   /**
-   * @dev Assignes a new NFT to owner.
-   * @notice Use and override this function with caution. Wrong usage can have serious consequences.
-   * @param _to Address to wich we want to add the NFT.
-   * @param _tokenId Which NFT we want to add.
+   * @dev Helper methods that actually does the transfer.
+   * @param _from The current owner of the NFT.
+   * @param _to The new owner.
+   * @param _tokenId The NFT to transfer.
    */
-  function _addNFToken(
+  function _transferFrom(
+    address _from,
     address _to,
     uint256 _tokenId
   )
     internal
   {
-    require(idToOwner[_tokenId] == address(0));
+    // valid NFT
+    require(_from != address(0), ZERO_ADDRESS);
+    require(idToOwner[_tokenId] == _from, NOT_VALID_NFT);
+    require(_to != address(0), ZERO_ADDRESS);
 
+    // can transfer
+    require(
+      _from == msg.sender
+      || idToApproval[_tokenId] == msg.sender
+      || ownerToOperators[_from][msg.sender],
+      NOT_OWNER_APPROWED_OR_OPERATOR
+    );
+
+    // clear approval
+    if (idToApproval[_tokenId] != address(0))
+    {
+      delete idToApproval[_tokenId];
+    }
+
+    // remove NFT
+    assert(ownerToNFTokenCount[_from] > 0);
+    ownerToNFTokenCount[_from] = ownerToNFTokenCount[_from] - 1;
+
+    // add NFT
     idToOwner[_tokenId] = _to;
     ownerToNFTokenCount[_to] = ownerToNFTokenCount[_to].add(1);
+
+    emit Transfer(_from, _to, _tokenId);
   }
 
   /**
-   * @dev Helper function that gets NFT count of owner. This is needed for overriding in enumerable
-   * extension to remove double storage (gas optimization) of owner nft count.
-   * @param _owner Address for whom to query the count.
-   * @return Number of _owner NFTs.
-   */
-  function _getOwnerNFTCount(
-    address _owner
-  )
-    internal
-    view
-    returns (uint256)
-  {
-    return ownerToNFTokenCount[_owner];
-  }
-
-  /**
-   * @dev Actually perform the safeTransferFrom.
+   * @dev Helper function that actually does the safeTransfer.
    * @param _from The current owner of the NFT.
    * @param _to The new owner.
    * @param _tokenId The NFT to transfer.
@@ -482,36 +465,51 @@ contract NFToken is
     uint256 _tokenId,
     bytes memory _data
   )
-    private
-    canTransfer(_tokenId)
-    validNFToken(_tokenId)
+    internal
   {
-    address tokenOwner = idToOwner[_tokenId];
-    require(tokenOwner == _from);
-    require(_to != address(0));
-
-    _transfer(_to, _tokenId);
-
     if (_to.isContract())
     {
-      bytes4 retval = ERC721TokenReceiver(_to).onERC721Received(msg.sender, _from, _tokenId, _data);
-      require(retval == MAGIC_ON_ERC721_RECEIVED);
+      require(
+        ERC721TokenReceiver(_to)
+          .onERC721Received(msg.sender, _from, _tokenId, _data) == MAGIC_ON_ERC721_RECEIVED,
+        NOT_ABLE_TO_RECEIVE_NFT
+      );
     }
+
+    _transferFrom(_from, _to, _tokenId);
   }
 
   /**
-   * @dev Clears the current approval of a given NFT ID.
-   * @param _tokenId ID of the NFT to be transferred.
+   * @dev Helper function that changes uint to string representation.
+   * @return String representation.
    */
-  function _clearApproval(
-    uint256 _tokenId
-  )
-    private
+  function _uint2str(
+    uint256 _i
+  ) 
+    internal
+    pure
+    returns (string memory str)
   {
-    if (idToApproval[_tokenId] != address(0))
+    if (_i == 0)
     {
-      delete idToApproval[_tokenId];
+      return "0";
     }
+    uint256 j = _i;
+    uint256 length;
+    while (j != 0)
+    {
+      length++;
+      j /= 10;
+    }
+    bytes memory bstr = new bytes(length);
+    uint256 k = length - 1;
+    j = _i;
+    while (j != 0)
+    {
+      bstr[k--] = byte(uint8(48 + j % 10));
+      j /= 10;
+    }
+    str = string(bstr);
   }
-
+  
 }
