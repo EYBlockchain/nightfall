@@ -7,7 +7,7 @@ pragma solidity ^0.5.8;
 import "./Ownable.sol";
 import "./Verifier_Registry.sol"; //we import the implementation to have visibility of its 'getters'
 import "./Verifier_Interface.sol";
-import "./ERC721Interface.sol";
+import "./erc721.sol";
 
 
 
@@ -66,7 +66,7 @@ depth row  width  st#     end#
 
     Verifier_Registry public verifierRegistry; //the Verifier Registry contract
     Verifier_Interface public verifier; //the verification smart contract
-    ERC721Interface public nfToken; //the NFToken ERC-721 token contract
+    ERC721 public nfToken; //the NFToken ERC-721 token contract
 
     //following registration of the vkId's with the Verifier Registry, we hard code their vkId's in setVkIds
     bytes32 public mintVkId;
@@ -77,7 +77,7 @@ depth row  width  st#     end#
         _owner = msg.sender;
         verifierRegistry = Verifier_Registry(_verifierRegistry);
         verifier = Verifier_Interface(_verifier);
-        nfToken = ERC721Interface(_nfToken);
+        nfToken = ERC721(_nfToken);
     }
 
     /**
