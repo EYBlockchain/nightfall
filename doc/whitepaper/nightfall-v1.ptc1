@@ -1,3 +1,5 @@
 {\reset@font\ptcSfont\mtc@string\contentsline{section}{\noexpand \leavevmode \numberline {1}zk-SNARKs}{\reset@font\ptcSfont 2}{section.1}}
-{\reset@font\ptcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {1.1}High-level motivation and intuition}{\reset@font\ptcSSfont 2}{subsection.1.1}}
-{\reset@font\ptcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {1.2}Technical explanation}{\reset@font\ptcSSfont 3}{subsection.1.2}}
+{\reset@font\ptcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {1.1}Overview}{\reset@font\ptcSSfont 2}{subsection.1.1}}
+{\reset@font\ptcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {1.2}Background}{\reset@font\ptcSSfont 3}{subsection.1.2}}
+{\reset@font\ptcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {1.3}Efficiency}{\reset@font\ptcSSfont 3}{subsection.1.3}}
+{\reset@font\ptcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {1.4}Proof generation}{\reset@font\ptcSSfont 4}{subsection.1.4}}

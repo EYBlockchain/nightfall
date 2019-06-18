@@ -25,6 +25,7 @@ def shaPad216To512('field' a215...0)->(field512):
 
 //inputs for main are:
 
+// payTo, the public Ethereum address to which the burned tokens get paid
 // A, the asset identifier(hash) contained in coin z_A (public)
 // Alice's secret key SkA (private)
 // Sa the serial number for coin z_A (private)
@@ -34,9 +35,11 @@ def shaPad216To512('field' a215...0)->(field512):
 
 // Note - We truncate the 256 bit SHA hash down to 216 bits as it's a better fit with our coding scheme
 
-def main('field' A1...0, 'field' £pSkA1...0, 'field' £pSa1...0, [private field c*bh, private field c*bl]0...31, private field order, 'field' pNa1...0, 'field' pR1...0)->(field1):
+def main('field' payTo1...0, 'field' A1...0, 'field' £pSkA1...0, 'field' £pSa1...0, [private field c*bh, private field c*bl]0...31, private field order, 'field' pNa1...0, 'field' pR1...0)->(field1):
 
 //Unpack the inputs of main() to 128 bits. We'll unpack each field to its own 128 bit string for simplicity for now. Later efficiencies could be made by grouping some inputs.
+
+// We don't need to unpack payTo, because it isn't part of a hash.
 
 A255...128 = unpack128(A1)
 A127...0 = unpack128(A0)
@@ -113,5 +116,9 @@ R127...0 = unpack128(pR0)
 	Na==215...0==na
 	R==215...0==ra
 
+//**************Intertwine payTo in the proof (trivially)
+
+	payTo1 * 1 == payTo1
+	payTo0 * 1 == payTo0
 
 	return 1

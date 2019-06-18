@@ -100,7 +100,8 @@ module.exports = class CoinService {
         let collection = COLLECTIONS.COIN
         return await this.db.getDbValues(
             collection,
-            {"transfer_timestamp":{ $exists: false}, "burn_timestamp":{ $exists: false}}
+            {"transfer_timestamp":{ $exists: false}, "burn_timestamp":{ $exists: false}, coin_value: { $ne: '0x00000000000000000000000000000000' }},
+            
         );
     }
 

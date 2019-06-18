@@ -1,2 +1,4 @@
-{\reset@font\stcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {1.1}High-level motivation and intuition}{\reset@font\stcSSfont 2}{subsection.1.1}}
-{\reset@font\stcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {1.2}Technical explanation}{\reset@font\stcSSfont 3}{subsection.1.2}}
+{\reset@font\stcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {1.1}Overview}{\reset@font\stcSSfont 2}{subsection.1.1}}
+{\reset@font\stcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {1.2}Background}{\reset@font\stcSSfont 3}{subsection.1.2}}
+{\reset@font\stcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {1.3}Efficiency}{\reset@font\stcSSfont 3}{subsection.1.3}}
+{\reset@font\stcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {1.4}Proof generation}{\reset@font\stcSSfont 4}{subsection.1.4}}

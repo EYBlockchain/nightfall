@@ -1,0 +1,754 @@
+\subsection{Transfer}
+\label{sec:20Transfer}
+
+We continue with the notation and indices from the `\hyperref[sec:Mint]{Mint}' section.\\
+\\
+In the `Mint' section, we saw how Alice can create an `ERC-20 commitment' $Z_c$ within the Shield contract which:
+\begin{itemize}
+  \item hides an underlying value $c$, denominated in the currency of a particular ERC-20 contract; and
+  \item hides and binds Alice as the owner of $Z_c$ (and hence of value $c$) through an ownership keypair $(sk_A^Z, pk_A^Z)$.
+\end{itemize}
+\ \\
+Recall our privacy intentions:\\
+Alice wishes to be able to transfer ownership of an ERC-20 tokens under zero-knowledge, so that the following become private:
+	\begin{center}
+		\begin{framed}
+      \begin{enumerate}
+        \item All details of the value being transacted.
+        \item The identity of the sender of the value (`Alice').
+        \item The identity of the recipient of the value.
+      \end{enumerate}
+    \end{framed}
+  \end{center}
+
+\noindent
+Recall that minting a token commitment does not yet afford Alice any privacy (see the warning in Figure~\ref{fig:fMintWarning}). Only with subsequent transfers will the whereabouts of value $c$ and the amount Alice owns be hidden.\\
+\\
+
+
+
+Suppose Alice wishes to transfer a value $e$ to Bob under zero knowledge.\\
+\\
+First, Alice must ensure she has `minted' enough private token commitments which represent a value of at least $e$.
+For convenience, suppose Alice has minted two private token commitments, representing ownership of values $c$ and $d$, where $c+d \geq e$. That is, 
+\begin{align*}
+  Z_c := h(\;c\;|\;pk^Z_A\;|\;\sigma_c\;)\\
+  Z_d := h(\;d\;|\;pk^Z_A\;|\;\sigma_d\;)\\
+\end{align*}
+Let $f$ be the balancing amount, so that $c+d = e+f$. In this example, we can think of $f$ as Alice's `change' when she pays Bob $e$.\\
+\\
+Note that a fungible commitment transfer in Nightfall always requires \textbf{two} `input' commitments and \textbf{two} `output' commitments. There are several reasons for this:
+\begin{itemize}
+  \item We're using zk-SNARKs to attest to proof of a `transfer' computation. Due to the way a computation (a set of constraints) is abstracted into a (proving key, verification key) pair, the computations cannot be dynamically sized. That is, the number of variables (public and private inputs) being passed into the computation must be of a fixed size. Further, only fixed-sized for-loops are possible within the computation.
+  
+  Therefore, if we wanted to allow different permutations of `number of inputs' and `number of outputs', we would need to perform a trusted setup for each permutation; store the verification key for each on-chain; and distribute each proving key.
+
+  To avoid such complexity at this stage, we have chosen ``two inputs, two outputs'' for now.
+
+  \item Having just one output would mean the sender would have to own a set of commitments which sum to exactly the amount required by the recipient (no more, no less). This is impractical for most use cases.
+  \item Having just one input increases the likelihood of an observer inferring information from analysis of transactions.
+\end{itemize}
+\ \\
+
+For Alice to transfer a value of $e$ (and receive $f$ as change) within the Shield contract, under zero knowledge, she follows the steps in Figure~\ref{fig:fTransferAlgorithm}:
+
+\begin{figure}[htp]
+  \ContinuedFloat*
+	\begin{center}
+		\begin{framed}
+			\resizebox{0.85\textwidth}{!}{
+      \begin{tabular}{p{16cm}}	
+        \textbf{Fungible transfer algorithm}
+        \\
+        \midrule
+        \textbf{Bob's steps:}
+        \begin{enumerate}
+          \item Before Alice can send him anything, Bob must register his public keys $pk_B^Z$ and $pk_B^W$ against both his public Ethereum address $pk_B^E$ and his unique name `Bob' within the \hyperref[sec:pkd]{PKD}.
+          \setcounter{ongoingEnumCounter}{\value{enumi}}
+        \end{enumerate}
+        \\ \midrule
+        \textbf{Alice's steps:}
+        \begin{enumerate}
+          \setcounter{enumi}{\value{ongoingEnumCounter}}
+          \item Generate new random salts $\sigma_e$ and $\sigma_f$.
+          \item Lookup Bob's `zkp' public key $pk_B^Z$ from the PKD.
+          \item Compute $Z_e := h(\;e\;|\;pk^Z_B\;|\;\sigma_e\;)$, a token commitment which represents value $e$, to be owned by Bob.
+          \item Compute $Z_f := h(\;f\;|\;pk^Z_A\;|\;\sigma_f\;)$, a token commitment which represents value $f$, to be owned by Alice (as change).
+          \item Compute $N_c := h(\;\sigma_c\;|\;sk^Z_A\;)$, the nullifier of Alice's commitment $Z_c$.
+          \item Compute $N_d := h(\;\sigma_d\;|\;sk^Z_A\;)$, the nullifier of Alice's commitment $Z_d$.
+          \item Get $\psi_{Z_c}$ -- the sister-path of $Z_c$ -- from the Shield contract (see Details below).
+          \item Get $\psi_{Z_d}$ -- the sister-path of $Z_d$ -- from the Shield contract.
+          \item Get the latest Merkle root from the Shield contract: $\roott_{n+m+k-1}$ (see Details below).
+          \item Set public inputs $x = (\;N_c,\;N_d,\;Z_e,\;Z_f,\;\roott_{n+m+k-1})$
+          \item Set private inputs $\omega = (\;c,\;d,\;e,\;f,\;\psi_{Z_c},\;\psi_{Z_d},\;sk_A,\;\sigma_c,\;\sigma_d,\;pk_B,\;\sigma_e,\;\sigma_f)$
+          \item Select $C_{ft-transfer}(\;\omega,\;x\;)$ -- the set of constraints which are satisfied if and only if:
+          \begin{enumerate}
+            \item $pk_A$ equals $h(\;sk_A\;)$; (Proof of knowledge of the secret key to $pk_A$) (see Details for why $pk_A$ isn't an input to $C$)
+            \item $Z_c$ equals $h(\;c\;|\;pk_A\;|\;\sigma_c\;)$ (Proof of the constituent values of $Z_c$)
+            \item $Z_d$ equals $h(\;d\;|\;pk_A\;|\;\sigma_d\;)$ (Proof of the constituent values of $Z_c$)
+            
+            (See Details for why $Z_c$ and $Z_d$ aren't inputs to $C$)
+            \item $\roott_{n+m+k-1}$ equals $h\br*{\psi_{Z_c}(1)\;|...|\;h\br*{\psi_{Z_c}(d-2)\;|\;h\br*{\psi_{Z_c}(d-1)\;|\;Z_c}\;}...}$ (Proof that $Z_c$ belongs to the on-chain Merkle Tree)
+            \item $\roott_{n+m+k-1}$ equals $h\br*{\psi_{Z_d}(1)\;|...|\;h\br*{\psi_{Z_d}(d-2)\;|\;h\br*{\psi_{Z_d}(d-1)\;|\;Z_d}\;}...}$ (Proof that $Z_d$ belongs to the on-chain Merkle Tree)
+            \item $N_c$ equals $h(\;\sigma_c\;|\;sk^Z_A\;)$ (Proof that $N_c$ is indeed the nullifier of $Z_c$)
+            \item $N_d$ equals $h(\;\sigma_d\;|\;sk^Z_A\;)$ (Proof that $N_d$ is indeed the nullifier of $Z_d$)
+            \item $Z_e$ equals $h(\;e\;|\;pk^Z_B\;|\;\sigma_e\;)$ (Proof that $Z_e$ hides value $e$)
+            \item $Z_f$ equals $h(\;f\;|\;pk^Z_A\;|\;\sigma_e\;)$ (Proof that $Z_f$ hides value $f$)
+            \item $c + d$ equals $e + f$.
+            \item The two most significant bits of each of $c, d, e, f$ are both zero. This prevents the output values $e$ and $f$ from exceeding the maximum bit-lengths accepted by $C$ (and hence prevents us from creating two unspendable commitments).
+          \end{enumerate}
+          \item Generate $\pi := P(\;p_C\;,\;x,\;\omega\;)$; a proof of knowledge of satisfying arguments $(\omega, x)\;s.t.\;C(\omega, x) = 1$. Recall: $p_C$ -- the proving key for $C$ -- will be stored on Alice's computer.
+           
+          The pair $(\pi, x)$ is the zk-SNARK which attests to knowledge of private inputs $\omega$ without revealing them.
+          \item Send $(\pi, x)$ to the Shield contract for verification.
+           
+          Using web3: \texttt{nfTokenShield.transfer(proof, inputs, vkId)}
+          %remember where the count (enumi) is up to and store it in ongoingEnumCounter:
+          \setcounter{ongoingEnumCounter}{\value{enumi}}
+        \end{enumerate}
+        \ \\
+        \midrule
+        ... 
+			\end{tabular}
+		}
+		\end{framed}
+	\end{center}
+\caption{Fungible Transfer Algorithm}
+\label{fig:fTransferAlgorithm}
+\end{figure}
+
+%continue on next page
+\begin{figure}[htp]
+  \ContinuedFloat %to continue
+	\begin{center}
+		\begin{framed}
+      \begin{tabular}{p{16cm}}
+        \textbf{Shield contract's steps:}\\
+        \begin{enumerate}
+          %resume counter
+          \setcounter{enumi}{\value{ongoingEnumCounter}}
+          \item Verify the proof as correct: call a Verifier contract to verify the \texttt{(proof, inputs)} pair against the verification key represented by \texttt{vkId}.
+          \setcounter{ongoingEnumCounter}{\value{enumi}}
+        \end{enumerate}
+        \ \\
+        \midrule
+        \textbf{Verifier contract's steps:}\\
+        \begin{enumerate}
+          \setcounter{enumi}{\value{ongoingEnumCounter}}
+          \item Compute \texttt{result = verify(proof, inputs, vkId)}.
+          
+          I.e. Verify the \texttt{(proof, inputs)} pair against the verification key.
+          \item Return \texttt{result}$\in$\texttt{\{false, true\}} to the Shield contract.
+          \setcounter{ongoingEnumCounter}{\value{enumi}}
+        \end{enumerate}
+        \ \\
+        \midrule
+        \textbf{Shield contract's steps:}\\
+        \begin{enumerate}
+          \setcounter{enumi}{\value{ongoingEnumCounter}}
+          \item If \texttt{result = false}, revert.
+          \item Else:
+          \begin{enumerate}
+            \item Check $\roott_{n+m+k-1}$ is in $\rootsList$. (Revert if not).
+            \item Check $N_c$ is not already in its list of `spent' nullifiers. (Revert if not).
+            \item Check $N_d$ is not already in its list of `spent' nullifiers. (Revert if not).
+            \item Add $Z_e$ to the next empty leaf of the Merkle Tree.
+            \item Recalculate the path to the root of the Merkle Tree from $Z_e$ for future users.
+            \item Add $Z_f$ to the next empty leaf of the Merkle Tree.
+            \item Recalculate the path to the root of the Merkle Tree from $Z_f$ for future users.
+            \item Append the newly calculated root $\roott_{n+m+k}$ to the ever-increasing array $\rootsList$
+            \item Similarly append the nullifiers $N_c$ and $N_d$ to the ever-increasing array $\bm N$.
+          \end{enumerate}
+          \setcounter{ongoingEnumCounter}{\value{enumi}}
+        \end{enumerate}
+        \ \\
+        \midrule
+        \textbf{Alice's steps:}\\
+        \begin{enumerate}
+          \setcounter{enumi}{\value{ongoingEnumCounter}}
+          \item Store relevant data in her local database, including the leaf-indices of $Z_e$ and $Z_f$.
+          \item Send Bob important data privately via Whisper (using his public key $pk^W_B$):
+          \begin{enumerate}
+            \item The salt $\sigma_e$ of $Z_e$.
+            \item The public key of Bob, $pk^Z_B$, used by Alice in the preimage of $Z_e$ (for completeness, so Bob can check the correctness of $Z_e$ himself).
+            \item The value $e$.
+            \item $Z_e$.
+            \item The leaf-index of $Z_e$ within the on-chain Merkle Tree $M$ (so Bob can locate it).
+          \end{enumerate}
+          \setcounter{ongoingEnumCounter}{\value{enumi}}
+        \end{enumerate}
+        \ \\
+        \midrule
+        \textbf{Bob's steps:}\\
+        \begin{enumerate}
+          \setcounter{enumi}{\value{ongoingEnumCounter}}
+          \item Check the correctness of the information provided by Alice:
+          \begin{enumerate}
+            \item Check $Z_e$ equals $h(\;e\;|\;pk^Z_B\;|\;\sigma_e\;)$
+            \item Check that $Z_e$ is stored at the leafIndex of $M$ which Alice claimed.
+          \end{enumerate}
+          \item Store relevant data in his local database, including whether or not his `correctness checks' passed.
+          \setcounter{ongoingEnumCounter}{0} %reset for next figure
+        \end{enumerate} 
+			\end{tabular}
+		\end{framed}
+	\end{center}
+\caption{Fungible Transfer Algorithm} %same caption as the first part of this figure
+%\label{fig:fTransferAlgorithm} - no label in this second part of the figure
+\end{figure}
+
+
+
+\newpage
+\subsubsection{Details}
+\label{sec:721TransferDetails}
+
+We refer to the numbered steps of Figure~\ref{fig:nfTransferAlgorithm}.
+
+\textbf{Step $1$}
+\ \\
+This is handled at the time Bob creates an account through the \hyperref[sec:ui]{UI}.\\
+\\
+
+\textbf{Step $2$}
+\ \\
+This is handled within the \hyperref[sec:ui]{UI} microservice (or within the api-gateway).\\
+\\
+
+\textbf{Step $3$}
+\ \\
+This is handled within the api-gateway when a call is made by Alice to transfer to Bob.\\
+\\
+
+\textbf{Steps $4 - 7$}
+\ \\
+These steps are handled within \hyperref[sec:nf-token-controller]{\texttt{nf-token-controller.js}}.\\
+\\
+
+\textbf{Steps $8 - 10$}
+\ \\
+These calls to the Shield contract are handled within \hyperref[sec:nf-token-zkp]{\texttt{nf-token-zkp.js}}.\\
+\\
+It is important at this stage to note that there are an unknown number of other parties utilising the Shield contract.
+Hence, the dynamic array of tokens $\bm{Z}$ might have grown since Alice appended her $Z_c$ as the $n^{th}$ leaf of $M$ (during the \hyperref[sec:20Mint]{Mint} explanation).\\
+\\
+Suppose $Z_c$ is located at the leaf-index $n$ of the merkle tree $M$ (and hence can also be denoted $Z_n$) and $Z_d$ is located at the leaf-index $n+m$ of the merkle tree $M$.\\
+\\
+Suppose there have been $k-1$ additional tokens added to $M$ since Alice added $Z_d$.
+That is,\\
+\begin{align*}
+  \bm{Z}_{n+m+k-1} = (Z_0, Z_1,...,Z_{n-1}, Z_c, ..., Z_{n+m-1}, Z_d,..., Z_{n+m+k-1})
+\end{align*}
+We denote the corresponding Merkle Tree which holds tokens $\bm{Z}_{n+m+k-1}$ by $M_{n+m+k-1}$.
+We denote its root by $\roott_{n+m+k-1}$; an element of $\rootsList = (\roott_0, \roott_1,...,\roott_{n+m+k-1})$.\\
+\\
+
+\begin{align*}
+  \scalebox{0.9}{
+    \begin{forest}
+      [{$\roott_{n+m+k-1}:= h\br*{
+                          h\br*{
+                            h\br*{
+                              h\br*{
+                                Z_0,Z_1
+                              },
+                              ...
+                            },
+                            h\br*{
+                              h\br*{
+                                Z_{n-1},Z_c
+                              },
+                              h\br*{
+                                ...,Z_{n+m-1}
+                              }
+                            }
+                          },
+                          h\br*{
+                            h\br*{
+                              h\br*{
+                                Z_d, ...
+                              },
+                              h\br*{
+                                Z_{n+m+k-1}, 0
+                              }
+                            },
+                            0
+                          }
+                        }
+                      $}
+        [{$ h\br*{
+              h\br*{
+                h\br*{
+                  Z_0,Z_1
+                },
+                ...
+              },
+              h\br*{
+                h\br*{
+                  Z_{n-1},Z_c
+                },
+                h\br*{
+                  ...,Z_{n+m-1}
+                }
+              }
+            }
+          $}
+          [{$ h\br*{
+                h\br*{
+                  Z_0,Z_1
+                },
+                ...
+              }
+            $}
+            [{$ h\br*{
+                  Z_0,Z_1
+                }
+              $}
+              [{$Z_0$}][{$Z_1$}]
+            ]
+            [...
+              [...][...]
+            ]
+          ]
+          [{$ h\br*{
+                h\br*{
+                  Z_{n-1},Z_c
+                },
+                h\br*{
+                  ...,Z_{n+m-1}
+                }
+              }
+            $}
+            [{$ h\br*{
+                  Z_{n-1},Z_c
+                }
+              $}
+              [{$Z_{n-1}$}][{$Z_c$}]
+            ]
+            [{$ h\br*{
+                  ...,Z_{n+m-1}
+                }
+              $}
+              [...][{$Z_{n+m-1}$}]
+            ]
+          ]
+        ]
+        [{$ h\br*{
+              h\br*{
+                h\br*{
+                  Z_d, ...
+                },
+                h\br*{
+                  Z_{n+m+k-1}, 0
+                }
+              },
+              0
+            }
+          $}
+          [{$ h\br*{
+                h\br*{
+                  Z_d, ...
+                },
+                h\br*{
+                  Z_{n+m+k-1}, 0
+                }
+              }
+            $}
+            [{$ h\br*{
+                  Z_d, ...
+                }
+              $}
+              [{$Z_d$}][...]
+            ]
+            [{$ h\br*{
+                  Z_{n+m+k-1}, 0
+                }
+              $}
+              [{$Z_{n+m+k-1}$}][0]
+            ]
+          ]
+          [0
+            [0
+              [0][0]
+            ]
+            [0
+              [0][0]
+            ]
+          ]
+        ]
+      ]
+    \end{forest}
+  }
+\end{align*}
+
+
+Alice retrieves the value of the current Merkle root, $\roott_{n+m+k-1}$, from the Shield contract.\\
+\\
+Since she knows the index of $Z_c$ is $n$ within the leaves of $M_{n+m+k-1}$, Alice can also retrieve from $M_{n+m+k-1}$ the nodes of the path from the leaf $Z_n$ to the root $\roott_{n+m+k-1}$.
+We denote this path:
+\begin{align*}
+  \phi_{Z_c} = [\phi_{Z_c}(d-1), \phi_{Z_c}(d-2),..., \phi_{Z_c}(1), \phi_{Z_c}(0)]
+\end{align*}
+Note that $\phi_{Z_c}(0) = \roott_{n+m+k-1}$.\\
+\\
+Alice also retrieve's the `sister-path' of this path:
+\begin{align*}
+  \psi_{Z_c} = [\psi_{Z_c}(d-1), \psi_{Z_c}(d-2),..., \psi_{Z_c}(1), \psi_{Z_c}(0)]
+\end{align*}
+where $\psi_{Z_c}(0) = \phi_{Z_c}(0) = \roott_{n+m+k-1}$.\\
+\\
+Similarly, Alice retrieves the path and sister-path $\phi_{Z_d}$ and $\psi_{Z_d}$.\\
+\\
+For ease of reading, let's focus only on the nodes of $M_{n+m-1}$ which Alice cares about for the purposes of transferring to Bob:
+
+
+\begin{align*}
+  \scalebox{0.9}{
+    \begin{forest}
+      [{$\roott_{n+m+k-1}:= \phi_{Z_c}(0) = \psi_{Z_c}(0) = \phi_{Z_d}(0) = \psi_{Z_d}(0)$}
+        [{$\phi_{Z_c}(1) = \psi_{Z_d}(1)$}
+          [{$\psi_{Z_c}(2)$}
+            [...
+              [...][...]
+            ]
+            [...
+              [...][...]
+            ]
+          ]
+          [{$\phi_{Z_c}(2)$}
+            [{$\phi_{Z_c}(3)$}
+              [{$\psi_{Z_c}(4)$}][{$Z_c$}]
+            ]
+            [{$\psi_{Z_c}(3)$}
+              [...][...]
+            ]
+          ]
+        ]
+        [{$\phi_{Z_d}(1) = \psi_{Z_c}(1)$}
+          [{$\phi_{Z_d}(2)$}
+            [{$\phi_{Z_d}(3)$}
+              [{$Z_d$}][{$\psi_{Z_d}(4)$}]
+            ]
+            [{$\psi_{Z_d}(3)$}
+              [...][0]
+            ]
+          ]
+          [{$\psi_{Z_d}(2)$}
+            [0
+              [0][0]
+            ]
+            [0
+              [0][0]
+            ]
+          ]
+        ]
+      ]
+    \end{forest}
+  }
+\end{align*}
+
+\noindent
+Equipped with $\psi_{Z_c}$ and $\psi_{Z_d}$, Alice can prove knowledge of leaves $Z_c$ and $Z_d$ in $M_{n+m+k-1}$ without revealing $Z_c$, $Z_d$, nor the paths $\phi_{Z_c}$, $\psi_{Z_c}$, $\phi_{Z_d}$, $\psi_{Z_d}$; all she needs to reveal is the root $\roott_{n+m+k-1}$ along with her proof.\\
+
+\textbf{Steps $11 - 12$}
+\ \\
+These steps are handled within \hyperref[sec:f-token-controller]{\texttt{f-token-controller.js}}.\\
+\\
+As a reminder, we let:
+\begin{center}
+  \begin{tabular}{l l}
+    $x = (N_c,\
+          N_d,\
+          Z_e,\
+          Z_f,\
+          \roott_{n+m+k-1})$ & Public Inputs used to generate the Proof\\
+    $\bm\omega = (c, d, e, f,
+              \psi_{Z_c},\
+              \psi_{Z_d},\
+              sk_A,\
+              \sigma_c,\
+              \sigma_d,\
+              pk_B,\
+              \sigma_e,\
+              \sigma_f)$ & Private Inputs used to generate the Proof\\
+  \end{tabular}
+\end{center}
+\ \\
+
+\textbf{Steps $13 - 14$}
+\ \\
+These steps are handled within a \hyperref[sec:zokrates]{ZoKrates} container.\\
+\\
+Alice uses the $C_{ft-transfer}$ (or $C$) -- the set of constraints for a fungible transfer, located in \texttt{zkp/code/gm17/ft-transfer} (see \hyperref[sec:trustedSetup]{Trusted Setup}). $C_{ft-transfer}(\;\omega,\;x\;)$ returns a value of $true$ if Alice provides a set of valid `satisfying' arguments $(\omega, x)$ to $C$.\\
+\\
+Let's elaborate on each of the checks and calculations constraining the inputs to $C$ (we highlight public inputs in \textbf{bold} below):
+\begin{enumerate}
+  \item Calculate $h(sk_A) =: pk_A'$.\\
+    Note that this newly calculated $pk_A'$ should equal $pk_A$ (Alice's public key), but we don't need to pass $pk_A$ as a private input and explicitly check that $pk_A'=pk_A$; a check on the correctness of $sk_A$ (and hence $pk_A'$) is implicitly achieved in the next four steps:
+  \item Calculate $h(c\;|\;pk_A'\;|\;\sigma_c) =: Z_c'$.\\
+  \item Calculate $h(d\;|\;pk_A'\;|\;\sigma_d) =: Z_d'$.\\
+    Note again that these newly calculated $Z_c'$ and $Z_d'$ values should equal $Z_c$ and $Z_d$ respectively (Alice's token commitments). But we don't need to pass $Z_c$ and $Z_d$ as private inputs and explicitly check that $Z_c'=Z_c$ and $Z_d'=Z_d$; a check on the correctness of $Z_c'$ and $Z_d'$ is implicitly achieved in the next step:
+  \item Check inputs $\psi_{Z_c}=[\psi_{Z_c}(d-1), \psi_{Z_c}(d-2),..., \psi_{Z_c}(1), \bm{\psi_{Z_c}(0)=\roott_{n+m+k-1}}]$ and the newly calculated $Z_c'$ satisfy:\\
+    $h\br*{\psi_{Z_c}(1)\;|...|\;h\br*{\psi_{Z_c}(d-2)\;|\;h\br*{\psi_{Z_c}(d-1)\;|\;Z_c'}\;}...} = \roott_{n+m+k-1} ( =: \bm{\psi_{Z_c}(0)})$\\
+    Given the one-way nature of our hashing function $h$, the only feasible way we could have arrived at the correct value of $\roott_{n+m+k-1}$ is if the sister-path $\psi_{Z_c}$ is correct, and if $Z_c'$ is correct, which (working backwards) must mean that $sk_A$ is correct.
+  \item Check inputs $\psi_{Z_d}=[\psi_{Z_d}(d-1), \psi_{Z_d}(d-2),..., \psi_{Z_d}(1), \bm{\psi_{Z_d}(0)=\roott_{n+m+k-1}}]$ and the newly calculated $Z_d'$ satisfy:\\
+    $h\br*{\psi_{Z_d}(1)\;|...|\;h\br*{\psi_{Z_d}(d-2)\;|\;h\br*{\psi_{Z_d}(d-1)\;|\;Z_d'}\;}...} = \roott_{n+m+k-1} ( =: \bm{\psi_{Z_d}(0)})$\\
+    Given the one-way nature of our hashing function $h$, the only feasible way we could have arrived at the correct value of $\roott_{n+m+k-1}$ is if the sister-path $\psi_{Z_d}$ is correct, and if $Z_d'$ is correct, which (working backwards) must mean that $sk_A$ is correct.
+
+    How does the circuit know the value of $\roott_{n+m+k-1}$ is correct? It doesn't; but it is a `public input', and we can rely upon the Shield smart contract to check the correctness of all public inputs.\\
+  \\
+  We've therefore shown in the steps so far, that:
+  \begin{itemize}
+    \item[--] Alice is the owner of two token commitments (because she knows their secret key)
+    \item[--] Said token commitments are indeed leaves of the on-chain Merkle Tree $M_{n+m+k-1}$.
+  \end{itemize}
+
+  Alice commits to spending her tokens $Z_c$ and $Z_d$ in the next two steps:
+  \item Check inputs $\sigma_c, sk_A, \bm{N_c}$ satisfy:
+    $h(\sigma_c\;|\;sk_A) = \bm{N_c}$\\
+    $N_c$ is referred to as a `nullifier' because it is understood by all participants to be an indisputable commitment to spend (`nullify') a token commitment. Remember that the token commitment being spent isn't revealed; the earlier steps have allowed Alice to demonstrate hidden knowledge of the secret key $sk_A$ of a token commitment which does indeed exist. By including $sk_A$ in the nullifier's preimage, Alice is binding herself as the executor of this transfer. By including $\sigma_c$, Alice is specifying a serial number which is unique to the token $Z_c$ (thereby distinguishing this nullifier from those which would nullify any other token commitments she may own).\\
+  \item Check inputs $\sigma_d, sk_A, \bm{N_d}$ satisfy:
+    $h(\sigma_d\;|\;sk_A) = \bm{N_d}$\\
+  \item Check inputs $e, pk_B, \sigma_e, \bm{Z_e}$ satisfy:
+    $h(e\;|\;pk_B\;|\;\sigma_e) = \bm{Z_B}$\\
+    This step constrains a value of $e$ to be included in $Z_e$.
+  \item Check inputs $f, \sigma_f, \bm{Z_f}$ and the calculated $pk_A'$ satisfy:
+    $h(f\;|\;pk_A'\;|\;\sigma_f) = \bm{Z_f}$\\
+    This step constrains a value of $f$ to be included in $Z_f$. Note that the default constraints for a fungible transfer in Nightfall force the second output token commitment to be returned to the sender as `change', as we're forcing $pk_A'$ to be a constituent of $Z_f$. It would be straightforward to make edits to allow this second token commitment to be transferred to anyone.
+  \item Check that $c + d \bm{=} e + f$. We must constrain that no value is created or lost.
+  \item Check that the most significant bit of each of $c, d, e, f$ is \textbf{zero}. This prevents either (or both) of $e$ and $f$ from exceeding the maximum bit-length of input values to $C$. If these bit-lengths were exceeded, then when if we were to attempt to transfer $Z_e$ and $Z_f$ in future, they would be rejected by $C$.
+
+\end{enumerate}
+Notice how each stage is linked to the last, and that at each of the `Check' stages, private inputs are being reconciled against at least one public input (highlighted in \textbf{bold} to help you notice). By structuring the circuit $C$ in this way, we are able to share only the public inputs with the Shield contract (along with a `proof' $\pi_{C,x,\omega}$). We'll see shortly that the Shield contract checks the correctness of each of the public inputs against its current states.\\
+\\
+
+\noindent
+If all of the above constraints are satisfied by the public and private inputs, ZoKrates will generate the proof $\pi_{C,x,\omega}$; a proof of knowledge of satisfying arguments $(\omega, x) \ s.t. \ C(\omega, x) = 1$.\\
+\\
+
+\textbf{Step $15$}
+\ \\
+This transaction is handled within \hyperref[sec:f-token-zkp]{\texttt{f-token-zkp.js}}.\\
+\\
+Having generated $\pi_{C,x,\omega}$, Alice then sends the following to the Shield contract from her anonymous Ethereum address $\Xi_{A,1}$:
+\begin{align*}
+  &\pi_{C,x,\omega}\\
+  &x = (\;N_c,\;N_d,\;Z_e,\;Z_f,\;\roott_{n+m+k-1})
+\end{align*}
+\\
+Recall that everyone knows the checks and calculations which have been performed in the circuit $C_{ft-transfer}$, because it is a public file in the Nightfall repository. Further, everyone knows the verification key $vk_C$ which uniquely represents this circuit, because it has been publicly stored in the Verifier Registry contract. Therefore, when this anonymous caller (Alice) shares the pair $(x, \pi_{C,x,\omega})$, and the `unique id' of the relevant verification key $vk_C$; everyone will interpret this information as the caller's intention to transfer, and everyone will be convinced that the caller knows the secret key which permits them to transfer ownership of a token commitment.\\
+\\
+
+
+
+\textbf{Steps $16 - 18$}
+\ \\
+The Verifier Registry contract already has stored within it the verification key $vk_C$.
+It runs a verification function $V(vk_C, \pi_{C,x,\omega}, x)$.
+\begin{align*}
+  V: (vk_C, \pi_{C,x,\omega}, x) \to \{0,1\}
+\end{align*}
+where:
+\[
+    V=
+\begin{cases}
+    1,& \text{if } \pi_{C,x,\omega} \text{ and } x \text{ satisfy } vk_C\\
+    0,& \text{otherwise}
+\end{cases}
+\]
+\ \\
+
+
+
+\textbf{Steps $19 - 20$}
+\ \\
+If the Verifier contract returns $1$ ($true$) (verified) to the Shield contract, then the Shield contract will be satisfied that Alice's proof and public inputs represent her commitment to relinquish ownership of two token commitments (which only Alice knows to be $Z_c$ and $Z_d$), and to transfer ownership of value to someone via the newly proposed token commitment $Z_e$ (whilst receiving `change' in the form of $Z_f$). If the Verifier contract returns $0$, then the transaction will revert.\\
+\\
+Let's suppose Alice's $(x, \pi_{C,x,\omega})$ pair is verified.\\
+\\
+Following verification of the proof, the Shield contract will do the following:
+\begin{enumerate}
+  \item Check $\roott_{n+m+k-1}$ is in $\rootsList$.\\
+    (If not, the transfer will fail)
+  \item Check $N_c$ is not already in the list of nullifiers, which we denote $\bm{N}$.\\
+    (If $N_c$ is already in $\bm{N}$, the transfer will fail)
+  \item Check $N_d$ is not already in the list of nullifiers, which we denote $\bm{N}$.\\
+  (If $N_d$ is already in $\bm{N}$, the transfer will fail)
+  \item Append the commitment $Z_e$ to the ever-increasing array of tokens, $\bm{Z}_{n+m+k}$, so that $\bm{Z}_{n+m+k}=(Z_0, Z_1, ... Z_{n-1}, Z_c, ..., Z_d,... Z_{n+m+k-1}, Z_e)$\\
+  \item Recalculate a Merkle Root $\roott_{n+m+k}$ of $M_{n+m+k}$\\
+    \\
+  \item Append the commitment $Z_f$ to the ever-increasing array of tokens, $\bm{Z}_{n+m+k+1}$, so that $\bm{Z}_{n+m+k}=(Z_0, Z_1, ... Z_{n-1}, Z_c, ..., Z_d,... Z_{n+m+k-1}, Z_e, Z_f)$\\
+  \item Recalculate a Merkle Root $\roott_{n+m+k+1}$ of $M_{n+m+k+1}$
+    
+    Note: The `recalculation' of the Merkle Root within the Shield contract only recalculates the hashes on the path from the newly added leaf to the root. We do not recalculate the entire Merkle Tree as that would require exponentially more computations. Hence, we need to perform this `recalculation' each time a new commitment is added as a leaf.
+
+    \begin{align*}
+      \scalebox{0.9}{
+        \begin{forest}
+          [{$\roott_{n+m+k+1}:= h\br*{
+                                h\br*{
+                                  h\br*{
+                                    h\br*{
+                                      Z_0,Z_1
+                                    },
+                                    ...
+                                  },
+                                  h\br*{
+                                    h\br*{
+                                      Z_{n-1},Z_c
+                                    },
+                                    h\br*{
+                                      ...,Z_{n+m-1}
+                                    }
+                                  }
+                                },
+                                h\br*{
+                                  h\br*{
+                                    h\br*{
+                                      Z_d, ...
+                                    },
+                                    h\br*{
+                                      Z_{n+m+k-1}, Z_e
+                                    }
+                                  },
+                                  h\br*{
+                                    h\br*{
+                                      Z_f, 0
+                                    },
+                                    0
+                                  }
+                                }
+                              }
+                            $}
+            [{$ h\br*{
+                  h\br*{
+                    h\br*{
+                      Z_0,Z_1
+                    },
+                    ...
+                  },
+                  h\br*{
+                    h\br*{
+                      Z_{n-1},Z_c
+                    },
+                    h\br*{
+                      ...,Z_{n+m-1}
+                    }
+                  }
+                }
+              $}
+              [{$ h\br*{
+                    h\br*{
+                      Z_0,Z_1
+                    },
+                    ...
+                  }
+                $}
+                [{$ h\br*{
+                      Z_0,Z_1
+                    }
+                  $}
+                  [{$Z_0$}][{$Z_1$}]
+                ]
+                [...
+                  [...][...]
+                ]
+              ]
+              [{$ h\br*{
+                    h\br*{
+                      Z_{n-1},Z_c
+                    },
+                    h\br*{
+                      ...,Z_{n+m-1}
+                    }
+                  }
+                $}
+                [{$ h\br*{
+                      Z_{n-1},Z_c
+                    }
+                  $}
+                  [{$Z_{n-1}$}][{$Z_c$}]
+                ]
+                [{$ h\br*{
+                      ...,Z_{n+m-1}
+                    }
+                  $}
+                  [...][{$Z_{n+m-1}$}]
+                ]
+              ]
+            ]
+            [{$ h\br*{
+                  h\br*{
+                    h\br*{
+                      Z_d, ...
+                    },
+                    h\br*{
+                      Z_{n+m+k-1}, Z_e
+                    }
+                  },
+                  h\br*{
+                    h\br*{
+                      Z_f, 0
+                    },
+                    0
+                  }
+                }
+              $}
+              [{$ h\br*{
+                    h\br*{
+                      Z_d, ...
+                    },
+                    h\br*{
+                      Z_{n+m+k-1}, Z_e
+                    }
+                  }
+                $}
+                [{$ h\br*{
+                      Z_d, ...
+                    }
+                  $}
+                  [{$Z_d$}][...]
+                ]
+                [{$ h\br*{
+                      Z_{n+m+k-1}, Z_e
+                    }
+                  $}
+                  [{$Z_{n+m+k-1}$}][{$Z_e$}]
+                ]
+              ]
+              [{$ h\br*{
+                    h\br*{
+                      Z_f, 0
+                    },
+                    0
+                  }
+                $}
+                [{$ h\br*{
+                      Z_f, 0
+                    }
+                  $}
+                  [{$Z_f$}][0]
+                ]
+                [0
+                  [0][0]
+                ]
+              ]
+            ]
+          ]
+        \end{forest}
+      }
+    \end{align*}
+  
+  \item Append $\roott_{n+m+k+1}$ to the ever-increasing array $\rootsList$
+  \item Similarly append the nullifiers $N_c$ and $N_d$ to the ever-increasing array $\bm N$.
+\end{enumerate}
+
+
+\textbf{Steps $21 - 22$}
+\ \\
+Nightfall uses web3.shh to use Whisper. Bob's logged-in application will listen for all Whisper messages, and will try to decrypt all messages with his private whisper key $sk^W_B$. If decryption is successful, the data will be stored in the relevant database on Bob's local machine.\\
+\\
+\hyperref[sec:f-token-zkp]{\texttt{ft-token-zkp.js}} includes functions to cross-reference the data Bob has received from Alice against the data stored in the Shield contract.\\
+\ \\
+Bob will store all important information in his private database.
+

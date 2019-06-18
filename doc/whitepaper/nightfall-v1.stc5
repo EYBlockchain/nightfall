@@ -1,15 +1,15 @@
-{\reset@font\stcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {5.1}zkp}{\reset@font\stcSSfont 14}{subsection.5.1}}
-{\reset@font\stcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode \numberline {5.1.1}\texttt {f-token-controller.js}}{\reset@font\stcSSSfont 14}{subsubsection.5.1.1}}
-{\reset@font\stcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode \numberline {5.1.2}\texttt {f-token-zkp.js}}{\reset@font\stcSSSfont 14}{subsubsection.5.1.2}}
-{\reset@font\stcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode \numberline {5.1.3}\texttt {nf-token-controller.js}}{\reset@font\stcSSSfont 14}{subsubsection.5.1.3}}
-{\reset@font\stcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode \numberline {5.1.4}\texttt {nf-token-zkp.js}}{\reset@font\stcSSSfont 14}{subsubsection.5.1.4}}
-{\reset@font\stcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode \numberline {5.1.5}\texttt {zokrates.js}}{\reset@font\stcSSSfont 14}{subsubsection.5.1.5}}
-{\reset@font\stcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode \numberline {5.1.6}\texttt {vk-controller.js}}{\reset@font\stcSSSfont 14}{subsubsection.5.1.6}}
-{\reset@font\stcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode \numberline {5.1.7}\texttt {vkIds.json}}{\reset@font\stcSSSfont 15}{subsubsection.5.1.7}}
-{\reset@font\stcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode \numberline {5.1.8}\texttt {stats.json}}{\reset@font\stcSSSfont 15}{subsubsection.5.1.8}}
-{\reset@font\stcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {5.2}offchain}{\reset@font\stcSSfont 15}{subsection.5.2}}
-{\reset@font\stcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode \numberline {5.2.1}whisper}{\reset@font\stcSSSfont 15}{subsubsection.5.2.1}}
-{\reset@font\stcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode \numberline {5.2.2}pkd}{\reset@font\stcSSSfont 15}{subsubsection.5.2.2}}
-{\reset@font\stcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {5.3}accounts}{\reset@font\stcSSfont 16}{subsection.5.3}}
-{\reset@font\stcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {5.4}database}{\reset@font\stcSSfont 16}{subsection.5.4}}
-{\reset@font\stcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {5.5}ui}{\reset@font\stcSSfont 16}{subsection.5.5}}
+{\reset@font\stcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {5.1}zkp}{\reset@font\stcSSfont 15}{subsection.5.1}}
+{\reset@font\stcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode \numberline {5.1.1}\texttt {f-token-controller.js}}{\reset@font\stcSSSfont 15}{subsubsection.5.1.1}}
+{\reset@font\stcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode \numberline {5.1.2}\texttt {f-token-zkp.js}}{\reset@font\stcSSSfont 15}{subsubsection.5.1.2}}
+{\reset@font\stcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode \numberline {5.1.3}\texttt {nf-token-controller.js}}{\reset@font\stcSSSfont 15}{subsubsection.5.1.3}}
+{\reset@font\stcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode \numberline {5.1.4}\texttt {nf-token-zkp.js}}{\reset@font\stcSSSfont 15}{subsubsection.5.1.4}}
+{\reset@font\stcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode \numberline {5.1.5}\texttt {zokrates.js}}{\reset@font\stcSSSfont 15}{subsubsection.5.1.5}}
+{\reset@font\stcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode \numberline {5.1.6}\texttt {vk-controller.js}}{\reset@font\stcSSSfont 15}{subsubsection.5.1.6}}
+{\reset@font\stcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode \numberline {5.1.7}\texttt {vkIds.json}}{\reset@font\stcSSSfont 16}{subsubsection.5.1.7}}
+{\reset@font\stcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode \numberline {5.1.8}\texttt {stats.json}}{\reset@font\stcSSSfont 16}{subsubsection.5.1.8}}
+{\reset@font\stcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {5.2}offchain}{\reset@font\stcSSfont 16}{subsection.5.2}}
+{\reset@font\stcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode \numberline {5.2.1}whisper}{\reset@font\stcSSSfont 16}{subsubsection.5.2.1}}
+{\reset@font\stcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode \numberline {5.2.2}pkd}{\reset@font\stcSSSfont 16}{subsubsection.5.2.2}}
+{\reset@font\stcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {5.3}accounts}{\reset@font\stcSSfont 17}{subsection.5.3}}
+{\reset@font\stcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {5.4}database}{\reset@font\stcSSfont 17}{subsection.5.4}}
+{\reset@font\stcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {5.5}ui}{\reset@font\stcSSfont 17}{subsection.5.5}}

@@ -1,0 +1,200 @@
+\newpage
+
+\part{Introduction}
+\label{part:introduction}
+\parttoc
+
+\ \\
+\\
+\noindent
+In this document we discuss \href{https://github.com/EYBlockchain/nightfall}{Nightfall}~\cite{nightfall} - an open source suite of tools designed to enable private token transactions over the public Ethereum blockchain.\\
+\\
+Nightfall is currently compatible with smart contracts which adhere to either of Ethereum's \href{https://github.com/ethereum/EIPs/blob/master/EIPS/eip-20.md}{ERC-20} or \href{https://github.com/ethereum/EIPs/blob/master/EIPS/eip-721.md}{ERC-721} token standards. These token standards have been chosen because of their prevalence in the Ethereum community today. Nightfall could indeed be expanded in the future to support other token standards.\\
+\\
+ERC-20 tokens are fungible in the sense that they can be subdivided and individual units are interchangeable.\\
+ERC-721 tokens are non-fungible in the sense that they represent something unique.\\
+\\
+Nightfall was created by EY and released into the public domain in May 2019.
+
+
+
+
+
+\section{zk-SNARKs}
+\label{sec:zkSnarks}
+
+\subsection{Overview}
+A zero-knowledge succinct non-interactive argument of knowledge (zk-SNARK) enables a `Prover' to demonstrate that they have correctly performed a calculation on a set of inputs, without revealing some of those inputs.  This is useful in the context of privately transacting on a public blockchain. In a `traditional' (non-private, ERC-20) blockchain transfer, computations to update a sender and receiver's balances are performed publicly `on-chain' within the \texttt{transfer} function of a smart contract. This public \texttt{transfer} function requires the \texttt{to}, and \texttt{amount} values to be publicly input into the calculation.
+
+Figure~\ref{fig:codeTransfer} depicts a public token transfer over Ethereum.
+
+  \begin{figure}[h]
+    \begin{lstlisting}
+
+    /**
+    * @dev Transfer token for a specified address
+    * @param _to The address to transfer to.
+    * @param _value The amount to be transferred.
+    */
+    function _transfer(address _to, uint256 _value) internal returns (bool) {
+      require(_value <= balances[msg.sender]);
+      require(_to != address(0));
+
+      balances[msg.sender] = balances[msg.sender].sub(_value);
+      balances[_to] = balances[_to].add(_value);
+      emit Transfer(msg.sender, _to, _value);
+      return true;
+    }
+     
+    \end{lstlisting}
+    \caption{An implementation of the ERC-20 `transfer' function}
+    \label{fig:codeTransfer}
+  \end{figure}
+
+For private transfers, we require that the \texttt{to} and \texttt{amount} values to be kept private from the blockchain. This is non-trivial, because for any `traditional' computation within a smart contract, any values which are used within a calculation must necessarily be made public in order for all nodes to agree on the new states of the smart contract.
+It therefore follows that we need to design alternative computations which are performed on-chain, in order to hide the inputs to a \texttt{transfer}. We will also need to re-think how `ownership' is ascribed to tokens. 
+In a traditional ERC-20 contract the \texttt{balances} of each Ethereum address are public mappings, which is incompatible with our notion of privacy.
+We require that the public key receiving tokens is not revealed by the transfer.
+
+In order to keep the \texttt{to} and \texttt{amount} inputs private between the sender and receiver we use zk-SNARKs.
+ The sender (or `Prover') runs a computation \textit{privately} on their own computer. They pass \textit{private} inputs into this computation and get a set of \textit{public} outputs which they  share with the blockchain. The public outputs appear as unreadable encrypted values to all observers; only the sender and receiver can interpret their full meaning. In order for these encrypted values to have `meaning' to all observers, the Prover also shares with the blockchain a corresponding `proof' of having correctly computed these outputs. Together this proof and these public outputs can be verified in such a way that everyone can be convinced that a pre-agreed calculation has been performed on a particular set of private inputs to produce the public outputs. In this case, the pre-agreed calculation represents a `transfer', and verification of the proof and public outputs can be unambiguously interpreted by observers as \textit{``somebody has submitted a binding intention to transfer funds to someone else''}.
+For full details on the Prover's computation and the public outputs submitted to the blockchain, see Part~\ref{part:theProtocols}.
+
+\subsection{Background}
+Nightfall leverages the impressive mathematics of zk-SNARKs to achieve privacy.
+In this paper zk-SNARKs are used in a blackbox manner and we do not discuss how they work.
+We encourage interested readers to refer to explanations by
+\href{https://z.cash/technology/zksnarks/}{Zcash}~\cite{whatAreSNARKs},
+\href{https://medium.com/@VitalikButerin/zk-snarks-under-the-hood-b33151a013f6}{Buterin}~\cite{underTheHood},
+and \href{https://blog.ethereum.org/2016/12/05/zksnarks-in-a-nutshell/}{Reitwiessner}\cite{zkSNARKsNutshell}.
+
+Nightfall is implemented under a zk-SNARK by Groth and Maller~\cite{DBLP:conf/crypto/GrothM17}.
+This zk-SNARK is simulation extractable, meaning that it is hard for an attacker to gain an advantage from other zk-SNARKs on the blockchain.
+It has highly competitive efficiency in terms of proof size and verifier time.
+On the other hand, it's security relies on the `Knowledge-of-exponent' assumption, which is a non-standard cryptographic assumption (in other words, although it is currently considered cryptographically secure, it is more likely to be broken than RSA or discrete-log).
+
+\subsection{Efficiency}
+Nightfall has a proving system for mint, transfer, and burn algorithms for both fungible and non-fungible assets which are proven secure using a zk-SNARK.
+These protocols are described in Part~\ref{part:theProtocols}.
+In Table~\ref{table:efficiency} we give an overview of the costs of each of these algorithms.
+
+\begin{table}[H]
+	\begin{center}
+		\begin{tabular}{cccccccc}
+			\toprule
+      Algorithm &
+      Constraints &
+      \multicolumn{2}{c}{Key Sizes} & 
+      \multicolumn{2}{c}{zk-SNARK Size} & 
+      \multicolumn{2}{c}{Costs$^{4}$} \\
+      
+      \cmidrule(lr){3-4}\cmidrule(lr){5-6}\cmidrule(lr){7-8} & 
+      
+      &
+      \makecell{Proving Key$^1$\\
+      (Mbytes)} & 
+      \makecell{Verification Key$^2$\\
+      (bytes)} & 
+      \makecell{Input$^3$\\
+      (bytes)} & 
+      \makecell{Proof$^3$\\
+      (bytes)} &
+      \makecell{Gas\\
+      (M)} &
+      US \$ \\ 
+
+      \midrule
+      
+      \texttt{ft-mint} &
+      $83,000$ &
+      $32$ &
+      $414$ & 
+      $128$ &
+      $256$ &
+      $1.8$ &
+      $10.21$ \\
+
+      \texttt{ft-transfer} &
+      $2,292,000$ & 
+      $859$ & 
+      $637$ &
+      $352$ & 
+      $256$ & 
+      $2.7$ & 
+      $14.77$ \\
+      
+      \texttt{ft-burn} &
+      $1,075,000$ & 
+      $401$ & 
+      $478$ &
+      $192$ &
+      $256$ & 
+      $1.7$ & 
+      $9.49$ \\
+
+      \texttt{nft-mint} &
+      $83,000$ &
+      $32$ &
+      $510$ &
+      $160$ &
+      $256$ &
+      $1.9$ & 
+      $10.60$ \\
+
+      \texttt{nft-transfer} & 
+      $1,158,000$ & 
+      $433$ & 
+      $446$ &
+      $224$ &
+      $256$ &
+      $2.1$ & 
+      $11.52$ \\
+
+      \texttt{nft-burn} &
+      $1,075,000$ &
+      $401$ & 
+      $510$ &
+      $224$ & 
+      $256$ & 
+      $1.8$ & 
+      $10.03$ \\
+      
+      \bottomrule
+		\end{tabular}
+	\end{center}
+	\caption{Efficiency overview of Nightfall.}
+	\label{table:efficiency}
+\end{table} 
+
+$^1$ As calculated within ZoKrates during the `setup' stage. Files stored on a User's hard drive will be larger.\\
+\\
+$^2$ As calculated within ZoKrates during the `setup' stage. Each elliptic curve point of a Verification Key is encoded as either two \texttt{uint256} values (G1) or four \texttt{uint256} values (G2) within the Nightfall smart contracts, and so might be larger than shown here.\\
+\\
+$^3$ Based on their sizes when passed as calldata to the Nightfall smart contracts. Each input is a \texttt{uint256}. Each elliptic curve point of a Proof is encoded as either two \texttt{uint256} values (G1) or four \texttt{uint256} values (G2).\\
+\\
+$^{4}$ The price of Ether as at 30 May 2019 is $\$278$ (according to \href{https://coinmarketcap.com/}{Coin Market Cap}). Costs are based on a gas price of 20Gwei.\\
+Gas measurements have been taken over an entire transaction. I.e. the gas cost shown for an nft-transfer (for example) reflects the overall cost of computation and storage across \textit{all} contracts involved in that transaction.\\
+Verification of the zk-SNARK (within the Verifier contract) forms only a part of this total gas cost. The gas costs for the verification of a zk-SNARK \textit{alone} (within the Verifier contract) have not been measured, due to the difficulty in attributing the final `storage refund' at the end of a transaction between the Shield contract and the Verifier contract.
+
+
+\subsection{Proof generation}
+
+Nightfall uses \hyperref[sec:zokrates]{ZoKrates} to generate proofs. With that, the time it takes to generate a `proof' depends mainly on:
+\begin{enumerate}
+  \item the complexity of the computation being `proven'
+  \item the computing resources being allocated to generate the proof
+  \item advances in ZoKrates' efficiency for generating proofs
+\end{enumerate}
+
+\textbf{1.}
+With zk-SNARKs, a `computation' is deconstructed into a series of arithmetic constraints. In Nightfall, the most constraints come from doing sha256 hashing from the leaf of a Merkle Tree to its root (see Part~\ref{part:theProtocols}, the Protocols, for details). This repeated sha256 hashing is performed during a `transfer' and a `burn' of both fungible and non-fungible token commitments. Most notably, for a fungible transfer, we need to perform this repeated hashing from leaf-to-root twice; for two leaves.\\
+\\
+At the moment, we have configured Nightfall to have a Merkle Tree of `depth' 33. That is, we have chosen to have a huge Merkle Tree with $2^{32} = 4,294,967,296$ leaves. That's capacity for over 4 billion token commitments before the Shield Contract runs out of space. If your use-case doesn't need to accommodate so many commitments for the rest of time, then you could reduce the depth of the tree in your implementation.\\
+\\
+A different hashing function would also reduce the time to generate a proof. Pedersen commitments were considered, because they have far fewer constraints.  However the repeated hashing from the leaf of a Merkle Tree to its root must also be performed \textit{on chain} (within the Shield Contract) with Nightfall. Given that there are no precompile contracts which reduce the gas costs for Pedersen commitment calculation, it is \textit{significantly} cheaper to use sha256.\\
+\\
+\textbf{2.}
+The proof for a fungible transfer takes the most time to generate. Generally this can take anywhere from `a few minutes' to `around 10 minutes', depending on the power of the computer.\\
+\\
+\textbf{3.}
+ZoKrates is continually updated with efficiency improvements. A newer image of ZoKrates could perhaps improve upon Nightfall's current proving times.

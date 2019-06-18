@@ -201,7 +201,7 @@ depth row  width  st#     end#
     /**
     The burn function burns a commitment and transfers the asset held within the commiment to the address payTo
     */
-    function burn(address payTo, uint256[] memory _proof, uint256[] memory _inputs, bytes32 _vkId) public {
+    function burn(uint256[] memory _proof, uint256[] memory _inputs, bytes32 _vkId) public {
 
       require(_vkId == burnVkId, "Incorrect vkId");
 
@@ -209,12 +209,11 @@ depth row  width  st#     end#
       bool result = verifier.verify(_proof, _inputs, _vkId);
       require(result, "The proof has not been verified by the contract");
 
-      //convert the first two inputs back into a token ID
-      uint256 tokenId = combineUint256(_inputs[1], _inputs[0]);
-
-      //bytes27 token = packedToBytes27(_inputs[1], _inputs[0]); //the token ID value being cashed-out
-      bytes27 na = packedToBytes27(_inputs[3], _inputs[2]); //recover the nullifier
-      bytes27 inputRoot = packedToBytes27(_inputs[5], _inputs[4]);
+      uint256 payToUint = combineUint256(_inputs[1], _inputs[0]); //recover the payTo address
+      address payTo = address(payToUint); // explicitly convert to address (because we're sure no data loss will result from this)
+      uint256 tokenId = combineUint256(_inputs[3], _inputs[2]); //recover the tokenId
+      bytes27 na = packedToBytes27(_inputs[5], _inputs[4]); //recover the nullifier
+      bytes27 inputRoot = packedToBytes27(_inputs[7], _inputs[6]); //recover the root
 
       require(roots[inputRoot] == inputRoot, "The input root has never been the root of the Merkle Tree");
       require(ns[na]==0, "The token has already been nullified!");

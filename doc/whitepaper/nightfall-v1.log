@@ -1,7 +1,7 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (MiKTeX 2.9.6840) (preloaded format=pdflatex 2019.1.13)  29 MAY 2019 14:43
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (MiKTeX 2.9.6840) (preloaded format=pdflatex 2019.6.10)  12 JUN 2019 18:02
 entering extended mode
-**/Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.tex
-(/Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.tex
+**/Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.tex
+(/Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.tex
 LaTeX2e <2018-12-01>
 ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/base/article.cls"
 Document Class: article 2018/09/03 v1.4i Standard LaTeX document class
@@ -46,7 +46,7 @@ Package minitoc Info: I0002
 
 \openout3 = `nightfall-v1.mtc'.
 
- (/Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.mtc0)
+ (/Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.mtc0)
 Package minitoc Info: I0012
 (minitoc)             Long extensions (Unix-like) will be used.
 Package minitoc Info: I0031
@@ -145,6 +145,17 @@ LaTeX Font Info:    Redeclaring font encoding OMS on input line 730.
 \mathdisplay@stack=\toks20
 LaTeX Info: Redefining \[ on input line 2844.
 LaTeX Info: Redefining \] on input line 2845.
+) ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/amscls/amsthm.sty"
+Package: amsthm 2017/10/31 v2.20.4
+\thm@style=\toks21
+\thm@bodyfont=\toks22
+\thm@headfont=\toks23
+\thm@notefont=\toks24
+\thm@headpunct=\toks25
+\thm@preskip=\skip50
+\thm@postskip=\skip51
+\thm@headsep=\skip52
+\dth@everypar=\toks26
 ) ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/tools/bm.sty"
 Package: bm 2017/01/16 v1.2c Bold Symbol Support (DPC/FMi)
 \symboldoperators=\mathgroup6
@@ -155,7 +166,7 @@ LaTeX Info: Redefining \bm on input line 207.
 ) ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/forest/forest.sty"
 Package: forest 2017/07/14 v2.1.5 Drawing (linguistic) trees
  ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/pgf/frontendlayer/tikz.sty" ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/pgf/basiclayer/pgf.sty" ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/pgf/utilities/pgfrcs.sty" ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/utilities/pgfutil-common.tex"
-\pgfutil@everybye=\toks21
+\pgfutil@everybye=\toks27
 \pgfutil@tempdima=\dimen112
 \pgfutil@tempdimb=\dimen113
  ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/utilities/pgfutil-common-lists.tex")) ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/utilities/pgfutil-latex.def"
@@ -163,14 +174,14 @@ Package: forest 2017/07/14 v2.1.5 Drawing (linguistic) trees
  ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/ms/everyshi.sty"
 Package: everyshi 2001/05/15 v3.00 EveryShipout Package (MS)
 )) ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/utilities/pgfrcs.code.tex" ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/pgf.revision.tex")
-Package: pgfrcs 2019/01/05 v3.1 (3.1)
+Package: pgfrcs 2019/05/09 v3.1.3 (3.1.3)
 ))
-Package: pgf 2019/01/05 v3.1 (3.1)
+Package: pgf 2019/05/09 v3.1.3 (3.1.3)
  ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/pgf/basiclayer/pgfcore.sty" ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/graphics/graphicx.sty"
 Package: graphicx 2017/06/01 v1.1a Enhanced LaTeX Graphics (DPC,SPQR)
  ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/graphics/keyval.sty"
 Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
-\KV@toks@=\toks22
+\KV@toks@=\toks28
 ) ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/graphics/graphics.sty"
 Package: graphics 2017/06/25 v1.2c Standard LaTeX Graphics (DPC,SPQR)
  ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/graphics/trig.sty"
@@ -185,12 +196,12 @@ File: pdftex.def 2018/01/08 v1.0l Graphics/color driver for pdftex
 \Gin@req@height=\dimen114
 \Gin@req@width=\dimen115
 ) ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/pgf/systemlayer/pgfsys.sty" ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/systemlayer/pgfsys.code.tex"
-Package: pgfsys 2019/01/05 v3.1 (3.1)
+Package: pgfsys 2019/05/09 v3.1.3 (3.1.3)
  ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/utilities/pgfkeys.code.tex"
-\pgfkeys@pathtoks=\toks23
-\pgfkeys@temptoks=\toks24
+\pgfkeys@pathtoks=\toks29
+\pgfkeys@temptoks=\toks30
  ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/utilities/pgfkeysfiltered.code.tex"
-\pgfkeys@tmptoks=\toks25
+\pgfkeys@tmptoks=\toks31
 ))
 \pgf@x=\dimen116
 \pgf@y=\dimen117
@@ -200,30 +211,32 @@ Package: pgfsys 2019/01/05 v3.1 (3.1)
 \pgf@yb=\dimen121
 \pgf@xc=\dimen122
 \pgf@yc=\dimen123
+\pgf@xd=\dimen124
+\pgf@yd=\dimen125
 \w@pgf@writea=\write4
 \r@pgf@reada=\read1
 \c@pgf@counta=\count104
 \c@pgf@countb=\count105
 \c@pgf@countc=\count106
 \c@pgf@countd=\count107
-\t@pgf@toka=\toks26
-\t@pgf@tokb=\toks27
-\t@pgf@tokc=\toks28
+\t@pgf@toka=\toks32
+\t@pgf@tokb=\toks33
+\t@pgf@tokc=\toks34
 \pgf@sys@id@count=\count108
  ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/systemlayer/pgf.cfg"
-File: pgf.cfg 2019/01/05 v3.1 (3.1)
+File: pgf.cfg 2019/05/09 v3.1.3 (3.1.3)
 )
 Driver file for pgf: pgfsys-pdftex.def
  ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/systemlayer/pgfsys-pdftex.def"
-File: pgfsys-pdftex.def 2019/01/05 v3.1 (3.1)
+File: pgfsys-pdftex.def 2019/05/09 v3.1.3 (3.1.3)
  ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/systemlayer/pgfsys-common-pdf.def"
-File: pgfsys-common-pdf.def 2019/01/05 v3.1 (3.1)
+File: pgfsys-common-pdf.def 2019/05/09 v3.1.3 (3.1.3)
 ))) ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/systemlayer/pgfsyssoftpath.code.tex"
-File: pgfsyssoftpath.code.tex 2019/01/05 v3.1 (3.1)
+File: pgfsyssoftpath.code.tex 2019/05/09 v3.1.3 (3.1.3)
 \pgfsyssoftpath@smallbuffer@items=\count109
 \pgfsyssoftpath@bigbuffer@items=\count110
 ) ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/systemlayer/pgfsysprotocol.code.tex"
-File: pgfsysprotocol.code.tex 2019/01/05 v3.1 (3.1)
+File: pgfsysprotocol.code.tex 2019/05/09 v3.1.3 (3.1.3)
 )) ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/xcolor/xcolor.sty"
 Package: xcolor 2016/05/11 v2.12 LaTeX color extensions (UK)
  ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/graphics-cfg/color.cfg"
@@ -240,151 +253,152 @@ Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1369.
 Package xcolor Info: Model `Gray' substituted by `gray' on input line 1370.
 Package xcolor Info: Model `wave' substituted by `hsb' on input line 1371.
 ) ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/basiclayer/pgfcore.code.tex"
-Package: pgfcore 2019/01/05 v3.1 (3.1)
+Package: pgfcore 2019/05/09 v3.1.3 (3.1.3)
  ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/math/pgfmath.code.tex" ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/math/pgfmathcalc.code.tex" ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/math/pgfmathutil.code.tex") ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/math/pgfmathparser.code.tex"
-\pgfmath@dimen=\dimen124
+\pgfmath@dimen=\dimen126
 \pgfmath@count=\count111
 \pgfmath@box=\box32
-\pgfmath@toks=\toks29
-\pgfmath@stack@operand=\toks30
-\pgfmath@stack@operation=\toks31
+\pgfmath@toks=\toks35
+\pgfmath@stack@operand=\toks36
+\pgfmath@stack@operation=\toks37
 ) ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/math/pgfmathfunctions.code.tex" ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/math/pgfmathfunctions.basic.code.tex") ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/math/pgfmathfunctions.trigonometric.code.tex") ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/math/pgfmathfunctions.random.code.tex") ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/math/pgfmathfunctions.comparison.code.tex") ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/math/pgfmathfunctions.base.code.tex") ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/math/pgfmathfunctions.round.code.tex") ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/math/pgfmathfunctions.misc.code.tex") ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/math/pgfmathfunctions.integerarithmetics.code.tex"))) ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/math/pgfmathfloat.code.tex"
 \c@pgfmathroundto@lastzeros=\count112
-)) ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/basiclayer/pgfcorepoints.code.tex"
-File: pgfcorepoints.code.tex 2019/01/05 v3.1 (3.1)
-\pgf@picminx=\dimen125
-\pgf@picmaxx=\dimen126
-\pgf@picminy=\dimen127
-\pgf@picmaxy=\dimen128
-\pgf@pathminx=\dimen129
-\pgf@pathmaxx=\dimen130
-\pgf@pathminy=\dimen131
-\pgf@pathmaxy=\dimen132
-\pgf@xx=\dimen133
-\pgf@xy=\dimen134
-\pgf@yx=\dimen135
-\pgf@yy=\dimen136
-\pgf@zx=\dimen137
-\pgf@zy=\dimen138
+)) ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/math/pgfint.code.tex") ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/basiclayer/pgfcorepoints.code.tex"
+File: pgfcorepoints.code.tex 2019/05/09 v3.1.3 (3.1.3)
+\pgf@picminx=\dimen127
+\pgf@picmaxx=\dimen128
+\pgf@picminy=\dimen129
+\pgf@picmaxy=\dimen130
+\pgf@pathminx=\dimen131
+\pgf@pathmaxx=\dimen132
+\pgf@pathminy=\dimen133
+\pgf@pathmaxy=\dimen134
+\pgf@xx=\dimen135
+\pgf@xy=\dimen136
+\pgf@yx=\dimen137
+\pgf@yy=\dimen138
+\pgf@zx=\dimen139
+\pgf@zy=\dimen140
 ) ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/basiclayer/pgfcorepathconstruct.code.tex"
-File: pgfcorepathconstruct.code.tex 2019/01/05 v3.1 (3.1)
-\pgf@path@lastx=\dimen139
-\pgf@path@lasty=\dimen140
+File: pgfcorepathconstruct.code.tex 2019/05/09 v3.1.3 (3.1.3)
+\pgf@path@lastx=\dimen141
+\pgf@path@lasty=\dimen142
 ) ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/basiclayer/pgfcorepathusage.code.tex"
-File: pgfcorepathusage.code.tex 2019/01/05 v3.1 (3.1)
-\pgf@shorten@end@additional=\dimen141
-\pgf@shorten@start@additional=\dimen142
+File: pgfcorepathusage.code.tex 2019/05/09 v3.1.3 (3.1.3)
+\pgf@shorten@end@additional=\dimen143
+\pgf@shorten@start@additional=\dimen144
 ) ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/basiclayer/pgfcorescopes.code.tex"
-File: pgfcorescopes.code.tex 2019/01/05 v3.1 (3.1)
+File: pgfcorescopes.code.tex 2019/05/09 v3.1.3 (3.1.3)
 \pgfpic=\box33
 \pgf@hbox=\box34
 \pgf@layerbox@main=\box35
 \pgf@picture@serial@count=\count113
 ) ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/basiclayer/pgfcoregraphicstate.code.tex"
-File: pgfcoregraphicstate.code.tex 2019/01/05 v3.1 (3.1)
-\pgflinewidth=\dimen143
+File: pgfcoregraphicstate.code.tex 2019/05/09 v3.1.3 (3.1.3)
+\pgflinewidth=\dimen145
 ) ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/basiclayer/pgfcoretransformations.code.tex"
-File: pgfcoretransformations.code.tex 2019/01/05 v3.1 (3.1)
-\pgf@pt@x=\dimen144
-\pgf@pt@y=\dimen145
-\pgf@pt@temp=\dimen146
+File: pgfcoretransformations.code.tex 2019/05/09 v3.1.3 (3.1.3)
+\pgf@pt@x=\dimen146
+\pgf@pt@y=\dimen147
+\pgf@pt@temp=\dimen148
 ) ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/basiclayer/pgfcorequick.code.tex"
-File: pgfcorequick.code.tex 2019/01/05 v3.1 (3.1)
+File: pgfcorequick.code.tex 2019/05/09 v3.1.3 (3.1.3)
 ) ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/basiclayer/pgfcoreobjects.code.tex"
-File: pgfcoreobjects.code.tex 2019/01/05 v3.1 (3.1)
+File: pgfcoreobjects.code.tex 2019/05/09 v3.1.3 (3.1.3)
 ) ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/basiclayer/pgfcorepathprocessing.code.tex"
-File: pgfcorepathprocessing.code.tex 2019/01/05 v3.1 (3.1)
+File: pgfcorepathprocessing.code.tex 2019/05/09 v3.1.3 (3.1.3)
 ) ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/basiclayer/pgfcorearrows.code.tex"
-File: pgfcorearrows.code.tex 2019/01/05 v3.1 (3.1)
-\pgfarrowsep=\dimen147
+File: pgfcorearrows.code.tex 2019/05/09 v3.1.3 (3.1.3)
+\pgfarrowsep=\dimen149
 ) ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/basiclayer/pgfcoreshade.code.tex"
-File: pgfcoreshade.code.tex 2019/01/05 v3.1 (3.1)
-\pgf@max=\dimen148
+File: pgfcoreshade.code.tex 2019/05/09 v3.1.3 (3.1.3)
+\pgf@max=\dimen150
 \pgf@sys@shading@range@num=\count114
+\pgf@shadingcount=\count115
 ) ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/basiclayer/pgfcoreimage.code.tex"
-File: pgfcoreimage.code.tex 2019/01/05 v3.1 (3.1)
+File: pgfcoreimage.code.tex 2019/05/09 v3.1.3 (3.1.3)
  ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/basiclayer/pgfcoreexternal.code.tex"
-File: pgfcoreexternal.code.tex 2019/01/05 v3.1 (3.1)
+File: pgfcoreexternal.code.tex 2019/05/09 v3.1.3 (3.1.3)
 \pgfexternal@startupbox=\box36
 )) ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/basiclayer/pgfcorelayers.code.tex"
-File: pgfcorelayers.code.tex 2019/01/05 v3.1 (3.1)
+File: pgfcorelayers.code.tex 2019/05/09 v3.1.3 (3.1.3)
 ) ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/basiclayer/pgfcoretransparency.code.tex"
-File: pgfcoretransparency.code.tex 2019/01/05 v3.1 (3.1)
+File: pgfcoretransparency.code.tex 2019/05/09 v3.1.3 (3.1.3)
 ) ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/basiclayer/pgfcorepatterns.code.tex"
-File: pgfcorepatterns.code.tex 2019/01/05 v3.1 (3.1)
+File: pgfcorepatterns.code.tex 2019/05/09 v3.1.3 (3.1.3)
 ) ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/basiclayer/pgfcorerdf.code.tex"
-File: pgfcorerdf.code.tex 2019/01/05 v3.1 (3.1)
+File: pgfcorerdf.code.tex 2019/05/09 v3.1.3 (3.1.3)
 ))) ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/modules/pgfmoduleshapes.code.tex"
-File: pgfmoduleshapes.code.tex 2019/01/05 v3.1 (3.1)
+File: pgfmoduleshapes.code.tex 2019/05/09 v3.1.3 (3.1.3)
 \pgfnodeparttextbox=\box37
 ) ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/modules/pgfmoduleplot.code.tex"
-File: pgfmoduleplot.code.tex 2019/01/05 v3.1 (3.1)
+File: pgfmoduleplot.code.tex 2019/05/09 v3.1.3 (3.1.3)
 ) ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/pgf/compatibility/pgfcomp-version-0-65.sty"
-Package: pgfcomp-version-0-65 2019/01/05 v3.1 (3.1)
-\pgf@nodesepstart=\dimen149
-\pgf@nodesepend=\dimen150
+Package: pgfcomp-version-0-65 2019/05/09 v3.1.3 (3.1.3)
+\pgf@nodesepstart=\dimen151
+\pgf@nodesepend=\dimen152
 ) ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/pgf/compatibility/pgfcomp-version-1-18.sty"
-Package: pgfcomp-version-1-18 2019/01/05 v3.1 (3.1)
+Package: pgfcomp-version-1-18 2019/05/09 v3.1.3 (3.1.3)
 )) ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/pgf/utilities/pgffor.sty" ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/pgf/utilities/pgfkeys.sty" ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/utilities/pgfkeys.code.tex")) ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/pgf/math/pgfmath.sty" ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/math/pgfmath.code.tex")) ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/utilities/pgffor.code.tex"
-Package: pgffor 2019/01/05 v3.1 (3.1)
+Package: pgffor 2019/05/09 v3.1.3 (3.1.3)
  ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/math/pgfmath.code.tex")
-\pgffor@iter=\dimen151
-\pgffor@skip=\dimen152
-\pgffor@stack=\toks32
-\pgffor@toks=\toks33
+\pgffor@iter=\dimen153
+\pgffor@skip=\dimen154
+\pgffor@stack=\toks38
+\pgffor@toks=\toks39
 )) ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/frontendlayer/tikz/tikz.code.tex"
-Package: tikz 2019/01/05 v3.1 (3.1)
+Package: tikz 2019/05/09 v3.1.3 (3.1.3)
  ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/libraries/pgflibraryplothandlers.code.tex"
-File: pgflibraryplothandlers.code.tex 2019/01/05 v3.1 (3.1)
-\pgf@plot@mark@count=\count115
-\pgfplotmarksize=\dimen153
+File: pgflibraryplothandlers.code.tex 2019/05/09 v3.1.3 (3.1.3)
+\pgf@plot@mark@count=\count116
+\pgfplotmarksize=\dimen155
 )
-\tikz@lastx=\dimen154
-\tikz@lasty=\dimen155
-\tikz@lastxsaved=\dimen156
-\tikz@lastysaved=\dimen157
-\tikzleveldistance=\dimen158
-\tikzsiblingdistance=\dimen159
+\tikz@lastx=\dimen156
+\tikz@lasty=\dimen157
+\tikz@lastxsaved=\dimen158
+\tikz@lastysaved=\dimen159
+\tikzleveldistance=\dimen160
+\tikzsiblingdistance=\dimen161
 \tikz@figbox=\box38
 \tikz@figbox@bg=\box39
 \tikz@tempbox=\box40
 \tikz@tempbox@bg=\box41
-\tikztreelevel=\count116
-\tikznumberofchildren=\count117
-\tikznumberofcurrentchild=\count118
-\tikz@fig@count=\count119
+\tikztreelevel=\count117
+\tikznumberofchildren=\count118
+\tikznumberofcurrentchild=\count119
+\tikz@fig@count=\count120
  ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/modules/pgfmodulematrix.code.tex"
-File: pgfmodulematrix.code.tex 2019/01/05 v3.1 (3.1)
-\pgfmatrixcurrentrow=\count120
-\pgfmatrixcurrentcolumn=\count121
-\pgf@matrix@numberofcolumns=\count122
+File: pgfmodulematrix.code.tex 2019/05/09 v3.1.3 (3.1.3)
+\pgfmatrixcurrentrow=\count121
+\pgfmatrixcurrentcolumn=\count122
+\pgf@matrix@numberofcolumns=\count123
 )
-\tikz@expandcount=\count123
+\tikz@expandcount=\count124
  ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarytopaths.code.tex"
-File: tikzlibrarytopaths.code.tex 2019/01/05 v3.1 (3.1)
+File: tikzlibrarytopaths.code.tex 2019/05/09 v3.1.3 (3.1.3)
 ))) ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibraryshapes.code.tex"
-File: tikzlibraryshapes.code.tex 2019/01/05 v3.1 (3.1)
+File: tikzlibraryshapes.code.tex 2019/05/09 v3.1.3 (3.1.3)
  ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibraryshapes.geometric.code.tex"
-File: tikzlibraryshapes.geometric.code.tex 2019/01/05 v3.1 (3.1)
+File: tikzlibraryshapes.geometric.code.tex 2019/05/09 v3.1.3 (3.1.3)
  ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/libraries/shapes/pgflibraryshapes.geometric.code.tex"
-File: pgflibraryshapes.geometric.code.tex 2019/01/05 v3.1 (3.1)
+File: pgflibraryshapes.geometric.code.tex 2019/05/09 v3.1.3 (3.1.3)
 )) ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibraryshapes.misc.code.tex"
-File: tikzlibraryshapes.misc.code.tex 2019/01/05 v3.1 (3.1)
+File: tikzlibraryshapes.misc.code.tex 2019/05/09 v3.1.3 (3.1.3)
  ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/libraries/shapes/pgflibraryshapes.misc.code.tex"
-File: pgflibraryshapes.misc.code.tex 2019/01/05 v3.1 (3.1)
-)) ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibraryshapes.symbols.code.tex"
-File: tikzlibraryshapes.symbols.code.tex 2019/01/05 v3.1 (3.1)
-
-("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/libraries/shapes/pgflibraryshapes.symbols.code.tex"
-File: pgflibraryshapes.symbols.code.tex 2019/01/05 v3.1 (3.1)
+File: pgflibraryshapes.misc.code.tex 2019/05/09 v3.1.3 (3.1.3)
+))
+("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibraryshapes.symbols.code.tex"
+File: tikzlibraryshapes.symbols.code.tex 2019/05/09 v3.1.3 (3.1.3)
+ ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/libraries/shapes/pgflibraryshapes.symbols.code.tex"
+File: pgflibraryshapes.symbols.code.tex 2019/05/09 v3.1.3 (3.1.3)
 )) ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibraryshapes.arrows.code.tex"
-File: tikzlibraryshapes.arrows.code.tex 2019/01/05 v3.1 (3.1)
+File: tikzlibraryshapes.arrows.code.tex 2019/05/09 v3.1.3 (3.1.3)
  ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/libraries/shapes/pgflibraryshapes.arrows.code.tex"
-File: pgflibraryshapes.arrows.code.tex 2019/01/05 v3.1 (3.1)
+File: pgflibraryshapes.arrows.code.tex 2019/05/09 v3.1.3 (3.1.3)
 )) ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibraryshapes.callouts.code.tex" ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/libraries/shapes/pgflibraryshapes.callouts.code.tex")) ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibraryshapes.multipart.code.tex"
-File: tikzlibraryshapes.multipart.code.tex 2019/01/05 v3.1 (3.1)
+File: tikzlibraryshapes.multipart.code.tex 2019/05/09 v3.1.3 (3.1.3)
  ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/libraries/shapes/pgflibraryshapes.multipart.code.tex"
-File: pgflibraryshapes.multipart.code.tex 2019/01/05 v3.1 (3.1)
+File: pgflibraryshapes.multipart.code.tex 2019/05/09 v3.1.3 (3.1.3)
 \pgfnodepartlowerbox=\box42
 \pgfnodeparttwobox=\box43
 \pgfnodepartthreebox=\box44
@@ -406,18 +420,18 @@ File: pgflibraryshapes.multipart.code.tex 2019/01/05 v3.1 (3.1)
 \pgfnodepartsixbox=\box60
 \pgfnodepartfivebox=\box61
 ))) ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibraryfit.code.tex"
-File: tikzlibraryfit.code.tex 2019/01/05 v3.1 (3.1)
+File: tikzlibraryfit.code.tex 2019/05/09 v3.1.3 (3.1.3)
 ) ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/frontendlayer/tikz/libraries/tikzlibrarycalc.code.tex"
-File: tikzlibrarycalc.code.tex 2019/01/05 v3.1 (3.1)
+File: tikzlibrarycalc.code.tex 2019/05/09 v3.1.3 (3.1.3)
 ) ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/libraries/pgflibraryintersections.code.tex" ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/libraries/pgflibraryfpu.code.tex")
-\pgf@intersect@solutions=\count124
+\pgf@intersect@solutions=\count125
 ) ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/pgfopts/pgfopts.sty"
 Package: pgfopts 2014/07/10 v2.1a LaTeX package options with pgfkeys
-\pgfopts@list@add@a@toks=\toks34
-\pgfopts@list@add@b@toks=\toks35
+\pgfopts@list@add@a@toks=\toks40
+\pgfopts@list@add@b@toks=\toks41
 ) ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/etoolbox/etoolbox.sty"
 Package: etoolbox 2018/08/19 v2.5f e-TeX tools for LaTeX (JAW)
-\etb@tempcnta=\count125
+\etb@tempcnta=\count126
 ) ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/elocalloc/elocalloc.sty"
 Package: elocalloc 2016/12/15 v0.03 local allocation for LaTeX 2015+ (DPC)
 ) ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/environ/environ.sty"
@@ -425,214 +439,219 @@ Package: environ 2014/05/04 v0.3 A new way to define environments
  ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/trimspaces/trimspaces.sty"
 Package: trimspaces 2009/09/17 v1.1 Trim spaces around a token list
 )) ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/l3packages/xparse/xparse.sty" ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/l3kernel/expl3.sty"
-Package: expl3 2019-01-01 L3 programming layer (loader) 
+Package: expl3 2019-05-28 L3 programming layer (loader) 
  ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/l3kernel/expl3-code.tex"
-Package: expl3 2019-01-01 L3 programming layer (code)
-\c_max_int=\count126
-\l_tmpa_int=\count127
-\l_tmpb_int=\count128
-\g_tmpa_int=\count129
-\g_tmpb_int=\count130
-\g__kernel_prg_map_int=\count131
-\c_log_iow=\count132
-\l_iow_line_count_int=\count133
-\l__iow_line_target_int=\count134
-\l__iow_one_indent_int=\count135
-\l__iow_indent_int=\count136
-\c_zero_dim=\dimen160
-\c_max_dim=\dimen161
-\l_tmpa_dim=\dimen162
-\l_tmpb_dim=\dimen163
-\g_tmpa_dim=\dimen164
-\g_tmpb_dim=\dimen165
-\c_zero_skip=\skip50
-\c_max_skip=\skip51
-\l_tmpa_skip=\skip52
-\l_tmpb_skip=\skip53
-\g_tmpa_skip=\skip54
-\g_tmpb_skip=\skip55
+Package: expl3 2019-05-28 L3 programming layer (code)
+\c_max_int=\count127
+\l_tmpa_int=\count128
+\l_tmpb_int=\count129
+\g_tmpa_int=\count130
+\g_tmpb_int=\count131
+\g__kernel_prg_map_int=\count132
+\c__ior_term_ior=\count133
+\c_log_iow=\count134
+\l_iow_line_count_int=\count135
+\l__iow_line_target_int=\count136
+\l__iow_one_indent_int=\count137
+\l__iow_indent_int=\count138
+\c_zero_dim=\dimen162
+\c_max_dim=\dimen163
+\l_tmpa_dim=\dimen164
+\l_tmpb_dim=\dimen165
+\g_tmpa_dim=\dimen166
+\g_tmpb_dim=\dimen167
+\c_zero_skip=\skip53
+\c_max_skip=\skip54
+\l_tmpa_skip=\skip55
+\l_tmpb_skip=\skip56
+\g_tmpa_skip=\skip57
+\g_tmpb_skip=\skip58
 \c_zero_muskip=\muskip11
 \c_max_muskip=\muskip12
 \l_tmpa_muskip=\muskip13
 \l_tmpb_muskip=\muskip14
 \g_tmpa_muskip=\muskip15
 \g_tmpb_muskip=\muskip16
-\l_keys_choice_int=\count137
-\l__intarray_loop_int=\count138
-\c__intarray_sp_dim=\dimen166
-\g__intarray_font_int=\count139
-\c__fp_leading_shift_int=\count140
-\c__fp_middle_shift_int=\count141
-\c__fp_trailing_shift_int=\count142
-\c__fp_big_leading_shift_int=\count143
-\c__fp_big_middle_shift_int=\count144
-\c__fp_big_trailing_shift_int=\count145
-\c__fp_Bigg_leading_shift_int=\count146
-\c__fp_Bigg_middle_shift_int=\count147
-\c__fp_Bigg_trailing_shift_int=\count148
-\c__kernel_randint_max_int=\count149
-\g__fp_array_int=\count150
-\l__fp_array_loop_int=\count151
-\l__sort_length_int=\count152
-\l__sort_min_int=\count153
-\l__sort_top_int=\count154
-\l__sort_max_int=\count155
-\l__sort_true_max_int=\count156
-\l__sort_block_int=\count157
-\l__sort_begin_int=\count158
-\l__sort_end_int=\count159
-\l__sort_A_int=\count160
-\l__sort_B_int=\count161
-\l__sort_C_int=\count162
-\l__tl_analysis_normal_int=\count163
-\l__tl_analysis_index_int=\count164
-\l__tl_analysis_nesting_int=\count165
-\l__tl_analysis_type_int=\count166
-\l__regex_internal_a_int=\count167
-\l__regex_internal_b_int=\count168
-\l__regex_internal_c_int=\count169
-\l__regex_balance_int=\count170
-\l__regex_group_level_int=\count171
-\l__regex_mode_int=\count172
-\c__regex_cs_in_class_mode_int=\count173
-\c__regex_cs_mode_int=\count174
-\l__regex_catcodes_int=\count175
-\l__regex_default_catcodes_int=\count176
-\c__regex_catcode_D_int=\count177
-\c__regex_catcode_S_int=\count178
-\c__regex_catcode_L_int=\count179
-\c__regex_catcode_O_int=\count180
-\c__regex_catcode_A_int=\count181
-\c__regex_all_catcodes_int=\count182
-\l__regex_show_lines_int=\count183
-\l__regex_min_state_int=\count184
-\l__regex_max_state_int=\count185
-\l__regex_left_state_int=\count186
-\l__regex_right_state_int=\count187
-\l__regex_capturing_group_int=\count188
-\l__regex_min_pos_int=\count189
-\l__regex_max_pos_int=\count190
-\l__regex_curr_pos_int=\count191
-\l__regex_start_pos_int=\count192
-\l__regex_success_pos_int=\count193
-\l__regex_curr_char_int=\count194
-\l__regex_curr_catcode_int=\count195
-\l__regex_last_char_int=\count196
-\l__regex_case_changed_char_int=\count197
-\l__regex_curr_state_int=\count198
-\l__regex_step_int=\count199
-\l__regex_min_active_int=\count266
-\l__regex_max_active_int=\count267
-\l__regex_replacement_csnames_int=\count268
-\l__regex_match_count_int=\count269
-\l__regex_min_submatch_int=\count270
-\l__regex_submatch_int=\count271
-\l__regex_zeroth_submatch_int=\count272
-\g__regex_trace_regex_int=\count273
+\l_keys_choice_int=\count139
+\l__intarray_loop_int=\count140
+\c__intarray_sp_dim=\dimen168
+\g__intarray_font_int=\count141
+\c__fp_leading_shift_int=\count142
+\c__fp_middle_shift_int=\count143
+\c__fp_trailing_shift_int=\count144
+\c__fp_big_leading_shift_int=\count145
+\c__fp_big_middle_shift_int=\count146
+\c__fp_big_trailing_shift_int=\count147
+\c__fp_Bigg_leading_shift_int=\count148
+\c__fp_Bigg_middle_shift_int=\count149
+\c__fp_Bigg_trailing_shift_int=\count150
+\c__kernel_randint_max_int=\count151
+\g__fp_array_int=\count152
+\l__fp_array_loop_int=\count153
+\l__sort_length_int=\count154
+\l__sort_min_int=\count155
+\l__sort_top_int=\count156
+\l__sort_max_int=\count157
+\l__sort_true_max_int=\count158
+\l__sort_block_int=\count159
+\l__sort_begin_int=\count160
+\l__sort_end_int=\count161
+\l__sort_A_int=\count162
+\l__sort_B_int=\count163
+\l__sort_C_int=\count164
+\l__tl_analysis_normal_int=\count165
+\l__tl_analysis_index_int=\count166
+\l__tl_analysis_nesting_int=\count167
+\l__tl_analysis_type_int=\count168
+\l__regex_internal_a_int=\count169
+\l__regex_internal_b_int=\count170
+\l__regex_internal_c_int=\count171
+\l__regex_balance_int=\count172
+\l__regex_group_level_int=\count173
+\l__regex_mode_int=\count174
+\c__regex_cs_in_class_mode_int=\count175
+\c__regex_cs_mode_int=\count176
+\l__regex_catcodes_int=\count177
+\l__regex_default_catcodes_int=\count178
+\c__regex_catcode_D_int=\count179
+\c__regex_catcode_S_int=\count180
+\c__regex_catcode_L_int=\count181
+\c__regex_catcode_O_int=\count182
+\c__regex_catcode_A_int=\count183
+\c__regex_all_catcodes_int=\count184
+\l__regex_show_lines_int=\count185
+\l__regex_min_state_int=\count186
+\l__regex_max_state_int=\count187
+\l__regex_left_state_int=\count188
+\l__regex_right_state_int=\count189
+\l__regex_capturing_group_int=\count190
+\l__regex_min_pos_int=\count191
+\l__regex_max_pos_int=\count192
+\l__regex_curr_pos_int=\count193
+\l__regex_start_pos_int=\count194
+\l__regex_success_pos_int=\count195
+\l__regex_curr_char_int=\count196
+\l__regex_curr_catcode_int=\count197
+\l__regex_last_char_int=\count198
+\l__regex_case_changed_char_int=\count199
+\l__regex_curr_state_int=\count266
+\l__regex_step_int=\count267
+\l__regex_min_active_int=\count268
+\l__regex_max_active_int=\count269
+\l__regex_replacement_csnames_int=\count270
+\l__regex_match_count_int=\count271
+\l__regex_min_submatch_int=\count272
+\l__regex_submatch_int=\count273
+\l__regex_zeroth_submatch_int=\count274
+\g__regex_trace_regex_int=\count275
 \c_empty_box=\box62
 \l_tmpa_box=\box63
 \l_tmpb_box=\box64
 \g_tmpa_box=\box65
 \g_tmpb_box=\box66
-\l__box_top_dim=\dimen167
-\l__box_bottom_dim=\dimen168
-\l__box_left_dim=\dimen169
-\l__box_right_dim=\dimen170
-\l__box_top_new_dim=\dimen171
-\l__box_bottom_new_dim=\dimen172
-\l__box_left_new_dim=\dimen173
-\l__box_right_new_dim=\dimen174
+\l__box_top_dim=\dimen169
+\l__box_bottom_dim=\dimen170
+\l__box_left_dim=\dimen171
+\l__box_right_dim=\dimen172
+\l__box_top_new_dim=\dimen173
+\l__box_bottom_new_dim=\dimen174
+\l__box_left_new_dim=\dimen175
+\l__box_right_new_dim=\dimen176
 \l__box_internal_box=\box67
 \l__coffin_internal_box=\box68
-\l__coffin_internal_dim=\dimen175
-\l__coffin_offset_x_dim=\dimen176
-\l__coffin_offset_y_dim=\dimen177
-\l__coffin_x_dim=\dimen178
-\l__coffin_y_dim=\dimen179
-\l__coffin_x_prime_dim=\dimen180
-\l__coffin_y_prime_dim=\dimen181
+\l__coffin_internal_dim=\dimen177
+\l__coffin_offset_x_dim=\dimen178
+\l__coffin_offset_y_dim=\dimen179
+\l__coffin_x_dim=\dimen180
+\l__coffin_y_dim=\dimen181
+\l__coffin_x_prime_dim=\dimen182
+\l__coffin_y_prime_dim=\dimen183
 \c_empty_coffin=\box69
 \l__coffin_aligned_coffin=\box70
 \l__coffin_aligned_internal_coffin=\box71
 \l_tmpa_coffin=\box72
 \l_tmpb_coffin=\box73
-\l__coffin_display_coffin=\box74
-\l__coffin_display_coord_coffin=\box75
-\l__coffin_display_pole_coffin=\box76
-\l__coffin_display_offset_dim=\dimen182
-\l__coffin_display_x_dim=\dimen183
-\l__coffin_display_y_dim=\dimen184
+\g_tmpa_coffin=\box74
+\g_tmpb_coffin=\box75
+\l__coffin_bounding_shift_dim=\dimen184
+\l__coffin_left_corner_dim=\dimen185
+\l__coffin_right_corner_dim=\dimen186
+\l__coffin_bottom_corner_dim=\dimen187
+\l__coffin_top_corner_dim=\dimen188
+\l__coffin_scaled_total_height_dim=\dimen189
+\l__coffin_scaled_width_dim=\dimen190
+\c__coffin_empty_coffin=\box76
+\l__coffin_display_coffin=\box77
+\l__coffin_display_coord_coffin=\box78
+\l__coffin_display_pole_coffin=\box79
+\l__coffin_display_offset_dim=\dimen191
+\l__coffin_display_x_dim=\dimen192
+\l__coffin_display_y_dim=\dimen193
 \g__file_internal_ior=\read2
-\l__coffin_bounding_shift_dim=\dimen185
-\l__coffin_left_corner_dim=\dimen186
-\l__coffin_right_corner_dim=\dimen187
-\l__coffin_bottom_corner_dim=\dimen188
-\l__coffin_top_corner_dim=\dimen189
-\l__coffin_scaled_total_height_dim=\dimen190
-\l__coffin_scaled_width_dim=\dimen191
-\l__seq_internal_a_int=\count274
-\l__seq_internal_b_int=\count275
+\l__seq_internal_a_int=\count276
+\l__seq_internal_b_int=\count277
+\c__deprecation_minus_one=\count278
 ) ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/l3kernel/l3pdfmode.def"
-File: l3pdfmode.def 2019-01-01 v L3 Experimental driver: PDF mode
-\l__driver_color_stack_int=\count276
+File: l3pdfmode.def 2019-04-06 v L3 Experimental driver: PDF mode
+\l__driver_internal_box=\box80
+\l__driver_color_stack_int=\count279
 ))
-Package: xparse 2018-10-17 L3 Experimental document command parser
-\l__xparse_current_arg_int=\count277
-\g__xparse_grabber_int=\count278
-\l__xparse_m_args_int=\count279
-\l__xparse_mandatory_args_int=\count280
-\l__xparse_v_nesting_int=\count281
+Package: xparse 2019-05-28 L3 Experimental document command parser
+\l__xparse_current_arg_int=\count280
+\g__xparse_grabber_int=\count281
+\l__xparse_m_args_int=\count282
+\l__xparse_v_nesting_int=\count283
 ) ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/inlinedef/inlinedef.sty"
 Package: inlinedef 2008/07/10 v1.0 Inlined expansions within definitions
-\ID@toks=\toks36
-\ID@count=\count282
+\ID@toks=\toks42
+\ID@count=\count284
 )
-\ID@usercommands=\toks37
-\safeloop@depth=\count283
-\safeRKloop@depth=\count284
-\forest@temp@dimen=\dimen192
-\forest@temp@count=\count285
-\forest@n=\count286
-\forest@temp@global@count=\count287
-\forest@temp@toks=\toks38
-\forest@temparray@M=\count288
-\forest@temparray@N=\count289
-\forest@global@temparray@M=\count290
-\forest@global@temparray@N=\count291
-\forest@isnum@count=\count292
-\forest@isdim@nonintpart=\count293
-\forest@isdim@dimen=\dimen193
-\forest@sort@m=\count294
-\forest@sort@k=\count295
-\forest@sort@p=\count296
-\bracket@content=\toks39
-\bracket@afterthought=\toks40
-\forest@node@maxid=\count297
-\forest@process@left@M=\count298
-\forest@process@left@N=\count299
-\forest@process@right@M=\count300
-\forest@process@right@N=\count301
-\forest@process@saved@M=\count302
-\forest@process@saved@N=\count303
-\forest@process@result@M=\count304
-\forest@process@result@N=\count305
-\forest@process@n=\count306
-\forest@nodewalk@branch@toks=\toks41
-\forest@nodewalk@shortsteps@resolution=\toks42
-\forest@do@dynamics=\toks43
-\forest@box=\box77
-\forest@xg=\dimen194
-\forest@yg=\dimen195
-\forest@xs=\dimen196
-\forest@ys=\dimen197
-\forest@pi@toks=\toks44
-\forest@segment@toks=\toks45
-\forest@PIi@toks=\toks46
-\forest@PIii@toks=\toks47
+\ID@usercommands=\toks43
+\safeloop@depth=\count285
+\safeRKloop@depth=\count286
+\forest@temp@dimen=\dimen194
+\forest@temp@count=\count287
+\forest@n=\count288
+\forest@temp@global@count=\count289
+\forest@temp@toks=\toks44
+\forest@temparray@M=\count290
+\forest@temparray@N=\count291
+\forest@global@temparray@M=\count292
+\forest@global@temparray@N=\count293
+\forest@isnum@count=\count294
+\forest@isdim@nonintpart=\count295
+\forest@isdim@dimen=\dimen195
+\forest@sort@m=\count296
+\forest@sort@k=\count297
+\forest@sort@p=\count298
+\bracket@content=\toks45
+\bracket@afterthought=\toks46
+\forest@node@maxid=\count299
+\forest@process@left@M=\count300
+\forest@process@left@N=\count301
+\forest@process@right@M=\count302
+\forest@process@right@N=\count303
+\forest@process@saved@M=\count304
+\forest@process@saved@N=\count305
+\forest@process@result@M=\count306
+\forest@process@result@N=\count307
+\forest@process@n=\count308
+\forest@nodewalk@branch@toks=\toks47
+\forest@nodewalk@shortsteps@resolution=\toks48
+\forest@do@dynamics=\toks49
+\forest@box=\box81
+\forest@xg=\dimen196
+\forest@yg=\dimen197
+\forest@xs=\dimen198
+\forest@ys=\dimen199
+\forest@pi@toks=\toks50
+\forest@segment@toks=\toks51
+\forest@PIi@toks=\toks52
+\forest@PIii@toks=\toks53
 \forest@copy@in=\read3
 \forest@copy@out=\write5
-\forest@externalize@max@outer@n=\count307
-\forest@externalize@inner@n=\count308
+\forest@externalize@max@outer@n=\count309
+\forest@externalize@inner@n=\count310
 ) ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/geometry/geometry.sty"
 Package: geometry 2018/04/16 v5.8 Page Geometry
  ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/oberdiek/ifpdf.sty"
@@ -643,18 +662,18 @@ Package ifvtex Info: VTeX not detected.
 ) ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/ifxetex/ifxetex.sty"
 Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
 )
-\Gm@cnth=\count309
-\Gm@cntv=\count310
-\c@Gm@tempcnt=\count311
-\Gm@bindingoffset=\dimen198
-\Gm@wd@mp=\dimen199
-\Gm@odd@mp=\dimen256
-\Gm@even@mp=\dimen257
-\Gm@layoutwidth=\dimen258
-\Gm@layoutheight=\dimen259
-\Gm@layouthoffset=\dimen260
-\Gm@layoutvoffset=\dimen261
-\Gm@dimlist=\toks48
+\Gm@cnth=\count311
+\Gm@cntv=\count312
+\c@Gm@tempcnt=\count313
+\Gm@bindingoffset=\dimen256
+\Gm@wd@mp=\dimen257
+\Gm@odd@mp=\dimen258
+\Gm@even@mp=\dimen259
+\Gm@layoutwidth=\dimen260
+\Gm@layoutheight=\dimen261
+\Gm@layouthoffset=\dimen262
+\Gm@layoutvoffset=\dimen263
+\Gm@dimlist=\toks54
  ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/geometry/geometry.cfg")) ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/hyperref/hyperref.sty"
 Package: hyperref 2018/11/30 v6.88e Hypertext links for LaTeX
  ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/oberdiek/hobsub-hyperref.sty"
@@ -699,15 +718,15 @@ Package: auxhook 2016/05/16 v1.4 Hooks for auxiliary files (HO)
 ) ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/oberdiek/kvoptions.sty"
 Package: kvoptions 2016/05/16 v3.12 Key value format for package options (HO)
 )
-\@linkdim=\dimen262
-\Hy@linkcounter=\count312
-\Hy@pagecounter=\count313
+\@linkdim=\dimen264
+\Hy@linkcounter=\count314
+\Hy@pagecounter=\count315
  ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/hyperref/pd1enc.def"
 File: pd1enc.def 2018/11/30 v6.88e Hyperref: PDFDocEncoding definition (HO)
 Now handling font encoding PD1 ...
 ... no UTF-8 mapping file for font encoding PD1
 )
-\Hy@SavedSpaceFactor=\count314
+\Hy@SavedSpaceFactor=\count316
  ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/00miktex/hyperref.cfg"
 File: hyperref.cfg 2002/06/06 v1.2 hyperref configuration of TeXLive
 )
@@ -718,16 +737,16 @@ Package hyperref Info: Plain pages OFF on input line 4534.
 Package hyperref Info: Backreferencing OFF on input line 4539.
 Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
 Package hyperref Info: Bookmarks ON on input line 4772.
-\c@Hy@tempcnt=\count315
+\c@Hy@tempcnt=\count317
  ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/url/url.sty"
 \Urlmuskip=\muskip17
 Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
 )
 LaTeX Info: Redefining \url on input line 5125.
-\XeTeXLinkMargin=\dimen263
-\Fld@menulength=\count316
-\Field@Width=\dimen264
-\Fld@charsize=\dimen265
+\XeTeXLinkMargin=\dimen265
+\Fld@menulength=\count318
+\Field@Width=\dimen266
+\Fld@charsize=\dimen267
 Package hyperref Info: Hyper figures OFF on input line 6380.
 Package hyperref Info: Link nesting OFF on input line 6385.
 Package hyperref Info: Hyper index ON on input line 6388.
@@ -737,39 +756,39 @@ Package hyperref Info: Link coloring with OCG OFF on input line 6405.
 Package hyperref Info: PDF/A mode OFF on input line 6410.
 LaTeX Info: Redefining \ref on input line 6450.
 LaTeX Info: Redefining \pageref on input line 6454.
-\Hy@abspage=\count317
-\c@Item=\count318
-\c@Hfootnote=\count319
+\Hy@abspage=\count319
+\c@Item=\count320
+\c@Hfootnote=\count321
 )
 Package hyperref Info: Driver (autodetected): hpdftex.
  ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/hyperref/hpdftex.def"
 File: hpdftex.def 2018/11/30 v6.88e Hyperref driver for pdfTeX
-\Fld@listcount=\count320
-\c@bookmark@seq@number=\count321
+\Fld@listcount=\count322
+\c@bookmark@seq@number=\count323
  ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/oberdiek/rerunfilecheck.sty"
 Package: rerunfilecheck 2016/05/16 v1.8 Rerun checks for auxiliary files (HO)
 Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 282.
 )
-\Hy@SectionHShift=\skip56
+\Hy@SectionHShift=\skip59
 )
 Package hyperref Info: Option `colorlinks' set `true' on input line 23.
  ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/makecell/makecell.sty"
 Package: makecell 2009/08/03 V0.1e Managing of Tab Column Heads and Cells
  ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/tools/array.sty"
 Package: array 2018/12/30 v2.4k Tabular extension package (FMi)
-\col@sep=\dimen266
-\ar@mcellbox=\box78
-\extrarowheight=\dimen267
-\NC@list=\toks49
-\extratabsurround=\skip57
-\backup@length=\skip58
-\ar@cellbox=\box79
+\col@sep=\dimen268
+\ar@mcellbox=\box82
+\extrarowheight=\dimen269
+\NC@list=\toks55
+\extratabsurround=\skip60
+\backup@length=\skip61
+\ar@cellbox=\box83
 )
-\rotheadsize=\dimen268
-\c@nlinenum=\count322
-\TeXr@lab=\toks50
+\rotheadsize=\dimen270
+\c@nlinenum=\count324
+\TeXr@lab=\toks56
 )
-\c@ongoingEnumCounter=\count323
+\c@ongoingEnumCounter=\count325
  ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/mdframed/mdframed.sty"
 Package: mdframed 2013/07/01 1.9b: mdframed
  ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/oberdiek/zref-abspage.sty"
@@ -780,157 +799,176 @@ Package zref Info: New property list: main on input line 759.
 Package zref Info: New property: default on input line 760.
 Package zref Info: New property: page on input line 761.
 )
-\c@abspage=\count324
+\c@abspage=\count326
 Package zref Info: New property: abspage on input line 62.
 ) ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/needspace/needspace.sty"
 Package: needspace 2010/09/12 v1.3d reserve vertical space
 )
-\mdf@templength=\skip59
-\c@mdf@globalstyle@cnt=\count325
-\mdf@skipabove@length=\skip60
-\mdf@skipbelow@length=\skip61
-\mdf@leftmargin@length=\skip62
-\mdf@rightmargin@length=\skip63
-\mdf@innerleftmargin@length=\skip64
-\mdf@innerrightmargin@length=\skip65
-\mdf@innertopmargin@length=\skip66
-\mdf@innerbottommargin@length=\skip67
-\mdf@splittopskip@length=\skip68
-\mdf@splitbottomskip@length=\skip69
-\mdf@outermargin@length=\skip70
-\mdf@innermargin@length=\skip71
-\mdf@linewidth@length=\skip72
-\mdf@innerlinewidth@length=\skip73
-\mdf@middlelinewidth@length=\skip74
-\mdf@outerlinewidth@length=\skip75
-\mdf@roundcorner@length=\skip76
-\mdf@footenotedistance@length=\skip77
-\mdf@userdefinedwidth@length=\skip78
-\mdf@needspace@length=\skip79
-\mdf@frametitleaboveskip@length=\skip80
-\mdf@frametitlebelowskip@length=\skip81
-\mdf@frametitlerulewidth@length=\skip82
-\mdf@frametitleleftmargin@length=\skip83
-\mdf@frametitlerightmargin@length=\skip84
-\mdf@shadowsize@length=\skip85
-\mdf@extratopheight@length=\skip86
-\mdf@subtitleabovelinewidth@length=\skip87
-\mdf@subtitlebelowlinewidth@length=\skip88
-\mdf@subtitleaboveskip@length=\skip89
-\mdf@subtitlebelowskip@length=\skip90
-\mdf@subtitleinneraboveskip@length=\skip91
-\mdf@subtitleinnerbelowskip@length=\skip92
-\mdf@subsubtitleabovelinewidth@length=\skip93
-\mdf@subsubtitlebelowlinewidth@length=\skip94
-\mdf@subsubtitleaboveskip@length=\skip95
-\mdf@subsubtitlebelowskip@length=\skip96
-\mdf@subsubtitleinneraboveskip@length=\skip97
-\mdf@subsubtitleinnerbelowskip@length=\skip98
+\mdf@templength=\skip62
+\c@mdf@globalstyle@cnt=\count327
+\mdf@skipabove@length=\skip63
+\mdf@skipbelow@length=\skip64
+\mdf@leftmargin@length=\skip65
+\mdf@rightmargin@length=\skip66
+\mdf@innerleftmargin@length=\skip67
+\mdf@innerrightmargin@length=\skip68
+\mdf@innertopmargin@length=\skip69
+\mdf@innerbottommargin@length=\skip70
+\mdf@splittopskip@length=\skip71
+\mdf@splitbottomskip@length=\skip72
+\mdf@outermargin@length=\skip73
+\mdf@innermargin@length=\skip74
+\mdf@linewidth@length=\skip75
+\mdf@innerlinewidth@length=\skip76
+\mdf@middlelinewidth@length=\skip77
+\mdf@outerlinewidth@length=\skip78
+\mdf@roundcorner@length=\skip79
+\mdf@footenotedistance@length=\skip80
+\mdf@userdefinedwidth@length=\skip81
+\mdf@needspace@length=\skip82
+\mdf@frametitleaboveskip@length=\skip83
+\mdf@frametitlebelowskip@length=\skip84
+\mdf@frametitlerulewidth@length=\skip85
+\mdf@frametitleleftmargin@length=\skip86
+\mdf@frametitlerightmargin@length=\skip87
+\mdf@shadowsize@length=\skip88
+\mdf@extratopheight@length=\skip89
+\mdf@subtitleabovelinewidth@length=\skip90
+\mdf@subtitlebelowlinewidth@length=\skip91
+\mdf@subtitleaboveskip@length=\skip92
+\mdf@subtitlebelowskip@length=\skip93
+\mdf@subtitleinneraboveskip@length=\skip94
+\mdf@subtitleinnerbelowskip@length=\skip95
+\mdf@subsubtitleabovelinewidth@length=\skip96
+\mdf@subsubtitlebelowlinewidth@length=\skip97
+\mdf@subsubtitleaboveskip@length=\skip98
+\mdf@subsubtitlebelowskip@length=\skip99
+\mdf@subsubtitleinneraboveskip@length=\skip100
+\mdf@subsubtitleinnerbelowskip@length=\skip101
  ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/mdframed/md-frame-0.mdf"
 File: md-frame-0.mdf 2013/07/01\ 1.9b: md-frame-0
 )
-\mdf@frametitlebox=\box80
-\mdf@footnotebox=\box81
-\mdf@splitbox@one=\box82
-\mdf@splitbox@two=\box83
-\mdf@splitbox@save=\box84
-\mdfsplitboxwidth=\skip99
-\mdfsplitboxtotalwidth=\skip100
-\mdfsplitboxheight=\skip101
-\mdfsplitboxdepth=\skip102
-\mdfsplitboxtotalheight=\skip103
-\mdfframetitleboxwidth=\skip104
-\mdfframetitleboxtotalwidth=\skip105
-\mdfframetitleboxheight=\skip106
-\mdfframetitleboxdepth=\skip107
-\mdfframetitleboxtotalheight=\skip108
-\mdffootnoteboxwidth=\skip109
-\mdffootnoteboxtotalwidth=\skip110
-\mdffootnoteboxheight=\skip111
-\mdffootnoteboxdepth=\skip112
-\mdffootnoteboxtotalheight=\skip113
-\mdftotallinewidth=\skip114
-\mdfboundingboxwidth=\skip115
-\mdfboundingboxtotalwidth=\skip116
-\mdfboundingboxheight=\skip117
-\mdfboundingboxdepth=\skip118
-\mdfboundingboxtotalheight=\skip119
-\mdf@freevspace@length=\skip120
-\mdf@horizontalwidthofbox@length=\skip121
-\mdf@verticalmarginwhole@length=\skip122
-\mdf@horizontalspaceofbox=\skip123
-\mdfsubtitleheight=\skip124
-\mdfsubsubtitleheight=\skip125
-\c@mdfcountframes=\count326
+\mdf@frametitlebox=\box84
+\mdf@footnotebox=\box85
+\mdf@splitbox@one=\box86
+\mdf@splitbox@two=\box87
+\mdf@splitbox@save=\box88
+\mdfsplitboxwidth=\skip102
+\mdfsplitboxtotalwidth=\skip103
+\mdfsplitboxheight=\skip104
+\mdfsplitboxdepth=\skip105
+\mdfsplitboxtotalheight=\skip106
+\mdfframetitleboxwidth=\skip107
+\mdfframetitleboxtotalwidth=\skip108
+\mdfframetitleboxheight=\skip109
+\mdfframetitleboxdepth=\skip110
+\mdfframetitleboxtotalheight=\skip111
+\mdffootnoteboxwidth=\skip112
+\mdffootnoteboxtotalwidth=\skip113
+\mdffootnoteboxheight=\skip114
+\mdffootnoteboxdepth=\skip115
+\mdffootnoteboxtotalheight=\skip116
+\mdftotallinewidth=\skip117
+\mdfboundingboxwidth=\skip118
+\mdfboundingboxtotalwidth=\skip119
+\mdfboundingboxheight=\skip120
+\mdfboundingboxdepth=\skip121
+\mdfboundingboxtotalheight=\skip122
+\mdf@freevspace@length=\skip123
+\mdf@horizontalwidthofbox@length=\skip124
+\mdf@verticalmarginwhole@length=\skip125
+\mdf@horizontalspaceofbox=\skip126
+\mdfsubtitleheight=\skip127
+\mdfsubsubtitleheight=\skip128
+\c@mdfcountframes=\count328
 
 ****** mdframed patching \endmdf@trivlist
 
 ****** -- success******
 
-\mdf@envdepth=\count327
-\c@mdf@env@i=\count328
-\c@mdf@env@ii=\count329
-\c@mdf@zref@counter=\count330
+\mdf@envdepth=\count329
+\c@mdf@env@i=\count330
+\c@mdf@env@ii=\count331
+\c@mdf@zref@counter=\count332
 Package zref Info: New property: mdf@pagevalue on input line 895.
 ) ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/caption/caption.sty"
 Package: caption 2018/10/06 v3.3-154 Customizing captions (AR)
  ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/caption/caption3.sty"
 Package: caption3 2018/09/12 v1.8c caption3 kernel (AR)
 Package caption3 Info: TeX engine: e-TeX on input line 64.
-\captionmargin=\dimen269
-\captionmargin@=\dimen270
-\captionwidth=\dimen271
-\caption@tempdima=\dimen272
-\caption@indent=\dimen273
-\caption@parindent=\dimen274
-\caption@hangindent=\dimen275
+\captionmargin=\dimen271
+\captionmargin@=\dimen272
+\captionwidth=\dimen273
+\caption@tempdima=\dimen274
+\caption@indent=\dimen275
+\caption@parindent=\dimen276
+\caption@hangindent=\dimen277
 )
-\c@caption@flags=\count331
-\c@ContinuedFloat=\count332
+\c@caption@flags=\count333
+\c@ContinuedFloat=\count334
 Package caption Info: hyperref package is loaded.
 ) ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/float/float.sty"
 Package: float 2001/11/08 v1.3d Float enhancements (AL)
-\c@float@type=\count333
-\float@exts=\toks51
-\float@box=\box85
-\@float@everytoks=\toks52
-\@floatcapt=\box86
+\c@float@type=\count335
+\float@exts=\toks57
+\float@box=\box89
+\@float@everytoks=\toks58
+\@floatcapt=\box90
 ) ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/listings/listings.sty"
-\lst@mode=\count334
-\lst@gtempboxa=\box87
-\lst@token=\toks53
-\lst@length=\count335
-\lst@currlwidth=\dimen276
-\lst@column=\count336
-\lst@pos=\count337
-\lst@lostspace=\dimen277
-\lst@width=\dimen278
-\lst@newlines=\count338
-\lst@lineno=\count339
-\lst@maxwidth=\dimen279
+\lst@mode=\count336
+\lst@gtempboxa=\box91
+\lst@token=\toks59
+\lst@length=\count337
+\lst@currlwidth=\dimen278
+\lst@column=\count338
+\lst@pos=\count339
+\lst@lostspace=\dimen279
+\lst@width=\dimen280
+\lst@newlines=\count340
+\lst@lineno=\count341
+\lst@maxwidth=\dimen281
  ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/listings/lstmisc.sty"
-File: lstmisc.sty 2018/09/02 1.7 (Carsten Heinz)
-\c@lstnumber=\count340
-\lst@skipnumbers=\count341
-\lst@framebox=\box88
+File: lstmisc.sty 2019/02/27 1.8b (Carsten Heinz)
+\c@lstnumber=\count342
+\lst@skipnumbers=\count343
+\lst@framebox=\box92
 ) ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/listings/listings.cfg"
-File: listings.cfg 2018/09/02 1.7 listings configuration
+File: listings.cfg 2019/02/27 1.8b listings configuration
 ))
-Package: listings 2018/09/02 1.7 (Carsten Heinz)
- ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/mathtools/mathtools.sty"
+Package: listings 2019/02/27 1.8b (Carsten Heinz)
+ ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/booktabs/booktabs.sty"
+Package: booktabs 2005/04/14 v1.61803 publication quality tables
+\heavyrulewidth=\dimen282
+\lightrulewidth=\dimen283
+\cmidrulewidth=\dimen284
+\belowrulesep=\dimen285
+\belowbottomsep=\dimen286
+\aboverulesep=\dimen287
+\abovetopsep=\dimen288
+\cmidrulesep=\dimen289
+\cmidrulekern=\dimen290
+\defaultaddspace=\dimen291
+\@cmidla=\count344
+\@cmidlb=\count345
+\@aboverulesep=\dimen292
+\@belowrulesep=\dimen293
+\@thisruleclass=\count346
+\@lastruleclass=\count347
+\@thisrulewidth=\dimen294
+) ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/mathtools/mathtools.sty"
 Package: mathtools 2018/01/08 v1.21 mathematical typesetting tools
  ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/tools/calc.sty"
 Package: calc 2017/05/25 v4.3 Infix arithmetic (KKT,FJ)
-\calc@Acount=\count342
-\calc@Bcount=\count343
-\calc@Adimen=\dimen280
-\calc@Bdimen=\dimen281
-\calc@Askip=\skip126
-\calc@Bskip=\skip127
+\calc@Acount=\count348
+\calc@Bcount=\count349
+\calc@Adimen=\dimen295
+\calc@Bdimen=\dimen296
+\calc@Askip=\skip129
+\calc@Bskip=\skip130
 LaTeX Info: Redefining \setlength on input line 80.
 LaTeX Info: Redefining \addtolength on input line 81.
-\calc@Ccount=\count344
-\calc@Cskip=\skip128
+\calc@Ccount=\count350
+\calc@Cskip=\skip131
 ) ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/mathtools/mhsetup.sty"
 Package: mhsetup 2017/03/31 v1.3 programming setup (MH)
 )
@@ -938,50 +976,57 @@ LaTeX Info: Thecontrolsequence`\('isalreadyrobust on input line 129.
 LaTeX Info: Thecontrolsequence`\)'isalreadyrobust on input line 129.
 LaTeX Info: Thecontrolsequence`\['isalreadyrobust on input line 129.
 LaTeX Info: Thecontrolsequence`\]'isalreadyrobust on input line 129.
-\g_MT_multlinerow_int=\count345
-\l_MT_multwidth_dim=\dimen282
-\origjot=\skip129
-\l_MT_shortvdotswithinadjustabove_dim=\dimen283
-\l_MT_shortvdotswithinadjustbelow_dim=\dimen284
-\l_MT_above_intertext_sep=\dimen285
-\l_MT_below_intertext_sep=\dimen286
-\l_MT_above_shortintertext_sep=\dimen287
-\l_MT_below_shortintertext_sep=\dimen288
+\g_MT_multlinerow_int=\count351
+\l_MT_multwidth_dim=\dimen297
+\origjot=\skip132
+\l_MT_shortvdotswithinadjustabove_dim=\dimen298
+\l_MT_shortvdotswithinadjustbelow_dim=\dimen299
+\l_MT_above_intertext_sep=\dimen300
+\l_MT_below_intertext_sep=\dimen301
+\l_MT_above_shortintertext_sep=\dimen302
+\l_MT_below_shortintertext_sep=\dimen303
 )
 \@input{macros.aux}
 \openout2 = `macros.aux'.
 
-(/Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/macros.tex ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/framed/framed.sty"
+(/Users/em137vl/git/nightfall/nightfall/doc/whitepaper/macros.tex ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/framed/framed.sty"
 Package: framed 2011/10/22 v 0.96: framed or shaded text with page breaks
-\OuterFrameSep=\skip130
-\fb@frw=\dimen289
-\fb@frh=\dimen290
-\FrameRule=\dimen291
-\FrameSep=\dimen292
-)) (/Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.aux
+\OuterFrameSep=\skip133
+\fb@frw=\dimen304
+\fb@frh=\dimen305
+\FrameRule=\dimen306
+\FrameSep=\dimen307
+))
+\c@definition=\count352
+\c@theorem=\count353
+ (/Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.aux (/Users/em137vl/git/nightfall/nightfall/doc/whitepaper/introduction/introduction.aux) (/Users/em137vl/git/nightfall/nightfall/doc/whitepaper/application/zokrates.aux) (/Users/em137vl/git/nightfall/nightfall/doc/whitepaper/application/trustedSetup.aux) (/Users/em137vl/git/nightfall/nightfall/doc/whitepaper/application/smartContracts.aux) (/Users/em137vl/git/nightfall/nightfall/doc/whitepaper/application/microservices.aux) (/Users/em137vl/git/nightfall/nightfall/doc/whitepaper/application/finiteFieldsAndBitLengths.aux
 
-LaTeX Warning: Label `fig:trustedSetupWarning' multiply defined.
+LaTeX Warning: Label `pic:ftShield' multiply defined.
 
+
+LaTeX Warning: Label `pic:ftShield' multiply defined.
+
+) (/Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC721/variables721.aux) (/Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC721/keymanagement721.aux) (/Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC721/mint721.aux) (/Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC721/transfer721.aux) (/Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC721/burn721.aux) (/Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC20/variables20.aux) (/Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC20/keymanagement20.aux) (/Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC20/mint20.aux) (/Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC20/transfer20.aux
 
 LaTeX Warning: Label `sec:721TransferDetails' multiply defined.
 
-)
+) (/Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC20/burn20.aux))
 \openout1 = `nightfall-v1.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 248.
-LaTeX Font Info:    ... okay on input line 248.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 248.
-LaTeX Font Info:    ... okay on input line 248.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 248.
-LaTeX Font Info:    ... okay on input line 248.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 248.
-LaTeX Font Info:    ... okay on input line 248.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 248.
-LaTeX Font Info:    ... okay on input line 248.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 248.
-LaTeX Font Info:    ... okay on input line 248.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 248.
-LaTeX Font Info:    ... okay on input line 248.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 239.
+LaTeX Font Info:    ... okay on input line 239.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 239.
+LaTeX Font Info:    ... okay on input line 239.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 239.
+LaTeX Font Info:    ... okay on input line 239.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 239.
+LaTeX Font Info:    ... okay on input line 239.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 239.
+LaTeX Font Info:    ... okay on input line 239.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 239.
+LaTeX Font Info:    ... okay on input line 239.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 239.
+LaTeX Font Info:    ... okay on input line 239.
 Package minitoc(hints) Info: I0049
 (minitoc(hints))             ==> You requested the hints option. 
 (minitoc(hints))             Some hints are eventually given below.
@@ -1006,19 +1051,19 @@ Package minitoc(hints) Warning: W0023
 (minitoc(hints))                --- It may be the consequence 
 (minitoc(hints))                of loading the ``hyperref'' package.
 
-ABD: EveryShipout initializing macros ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/context/base/supp-pdf.mkii"
+ABD: EveryShipout initializing macros ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/context/base/mkii/supp-pdf.mkii"
 [Loading MPS to PDF converter (version 2006.09.02).]
-\scratchcounter=\count346
-\scratchdimen=\dimen293
-\scratchbox=\box89
-\nofMPsegments=\count347
-\nofMParguments=\count348
-\everyMPshowfont=\toks54
-\MPscratchCnt=\count349
-\MPscratchDim=\dimen294
-\MPnumerator=\count350
-\makeMPintoPDFobject=\count351
-\everyMPtoPDFconversion=\toks55
+\scratchcounter=\count354
+\scratchdimen=\dimen308
+\scratchbox=\box93
+\nofMPsegments=\count355
+\nofMParguments=\count356
+\everyMPshowfont=\toks60
+\MPscratchCnt=\count357
+\MPscratchDim=\dimen309
+\MPnumerator=\count358
+\makeMPintoPDFobject=\count359
+\everyMPtoPDFconversion=\toks61
 ) ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/oberdiek/epstopdf-base.sty"
 Package: epstopdf-base 2016/05/15 v2.6 Base part for package epstopdf
  ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/oberdiek/grfext.sty"
@@ -1063,19 +1108,19 @@ Package grfext Info: Graphics extension search list:
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-\AtBeginShipoutBox=\box90
-Package hyperref Info: Link coloring ON on input line 248.
+\AtBeginShipoutBox=\box94
+Package hyperref Info: Link coloring ON on input line 239.
 ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/hyperref/nameref.sty"
 Package: nameref 2016/05/21 v2.44 Cross-referencing by name of section
  ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/oberdiek/gettitlestring.sty"
 Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
 )
-\c@section@level=\count352
+\c@section@level=\count360
 )
-LaTeX Info: Redefining \ref on input line 248.
-LaTeX Info: Redefining \pageref on input line 248.
-LaTeX Info: Redefining \nameref on input line 248.
- (/Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.out) (/Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.out)
+LaTeX Info: Redefining \ref on input line 239.
+LaTeX Info: Redefining \pageref on input line 239.
+LaTeX Info: Redefining \nameref on input line 239.
+ (/Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.out) (/Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.out)
 \@outlinefile=\write6
 \openout6 = `nightfall-v1.out'.
 
@@ -1083,53 +1128,57 @@ Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: float package is loaded.
 Package caption Info: listings package is loaded.
 Package caption Info: End \AtBeginDocument code.
-\c@lstlisting=\count353
-LaTeX Font Info:    Try loading font information for U+msa on input line 250.
+\c@lstlisting=\count361
+LaTeX Font Info:    Try loading font information for U+msa on input line 241.
  ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/amsfonts/umsa.fd"
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 )
-LaTeX Font Info:    Try loading font information for U+msb on input line 250.
+LaTeX Font Info:    Try loading font information for U+msb on input line 241.
  ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/amsfonts/umsb.fd"
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 )
 Package minitoc Info: I0026
-(minitoc)             PREPARING SECTTOCS FROM nightfall-v1.toc on input line 251.
+(minitoc)             PREPARING SECTTOCS FROM nightfall-v1.toc on input line 242.
 Package minitoc Info: I0033
-(minitoc)             Writing nightfall-v1.stc1 on input line 251.
+(minitoc)             Writing nightfall-v1.stc1 on input line 242.
 \openout3 = `nightfall-v1.stc1'.
 
 Package minitoc Info: I0033
-(minitoc)             Writing nightfall-v1.stc2 on input line 251.
+(minitoc)             Writing nightfall-v1.stc2 on input line 242.
 \openout3 = `nightfall-v1.stc2'.
 
 Package minitoc Info: I0033
-(minitoc)             Writing nightfall-v1.stc3 on input line 251.
+(minitoc)             Writing nightfall-v1.stc3 on input line 242.
 \openout3 = `nightfall-v1.stc3'.
 
 Package minitoc Info: I0033
-(minitoc)             Writing nightfall-v1.stc4 on input line 251.
+(minitoc)             Writing nightfall-v1.stc4 on input line 242.
 \openout3 = `nightfall-v1.stc4'.
 
 Package minitoc Info: I0033
-(minitoc)             Writing nightfall-v1.stc5 on input line 251.
+(minitoc)             Writing nightfall-v1.stc5 on input line 242.
 \openout3 = `nightfall-v1.stc5'.
 
 Package minitoc Info: I0033
-(minitoc)             Writing nightfall-v1.stc6 on input line 251.
+(minitoc)             Writing nightfall-v1.stc6 on input line 242.
 \openout3 = `nightfall-v1.stc6'.
 
 Package minitoc Info: I0033
-(minitoc)             Writing nightfall-v1.stc7 on input line 251.
+(minitoc)             Writing nightfall-v1.stc7 on input line 242.
 \openout3 = `nightfall-v1.stc7'.
+
+Package minitoc Info: I0033
+(minitoc)             Writing nightfall-v1.stc8 on input line 242.
+\openout3 = `nightfall-v1.stc8'.
 
 
 
 Package minitoc Warning: W0014
 (minitoc)                No file nightfall-v1.lof 
-(minitoc)                SECTLOFS NOT PREPARED on input line 252.
+(minitoc)                SECTLOFS NOT PREPARED on input line 243.
 
 Package minitoc Info: I0025
-(minitoc)             PREPARING PARTTOCS FROM nightfall-v1.toc on input line 261.
+(minitoc)             PREPARING PARTTOCS FROM nightfall-v1.toc on input line 252.
 Package minitoc Info: I0033
 (minitoc)             Writing nightfall-v1.ptc1.
 \openout3 = `nightfall-v1.ptc1'.
@@ -1142,8 +1191,8 @@ Package minitoc Info: I0033
 (minitoc)             Writing nightfall-v1.ptc3.
 \openout3 = `nightfall-v1.ptc3'.
 
-Package placeins Info: No floats held, on input line 261.
-(/Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.toc)
+Package placeins Info: No floats held, on input line 252.
+(/Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.toc)
 \tf@toc=\write7
 \openout7 = `nightfall-v1.toc'.
 
@@ -1152,1302 +1201,1674 @@ Package placeins Info: No floats held, on input line 261.
 
 
 {/Users/em137vl/Library/Application Support/MiKTeX/texmfs/data/pdftex/config/pdftex.map}
-Package placeins Info: Float barrier, from input line 261, processed on page 1, lands on page 1. 
+Package placeins Info: Float barrier, from input line 252, processed on page 1, lands on page 1. 
 ]
+\openout2 = `introduction/introduction.aux'.
+
+ (/Users/em137vl/git/nightfall/nightfall/doc/whitepaper/introduction/introduction.tex
 \openout3 = `nightfall-v1.mtc'.
 
 \openout3 = `nightfall-v1.mtc'.
 
- (/Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.ptc1)
-Underfull \hbox (badness 10000) in paragraph at lines 271--282
+ (/Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.ptc1)
+Underfull \hbox (badness 10000) in paragraph at lines 7--18
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 271--282
+Underfull \hbox (badness 10000) in paragraph at lines 7--18
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 271--282
+Underfull \hbox (badness 10000) in paragraph at lines 7--18
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 271--282
+Underfull \hbox (badness 10000) in paragraph at lines 7--18
 
  []
 
-Package placeins Info: No floats held, on input line 287.
-
-Underfull \hbox (badness 10000) in paragraph at lines 291--294
-
- []
-
+Package placeins Info: No floats held, on input line 23.
 LaTeX Font Info:    Font shape `OT1/cmtt/bx/n' in size <10> not available
-(Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 304.
-
-Underfull \hbox (badness 10000) in paragraph at lines 320--328
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 320--328
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 320--328
-
- []
-
+(Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 39.
 [2
-Package placeins Info: Float barrier, from input line 287, processed on page 2, lands on page 2. 
+
+Package placeins Info: Float barrier, from input line 23, processed on page 2, lands on page 2. 
 ]
-Underfull \hbox (badness 10000) in paragraph at lines 330--334
+Underfull \hbox (badness 10000) in paragraph at lines 169--178
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 330--334
+Underfull \hbox (badness 10000) in paragraph at lines 169--178
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 330--334
+Underfull \hbox (badness 10000) in paragraph at lines 169--178
+
+ []
+
+)
+Underfull \hbox (badness 10000) in paragraph at lines 189--260
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 336--349
+Underfull \hbox (badness 10000) in paragraph at lines 189--260
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 336--349
+Underfull \hbox (badness 10000) in paragraph at lines 189--260
 
  []
 
-Package mdframed Info: mdframed inside float 
- mdframed uses option nobreak mdframed on input line 360.
-Package mdframed Info: mdframed inside a box 
- mdframed uses option nobreak mdframed on input line 360.
-[3]
+
+Underfull \hbox (badness 10000) in paragraph at lines 189--260
+
+ []
+
+[3] [4]
 \openout3 = `nightfall-v1.mtc'.
 
 \openout3 = `nightfall-v1.mtc'.
 
- (/Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.ptc2) [4]
-Package placeins Info: No floats held, on input line 381.
+ (/Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.ptc2) [5
 
-Underfull \hbox (badness 10000) in paragraph at lines 383--390
+]
+\openout2 = `application/zokrates.aux'.
 
- []
+ (/Users/em137vl/git/nightfall/nightfall/doc/whitepaper/application/zokrates.tex
+Package placeins Info: No floats held, on input line 1.
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 53.
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 383--390
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 383--390
+Underfull \hbox (badness 10000) in paragraph at lines 54--68
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 410--415
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 432--435
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 432--435
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 438--452
-
- []
-
-
-Overfull \hbox (167.62344pt too wide) in paragraph at lines 438--452
+Overfull \hbox (167.62344pt too wide) in paragraph at lines 54--68
 [] 
  []
 
-[5
-Package placeins Info: Float barrier, from input line 381, processed on page 5, lands on page 5. 
-]
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 74.
 Package mdframed Info: mdframed inside float 
- mdframed uses option nobreak mdframed on input line 463.
+ mdframed uses option nobreak mdframed on input line 80.
 Package mdframed Info: mdframed inside a box 
- mdframed uses option nobreak mdframed on input line 463.
- [6]
-Package placeins Info: No floats held, on input line 470.
+ mdframed uses option nobreak mdframed on input line 80.
+) [6
 
-Underfull \hbox (badness 10000) in paragraph at lines 473--483
+Package placeins Info: Float barrier, from input line 1, processed on page 6, lands on page 6. 
+]
+\openout2 = `application/trustedSetup.aux'.
 
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 473--483
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 473--483
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 473--483
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 473--483
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 473--483
-
- []
-
-<./images/files-before-setup.png, id=162, 260.975pt x 202.7575pt>
+ (/Users/em137vl/git/nightfall/nightfall/doc/whitepaper/application/trustedSetup.tex
+Package placeins Info: No floats held, on input line 1.
+<./images/files-before-setup.png, id=194, 260.975pt x 202.7575pt>
 File: ./images/files-before-setup.png Graphic file (type png)
 <use ./images/files-before-setup.png>
-Package pdftex.def Info: ./images/files-before-setup.png  used on input line 486.
-(pdftex.def)             Requested size: 169.63174pt x 131.7908pt.
-<./images/files-after-setup.png, id=164, 260.975pt x 361.35pt>
+Package pdftex.def Info: ./images/files-before-setup.png  used on input line 12.
+(pdftex.def)             Requested size: 110.30058pt x 85.69589pt.
+<./images/files-after-setup.png, id=196, 260.975pt x 361.35pt>
 File: ./images/files-after-setup.png Graphic file (type png)
 <use ./images/files-after-setup.png>
-Package pdftex.def Info: ./images/files-after-setup.png  used on input line 495.
-(pdftex.def)             Requested size: 169.63174pt x 234.87471pt.
-LaTeX Font Info:    Font shape `OT1/cmtt/bx/n' in size <12> not available
-(Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 500.
+Package pdftex.def Info: ./images/files-after-setup.png  used on input line 17.
+(pdftex.def)             Requested size: 110.30058pt x 152.72536pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 24--35
+
+ []
+
 [7
-Package placeins Info: Float barrier, from input line 470, processed on page 7, lands on page 7. 
+
+
+Package placeins Info: Float barrier, from input line 1, processed on page 7, lands on page 7. 
  <./images/files-before-setup.png> <./images/files-after-setup.png>]
-Underfull \hbox (badness 10000) in paragraph at lines 511--522
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 511--522
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 530--537
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 530--537
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 530--537
-
- []
-
-LaTeX Font Info:    Try loading font information for OMS+cmr on input line 553.
-("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/base/omscmr.fd"
+LaTeX Font Info:    Try loading font information for OMS+cmr on input line 93.
+ ("/Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/base/omscmr.fd"
 File: omscmr.fd 2014/09/29 v2.5h Standard LaTeX font definitions
 )
 LaTeX Font Info:    Font shape `OMS/cmr/m/n' in size <10> not available
-(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 553.
- [8]
-Underfull \hbox (badness 10000) in paragraph at lines 590--599
+(Font)              Font shape `OMS/cmsy/m/n' tried instead on input line 93.
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 139.
+
+Underfull \hbox (badness 10000) in paragraph at lines 143--150
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 590--599
+Underfull \hbox (badness 10000) in paragraph at lines 143--150
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 590--599
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 590--599
-
- []
-
-[9]
-Underfull \hbox (badness 10000) in paragraph at lines 606--613
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 606--613
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 606--613
+Underfull \hbox (badness 10000) in paragraph at lines 143--150
 
  []
 
 Package mdframed Info: mdframed inside float 
- mdframed uses option nobreak mdframed on input line 614.
+ mdframed uses option nobreak mdframed on input line 151.
 Package mdframed Info: mdframed inside a box 
- mdframed uses option nobreak mdframed on input line 614.
+ mdframed uses option nobreak mdframed on input line 151.
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 159.
 
-Underfull \hbox (badness 10000) in paragraph at lines 623--640
+Underfull \hbox (badness 10000) in paragraph at lines 160--177
 
  []
 
 
-Overfull \hbox (167.62344pt too wide) in paragraph at lines 623--640
+Overfull \hbox (167.62344pt too wide) in paragraph at lines 160--177
 [] 
  []
 
-[10]
-Package placeins Info: No floats held, on input line 644.
+) [8] [9]
+\openout2 = `application/smartContracts.aux'.
+
+ (/Users/em137vl/git/nightfall/nightfall/doc/whitepaper/application/smartContracts.tex
+Package placeins Info: No floats held, on input line 1.
 \openout3 = `nightfall-v1.mtc'.
 
 \openout3 = `nightfall-v1.mtc'.
 
- (/Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.stc4)
-Underfull \hbox (badness 10000) in paragraph at lines 655--657
+ (/Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.stc4)
+Underfull \hbox (badness 10000) in paragraph at lines 14--16
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 655--657
+Underfull \hbox (badness 10000) in paragraph at lines 14--16
 
  []
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 660--671
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 660--671
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 660--671
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 660--671
-
- []
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 34.
+<images/nft-contracts.png, id=268, 894.2208pt x 510.2262pt>
+File: images/nft-contracts.png Graphic file (type png)
+<use images/nft-contracts.png>
+Package pdftex.def Info: images/nft-contracts.png  used on input line 35.
+(pdftex.def)             Requested size: 504.4379pt x 287.82678pt.
+Package mdframed Info: mdframed inside float 
+ mdframed uses option nobreak mdframed on input line 36.
+Package mdframed Info: mdframed inside a box 
+ mdframed uses option nobreak mdframed on input line 36.
+[10
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 660--671
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 660--671
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 673--678
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 673--678
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 673--678
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 680--685
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 680--685
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 680--685
-
- []
-
-[11
-Package placeins Info: Float barrier, from input line 644, processed on page 11, lands on page 11. 
+Package placeins Info: Float barrier, from input line 1, processed on page 10, lands on page 10. 
 ]
-Underfull \hbox (badness 10000) in paragraph at lines 688--691
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 55.
+<images/ft-contracts.png, id=290, 894.2208pt x 510.2262pt>
+File: images/ft-contracts.png Graphic file (type png)
+<use images/ft-contracts.png>
+Package pdftex.def Info: images/ft-contracts.png  used on input line 56.
+(pdftex.def)             Requested size: 504.4379pt x 287.82678pt.
+Package mdframed Info: mdframed inside float 
+ mdframed uses option nobreak mdframed on input line 57.
+Package mdframed Info: mdframed inside a box 
+ mdframed uses option nobreak mdframed on input line 57.
+ [11 </Users/em137vl/git/nightfall/nightfall/doc/whitepaper/images/nft-contracts.png> </Users/em137vl/git/nightfall/nightfall/doc/whitepaper/images/ft-contracts.png>]
+Overfull \hbox (3.42892pt too wide) in paragraph at lines 74--78
+ [] 
+ []
+
+<images/erc721Shielding.png, id=301, 964.0818pt x 542.025pt>
+File: images/erc721Shielding.png Graphic file (type png)
+<use images/erc721Shielding.png>
+Package pdftex.def Info: images/erc721Shielding.png  used on input line 94.
+(pdftex.def)             Requested size: 525.23788pt x 295.30266pt.
+<images/erc20Shielding.png, id=303, 964.0818pt x 542.025pt>
+File: images/erc20Shielding.png Graphic file (type png)
+<use images/erc20Shielding.png>
+Package pdftex.def Info: images/erc20Shielding.png  used on input line 113.
+(pdftex.def)             Requested size: 525.23788pt x 295.30266pt.
+[12 </Users/em137vl/git/nightfall/nightfall/doc/whitepaper/images/erc721Shielding.png
+
+pdfTeX warning: pdflatex (file /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/images/erc721Shielding.png): large interlaced PNG might cause out of memory (use non-interlaced PNG to fix this)
+>] [13 </Users/em137vl/git/nightfall/nightfall/doc/whitepaper/images/erc20Shielding.png
+
+pdfTeX warning: pdflatex (file /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/images/erc20Shielding.png): large interlaced PNG might cause out of memory (use non-interlaced PNG to fix this)
+>]
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 159.
+
+Underfull \hbox (badness 10000) in paragraph at lines 160--173
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 695--702
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 695--702
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 695--702
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 704--711
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 704--711
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 704--711
-
- []
-
-[12]
-Underfull \hbox (badness 10000) in paragraph at lines 744--745
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 748--751
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 748--751
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 748--751
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 754--767
-
- []
-
-
-Overfull \hbox (95.45665pt too wide) in paragraph at lines 754--767
+Overfull \hbox (95.45665pt too wide) in paragraph at lines 160--173
 [] 
  []
 
-[13]
-Package placeins Info: No floats held, on input line 782.
+) [14]
+\openout2 = `application/microservices.aux'.
+
+ (/Users/em137vl/git/nightfall/nightfall/doc/whitepaper/application/microservices.tex
+Package placeins Info: No floats held, on input line 1.
 \openout3 = `nightfall-v1.mtc'.
 
 \openout3 = `nightfall-v1.mtc'.
 
- (/Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.stc5) [14
-Package placeins Info: Float barrier, from input line 782, processed on page 14, lands on page 14. 
+ (/Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.stc5)
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 50.
+
+Underfull \hbox (badness 10000) in paragraph at lines 51--56
+
+ []
+
+[15
+
+
+Package placeins Info: Float barrier, from input line 1, processed on page 15, lands on page 15. 
 ]
-Underfull \hbox (badness 10000) in paragraph at lines 832--837
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 67.
+
+Underfull \hbox (badness 10000) in paragraph at lines 68--81
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 849--862
-
- []
-
-
-Overfull \hbox (149.20674pt too wide) in paragraph at lines 849--862
+Overfull \hbox (149.20674pt too wide) in paragraph at lines 68--81
 [] 
  []
 
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 86.
 
-Underfull \hbox (badness 10000) in paragraph at lines 868--876
+Underfull \hbox (badness 10000) in paragraph at lines 87--95
 
  []
 
 
-Underfull \hbox (badness 1292) in paragraph at lines 868--876
+Underfull \hbox (badness 1292) in paragraph at lines 87--95
 \OT1/cmr/m/n/10 The \OT1/cmtt/m/n/10 whisper-controller.js \OT1/cmr/m/n/10 and The \OT1/cmtt/m/n/10 whisper-controller-stub.js \OT1/cmr/m/n/10 only listen for Whisper events (via
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 868--876
+Underfull \hbox (badness 10000) in paragraph at lines 87--95
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 868--876
-
- []
-
-Package mdframed Info: mdframed inside float 
- mdframed uses option nobreak mdframed on input line 876.
-Package mdframed Info: mdframed inside a box 
- mdframed uses option nobreak mdframed on input line 876.
-
-Underfull \hbox (badness 10000) in paragraph at lines 885--891
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 885--891
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 896--907
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 896--907
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 896--907
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 896--907
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 896--907
-
- []
-
-[15]
-Underfull \hbox (badness 10000) in paragraph at lines 911--917
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 911--917
+Underfull \hbox (badness 10000) in paragraph at lines 87--95
 
  []
 
 Package mdframed Info: mdframed inside float 
- mdframed uses option nobreak mdframed on input line 917.
+ mdframed uses option nobreak mdframed on input line 95.
 Package mdframed Info: mdframed inside a box 
- mdframed uses option nobreak mdframed on input line 917.
+ mdframed uses option nobreak mdframed on input line 95.
 
-Underfull \hbox (badness 10000) in paragraph at lines 925--930
+Underfull \hbox (badness 10000) in paragraph at lines 104--110
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 941--945
+Underfull \hbox (badness 10000) in paragraph at lines 104--110
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 115--126
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 115--126
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 115--126
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 115--126
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 115--126
+
+ []
+
+[16]
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 129.
+
+Underfull \hbox (badness 10000) in paragraph at lines 130--136
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 130--136
 
  []
 
 Package mdframed Info: mdframed inside float 
- mdframed uses option nobreak mdframed on input line 945.
+ mdframed uses option nobreak mdframed on input line 136.
 Package mdframed Info: mdframed inside a box 
- mdframed uses option nobreak mdframed on input line 945.
+ mdframed uses option nobreak mdframed on input line 136.
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 143.
 
-Underfull \hbox (badness 10000) in paragraph at lines 954--959
+Underfull \hbox (badness 10000) in paragraph at lines 144--149
+
+ []
+
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 159.
+
+Underfull \hbox (badness 10000) in paragraph at lines 160--164
+
+ []
+
+Package mdframed Info: mdframed inside float 
+ mdframed uses option nobreak mdframed on input line 164.
+Package mdframed Info: mdframed inside a box 
+ mdframed uses option nobreak mdframed on input line 164.
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 172.
+
+Underfull \hbox (badness 10000) in paragraph at lines 173--178
 
  []
 
 
-Overfull \hbox (33.39969pt too wide) in paragraph at lines 954--959
+Overfull \hbox (33.39969pt too wide) in paragraph at lines 173--178
 [] 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 967--968
+Underfull \hbox (badness 10000) in paragraph at lines 186--187
+
+ []
+
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 190.
+
+Underfull \hbox (badness 10000) in paragraph at lines 191--197
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 972--978
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 972--978
+Underfull \hbox (badness 10000) in paragraph at lines 191--197
 
  []
 
 Package mdframed Info: mdframed inside float 
- mdframed uses option nobreak mdframed on input line 978.
+ mdframed uses option nobreak mdframed on input line 197.
 Package mdframed Info: mdframed inside a box 
- mdframed uses option nobreak mdframed on input line 978.
-[16]
-Underfull \hbox (badness 10000) in paragraph at lines 987--993
-
- []
-
+ mdframed uses option nobreak mdframed on input line 197.
 [17]
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 204.
+
+Underfull \hbox (badness 10000) in paragraph at lines 205--211
+
+ []
+
+) [18]
+\openout2 = `application/finiteFieldsAndBitLengths.aux'.
+
+ (/Users/em137vl/git/nightfall/nightfall/doc/whitepaper/application/finiteFieldsAndBitLengths.tex
+Package placeins Info: No floats held, on input line 1.
+
+Underfull \hbox (badness 10000) in paragraph at lines 4--10
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 4--10
+
+ []
+
+<images/ellipticCurveReals.png, id=381, 1121.18875pt x 878.28125pt>
+File: images/ellipticCurveReals.png Graphic file (type png)
+<use images/ellipticCurveReals.png>
+Package pdftex.def Info: images/ellipticCurveReals.png  used on input line 17.
+(pdftex.def)             Requested size: 420.19191pt x 329.15364pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 23--26
+
+ []
+
+<images/ellipticCurveF7.png, id=382, 1121.18875pt x 832.10875pt>
+File: images/ellipticCurveF7.png Graphic file (type png)
+<use images/ellipticCurveF7.png>
+Package pdftex.def Info: images/ellipticCurveF7.png  used on input line 66.
+(pdftex.def)             Requested size: 420.19191pt x 311.84956pt.
+
+Underfull \hbox (badness 10000) in paragraph at lines 58--70
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 58--70
+
+ []
+
+[19
+
+
+Package placeins Info: Float barrier, from input line 1, processed on page 19, lands on page 19. 
+ </Users/em137vl/git/nightfall/nightfall/doc/whitepaper/images/ellipticCurveReals.png>]
+Underfull \hbox (badness 10000) in paragraph at lines 72--75
+
+ []
+
+)
+Underfull \hbox (badness 10000) in paragraph at lines 84--283
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 84--283
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 84--283
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 84--283
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 84--283
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 84--283
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 84--283
+
+ []
+
+[20 </Users/em137vl/git/nightfall/nightfall/doc/whitepaper/images/ellipticCurveF7.png>] [21]
 \openout3 = `nightfall-v1.mtc'.
 
 \openout3 = `nightfall-v1.mtc'.
 
- (/Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.ptc3) [18]
-Package placeins Info: No floats held, on input line 1028.
+ (/Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.ptc3) [22
+
+]
+Package placeins Info: No floats held, on input line 293.
 \openout3 = `nightfall-v1.mtc'.
 
 \openout3 = `nightfall-v1.mtc'.
 
- (/Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.stc6)
+ (/Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.stc7)
 Package minitoc Info: I0006
-(minitoc)             nightfall-v1.slf6 is empty on input line 1033.
- [19
-Package placeins Info: Float barrier, from input line 1028, processed on page 19, lands on page 19. 
-] [20] [21]
-Underfull \hbox (badness 10000) in paragraph at lines 1153--1157
+(minitoc)             nightfall-v1.slf7 is empty on input line 298.
+ [23
+Package placeins Info: Float barrier, from input line 293, processed on page 23, lands on page 23. 
+] [24]
+\openout2 = `protocols/ERC721/variables721.aux'.
+
+ (/Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC721/variables721.tex) [25
+
+]
+\openout2 = `protocols/ERC721/keymanagement721.aux'.
+
+ (/Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC721/keymanagement721.tex) [26
+
+
+]
+\openout2 = `protocols/ERC721/mint721.aux'.
+
+ (/Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC721/mint721.tex
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 20.
+
+
+LaTeX Warning: Reference `fig:nfPrivacyIntentions' on page 27 undefined on input line 30.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 21--31
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1161--1171
+Underfull \hbox (badness 10000) in paragraph at lines 21--31
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1161--1171
+Underfull \hbox (badness 10000) in paragraph at lines 21--31
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1161--1171
+Underfull \hbox (badness 10000) in paragraph at lines 33--38
 
  []
 
-Package mdframed Info: mdframed inside float 
- mdframed uses option nobreak mdframed on input line 1171.
-Package mdframed Info: mdframed inside a box 
- mdframed uses option nobreak mdframed on input line 1171.
-
-Underfull \hbox (badness 10000) in paragraph at lines 1176--1181
-
- []
-
-[22]
-LaTeX Font Info:    Try loading font information for OMS+cmtt on input line 1227.
-LaTeX Font Info:    No file OMScmtt.fd. on input line 1227.
-
+LaTeX Font Info:    Try loading font information for OMS+cmtt on input line 81.
+LaTeX Font Info:    No file OMScmtt.fd. on input line 81.
 
 LaTeX Font Warning: Font shape `OMS/cmtt/m/n' undefined
 (Font)              using `OMS/cmsy/m/n' instead
-(Font)              for symbol `textbraceleft' on input line 1227.
+(Font)              for symbol `textbraceleft' on input line 81.
 
-[23]
-Underfull \hbox (badness 10000) in paragraph at lines 1296--1302
-
- []
+[27
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1296--1302
+] [28]
+Underfull \hbox (badness 10000) in paragraph at lines 117--138
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1304--1306
+Underfull \hbox (badness 10000) in paragraph at lines 117--138
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1400--1402
+Underfull \hbox (badness 10000) in paragraph at lines 117--138
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1405--1407
-
- []
-
-[24]
-Underfull \hbox (badness 10000) in paragraph at lines 1501--1502
-
- []
-
-[25]
-Package minitoc Info: I0006
-(minitoc)             nightfall-v1.slf6 is empty on input line 1529.
-
-
-LaTeX Warning: Hyper reference `sec:Mint' on page 26 undefined on input line 1529.
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 1529--1534
+Underfull \hbox (badness 10000) in paragraph at lines 117--138
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1529--1534
+Underfull \hbox (badness 10000) in paragraph at lines 117--138
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1555--1558
+Underfull \hbox (badness 10000) in paragraph at lines 150--157
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1555--1558
-
- []
-
-[26] [27] [28]
-Underfull \hbox (badness 10000) in paragraph at lines 1719--1726
+Underfull \hbox (badness 10000) in paragraph at lines 150--157
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1719--1726
+Underfull \hbox (badness 10000) in paragraph at lines 159--161
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1728--1732
+Underfull \hbox (badness 10000) in paragraph at lines 255--256
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1728--1732
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 1860--1866
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 1860--1866
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 1868--1872
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 1874--1878
+Underfull \hbox (badness 10000) in paragraph at lines 259--261
 
  []
 
 [29]
-Underfull \hbox (badness 10000) in paragraph at lines 1927--1931
+Underfull \hbox (badness 10000) in paragraph at lines 355--356
+
+ []
+
+) [30]
+\openout2 = `protocols/ERC721/transfer721.aux'.
+
+ (/Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC721/transfer721.tex
+Package minitoc Info: I0006
+(minitoc)             nightfall-v1.slf7 is empty on input line 5.
+
+
+LaTeX Warning: Hyper reference `sec:Mint' on page 31 undefined on input line 5.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 5--10
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1946--1952
+Underfull \hbox (badness 10000) in paragraph at lines 5--10
 
  []
 
 
-Overfull \hbox (20.71915pt too wide) in paragraph at lines 1946--1952
+LaTeX Warning: Reference `fig:nfMintWarning' on page 31 undefined on input line 26.
+
+[31
+
+
+] [32] [33]
+Underfull \hbox (badness 10000) in paragraph at lines 167--191
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 167--191
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 167--191
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 167--191
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 167--191
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 167--191
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 193--197
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 193--197
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 325--331
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 325--331
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 333--337
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 339--343
+
+ []
+
+[34]
+Underfull \hbox (badness 10000) in paragraph at lines 388--396
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 388--396
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 409--417
+
+ []
+
+
+Overfull \hbox (20.71915pt too wide) in paragraph at lines 409--417
 \OT1/cmr/m/n/10 Alice uses the $\OML/cmm/m/it/10 C[]$ \OT1/cmr/m/n/10 (or $\OML/cmm/m/it/10 C$\OT1/cmr/m/n/10 ) -- the set of constraints for a non-fungible transfer, located in \OT1/cmtt/m/n/10 zkp/code/gm17/nft-transfer
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1946--1952
+Underfull \hbox (badness 10000) in paragraph at lines 409--417
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1961--1964
+Underfull \hbox (badness 10000) in paragraph at lines 426--429
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1970--1973
+Underfull \hbox (badness 10000) in paragraph at lines 435--438
 
  []
 
-[30]
-Underfull \hbox (badness 10000) in paragraph at lines 1978--1980
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 1978--1980
+[35]
+Underfull \hbox (badness 10000) in paragraph at lines 443--445
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 1985--1989
+Underfull \hbox (badness 10000) in paragraph at lines 443--445
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 2019--2025
+Underfull \hbox (badness 10000) in paragraph at lines 446--454
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 2019--2025
+Underfull \hbox (badness 10000) in paragraph at lines 446--454
 
  []
 
 
-Overfull \hbox (72.3184pt too wide) in paragraph at lines 2030--2031
+Underfull \hbox (badness 10000) in paragraph at lines 457--461
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 457--461
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 478--480
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 482--489
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 482--489
+
+ []
+
+
+Overfull \hbox (72.3184pt too wide) in paragraph at lines 494--495
 []\OT1/cmr/m/n/10 Append the commitment $\OML/cmm/m/it/10 Z[]$ \OT1/cmr/m/n/10 to the ever-increasing array of tokens, $\OML/cmm/b/it/10 Z[]$\OT1/cmr/m/n/10 , so that $\OML/cmm/b/it/10 Z[] \OT1/cmr/m/n/10 = (\OML/cmm/m/it/10 Z[]; Z[]; :::Z[]; Z[]; Z[]; :::Z[]; Z[]\OT1/cmr/m/n/10 )$ 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 2030--2031
+Underfull \hbox (badness 10000) in paragraph at lines 494--495
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 2031--2033
+Underfull \hbox (badness 10000) in paragraph at lines 495--497
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 2031--2033
-
- []
-
-[31]
-Underfull \hbox (badness 10000) in paragraph at lines 2170--2176
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 2170--2176
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 2178--2184
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 2178--2184
-
- []
-
-[32]
-Underfull \hbox (badness 10000) in paragraph at lines 2204--2218
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 2204--2218
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 2204--2218
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 2204--2218
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 2204--2218
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 2204--2218
-
- []
-
-[33] [34] [35]
-Underfull \hbox (badness 10000) in paragraph at lines 2336--2344
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 2336--2344
-
- []
-
-
-Overfull \hbox (4.75156pt too wide) detected at line 2509
-[]
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 2513--2519
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 2513--2519
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 2521--2525
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 2527--2531
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 2579--2583
+Underfull \hbox (badness 10000) in paragraph at lines 495--497
 
  []
 
 [36]
-Underfull \hbox (badness 10000) in paragraph at lines 2596--2602
+Underfull \hbox (badness 10000) in paragraph at lines 629--630
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 2596--2602
+Underfull \hbox (badness 10000) in paragraph at lines 631--639
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 2611--2614
+Underfull \hbox (badness 10000) in paragraph at lines 631--639
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 2625--2627
+Underfull \hbox (badness 10000) in paragraph at lines 631--639
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 2625--2627
+Underfull \hbox (badness 10000) in paragraph at lines 631--639
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 2638--2642
-
- []
-
-[37]
-Underfull \hbox (badness 10000) in paragraph at lines 2672--2678
+Underfull \hbox (badness 10000) in paragraph at lines 640--647
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 2672--2678
+Underfull \hbox (badness 10000) in paragraph at lines 640--647
 
  []
 
-[38]
-Package placeins Info: No floats held, on input line 2737.
+) [37]
+\openout2 = `protocols/ERC721/burn721.aux'.
+
+ (/Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC721/burn721.tex
+Underfull \hbox (badness 10000) in paragraph at lines 4--18
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 4--18
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 4--18
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 4--18
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 4--18
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 4--18
+
+ []
+
+[38
+
+
+] [39] [40]
+Underfull \hbox (badness 10000) in paragraph at lines 128--130
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 128--130
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 131--135
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 131--135
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 136--146
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 136--146
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 136--146
+
+ []
+
+
+Overfull \hbox (4.04118pt too wide) detected at line 311
+[]
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 315--321
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 315--321
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 323--327
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 329--333
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 377--380
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 377--380
+
+ []
+
+[41]
+Underfull \hbox (badness 10000) in paragraph at lines 381--386
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 396--397
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 398--405
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 398--405
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 414--417
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 428--430
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 428--430
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 431--434
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 431--434
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 441--446
+
+ []
+
+[42]
+Underfull \hbox (badness 10000) in paragraph at lines 450--454
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 450--454
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 471--473
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 476--483
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 476--483
+
+ []
+
+) [43]
+Package placeins Info: No floats held, on input line 324.
 \openout3 = `nightfall-v1.mtc'.
 
 \openout3 = `nightfall-v1.mtc'.
 
- (/Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.stc7)
+ (/Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.stc8)
 Package minitoc Info: I0006
-(minitoc)             nightfall-v1.slf7 is empty on input line 2742.
+(minitoc)             nightfall-v1.slf8 is empty on input line 329.
 
-Underfull \hbox (badness 10000) in paragraph at lines 2743--2747
-
- []
-
-[39
-Package placeins Info: Float barrier, from input line 2737, processed on page 39, lands on page 39. 
-] [40] [41]
-Underfull \hbox (badness 10000) in paragraph at lines 2862--2866
+Underfull \hbox (badness 10000) in paragraph at lines 330--334
 
  []
 
+[44
 
-Underfull \hbox (badness 10000) in paragraph at lines 2870--2880
+Package placeins Info: Float barrier, from input line 324, processed on page 44, lands on page 44. 
+]
+\openout2 = `protocols/ERC20/variables20.aux'.
+
+ (/Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC20/variables20.tex) [45
+
+]
+\openout2 = `protocols/ERC20/keymanagement20.aux'.
+
+ (/Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC20/keymanagement20.tex) [46
+
+
+]
+\openout2 = `protocols/ERC20/mint20.aux'.
+
+ (/Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC20/mint20.tex
+Underfull \hbox (badness 10000) in paragraph at lines 14--17
+
+ []
+
+Package mdframed Info: mdframed detected package amsthm 
+ changed the theorem header of amsthm
+(mdframed)              on input line 20.
+
+LaTeX Warning: Reference `fig:fPrivacyIntentions' on page 47 undefined on input line 30.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 21--31
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 2870--2880
+Underfull \hbox (badness 10000) in paragraph at lines 21--31
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 2870--2880
+Underfull \hbox (badness 10000) in paragraph at lines 21--31
 
  []
 
 Package mdframed Info: mdframed inside float 
- mdframed uses option nobreak mdframed on input line 2880.
+ mdframed uses option nobreak mdframed on input line 31.
 Package mdframed Info: mdframed inside a box 
- mdframed uses option nobreak mdframed on input line 2880.
+ mdframed uses option nobreak mdframed on input line 31.
 
-Underfull \hbox (badness 10000) in paragraph at lines 2886--2893
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 2886--2893
-
- []
-
-[42] [43]
-Underfull \hbox (badness 10000) in paragraph at lines 3012--3018
+Underfull \hbox (badness 10000) in paragraph at lines 37--44
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 3012--3018
+Underfull \hbox (badness 10000) in paragraph at lines 37--44
+
+ []
+
+[47
+
+
+] [48]
+Underfull \hbox (badness 10000) in paragraph at lines 124--130
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 3020--3022
+Underfull \hbox (badness 10000) in paragraph at lines 124--130
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 3116--3118
+Underfull \hbox (badness 10000) in paragraph at lines 124--130
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 3121--3123
-
- []
-
-[44]
-Underfull \hbox (badness 10000) in paragraph at lines 3220--3222
-
- []
-
-[45]
-
-LaTeX Warning: Hyper reference `sec:Mint' on page 46 undefined on input line 3247.
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 3247--3250
+Underfull \hbox (badness 10000) in paragraph at lines 131--135
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 3271--3274
+Underfull \hbox (badness 10000) in paragraph at lines 131--135
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 3271--3274
+Underfull \hbox (badness 10000) in paragraph at lines 136--140
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 3277--3281
+Underfull \hbox (badness 10000) in paragraph at lines 136--140
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 3284--3288
+Underfull \hbox (badness 10000) in paragraph at lines 141--145
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 3298--3299
-
- []
-
-[46]
-Overfull \vbox (63.58028pt too high) has occurred while \output is active []
-
- [47] [48]
-Underfull \hbox (badness 10000) in paragraph at lines 3472--3482
+Underfull \hbox (badness 10000) in paragraph at lines 141--145
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 3472--3482
+Underfull \hbox (badness 10000) in paragraph at lines 159--161
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 3472--3482
+Underfull \hbox (badness 10000) in paragraph at lines 164--171
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 3472--3482
+Underfull \hbox (badness 10000) in paragraph at lines 164--171
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 3484--3488
+Underfull \hbox (badness 10000) in paragraph at lines 173--175
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 3484--3488
+Underfull \hbox (badness 10000) in paragraph at lines 269--271
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 3628--3632
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 3634--3638
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 3640--3646
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 3640--3646
+Underfull \hbox (badness 10000) in paragraph at lines 274--276
 
  []
 
 [49]
-Underfull \hbox (badness 10000) in paragraph at lines 3693--3695
+Underfull \hbox (badness 10000) in paragraph at lines 372--375
+
+ []
+
+) [50]
+\openout2 = `protocols/ERC20/transfer20.aux'.
+
+ (/Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC20/transfer20.tex
+
+LaTeX Warning: Hyper reference `sec:Mint' on page 51 undefined on input line 4.
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 4--7
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 3697--3701
+Underfull \hbox (badness 10000) in paragraph at lines 24--27
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 3722--3728
+Underfull \hbox (badness 10000) in paragraph at lines 24--27
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 3722--3728
+Underfull \hbox (badness 10000) in paragraph at lines 30--34
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 3731--3732
+Underfull \hbox (badness 10000) in paragraph at lines 37--41
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 3741--3744
+Underfull \hbox (badness 10000) in paragraph at lines 51--52
 
  []
 
-[50]
-Underfull \hbox (badness 10000) in paragraph at lines 3750--3753
-
- []
+[51
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 3753--3755
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 3765--3767
+] [52] [53]
+Underfull \hbox (badness 10000) in paragraph at lines 208--212
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 3765--3767
+Underfull \hbox (badness 10000) in paragraph at lines 208--212
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 3772--3776
-
- []
-
-[51]
-Underfull \hbox (badness 10000) in paragraph at lines 3805--3811
+Underfull \hbox (badness 10000) in paragraph at lines 213--217
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 3805--3811
+Underfull \hbox (badness 10000) in paragraph at lines 213--217
 
  []
 
 
-Overfull \hbox (98.24998pt too wide) in paragraph at lines 3818--3819
+Underfull \hbox (badness 10000) in paragraph at lines 218--222
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 218--222
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 223--227
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 223--227
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 228--239
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 228--239
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 228--239
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 228--239
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 241--245
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 241--245
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 385--389
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 391--395
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 397--403
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 397--403
+
+ []
+
+[54]
+Underfull \hbox (badness 10000) in paragraph at lines 450--452
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 453--458
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 476--477
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 478--485
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 478--485
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 488--489
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 498--501
+
+ []
+
+[55]
+Underfull \hbox (badness 10000) in paragraph at lines 507--510
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 510--512
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 522--524
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 522--524
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 525--528
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 525--528
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 529--534
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 537--541
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 537--541
+
+ []
+
+[56]
+Underfull \hbox (badness 10000) in paragraph at lines 558--560
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 563--570
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 563--570
+
+ []
+
+
+Overfull \hbox (98.24998pt too wide) in paragraph at lines 577--578
 []\OT1/cmr/m/n/10 Append the commitment $\OML/cmm/m/it/10 Z[]$ \OT1/cmr/m/n/10 to the ever-increasing array of tokens, $\OML/cmm/b/it/10 Z[]$\OT1/cmr/m/n/10 , so that $\OML/cmm/b/it/10 Z[] \OT1/cmr/m/n/10 = (\OML/cmm/m/it/10 Z[]; Z[]; :::Z[]; Z[]; :::; Z[]; :::Z[]; Z[]\OT1/cmr/m/n/10 )$ 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 3818--3819
+Underfull \hbox (badness 10000) in paragraph at lines 577--578
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 3819--3821
+Underfull \hbox (badness 10000) in paragraph at lines 578--580
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 3819--3821
+Underfull \hbox (badness 10000) in paragraph at lines 578--580
 
  []
 
 
-Overfull \hbox (125.7199pt too wide) in paragraph at lines 3821--3822
+Overfull \hbox (125.7199pt too wide) in paragraph at lines 580--581
 []\OT1/cmr/m/n/10 Append the commitment $\OML/cmm/m/it/10 Z[]$ \OT1/cmr/m/n/10 to the ever-increasing array of tokens, $\OML/cmm/b/it/10 Z[]$\OT1/cmr/m/n/10 , so that $\OML/cmm/b/it/10 Z[] \OT1/cmr/m/n/10 = (\OML/cmm/m/it/10 Z[]; Z[]; :::Z[]; Z[]; :::; Z[]; :::Z[]; Z[]; Z[]\OT1/cmr/m/n/10 )$ 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 3821--3822
+Underfull \hbox (badness 10000) in paragraph at lines 580--581
 
  []
 
 
-Overfull \hbox (1.30331pt too wide) detected at line 3981
+Overfull \hbox (0.59296pt too wide) detected at line 740
 []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 3989--3995
+Underfull \hbox (badness 10000) in paragraph at lines 747--754
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 3989--3995
+Underfull \hbox (badness 10000) in paragraph at lines 747--754
 
  []
 
-[52] [53]
-Underfull \hbox (badness 10000) in paragraph at lines 4027--4039
+[57]) [58]
+\openout2 = `protocols/ERC20/burn20.aux'.
 
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 4027--4039
-
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 4027--4039
+ (/Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC20/burn20.tex
+Underfull \hbox (badness 10000) in paragraph at lines 4--16
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 4027--4039
+Underfull \hbox (badness 10000) in paragraph at lines 4--16
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 4027--4039
-
- []
-
-[54] [55] [56]
-Underfull \hbox (badness 10000) in paragraph at lines 4160--4168
+Underfull \hbox (badness 10000) in paragraph at lines 4--16
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 4160--4168
+Underfull \hbox (badness 10000) in paragraph at lines 4--16
 
  []
 
 
-Overfull \hbox (4.66838pt too wide) in paragraph at lines 4172--4174
-\OT1/cmr/m/n/10 We denote the corresponding Merkle Tree which holds tokens $\OML/cmm/b/it/10 Z[]$ \OT1/cmr/m/n/10 by $\OML/cmm/m/it/10 M[]$\OT1/cmr/m/n/10 . We denote its root by $\OML/cmm/m/it/10 root[]$\OT1/cmr/m/n/10 ;
+Underfull \hbox (badness 10000) in paragraph at lines 4--16
+
  []
 
 
-Overfull \hbox (3.41869pt too wide) detected at line 4340
+Underfull \hbox (badness 1043) in paragraph at lines 41--42
+[]$[][]$ \OT1/cmr/m/n/10 equals $\OML/cmm/m/it/10 h[][]$ \OT1/cmr/m/n/10 (Proof that $\OML/cmm/m/it/10 Z[]$
+ []
+
+[59
+
+
+] [60] [61]
+Underfull \hbox (badness 10000) in paragraph at lines 129--131
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 129--131
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 132--136
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 132--136
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 137--146
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 137--146
+
+ []
+
+
+Overfull \hbox (3.87906pt too wide) in paragraph at lines 150--152
+\OT1/cmr/m/n/10 We denote the corresponding Merkle Tree which holds tokens $\OML/cmm/b/it/10 Z[]$ \OT1/cmr/m/n/10 by $\OML/cmm/m/it/10 M[]$\OT1/cmr/m/n/10 . We denote its root by $[][]$;
+ []
+
+
+Overfull \hbox (2.74776pt too wide) detected at line 318
 []
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 4344--4350
+Underfull \hbox (badness 10000) in paragraph at lines 322--328
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 4344--4350
+Underfull \hbox (badness 10000) in paragraph at lines 322--328
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 4352--4356
+Underfull \hbox (badness 10000) in paragraph at lines 330--334
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 4358--4362
+Underfull \hbox (badness 10000) in paragraph at lines 336--340
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 4414--4418
-
- []
-
-[57]
-Underfull \hbox (badness 10000) in paragraph at lines 4434--4440
+Underfull \hbox (badness 10000) in paragraph at lines 388--391
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 4434--4440
+Underfull \hbox (badness 10000) in paragraph at lines 388--391
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 4449--4452
+Underfull \hbox (badness 10000) in paragraph at lines 392--397
+
+ []
+
+[62]
+Underfull \hbox (badness 10000) in paragraph at lines 407--408
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 4463--4465
+Underfull \hbox (badness 10000) in paragraph at lines 412--419
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 4463--4465
+Underfull \hbox (badness 10000) in paragraph at lines 412--419
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 4476--4480
-
- []
-
-[58]
-Underfull \hbox (badness 10000) in paragraph at lines 4511--4517
+Underfull \hbox (badness 10000) in paragraph at lines 428--431
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 4511--4517
+Underfull \hbox (badness 10000) in paragraph at lines 442--444
 
  []
 
-[59]
-No file nightfall-v1.bbl.
+
+Underfull \hbox (badness 10000) in paragraph at lines 442--444
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 445--448
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 445--448
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 455--460
+
+ []
+
+[63]
+Underfull \hbox (badness 10000) in paragraph at lines 464--468
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 464--468
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 484--486
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 490--497
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 490--497
+
+ []
+
+
+Underfull \hbox (badness 10000) in paragraph at lines 505--506
+
+ []
+
+) [64] (/Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.bbl
+Package placeins Info: No floats held, on input line 1.
+
+Underfull \hbox (badness 10000) in paragraph at lines 15--19
+[]\OT1/cmr/m/n/10 Vitalik Buterin.  zk-SNARKS: Under the hood.  [][]$https : / / medium . com / @VitalikButerin /
+ []
+
+)
 Package minitoc Info: I0009
 (minitoc)             Listing minitoc auxiliary files. 
 (minitoc)             Creating the nightfall-v1.maf file.
 \openout3 = `nightfall-v1.maf'.
+
 
 
 Package minitoc(hints) Warning: W0072
@@ -2475,14 +2896,17 @@ Package minitoc(hints) Warning: W0024
 (minitoc(hints))                Some hints have been written 
 (minitoc(hints))                in the nightfall-v1.log file.
 
-[60]
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 4537.
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 4537.
- (/Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.aux)
-Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 4537.
-Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 4537.
+[65
+
+Package placeins Info: Float barrier, from input line 1, processed on page 65, lands on page 65. 
+]
+Package atveryend Info: Empty hook `BeforeClearDocument' on input line 355.
+Package atveryend Info: Empty hook `AfterLastShipout' on input line 355.
+ (/Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.aux (/Users/em137vl/git/nightfall/nightfall/doc/whitepaper/introduction/introduction.aux) (/Users/em137vl/git/nightfall/nightfall/doc/whitepaper/application/zokrates.aux) (/Users/em137vl/git/nightfall/nightfall/doc/whitepaper/application/trustedSetup.aux) (/Users/em137vl/git/nightfall/nightfall/doc/whitepaper/application/smartContracts.aux) (/Users/em137vl/git/nightfall/nightfall/doc/whitepaper/application/microservices.aux) (/Users/em137vl/git/nightfall/nightfall/doc/whitepaper/application/finiteFieldsAndBitLengths.aux) (/Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC721/variables721.aux) (/Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC721/keymanagement721.aux) (/Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC721/mint721.aux) (/Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC721/transfer721.aux) (/Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC721/burn721.aux) (/Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC20/variables20.aux) (/Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC20/keymanagement20.aux) (/Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC20/mint20.aux) (/Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC20/transfer20.aux) (/Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC20/burn20.aux))
+Package atveryend Info: Executing hook `AtVeryEndDocument' on input line 355.
+Package atveryend Info: Executing hook `AtEndAfterFileList' on input line 355.
 Package rerunfilecheck Info: File `nightfall-v1.out' has not changed.
-(rerunfilecheck)             Checksum: D8778A5B07CA1B99B77973D6C3E42829;548.
+(rerunfilecheck)             Checksum: 627ACA8C2389B2272A0CD1BAF033539B;619.
 
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
@@ -2495,17 +2919,17 @@ LaTeX Warning: There were multiply-defined labels.
 
  ) 
 Here is how much of TeX's memory you used:
- 49379 strings out of 494866
- 1052900 string characters out of 3176517
- 1267137 words of memory out of 3000000
- 51821 multiletter control sequences out of 15000+200000
- 548735 words of font info for 85 fonts, out of 3000000 for 9000
+ 50271 strings out of 494859
+ 1077446 string characters out of 3176446
+ 1282970 words of memory out of 3000000
+ 52615 multiletter control sequences out of 15000+200000
+ 550959 words of font info for 92 fonts, out of 3000000 for 9000
  0 hyphenation exceptions out of 8191
- 149i,22n,173p,1655b,3342s stack positions out of 5000i,500n,10000p,200000b,50000s
-</Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/cmextra/cmbsy7.pfb></Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/cm/cmbx10.pfb></Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/cm/cmbx12.pfb></Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/cm/cmbx7.pfb></Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/cm/cmbx9.pfb></Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/cm/cmex10.pfb></Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/cm/cmmi10.pfb></Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/cm/cmmi5.pfb></Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/cm/cmmi7.pfb></Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/cm/cmmib10.pfb></Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/cmextra/cmmib5.pfb></Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/cmextra/cmmib7.pfb></Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/cm/cmr10.pfb></Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/cm/cmr12.pfb></Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/cm/cmr17.pfb></Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/cm/cmr7.pfb></Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/cm/cmr8.pfb></Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/cm/cmr9.pfb></Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/cm/cmsy10.pfb></Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/cm/cmsy7.pfb></Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/cm/cmti10.pfb></Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/cm/cmtt10.pfb></Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/cm/cmtt12.pfb></Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/cm/cmtt9.pfb></Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.pdf (60 pages, 641655 bytes).
+ 153i,22n,175p,1642b,3338s stack positions out of 5000i,500n,10000p,200000b,50000s
+</Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/cmextra/cmbsy7.pfb></Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/cm/cmbx10.pfb></Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/cm/cmbx12.pfb></Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/cm/cmbx7.pfb></Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/cm/cmbx9.pfb></Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/cm/cmex10.pfb></Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/cm/cmmi10.pfb></Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/cm/cmmi5.pfb></Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/cm/cmmi7.pfb></Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/cm/cmmib10.pfb></Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/cmextra/cmmib5.pfb></Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/cmextra/cmmib7.pfb></Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/cm/cmr10.pfb></Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/cm/cmr12.pfb></Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/cm/cmr17.pfb></Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/cm/cmr7.pfb></Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/cm/cmr8.pfb></Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/cm/cmr9.pfb></Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/cm/cmss10.pfb></Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/cm/cmssbx10.pfb></Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/cm/cmsy10.pfb></Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/cm/cmsy7.pfb></Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/cm/cmti10.pfb></Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/cm/cmtt10.pfb></Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/cm/cmtt9.pfb></Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/symbols/msbm10.pfb></Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/symbols/msbm7.pfb>
+Output written on /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.pdf (65 pages, 2064788 bytes).
 PDF statistics:
- 1110 PDF objects out of 1200 (max. 8388607)
- 476 named destinations out of 1000 (max. 500000)
- 103 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 1115 PDF objects out of 1200 (max. 8388607)
+ 432 named destinations out of 1000 (max. 500000)
+ 141 words of extra memory for PDF output out of 10000 (max. 10000000)
 

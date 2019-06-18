@@ -310,7 +310,7 @@ async function mint(A, pk_A, S_A, account) {
   console.log(hostDir);
 
   // compute the proof
-  console.group('Computing proof with w=[A,pk_A,S_A] x=[d,z_A,1]');
+  console.group('Computing proof with w=[pk_A,S_A] x=[A,z_A,1]');
   let proof = await computeProof(
     [
       new Element(A, 'field'),
@@ -547,9 +547,10 @@ async function burn(A, Sk_A, S_A, z_A, z_A_index, account, payTo) {
   console.groupEnd();
 
   const inputs = cv.computeVectors([
+    new Element(payTo, 'field'),
     new Element(A, 'field'),
     new Element(Na, 'field'),
-    new Element(root, 'field'),
+    new Element(root, 'field')
   ]);
   console.log('inputs:');
   console.log(inputs);
@@ -565,6 +566,7 @@ async function burn(A, Sk_A, S_A, z_A, z_A_index, account, payTo) {
   console.group('Computing proof with w=[sk_A,S_A,path[],order] x=[A,Na,root,1]');
   let proof = await computeProof(
     [
+      new Element(payTo, 'field'),
       new Element(A, 'field'),
       new Element(Sk_A, 'field'),
       new Element(S_A, 'field'),
@@ -586,7 +588,7 @@ async function burn(A, Sk_A, S_A, z_A, z_A_index, account, payTo) {
 
   // with the pre-compute done we can burn the token, which is now a reasonably
   // light-weight calculation
-  await zkp.burn(payToOrDefault, proof, inputs, vkId, account, nfTokenShield);
+  await zkp.burn(proof, inputs, vkId, account, nfTokenShield);
 
   console.log('BURN COMPLETE\n');
   console.groupEnd();

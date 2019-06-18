@@ -1,0 +1,362 @@
+\subsection{Mint}
+\label{sec:721Mint}
+
+Suppose Alice wishes to be able to transfer ownership of an ERC-721 token under zero-knowledge, so that the following become private:
+
+\begin{center}
+  \begin{framed}
+    \begin{enumerate}
+      \item All details of the ERC-721 token (the `asset').
+      \item The identity of the sender of the token (`Alice').
+      \item The identity of the recipient of the token.
+    \end{enumerate}
+  \end{framed}
+\end{center}
+
+In order to achieve this, Alice must first convert her ERC-721 token into a private ERC-721 commitment. We call this act of conversion \textbf{`minting'} an ERC-721 commitment.
+In this section, we outline Nightfall's protocol for minting an ERC-721 commitment, but first, an important privacy warning:
+
+\begin{center}
+  \begin{mdframed}[backgroundcolor=verylightred]
+    \noindent
+    PRIVACY WARNING\\
+    \\
+    \textit{
+    Privacy is NOT achieved during the minting stage!
+    }\\
+    \\
+    Minting an ERC-721 commitment initially requires Alice to transfer her ERC-721 token to a `Shield' contract (which thereafter holds it in escrow). This transfer reveals the Ethereum address of the sender (Alice) as well as the ERC-721 token itself. Therefore everyone will know the owner and the underlying asset being represented by the initial ERC-721 commitment which is created at this `minting' stage.\\
+    \\
+    Only during subsequent `transfers' of the new ERC-721 commitment, will we achieve the privacy intentions of Figure~\ref{fig:nfPrivacyIntentions}
+  \end{mdframed}
+\end{center}
+\ \\
+The ERC-721 standard allows many unique assets to be tokenised and represented by a unique tokenId within an ERC-721 smart contract.
+Let $\alpha$ be the tokenId of some ERC-721 asset.\\
+\\
+For Alice to mint a token commitment representing $\alpha$, on the blockchain, under zero knowledge, she follows the steps in Figure~\ref{fig:nfMintAlgorithm}:
+
+\begin{figure}[hp]
+	\begin{center}
+		\begin{framed}
+      \begin{tabular}{p{16cm}}	
+        \textbf{Non-fungible mint algorithm} \\
+        \midrule
+        \textbf{Alice's steps:}\\
+        \begin{enumerate}
+				  \item Generate a random salt $\sigma_{A}$.
+				  \item Compute $Z_A := h(\;\alpha\;|\;pk^Z_A\;|\;\sigma_{A}\;)$, a token commitment which represents $\alpha$. 
+          \item Set public inputs $x = (\;\alpha,\;Z_A\;)$
+          \item Set private inputs $\omega = (\;pk_A^Z,\;\sigma_{A}\;)$
+          \item Select $C_{nft\mbox{-}mint}(\;\omega,\;x\;)$ -- the set of constraints which are satisfied if and only if:
+          \begin{enumerate}
+            \item $Z_A$ equals $h(\;\alpha\;|\;pk_A^Z\;|\;\sigma_A\;)$ (Proof that the commitment $Z_A$ hides the correct asset $\alpha$)
+          \end{enumerate}
+          \item Generate $\pi := P(\;p_C\;,\;x,\;\omega\;)$; a proof of knowledge of satisfying arguments $(\omega, x)\;s.t.\;C(\omega, x) = 1$. Recall: $p_C$ -- the proving key for $C$ -- will be stored on Alice's computer.
+           
+          The pair $(\pi, x)$ is the zk-SNARK which attests to knowledge of private inputs $\omega$ without revealing them.
+          \item Send $(\pi, x)$ to the Shield contract for verification.
+           
+          Using web3: \texttt{nfTokenShield.mint(proof, inputs, vkId)}
+          %remember where the count (enumi) is up to and store it in ongoingEnumCounter:
+          \setcounter{ongoingEnumCounter}{\value{enumi}}
+        \end{enumerate}
+        \ \\
+        \midrule
+        \textbf{Shield contract's steps:}\\
+        \begin{enumerate}
+          %resume counter
+          \setcounter{enumi}{\value{ongoingEnumCounter}}
+          \item Verify the proof as correct: call a Verifier contract to verify the \texttt{(proof, inputs)} pair against the verification key represented by \texttt{vkId}.
+          \setcounter{ongoingEnumCounter}{\value{enumi}}
+        \end{enumerate}
+        \ \\
+        \midrule
+       \textbf{ Verifier contract's steps:}\\
+        \begin{enumerate}
+          \setcounter{enumi}{\value{ongoingEnumCounter}}
+          \item Compute \texttt{result = verify(proof, inputs, vkId)}.
+          
+          I.e. Verify the \texttt{(proof, inputs)} pair against the verification key.
+          \item Return \texttt{result}$\in$\texttt{\{false, true\}} to the Shield contract.
+          \setcounter{ongoingEnumCounter}{\value{enumi}}
+        \end{enumerate}
+        \ \\
+        \midrule
+        \textbf{Shield contract's steps:}\\
+        \begin{enumerate}
+          \setcounter{enumi}{\value{ongoingEnumCounter}}
+          \item If \texttt{result = false}, revert.
+          \item Else:
+          \begin{enumerate}
+            \item Transfer $\alpha$ (the ERC-721 token with \texttt{tokenId} $=\alpha$), on behalf of Alice, to the Shield Contract. I.e. store $\alpha$ in escrow.
+            \item Add $Z_A$ to the next empty leaf of the Merkle Tree.
+            \item Recalculate the path to the root of the Merkle Tree from $Z_A$ for future users.
+          \end{enumerate}
+          \setcounter{ongoingEnumCounter}{\value{enumi}}
+        \end{enumerate}
+        \ \\
+        \midrule
+        \textbf{Alice's steps:}\\
+        \begin{enumerate}
+          \setcounter{enumi}{\value{ongoingEnumCounter}}
+          \item Store relevant data in local database, including the leafindex of $Z_A$.
+          \setcounter{ongoingEnumCounter}{0} %reset for next figure
+        \end{enumerate} 
+			\end{tabular}
+		\end{framed}
+	\end{center}
+\caption{Non-Fungible Mint Algorithm}
+\label{fig:nfMintAlgorithm}
+\end{figure}
+
+\newpage
+\subsubsection{Details}
+\label{sec:721MintDetails}
+
+We refer to the numbered steps of Figure~\ref{fig:nfMintAlgorithm}.\\
+\\
+\textbf{Step $1$}
+\ \\
+This is handled within the \hyperref[sec:ui]{UI} microservice (or within the api-gateway).\\
+\\
+\textbf{Steps $2 - 4$}
+\ \\
+These steps are handled within \hyperref[sec:nf-token-controller]{\texttt{nf-token-controller.js}}.\\
+\\
+\textbf{Steps $5 - 6$}
+\ \\
+These steps are handled within a \hyperref[sec:zokrates]{ZoKrates} container.\\
+\\
+\textbf{Step $7$}
+\ \\
+This transaction is handled within \hyperref[sec:nf-token-zkp]{\texttt{nf-token-zkp.js}}.\\
+\\
+\textbf{Steps $8 - 10$}
+\ \\
+The Verifier contract already has stored within it the object $vk_C$ (see \hyperref[sec:trustedSetup]{Trusted Setup}). It runs a verification function $V(vk_C, \pi , x)$.
+\begin{align*}
+  V: (vk_C, \pi_{C,x,\omega}, x) \to \{0,1\}
+\end{align*}
+where:
+\[
+    V=
+\begin{cases}
+    1,& \text{if } \pi_{C,x,\omega} \text{ and } x \text{ satisfy } vk_C\\
+    0,& \text{otherwise}
+\end{cases}
+\]
+
+\textbf{Steps $11 - 12$}
+\ \\
+If the Verifier contract returns $1$ (\texttt{true}) (verified) to the Shield contract, then the Shield contract will be satisfied with Alice's commitment, and will update its persistent states:\\
+\\
+Suppose the Shield contract stores an ever-increasing array, $\bm{Z}$, of all token commitments which have ever been submitted by anyone.\\
+\\
+Suppose, prior to Alice's mint, there are $n-1$ tokens in the tree:
+\begin{align*}
+  \bm{Z}_{n-1} = (Z_0, Z_1, ..., Z_{n-1})
+\end{align*}
+The information held within $\bm{Z}_{n-1}$ may be represented by the root hash $\roott_{n-1}$ of a Merkle Tree $M_{n-1}$:\\
+
+
+\begin{align*}
+  \begin{forest}
+    [{$\roott_{n-1}:= h\br*{
+                      h\br*{
+                        h\br*{
+                          h\br*{
+                            Z_0,Z_1
+                          },
+                          ...
+                        },
+                        h\br*{
+                          h\br*{
+                            Z_{n-1},0
+                          },
+                          0
+                        }
+                      },
+                      0
+                    }
+                  $}
+      [{$ h\br*{
+            h\br*{
+              h\br*{
+                Z_0,Z_1
+              },
+              ...
+            },
+            h\br*{
+              h\br*{
+                Z_{n-1},0
+              },
+              0
+            }
+          }
+        $}
+        [{$ h\br*{
+              h\br*{
+                Z_0,Z_1
+              },
+              ...
+            }
+          $}
+          [{$ h\br*{
+                Z_0,Z_1
+              }
+            $}
+            [{$Z_0$}][{$Z_1$}]
+          ]
+          [...
+            [...][...]
+          ]
+        ]
+        [{$ h\br*{
+              h\br*{
+                Z_{n-1},0
+              },
+              0
+            }
+          $}
+          [{$ h\br*{
+                Z_{n-1},0
+              }
+            $}
+            [{$Z_{n-1}$}][0]
+          ]
+          [0
+            [0][0]
+          ]
+        ]
+      ]
+      [0
+        [0
+          [0
+            [0][0]
+          ]
+          [0
+            [0][0]
+          ]
+        ]
+        [0
+          [0
+            [0][0]
+          ]
+          [0
+            [0][0]
+          ]
+        ]
+      ]
+    ]
+  \end{forest}
+\end{align*}
+
+Now that the Shield contract has been given verification that Alice's commitment, $Z_A$, does indeed hide the asset $\alpha$, the Shield contract will do the following:\\
+
+\begin{itemize}
+  \item Append the commitment $Z_A$ to the ever-increasing array of tokens, $\bm{Z}_{n-1}$, so that $\bm{Z}_{n}=(Z_0, Z_1, ... Z_{n-1}, Z_A)$
+  \item Recalculate a Merkle Root $\roott_{n}$ of $M_{n}$:
+  \\
+  \begin{align*}
+    \begin{forest}
+      [{$\roott_{n}:= h\br*{
+                      h\br*{
+                        h\br*{
+                          h\br*{
+                            Z_0,Z_1
+                          },
+                          ...
+                        },
+                        h\br*{
+                          h\br*{
+                            Z_{n-1},Z_A
+                          },
+                          0
+                        }
+                      },
+                      0
+                    }
+                  $}
+        [{$ h\br*{
+              h\br*{
+                h\br*{
+                  Z_0,Z_1
+                },
+                ...
+              },
+              h\br*{
+                h\br*{
+                  Z_{n-1},Z_A
+                },
+                0
+              }
+            }
+          $}
+          [{$ h\br*{
+                h\br*{
+                  Z_0,Z_1
+                },
+                ...
+              }
+            $}
+            [{$ h\br*{
+                  Z_0,Z_1
+                }
+              $}
+              [{$Z_0$}][{$Z_1$}]
+            ]
+            [...
+              [...][...]
+            ]
+          ]
+          [{$ h\br*{
+                h\br*{
+                  Z_{n-1},Z_A
+                },
+                0
+              }
+            $}
+            [{$ h\br*{
+                  Z_{n-1},Z_A
+                }
+              $}
+              [{$Z_{n-1}$}][{$Z_A$}]
+            ]
+            [0
+              [0][0]
+            ]
+          ]
+        ]
+        [0
+          [0
+            [0
+              [0][0]
+            ]
+            [0
+              [0][0]
+            ]
+          ]
+          [0
+            [0
+              [0][0]
+            ]
+            [0
+              [0][0]
+            ]
+          ]
+        ]
+      ]
+    \end{forest}
+  \end{align*}
+
+  \item Append $\roott_{n}$ to an ever-increasing array $\rootsList=(\roott_0, \roott_1,..., \roott_{n-1}, \roott_{n})$
+\end{itemize}
+\ \\
+
+
+
+\textbf{Step $13$}
+\ \\
+Alice will store all important information in her private database.
+

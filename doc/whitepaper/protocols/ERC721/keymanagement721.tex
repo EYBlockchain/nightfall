@@ -1,0 +1,22 @@
+\subsubsection{Key Management}
+\label{sec:721KeyManagement}
+There are several pairs of public and private keys to keep track of throughout these protocols. We provide a summary here (for an actor Alice ($A$)):
+
+\begin{center}
+	\resizebox{\textwidth}{!}{
+	\begin{tabular}{ c c c c c }
+		\textbf{Ownership of...} & \textbf{Account symbol} & \textbf{Private Key} & \textbf{Public Key} & \textbf{Notes}\\
+		\\
+    \makecell{Ethereum address} & $E_A$ & $sk^E_A$ & $pk^E_A$ & Used for `mint' and `burn'. \\
+		\\
+    \makecell{Anonymous Ethereum addresses} & $\Xi_{A,i}$ & $sk^{\Xi}_{A,i}$ & $pk^{\Xi}_{A,i}$ & Used for `transfer'. $i\in\mathbb{N}$.\\
+		\\
+    \makecell{Ethereum Whisper accounts} & $W_{A,j}$ & $sk^{W}_{A,j}$ & $pk^{W}_{A,j}$ & Used for private messaging. $j\in\mathbb{N}$\\
+		\\
+    \makecell{ERC-721 commitment $Z_l$} & $Z_l$ & $sk^{Z,l}_{A}$ & $pk^{Z,l}_{A}$ & Used to `mint', `transfer' and `burn' $Z_l$.\\
+
+	\end{tabular}
+	}
+\end{center}
+\ \\
+Hereafter, when we write $sk_A$ and $pk_A$ we will be referring to $sk^{Z,l}_{A}$ and $pk^{Z,l}_{A}$ respectively (where $Z_l$ is clear from context) - unless otherwise stated. 

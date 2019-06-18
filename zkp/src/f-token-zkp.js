@@ -156,7 +156,7 @@ computed.
 @param {string} vkId is a unique ID for the vk, used by the verifier contract to lookup the correct vk.
 @returns {object} burnResponse - a promise that resolves into the transaction hash
 */
-async function burn(payTo, proof, _inputs, vkId, _account, fTokenShield) {
+async function burn(proof, _inputs, vkId, _account, fTokenShield) {
   const account = utils.ensure0x(_account);
   const inputs = [..._inputs, '1'];
 
@@ -168,7 +168,7 @@ async function burn(payTo, proof, _inputs, vkId, _account, fTokenShield) {
   console.log(inputs);
   console.log(`vkId: ${vkId}`);
 
-  const txReceipt = await fTokenShield.burn(payTo, proof, inputs, vkId, {
+  const txReceipt = await fTokenShield.burn(proof, inputs, vkId, {
     from: account,
     gas: 6500000,
     gasPrice: config.GASPRICE,

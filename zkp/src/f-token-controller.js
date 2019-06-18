@@ -595,9 +595,10 @@ async function burn(C, skA, S_C, zC, zCIndex, account, _payTo) {
   console.groupEnd();
 
   const inputs = cv.computeVectors([
-    new Element(C, 'field', 1), // note that, unlike with an Asset token, we load A, not H(A)
+    new Element(payTo, 'field'),
+    new Element(C, 'field', 1),
     new Element(Nc, 'field'),
-    new Element(root, 'field'),
+    new Element(root, 'field')
   ]);
   console.log('inputs:');
   console.log(inputs);
@@ -613,6 +614,7 @@ async function burn(C, skA, S_C, zC, zCIndex, account, _payTo) {
   console.group('Computing proof with w=[skA,S_C,path[],order] x=[C,Nc,root,1]');
   let proof = await computeProof(
     [
+      new Element(payTo, 'field'),
       new Element(C, 'field', 1),
       new Element(skA, 'field'),
       new Element(S_C, 'field'),
@@ -634,7 +636,7 @@ async function burn(C, skA, S_C, zC, zCIndex, account, _payTo) {
 
   // with the pre-compute done we can burn the token, which is now a reasonably
   // light-weight calculation
-  await zkp.burn(payTo, proof, inputs, vkId, account, fTokenShield);
+  await zkp.burn(proof, inputs, vkId, account, fTokenShield);
 
   console.log('BURN COMPLETE\n');
   console.groupEnd();

@@ -1,0 +1,19 @@
+This is BibTeX, Version 0.99dThe top-level auxiliary file: nightfall-v1.aux
+The style file: unsrt.bst
+A level-1 auxiliary file: introduction/introduction.aux
+A level-1 auxiliary file: application/zokrates.aux
+A level-1 auxiliary file: application/trustedSetup.aux
+A level-1 auxiliary file: application/smartContracts.aux
+A level-1 auxiliary file: application/microservices.aux
+A level-1 auxiliary file: application/finiteFieldsAndBitLengths.aux
+A level-1 auxiliary file: protocols/ERC721/variables721.aux
+A level-1 auxiliary file: protocols/ERC721/keymanagement721.aux
+A level-1 auxiliary file: protocols/ERC721/mint721.aux
+A level-1 auxiliary file: protocols/ERC721/transfer721.aux
+A level-1 auxiliary file: protocols/ERC721/burn721.aux
+A level-1 auxiliary file: protocols/ERC20/variables20.aux
+A level-1 auxiliary file: protocols/ERC20/keymanagement20.aux
+A level-1 auxiliary file: protocols/ERC20/mint20.aux
+A level-1 auxiliary file: protocols/ERC20/transfer20.aux
+A level-1 auxiliary file: protocols/ERC20/burn20.aux
+Database file #1: misc.bib

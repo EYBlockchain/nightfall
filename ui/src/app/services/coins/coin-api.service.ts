@@ -178,7 +178,6 @@ export class CoinApiService {
     D: string,
     E: string,
     F: string,
-    pk_B: string,
     S_C: string,
     S_D: string,
     z_C_index: string,
@@ -199,7 +198,6 @@ export class CoinApiService {
       D,
       E,
       F,
-      pk_B,
       S_C,
       S_D,
       z_C_index,
@@ -214,7 +212,6 @@ export class CoinApiService {
     };
 
     const url = config.apiGateway.root + 'coin/transfer';
-
     return this.http
       .post(url, body, httpOptions)
       .pipe(tap(data => console.log(data)), catchError(this.handleError('spendCoin', [])));

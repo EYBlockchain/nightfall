@@ -1,0 +1,84 @@
+\section{ZoKrates}
+\label{sec:zokrates}
+Nightfall uses \href{https://github.com/Zokrates/ZoKrates}{ZoKrates}~\cite{zokrates} to generate zk-SNARKs.
+As discussed in Part~\ref{part:introduction},
+zk-SNARKs allow a Prover to `prove' that they have performed a particular computation, 
+and in order to do so they must convert that computation into an abstract `proof'. 
+ZoKrates gives us a domain specific language (DSL) through which we can express our computations in a human-readable way.
+It then abstracts the code into the format expected by the zk-SNARK prover and verifier.
+In all, ZoKrates assists Nightfall with the following:
+\begin{itemize} \itemsep-0.5em
+  \item[--] A human-readable language for writing code (computations) which can be turned into a zk-SNARK;
+  \item[--] Compilation of human-readable code into constraints;
+  \item[--] Generation of a (verification key, proving key) pair, which together represent the constraints;
+  \item[--] Computation of a `witness'. A Prover can feed their private inputs and public inputs into ZoKrates, and ZoKrates will produce a `witness' -- a step-by-step vector of evidence that each constraint has been satisfied by these inputs.
+  \item[--] Generation of a `proof' -- This, combined with the public inputs, is the attestation that the constraints of the computation have been satisfied.
+\end{itemize}
+
+\subsection{ZoKrates JavaScript Wrapper}
+\label{sec:zokratesJavascriptWrapper}
+
+Nightfall includes a JavaScript wrapper for each of the ZoKrates functions:
+\begin{itemize} \itemsep-0.5em
+  \item[--] compile;
+  \item[--] setup;
+  \item[--] compute-witness;
+  \item[--] generate-proof;
+  \item[--] export-verifier.
+\end{itemize}
+Nightfall uses the GM17 backend~\cite{DBLP:conf/crypto/GrothM17} of ZoKrates. Nightfall does not currently support the PGHR13 backend~\cite{DBLP:journals/cacm/ParnoHG016}.
+Nightfall could be adapted to also support PGHR13.
+
+The ZoKrates JavaScript wrapper:
+\begin{itemize} \itemsep-0.5em
+  \item[--] Uses a \href{https://hub.docker.com/r/michaelconnor/zok}{Docker Image of ZoKrates} from January 2019;
+  \item[--] Performs a Trusted Setup: 
+  \begin{itemize}
+    \item[--] Mounts `.code' files into a ZoKrates container;
+    \item[--] Compiles this code into constraints;
+    \item[--] Performs the `trusted setup' to output a `proving key' and a `verification key'
+    \item[--] Outputs this `proving key' and `verification key' into the mounter directory of the user's local machine;
+    \item[--] Jsonifies the `verification key'.
+  \end{itemize}  
+  \item[--] Generates proofs:
+  \begin{itemize}
+    \item[--] Generates a proof for a particular set of public and private inputs (passed from the UI):
+    \item[--] Extracts the proof object from the container's console (ready for use by the node.js application)
+  \end{itemize} 
+\end{itemize}
+
+Nightfall doesn't use the hard-coded \texttt{verifier.sol} contracts which are created by ZoKrates. Instead, Nightfall uses a single verifier contract which can handle all GM17 verification keys, and all proof submissions against these verification keys. This verifier contract (called \texttt{GM17.sol}) adheres to the draft EIP1922 standard.
+
+\begin{center}
+  \begin{mdframed}[backgroundcolor=verylightblue]
+    Where to look?\\
+    \\
+    \begin{tabular}{lp{14cm}}
+      \url{https://github.com/Zokrates/ZoKrates} & ZoKrates source code\\
+      \url{https://zokrates.github.io} & ZoKrates documentation\\
+      \texttt{./zkp/src/zokrates.js} & ZoKrates JavaScript Wrapper\\
+      \texttt{./zkp/code/gm17/} & \texttt{.pcode} files\\
+      \texttt{./zkp/code/README-tools-code-preprop.md} & explanation of \texttt{.pcode} syntax\\
+      \texttt{./zkp/code/README-tools-trusted-setup.md} & how to automatically do the trusted setup\\
+      \url{https://github.com/EYBlockchain/zokrates-preprocessor} & how to manually transpile from \texttt{.pcode} to \texttt{.code}\\ 
+      \texttt{./zkp/code/README-manual-trusted-setup.md} & how to manually do the trusted setup\\
+      \texttt{./zkp/contracts/GM17.sol} & for the EIP1922 Verifier contract.\\
+      \url{http://eips.ethereum.org/EIPS/eip-1922} & for the draft zk-SNARK Verifier Standard.
+    \end{tabular}
+  \end{mdframed}
+\end{center}
+
+
+\begin{figure}[H]
+  \begin{center}
+    \begin{mdframed}[backgroundcolor=verylightred]
+      \noindent
+      SECURITY WARNINGS 
+      \begin{itemize}
+        \item[--] The \href{https://hub.docker.com/r/michaelconnor/zok}{Docker Image of ZoKrates} from January 2019 is already outdated. It might include security bugs which have since been fixed over in the ZoKrates repository. The syntax of the ZoKrates DSL has also changed considerably since January 2019, and therefore the \texttt{.pcode} files of Nightfall are written in outdated syntax.
+      \end{itemize} 
+    \end{mdframed} 
+  \end{center}
+  \caption{Security warning: ZoKrates versioning}
+  \label{fig:zokratesWarning}
+\end{figure}

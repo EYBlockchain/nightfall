@@ -175,7 +175,7 @@ computed.
 @param {string} proofId is a unique ID for the proof, used by the verifier contract to lookup the correct proof.
 @returns {object} burnResponse - a promise that resolves into the transaction hash
 */
-async function burn(payTo, proof, inputs, vkId, account, nfTokenShield) {
+async function burn(proof, inputs, vkId, account, nfTokenShield) {
   const accountWith0x = utils.ensure0x(account);
   const finalInputs = [...inputs, '1'];
 
@@ -187,7 +187,7 @@ async function burn(payTo, proof, inputs, vkId, account, nfTokenShield) {
   console.log(finalInputs);
   console.log(`vkId: ${vkId}`);
 
-  const txReceipt = await nfTokenShield.burn(payTo, proof, finalInputs, vkId, {
+  const txReceipt = await nfTokenShield.burn(proof, finalInputs, vkId, {
     from: accountWith0x,
     gas: 6500000,
     gasPrice: config.GASPRICE,

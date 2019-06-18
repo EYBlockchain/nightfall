@@ -1,120 +1,68 @@
 \contentsline {part}{I\hspace {1em}Introduction}{2}{part.1}% 
 \contentsline {xpart}{Introduction}{2}{part.1}% 
 \contentsline {section}{\numberline {1}zk-SNARKs}{2}{section.1}% 
-\contentsline {subsection}{\numberline {1.1}High-level motivation and intuition}{2}{subsection.1.1}% 
-\contentsline {subsection}{\numberline {1.2}Technical explanation}{3}{subsection.1.2}% 
-\contentsline {part}{II\hspace {1em}The Application}{4}{part.2}% 
-\contentsline {xpart}{The Application}{4}{part.2}% 
-\contentsline {section}{\numberline {2}ZoKrates}{5}{section.2}% 
-\contentsline {subsection}{\numberline {2.1}ZoKrates JavaScript Wrapper}{5}{subsection.2.1}% 
+\contentsline {subsection}{\numberline {1.1}Overview}{2}{subsection.1.1}% 
+\contentsline {subsection}{\numberline {1.2}Background}{3}{subsection.1.2}% 
+\contentsline {subsection}{\numberline {1.3}Efficiency}{3}{subsection.1.3}% 
+\contentsline {subsection}{\numberline {1.4}Proof generation}{4}{subsection.1.4}% 
+\contentsline {part}{II\hspace {1em}The Application}{5}{part.2}% 
+\contentsline {xpart}{The Application}{5}{part.2}% 
+\contentsline {section}{\numberline {2}ZoKrates}{6}{section.2}% 
+\contentsline {subsection}{\numberline {2.1}ZoKrates JavaScript Wrapper}{6}{subsection.2.1}% 
 \contentsline {section}{\numberline {3}Trusted Setup}{7}{section.3}% 
-\contentsline {section}{\numberline {4}Smart Contracts}{11}{section.4}% 
-\contentsline {subsection}{\numberline {4.1}Familiar contracts}{11}{subsection.4.1}% 
-\contentsline {subsubsection}{\numberline {4.1.1}\texttt {ERC-721}}{11}{subsubsection.4.1.1}% 
+\contentsline {section}{\numberline {4}Smart Contracts}{10}{section.4}% 
+\contentsline {subsection}{\numberline {4.1}Pre-Existing Contracts}{10}{subsection.4.1}% 
+\contentsline {subsubsection}{\numberline {4.1.1}\texttt {ERC-721}}{10}{subsubsection.4.1.1}% 
 \contentsline {subsubsection}{\numberline {4.1.2}\texttt {ERC-20}}{11}{subsubsection.4.1.2}% 
 \contentsline {subsubsection}{\numberline {4.1.3}\texttt {ERC-165}}{12}{subsubsection.4.1.3}% 
 \contentsline {subsubsection}{\numberline {4.1.4}\texttt {Utility contracts}}{12}{subsubsection.4.1.4}% 
 \contentsline {subsection}{\numberline {4.2}Shield contracts}{12}{subsection.4.2}% 
-\contentsline {subsubsection}{\numberline {4.2.1}\texttt {FTokenShield.sol}}{12}{subsubsection.4.2.1}% 
-\contentsline {subsubsection}{\numberline {4.2.2}\texttt {NFTokenShield.sol}}{12}{subsubsection.4.2.2}% 
-\contentsline {subsection}{\numberline {4.3}Verifier contracts}{12}{subsection.4.3}% 
-\contentsline {subsubsection}{\numberline {4.3.1}\texttt {GM17.sol}}{12}{subsubsection.4.3.1}% 
-\contentsline {subsubsection}{\numberline {4.3.2}\texttt {Points.sol}}{12}{subsubsection.4.3.2}% 
-\contentsline {subsubsection}{\numberline {4.3.3}\texttt {GM17Library.sol}}{12}{subsubsection.4.3.3}% 
-\contentsline {subsubsection}{\numberline {4.3.4}\texttt {Pairing.sol}}{12}{subsubsection.4.3.4}% 
-\contentsline {subsection}{\numberline {4.4}Verifier Registry contracts}{13}{subsection.4.4}% 
-\contentsline {subsubsection}{\numberline {4.4.1}\texttt {Verifier\_Registry\_Interface.sol}}{13}{subsubsection.4.4.1}% 
-\contentsline {subsubsection}{\numberline {4.4.2}\texttt {Verifier\_Registry.sol}}{13}{subsubsection.4.4.2}% 
-\contentsline {subsubsection}{\numberline {4.4.3}\texttt {Verifier\_Register\_Interface.sol}}{13}{subsubsection.4.4.3}% 
-\contentsline {subsection}{\numberline {4.5}Deployment of Contracts}{13}{subsection.4.5}% 
-\contentsline {section}{\numberline {5}Microservices}{14}{section.5}% 
-\contentsline {subsection}{\numberline {5.1}zkp}{14}{subsection.5.1}% 
-\contentsline {subsubsection}{\numberline {5.1.1}\texttt {f-token-controller.js}}{14}{subsubsection.5.1.1}% 
-\contentsline {subsubsection}{\numberline {5.1.2}\texttt {f-token-zkp.js}}{14}{subsubsection.5.1.2}% 
-\contentsline {subsubsection}{\numberline {5.1.3}\texttt {nf-token-controller.js}}{14}{subsubsection.5.1.3}% 
-\contentsline {subsubsection}{\numberline {5.1.4}\texttt {nf-token-zkp.js}}{14}{subsubsection.5.1.4}% 
-\contentsline {subsubsection}{\numberline {5.1.5}\texttt {zokrates.js}}{14}{subsubsection.5.1.5}% 
-\contentsline {subsubsection}{\numberline {5.1.6}\texttt {vk-controller.js}}{14}{subsubsection.5.1.6}% 
-\contentsline {subsubsection}{\numberline {5.1.7}\texttt {vkIds.json}}{15}{subsubsection.5.1.7}% 
-\contentsline {subsubsection}{\numberline {5.1.8}\texttt {stats.json}}{15}{subsubsection.5.1.8}% 
-\contentsline {subsection}{\numberline {5.2}offchain}{15}{subsection.5.2}% 
-\contentsline {subsubsection}{\numberline {5.2.1}whisper}{15}{subsubsection.5.2.1}% 
-\contentsline {subsubsection}{\numberline {5.2.2}pkd}{15}{subsubsection.5.2.2}% 
-\contentsline {subsection}{\numberline {5.3}accounts}{16}{subsection.5.3}% 
-\contentsline {subsection}{\numberline {5.4}database}{16}{subsection.5.4}% 
-\contentsline {subsection}{\numberline {5.5}ui}{16}{subsection.5.5}% 
-\contentsline {part}{III\hspace {1em}The Protocols}{18}{part.3}% 
-\contentsline {xpart}{The Protocols}{18}{part.3}% 
-\contentsline {section}{\numberline {6}ERC-721 (non-fungible) tokens}{19}{section.6}% 
-\contentsline {subsection}{\numberline {6.1}Preliminaries}{19}{subsection.6.1}% 
-\contentsline {subsubsection}{\numberline {6.1.1}Variables}{20}{subsubsection.6.1.1}% 
-\contentsline {subsubsection}{\numberline {6.1.2}Key Management}{21}{subsubsection.6.1.2}% 
-\contentsline {subsection}{\numberline {6.2}Mint}{22}{subsection.6.2}% 
-\contentsline {subsubsection}{\numberline {6.2.1}Details}{24}{subsubsection.6.2.1}% 
-\contentsline {paragraph}{\relax Step $1$}{24}{section*.26}% 
-\contentsline {paragraph}{\relax Steps $2 - 4$}{24}{section*.27}% 
-\contentsline {paragraph}{\relax Steps $5 - 6$}{24}{section*.28}% 
-\contentsline {paragraph}{\relax Step $7$}{24}{section*.29}% 
-\contentsline {paragraph}{\relax Steps $8 - 10$}{24}{section*.30}% 
-\contentsline {paragraph}{\relax Steps $11 - 12$}{24}{section*.31}% 
-\contentsline {paragraph}{\relax Step $13$}{25}{section*.32}% 
-\contentsline {subsection}{\numberline {6.3}Transfer}{26}{subsection.6.3}% 
-\contentsline {subsubsection}{\numberline {6.3.1}Details}{29}{subsubsection.6.3.1}% 
-\contentsline {paragraph}{\relax Step $1$}{29}{section*.36}% 
-\contentsline {paragraph}{\relax Step $2$}{29}{section*.37}% 
-\contentsline {paragraph}{\relax Step $3$}{29}{section*.38}% 
-\contentsline {paragraph}{\relax Steps $4 - 5$}{29}{section*.39}% 
-\contentsline {paragraph}{\relax Steps $6 - 7$}{29}{section*.40}% 
-\contentsline {paragraph}{\relax Steps $8 - 9$}{30}{section*.41}% 
-\contentsline {paragraph}{\relax Steps $10 - 11$}{30}{section*.42}% 
-\contentsline {paragraph}{\relax Step $12$}{31}{section*.43}% 
-\contentsline {paragraph}{\relax Steps $13 - 15$}{31}{section*.44}% 
-\contentsline {paragraph}{\relax Steps $16 - 17$}{31}{section*.45}% 
-\contentsline {paragraph}{\relax Steps $18 - 19$}{32}{section*.46}% 
-\contentsline {paragraph}{\relax Steps $20 - 21$}{32}{section*.47}% 
-\contentsline {subsection}{\numberline {6.4}Burn}{33}{subsection.6.4}% 
-\contentsline {subsubsection}{\numberline {6.4.1}Details}{36}{subsubsection.6.4.1}% 
-\contentsline {paragraph}{\relax Step $1$}{36}{section*.50}% 
-\contentsline {paragraph}{\relax Steps $2 - 3$}{36}{section*.51}% 
-\contentsline {paragraph}{\relax Steps $4-5$}{37}{section*.52}% 
-\contentsline {paragraph}{\relax Steps $6 - 7$}{37}{section*.53}% 
-\contentsline {paragraph}{\relax Step $8$}{38}{section*.54}% 
-\contentsline {paragraph}{\relax Steps $9 - 11$}{38}{section*.55}% 
-\contentsline {paragraph}{\relax Steps $12 - 13$}{38}{section*.56}% 
-\contentsline {paragraph}{\relax Steps $14 - 15$}{38}{section*.57}% 
-\contentsline {section}{\numberline {7}ERC-20 (fungible) Tokens}{39}{section.7}% 
-\contentsline {subsection}{\numberline {7.1}Preliminaries}{39}{subsection.7.1}% 
-\contentsline {subsubsection}{\numberline {7.1.1}Variables}{40}{subsubsection.7.1.1}% 
-\contentsline {subsubsection}{\numberline {7.1.2}Key Management}{41}{subsubsection.7.1.2}% 
-\contentsline {subsection}{\numberline {7.2}Mint}{42}{subsection.7.2}% 
-\contentsline {subsubsection}{\numberline {7.2.1}Details}{44}{subsubsection.7.2.1}% 
-\contentsline {paragraph}{\relax Step $1$}{44}{section*.61}% 
-\contentsline {paragraph}{\relax Steps $2 - 4$}{44}{section*.62}% 
-\contentsline {paragraph}{\relax Steps $5 - 6$}{44}{section*.63}% 
-\contentsline {paragraph}{\relax Step $7$}{44}{section*.64}% 
-\contentsline {paragraph}{\relax Steps $8 - 10$}{44}{section*.65}% 
-\contentsline {paragraph}{\relax Steps $11 - 12$}{44}{section*.66}% 
-\contentsline {paragraph}{\relax Step $13$}{45}{section*.67}% 
-\contentsline {subsection}{\numberline {7.3}Transfer}{46}{subsection.7.3}% 
-\contentsline {subsubsection}{\numberline {7.3.1}Details}{49}{subsubsection.7.3.1}% 
-\contentsline {paragraph}{\relax Step $1$}{49}{section*.71}% 
-\contentsline {paragraph}{\relax Step $2$}{49}{section*.72}% 
-\contentsline {paragraph}{\relax Step $3$}{49}{section*.73}% 
-\contentsline {paragraph}{\relax Steps $4 - 7$}{49}{section*.74}% 
-\contentsline {paragraph}{\relax Steps $8 - 10$}{49}{section*.75}% 
-\contentsline {paragraph}{\relax Steps $11 - 12$}{50}{section*.76}% 
-\contentsline {paragraph}{\relax Steps $10 - 11$}{50}{section*.77}% 
-\contentsline {paragraph}{\relax Step $15$}{51}{section*.78}% 
-\contentsline {paragraph}{\relax Steps $16 - 18$}{52}{section*.79}% 
-\contentsline {paragraph}{\relax Steps $19 - 20$}{52}{section*.80}% 
-\contentsline {paragraph}{\relax Steps $21 - 22$}{53}{section*.81}% 
-\contentsline {subsection}{\numberline {7.4}Burn}{54}{subsection.7.4}% 
-\contentsline {subsubsection}{\numberline {7.4.1}Details}{57}{subsubsection.7.4.1}% 
-\contentsline {paragraph}{\relax Step $1$}{57}{section*.84}% 
-\contentsline {paragraph}{\relax Steps $2 - 3$}{57}{section*.85}% 
-\contentsline {paragraph}{\relax Steps $4-5$}{58}{section*.86}% 
-\contentsline {paragraph}{\relax Steps $6 - 7$}{58}{section*.87}% 
-\contentsline {paragraph}{\relax Step $8$}{58}{section*.88}% 
-\contentsline {paragraph}{\relax Steps $9 - 11$}{59}{section*.89}% 
-\contentsline {paragraph}{\relax Steps $12 - 13$}{59}{section*.90}% 
-\contentsline {paragraph}{\relax Steps $14 - 15$}{59}{section*.91}% 
+\contentsline {subsubsection}{\numberline {4.2.1}\texttt {NFTokenShield.sol}}{12}{subsubsection.4.2.1}% 
+\contentsline {subsubsection}{\numberline {4.2.2}\texttt {FTokenShield.sol}}{13}{subsubsection.4.2.2}% 
+\contentsline {subsection}{\numberline {4.3}Verifier contracts}{13}{subsection.4.3}% 
+\contentsline {subsubsection}{\numberline {4.3.1}\texttt {GM17.sol}}{13}{subsubsection.4.3.1}% 
+\contentsline {subsubsection}{\numberline {4.3.2}\texttt {Points.sol}}{13}{subsubsection.4.3.2}% 
+\contentsline {subsubsection}{\numberline {4.3.3}\texttt {GM17Library.sol}}{13}{subsubsection.4.3.3}% 
+\contentsline {subsubsection}{\numberline {4.3.4}\texttt {Pairing.sol}}{13}{subsubsection.4.3.4}% 
+\contentsline {subsection}{\numberline {4.4}Verifier Registry contracts}{14}{subsection.4.4}% 
+\contentsline {subsubsection}{\numberline {4.4.1}\texttt {Verifier\_Registry\_Interface.sol}}{14}{subsubsection.4.4.1}% 
+\contentsline {subsubsection}{\numberline {4.4.2}\texttt {Verifier\_Registry.sol}}{14}{subsubsection.4.4.2}% 
+\contentsline {subsubsection}{\numberline {4.4.3}\texttt {Verifier\_Register\_Interface.sol}}{14}{subsubsection.4.4.3}% 
+\contentsline {subsection}{\numberline {4.5}Deployment of Contracts}{14}{subsection.4.5}% 
+\contentsline {section}{\numberline {5}Microservices}{15}{section.5}% 
+\contentsline {subsection}{\numberline {5.1}zkp}{15}{subsection.5.1}% 
+\contentsline {subsubsection}{\numberline {5.1.1}\texttt {f-token-controller.js}}{15}{subsubsection.5.1.1}% 
+\contentsline {subsubsection}{\numberline {5.1.2}\texttt {f-token-zkp.js}}{15}{subsubsection.5.1.2}% 
+\contentsline {subsubsection}{\numberline {5.1.3}\texttt {nf-token-controller.js}}{15}{subsubsection.5.1.3}% 
+\contentsline {subsubsection}{\numberline {5.1.4}\texttt {nf-token-zkp.js}}{15}{subsubsection.5.1.4}% 
+\contentsline {subsubsection}{\numberline {5.1.5}\texttt {zokrates.js}}{15}{subsubsection.5.1.5}% 
+\contentsline {subsubsection}{\numberline {5.1.6}\texttt {vk-controller.js}}{15}{subsubsection.5.1.6}% 
+\contentsline {subsubsection}{\numberline {5.1.7}\texttt {vkIds.json}}{16}{subsubsection.5.1.7}% 
+\contentsline {subsubsection}{\numberline {5.1.8}\texttt {stats.json}}{16}{subsubsection.5.1.8}% 
+\contentsline {subsection}{\numberline {5.2}offchain}{16}{subsection.5.2}% 
+\contentsline {subsubsection}{\numberline {5.2.1}whisper}{16}{subsubsection.5.2.1}% 
+\contentsline {subsubsection}{\numberline {5.2.2}pkd}{16}{subsubsection.5.2.2}% 
+\contentsline {subsection}{\numberline {5.3}accounts}{17}{subsection.5.3}% 
+\contentsline {subsection}{\numberline {5.4}database}{17}{subsection.5.4}% 
+\contentsline {subsection}{\numberline {5.5}ui}{17}{subsection.5.5}% 
+\contentsline {section}{\numberline {6}Finite Fields and Bit Lengths}{19}{section.6}% 
+\contentsline {part}{III\hspace {1em}The Protocols}{22}{part.3}% 
+\contentsline {xpart}{The Protocols}{22}{part.3}% 
+\contentsline {section}{\numberline {7}ERC-721 (non-fungible) tokens}{23}{section.7}% 
+\contentsline {subsubsection}{\numberline {7.0.1}Variables}{25}{subsubsection.7.0.1}% 
+\contentsline {subsubsection}{\numberline {7.0.2}Key Management}{26}{subsubsection.7.0.2}% 
+\contentsline {subsection}{\numberline {7.1}Mint}{27}{subsection.7.1}% 
+\contentsline {subsubsection}{\numberline {7.1.1}Details}{29}{subsubsection.7.1.1}% 
+\contentsline {subsection}{\numberline {7.2}Transfer}{31}{subsection.7.2}% 
+\contentsline {subsubsection}{\numberline {7.2.1}Details}{34}{subsubsection.7.2.1}% 
+\contentsline {subsection}{\numberline {7.3}Burn}{38}{subsection.7.3}% 
+\contentsline {subsubsection}{\numberline {7.3.1}Details}{41}{subsubsection.7.3.1}% 
+\contentsline {section}{\numberline {8}ERC-20 (fungible) Tokens}{44}{section.8}% 
+\contentsline {subsubsection}{\numberline {8.0.1}Variables}{45}{subsubsection.8.0.1}% 
+\contentsline {subsubsection}{\numberline {8.0.2}Key Management}{46}{subsubsection.8.0.2}% 
+\contentsline {subsection}{\numberline {8.1}Mint}{47}{subsection.8.1}% 
+\contentsline {subsubsection}{\numberline {8.1.1}Details}{49}{subsubsection.8.1.1}% 
+\contentsline {subsection}{\numberline {8.2}Transfer}{51}{subsection.8.2}% 
+\contentsline {subsubsection}{\numberline {8.2.1}Details}{54}{subsubsection.8.2.1}% 
+\contentsline {subsection}{\numberline {8.3}Burn}{59}{subsection.8.3}% 
+\contentsline {subsubsection}{\numberline {8.3.1}Details}{62}{subsubsection.8.3.1}% 

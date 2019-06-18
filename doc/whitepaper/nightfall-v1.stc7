@@ -1,35 +1,8 @@
-{\reset@font\stcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {7.1}Preliminaries}{\reset@font\stcSSfont 39}{subsection.7.1}}
-{\reset@font\stcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode \numberline {7.1.1}Variables}{\reset@font\stcSSSfont 40}{subsubsection.7.1.1}}
-{\reset@font\stcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode \numberline {7.1.2}Key Management}{\reset@font\stcSSSfont 41}{subsubsection.7.1.2}}
-{\reset@font\stcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {7.2}Mint}{\reset@font\stcSSfont 42}{subsection.7.2}}
-{\reset@font\stcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode \numberline {7.2.1}Details}{\reset@font\stcSSSfont 44}{subsubsection.7.2.1}}
-{\reset@font\stcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Step $1$}{\reset@font\stcPfont 44}{section*.61}}
-{\reset@font\stcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Steps $2 - 4$}{\reset@font\stcPfont 44}{section*.62}}
-{\reset@font\stcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Steps $5 - 6$}{\reset@font\stcPfont 44}{section*.63}}
-{\reset@font\stcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Step $7$}{\reset@font\stcPfont 44}{section*.64}}
-{\reset@font\stcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Steps $8 - 10$}{\reset@font\stcPfont 44}{section*.65}}
-{\reset@font\stcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Steps $11 - 12$}{\reset@font\stcPfont 44}{section*.66}}
-{\reset@font\stcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Step $13$}{\reset@font\stcPfont 45}{section*.67}}
-{\reset@font\stcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {7.3}Transfer}{\reset@font\stcSSfont 46}{subsection.7.3}}
-{\reset@font\stcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode \numberline {7.3.1}Details}{\reset@font\stcSSSfont 49}{subsubsection.7.3.1}}
-{\reset@font\stcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Step $1$}{\reset@font\stcPfont 49}{section*.71}}
-{\reset@font\stcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Step $2$}{\reset@font\stcPfont 49}{section*.72}}
-{\reset@font\stcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Step $3$}{\reset@font\stcPfont 49}{section*.73}}
-{\reset@font\stcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Steps $4 - 7$}{\reset@font\stcPfont 49}{section*.74}}
-{\reset@font\stcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Steps $8 - 10$}{\reset@font\stcPfont 49}{section*.75}}
-{\reset@font\stcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Steps $11 - 12$}{\reset@font\stcPfont 50}{section*.76}}
-{\reset@font\stcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Steps $10 - 11$}{\reset@font\stcPfont 50}{section*.77}}
-{\reset@font\stcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Step $15$}{\reset@font\stcPfont 51}{section*.78}}
-{\reset@font\stcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Steps $16 - 18$}{\reset@font\stcPfont 52}{section*.79}}
-{\reset@font\stcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Steps $19 - 20$}{\reset@font\stcPfont 52}{section*.80}}
-{\reset@font\stcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Steps $21 - 22$}{\reset@font\stcPfont 53}{section*.81}}
-{\reset@font\stcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {7.4}Burn}{\reset@font\stcSSfont 54}{subsection.7.4}}
-{\reset@font\stcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode \numberline {7.4.1}Details}{\reset@font\stcSSSfont 57}{subsubsection.7.4.1}}
-{\reset@font\stcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Step $1$}{\reset@font\stcPfont 57}{section*.84}}
-{\reset@font\stcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Steps $2 - 3$}{\reset@font\stcPfont 57}{section*.85}}
-{\reset@font\stcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Steps $4-5$}{\reset@font\stcPfont 58}{section*.86}}
-{\reset@font\stcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Steps $6 - 7$}{\reset@font\stcPfont 58}{section*.87}}
-{\reset@font\stcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Step $8$}{\reset@font\stcPfont 58}{section*.88}}
-{\reset@font\stcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Steps $9 - 11$}{\reset@font\stcPfont 59}{section*.89}}
-{\reset@font\stcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Steps $12 - 13$}{\reset@font\stcPfont 59}{section*.90}}
-{\reset@font\stcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Steps $14 - 15$}{\reset@font\stcPfont 59}{section*.91}}
+{\reset@font\stcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode \numberline {7.0.1}Variables}{\reset@font\stcSSSfont 25}{subsubsection.7.0.1}}
+{\reset@font\stcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode \numberline {7.0.2}Key Management}{\reset@font\stcSSSfont 26}{subsubsection.7.0.2}}
+{\reset@font\stcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {7.1}Mint}{\reset@font\stcSSfont 27}{subsection.7.1}}
+{\reset@font\stcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode \numberline {7.1.1}Details}{\reset@font\stcSSSfont 29}{subsubsection.7.1.1}}
+{\reset@font\stcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {7.2}Transfer}{\reset@font\stcSSfont 31}{subsection.7.2}}
+{\reset@font\stcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode \numberline {7.2.1}Details}{\reset@font\stcSSSfont 34}{subsubsection.7.2.1}}
+{\reset@font\stcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {7.3}Burn}{\reset@font\stcSSfont 38}{subsection.7.3}}
+{\reset@font\stcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode \numberline {7.3.1}Details}{\reset@font\stcSSSfont 41}{subsubsection.7.3.1}}

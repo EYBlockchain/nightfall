@@ -1,0 +1,43 @@
+\begin{thebibliography}{1}
+
+\bibitem{nightfall}
+EY~Global~Blockchain R\&D.
+\newblock Nightfall: Zokrates library for private token transfer over the
+  ethereum blockchain.
+\newblock \url{https://github.com/EYBlockchain/nightfall}.
+
+\bibitem{whatAreSNARKs}
+Zcash.
+\newblock What are zk-{SNARK}s?
+\newblock \url{https://z.cash/technology/zksnarks/}.
+
+\bibitem{underTheHood}
+Vitalik Buterin.
+\newblock zk-{SNARKS}: Under the hood.
+\newblock
+  \url{https://medium.com/@VitalikButerin/zk-snarks-under-the-hood-b33151a013f6}.
+
+\bibitem{zkSNARKsNutshell}
+Christian Reitwiessner.
+\newblock zk-{SNARK}s in a nutshell.
+\newblock \url{https://blog.ethereum.org/2016/12/05/zksnarks-in-a-nutshell/}.
+
+\bibitem{DBLP:conf/crypto/GrothM17}
+Jens Groth and Mary Maller.
+\newblock Snarky signatures: Minimal signatures of knowledge from
+  simulation-extractable snarks.
+\newblock In {\em Advances in Cryptology - {CRYPTO} 2017 - 37th Annual
+  International Cryptology Conference, Santa Barbara, CA, USA, August 20-24,
+  2017, Proceedings, Part {II}}, pages 581--612, 2017.
+
+\bibitem{zokrates}
+Stefan~Deml Jacob~Eberhardt, Thibaut~Schaeffer.
+\newblock {ZoK}rates.
+\newblock \url{https://github.com/Zokrates/ZoKrates}.
+
+\bibitem{DBLP:journals/cacm/ParnoHG016}
+Bryan Parno, Jon Howell, Craig Gentry, and Mariana Raykova.
+\newblock Pinocchio: nearly practical verifiable computation.
+\newblock {\em Commun. {ACM}}, 59(2):103--112, 2016.
+
+\end{thebibliography}

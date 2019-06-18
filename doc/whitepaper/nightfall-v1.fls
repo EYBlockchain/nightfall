@@ -1,7 +1,7 @@
-PWD /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper
+PWD /Users/em137vl/git/nightfall/nightfall/doc/whitepaper
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/data/miktex/data/le/pdftex/pdflatex.fmt
-INPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.tex
-OUTPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.log
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.tex
+OUTPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.log
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/base/article.cls
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/base/article.cls
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/base/size10.clo
@@ -10,12 +10,12 @@ INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/minitoc/minitoc.sty
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/minitoc/mtcmess.sty
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/minitoc/mtcmess.sty
-OUTPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.mtc0
-OUTPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.mtc
-INPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.mtc0
-INPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.mtc0
-OUTPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.mtc
-OUTPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.mtc0
+OUTPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.mtc0
+OUTPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.mtc
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.mtc0
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.mtc0
+OUTPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.mtc
+OUTPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.mtc0
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/minitoc/acadian.mld
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/minitoc/acadien.mld
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/minitoc/afrikaan.mld
@@ -255,6 +255,8 @@ INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/amsmath/amsbsy.sty
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/amsmath/amsopn.sty
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/amsmath/amsopn.sty
+INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/amscls/amsthm.sty
+INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/amscls/amsthm.sty
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/tools/bm.sty
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/tools/bm.sty
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/forest/forest.sty
@@ -322,6 +324,7 @@ INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/gener
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/math/pgfmathfunctions.misc.code.tex
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/math/pgfmathfunctions.integerarithmetics.code.tex
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/math/pgfmathfloat.code.tex
+INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/math/pgfint.code.tex
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/basiclayer/pgfcorepoints.code.tex
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/basiclayer/pgfcorepathconstruct.code.tex
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/pgf/basiclayer/pgfcorepathusage.code.tex
@@ -488,22 +491,56 @@ INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/listings/lstmisc.sty
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/listings/listings.cfg
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/listings/listings.cfg
+INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/booktabs/booktabs.sty
+INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/booktabs/booktabs.sty
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/mathtools/mathtools.sty
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/mathtools/mathtools.sty
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/tools/calc.sty
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/tools/calc.sty
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/mathtools/mhsetup.sty
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/mathtools/mhsetup.sty
-OUTPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/macros.aux
-INPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/macros.tex
-INPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/macros.tex
+OUTPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/macros.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/macros.tex
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/macros.tex
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/framed/framed.sty
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/framed/framed.sty
-INPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.aux
-INPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.aux
-OUTPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.aux
-INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/context/base/supp-pdf.mkii
-INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/context/base/supp-pdf.mkii
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/introduction/introduction.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/introduction/introduction.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/application/zokrates.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/application/zokrates.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/application/trustedSetup.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/application/trustedSetup.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/application/smartContracts.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/application/smartContracts.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/application/microservices.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/application/microservices.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/application/finiteFieldsAndBitLengths.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/application/finiteFieldsAndBitLengths.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC721/variables721.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC721/variables721.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC721/keymanagement721.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC721/keymanagement721.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC721/mint721.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC721/mint721.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC721/transfer721.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC721/transfer721.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC721/burn721.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC721/burn721.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC20/variables20.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC20/variables20.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC20/keymanagement20.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC20/keymanagement20.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC20/mint20.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC20/mint20.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC20/transfer20.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC20/transfer20.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC20/burn20.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC20/burn20.aux
+OUTPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.aux
+INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/context/base/mkii/supp-pdf.mkii
+INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/context/base/mkii/supp-pdf.mkii
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/oberdiek/epstopdf-base.sty
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/oberdiek/epstopdf-base.sty
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/oberdiek/grfext.sty
@@ -512,14 +549,14 @@ INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/hyperref/nameref.sty
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/oberdiek/gettitlestring.sty
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/generic/oberdiek/gettitlestring.sty
-INPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.out
-INPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.out
-INPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.out
-INPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.out
-OUTPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.pdf
-INPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.out
-INPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.out
-OUTPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.out
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.out
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.out
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.out
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.out
+OUTPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.pdf
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.out
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.out
+OUTPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.out
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/tfm/public/cm/cmr17.tfm
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/tfm/public/cm/cmr8.tfm
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/tfm/public/cm/cmr6.tfm
@@ -558,32 +595,36 @@ INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/tfm
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/tfm/public/cm/cmbx12.tfm
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/tfm/public/cm/cmmib10.tfm
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/tfm/public/cm/cmbsy10.tfm
-INPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.toc
-OUTPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.stc1
-OUTPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.stc2
-OUTPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.stc3
-OUTPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.stc4
-OUTPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.stc5
-OUTPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.stc6
-OUTPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.stc7
-INPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.toc
-OUTPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.ptc1
-OUTPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.ptc2
-OUTPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.ptc3
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.toc
+OUTPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.stc1
+OUTPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.stc2
+OUTPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.stc3
+OUTPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.stc4
+OUTPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.stc5
+OUTPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.stc6
+OUTPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.stc7
+OUTPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.stc8
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.toc
+OUTPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.ptc1
+OUTPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.ptc2
+OUTPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.ptc3
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/tfm/public/cm/cmr12.tfm
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/tfm/public/cm/cmbx12.tfm
-INPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.toc
-INPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.toc
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.toc
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.toc
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/tfm/public/cm/cmbx10.tfm
-OUTPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.toc
+OUTPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.toc
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/data/pdftex/config/pdftex.map
+OUTPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/introduction/introduction.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/introduction/introduction.tex
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/introduction/introduction.tex
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/tfm/public/cm/cmbx12.tfm
-INPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.ptc1
-INPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.ptc1
-OUTPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.mtc
-INPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.mtc
-INPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.mtc
-OUTPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.mtc
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.ptc1
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.ptc1
+OUTPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.mtc
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.mtc
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.mtc
+OUTPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.mtc
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/tfm/public/cm/cmr9.tfm
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/tfm/public/cm/cmmi9.tfm
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/tfm/public/cm/cmsy9.tfm
@@ -593,8 +634,8 @@ INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/tfm
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/tfm/public/cm/cmbx9.tfm
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/tfm/public/amsfonts/cmextra/cmmib9.tfm
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/tfm/public/amsfonts/cmextra/cmbsy9.tfm
-INPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.ptc1
-INPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.ptc1
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.ptc1
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.ptc1
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/tfm/public/cm/cmtt10.tfm
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/tfm/public/cm/cmti10.tfm
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/tfm/public/amsfonts/cmextra/cmex7.tfm
@@ -607,14 +648,20 @@ INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/tfm
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/tfm/public/amsfonts/cmextra/cmmib7.tfm
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/tfm/public/cm/cmbsy10.tfm
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/tfm/public/amsfonts/cmextra/cmbsy7.tfm
-INPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.ptc2
-INPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.ptc2
-OUTPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.mtc
-INPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.mtc
-INPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.mtc
-OUTPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.mtc
-INPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.ptc2
-INPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.ptc2
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.ptc2
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.ptc2
+OUTPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.mtc
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.mtc
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.mtc
+OUTPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.mtc
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.ptc2
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.ptc2
+OUTPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/application/zokrates.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/application/zokrates.tex
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/application/zokrates.tex
+OUTPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/application/trustedSetup.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/application/trustedSetup.tex
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/application/trustedSetup.tex
 INPUT images/files-before-setup.png
 INPUT ./images/files-before-setup.png
 INPUT ./images/files-before-setup.png
@@ -625,66 +672,177 @@ INPUT ./images/files-after-setup.png
 INPUT ./images/files-after-setup.png
 INPUT ./images/files-after-setup.png
 INPUT ./images/files-after-setup.png
-INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/tfm/public/cm/cmtt12.tfm
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/base/omscmr.fd
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/tex/latex/base/omscmr.fd
-INPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.stc4
-INPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.stc4
-OUTPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.mtc
-INPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.mtc
-INPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.mtc
-OUTPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.mtc
-INPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.stc4
-INPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.stc4
+OUTPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/application/smartContracts.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/application/smartContracts.tex
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/application/smartContracts.tex
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.stc4
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.stc4
+OUTPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.mtc
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.mtc
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.mtc
+OUTPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.mtc
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.stc4
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.stc4
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/tfm/public/cm/cmtt9.tfm
-INPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.stc5
-INPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.stc5
-OUTPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.mtc
-INPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.mtc
-INPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.mtc
-OUTPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.mtc
-INPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.stc5
-INPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.stc5
-INPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.ptc3
-INPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.ptc3
-OUTPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.mtc
-INPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.mtc
-INPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.mtc
-OUTPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.mtc
-INPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.ptc3
-INPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.ptc3
-INPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.stc6
-INPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.stc6
-OUTPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.mtc
-INPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.mtc
-INPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.mtc
-OUTPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.mtc
-INPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.stc6
-INPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.stc6
-INPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.stc7
-INPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.stc7
-OUTPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.mtc
-INPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.mtc
-INPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.mtc
-OUTPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.mtc
-INPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.stc7
-INPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.stc7
-OUTPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.maf
-INPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.mtc
-INPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.mtc0
-INPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.ptc3
-INPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.ptc2
-INPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.ptc1
-INPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.stc7
-INPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.stc6
-INPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.stc5
-INPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.stc4
-INPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.stc3
-INPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.stc2
-INPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.stc1
-INPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.aux
-INPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.out
-INPUT /Users/em137vl/git/zkp-opensource/nightfall/documentation/whitepaper/nightfall-v1.out
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/images/nft-contracts.png
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/images/nft-contracts.png
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/images/nft-contracts.png
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/images/nft-contracts.png
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/images/nft-contracts.png
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/images/ft-contracts.png
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/images/ft-contracts.png
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/images/ft-contracts.png
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/images/ft-contracts.png
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/images/ft-contracts.png
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/images/erc721Shielding.png
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/images/erc721Shielding.png
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/images/erc721Shielding.png
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/images/erc721Shielding.png
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/images/erc721Shielding.png
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/images/erc20Shielding.png
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/images/erc20Shielding.png
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/images/erc20Shielding.png
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/images/erc20Shielding.png
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/images/erc20Shielding.png
+OUTPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/application/microservices.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/application/microservices.tex
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/application/microservices.tex
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.stc5
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.stc5
+OUTPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.mtc
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.mtc
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.mtc
+OUTPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.mtc
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.stc5
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.stc5
+OUTPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/application/finiteFieldsAndBitLengths.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/application/finiteFieldsAndBitLengths.tex
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/application/finiteFieldsAndBitLengths.tex
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/images/ellipticCurveReals.png
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/images/ellipticCurveReals.png
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/images/ellipticCurveReals.png
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/images/ellipticCurveReals.png
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/images/ellipticCurveReals.png
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/images/ellipticCurveF7.png
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/images/ellipticCurveF7.png
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/images/ellipticCurveF7.png
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/images/ellipticCurveF7.png
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/images/ellipticCurveF7.png
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.ptc3
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.ptc3
+OUTPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.mtc
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.mtc
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.mtc
+OUTPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.mtc
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.ptc3
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.ptc3
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.stc7
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.stc7
+OUTPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.mtc
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.mtc
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.mtc
+OUTPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.mtc
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.stc7
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.stc7
+OUTPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC721/variables721.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC721/variables721.tex
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC721/variables721.tex
+INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/tfm/public/cm/cmss10.tfm
+INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/tfm/public/cm/cmss8.tfm
+INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/tfm/public/cm/cmss8.tfm
+OUTPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC721/keymanagement721.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC721/keymanagement721.tex
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC721/keymanagement721.tex
+OUTPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC721/mint721.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC721/mint721.tex
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC721/mint721.tex
+INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/tfm/public/cm/cmssbx10.tfm
+INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/tfm/public/cm/cmssbx10.tfm
+INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/tfm/public/cm/cmssbx10.tfm
+OUTPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC721/transfer721.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC721/transfer721.tex
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC721/transfer721.tex
+OUTPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC721/burn721.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC721/burn721.tex
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC721/burn721.tex
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.stc8
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.stc8
+OUTPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.mtc
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.mtc
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.mtc
+OUTPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.mtc
+INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/tfm/public/cm/cmss9.tfm
+INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/tfm/public/cm/cmss8.tfm
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.stc8
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.stc8
+OUTPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC20/variables20.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC20/variables20.tex
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC20/variables20.tex
+OUTPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC20/keymanagement20.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC20/keymanagement20.tex
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC20/keymanagement20.tex
+OUTPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC20/mint20.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC20/mint20.tex
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC20/mint20.tex
+OUTPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC20/transfer20.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC20/transfer20.tex
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC20/transfer20.tex
+OUTPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC20/burn20.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC20/burn20.tex
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC20/burn20.tex
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.bbl
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.bbl
+OUTPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.maf
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.mtc
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.mtc0
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.ptc3
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.ptc2
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.ptc1
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.stc8
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.stc7
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.stc6
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.stc5
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.stc4
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.stc3
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.stc2
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.stc1
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/introduction/introduction.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/introduction/introduction.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/application/zokrates.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/application/zokrates.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/application/trustedSetup.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/application/trustedSetup.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/application/smartContracts.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/application/smartContracts.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/application/microservices.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/application/microservices.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/application/finiteFieldsAndBitLengths.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/application/finiteFieldsAndBitLengths.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC721/variables721.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC721/variables721.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC721/keymanagement721.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC721/keymanagement721.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC721/mint721.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC721/mint721.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC721/transfer721.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC721/transfer721.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC721/burn721.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC721/burn721.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC20/variables20.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC20/variables20.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC20/keymanagement20.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC20/keymanagement20.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC20/mint20.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC20/mint20.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC20/transfer20.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC20/transfer20.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC20/burn20.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/protocols/ERC20/burn20.aux
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.out
+INPUT /Users/em137vl/git/nightfall/nightfall/doc/whitepaper/nightfall-v1.out
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/cmextra/cmbsy7.pfb
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/cmextra/cmbsy7.pfb
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/cm/cmbx10.pfb
@@ -721,6 +879,10 @@ INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/typ
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/cm/cmr8.pfb
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/cm/cmr9.pfb
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/cm/cmr9.pfb
+INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/cm/cmss10.pfb
+INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/cm/cmss10.pfb
+INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/cm/cmssbx10.pfb
+INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/cm/cmssbx10.pfb
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/cm/cmsy10.pfb
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/cm/cmsy10.pfb
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/cm/cmsy7.pfb
@@ -729,9 +891,9 @@ INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/typ
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/cm/cmti10.pfb
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/cm/cmtt10.pfb
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/cm/cmtt10.pfb
-INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/cm/cmtt12.pfb
-INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/cm/cmtt12.pfb
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/cm/cmtt9.pfb
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/cm/cmtt9.pfb
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/symbols/msbm10.pfb
 INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/symbols/msbm10.pfb
+INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/symbols/msbm7.pfb
+INPUT /Users/em137vl/Library/Application Support/MiKTeX/texmfs/install/fonts/type1/public/amsfonts/symbols/msbm7.pfb

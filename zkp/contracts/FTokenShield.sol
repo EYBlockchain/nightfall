@@ -174,8 +174,10 @@ depth row  width  st#     end#
 
 
     require(roots[inputRoot] == inputRoot, "The input root has never been the root of the Merkle Tree");
-    require(ns[nc]==0, "The token has already been nullified!");
-    require(ns[nd]==0, "The token has already been nullified!");
+    require(nc != nd, "The nullifiers nc and nd must be different!");
+    require(ze != zf, "The token commitments ze and zf must be different!");
+    require(ns[nc] == 0, "The token has already been nullified!");
+    require(ns[nd] == 0, "The token has already been nullified!");
 
     ns[nc] = nc; //remember we spent it
     ns[nd] = nd; //remember we spent it
@@ -199,7 +201,7 @@ depth row  width  st#     end#
   }
 
 
-  function burn(address payTo, uint256[] memory _proof, uint256[] memory _inputs, bytes32 _vkId) public {
+  function burn(uint256[] memory _proof, uint256[] memory _inputs, bytes32 _vkId) public {
 
     require(_vkId == burnVkId, "Incorrect vkId");
 
@@ -207,9 +209,11 @@ depth row  width  st#     end#
     bool result = verifier.verify(_proof, _inputs, _vkId);
     require(result, "The proof has not been verified by the contract");
 
-    uint256 value = _inputs[0]; //the coin value being cashed-out
-    bytes27 nc = packedToBytes27(_inputs[2], _inputs[1]); //recover the nullifier
-    bytes27 inputRoot = packedToBytes27(_inputs[4], _inputs[3]);
+    uint256 payToUint = combineUint256(_inputs[1], _inputs[0]); //recover the payTo address
+    address payTo = address(payToUint); // explicitly convert to address (because we're sure no data loss will result from this)
+    uint256 value = _inputs[2]; //the coin value being cashed-out
+    bytes27 nc = packedToBytes27(_inputs[4], _inputs[3]); //recover the nullifier
+    bytes27 inputRoot = packedToBytes27(_inputs[6], _inputs[5]); //recover the root
 
     require(roots[inputRoot] == inputRoot, "The input root has never been the root of the Merkle Tree");
     require(ns[nc]==0, "The token has already been nullified!");
@@ -258,6 +262,10 @@ depth row  width  st#     end#
 
   function packedToBytes27(uint256 low, uint256 high) private pure returns (bytes27){
     return bytes27(uint216(low)) | (bytes27(uint216(high))<<128);
+  }
+
+  function combineUint256(uint256 low, uint256 high) private pure returns (uint256){
+    return uint256((bytes32(high)<<128) | bytes32(low));
   }
 
 }

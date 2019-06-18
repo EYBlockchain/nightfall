@@ -1,73 +1,18 @@
-{\reset@font\ptcSfont\mtc@string\contentsline{section}{\noexpand \leavevmode \numberline {6}ERC-721 (non-fungible) tokens}{\reset@font\ptcSfont 19}{section.6}}
-{\reset@font\ptcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {6.1}Preliminaries}{\reset@font\ptcSSfont 19}{subsection.6.1}}
-{\reset@font\ptcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode \numberline {6.1.1}Variables}{\reset@font\ptcSSSfont 20}{subsubsection.6.1.1}}
-{\reset@font\ptcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode \numberline {6.1.2}Key Management}{\reset@font\ptcSSSfont 21}{subsubsection.6.1.2}}
-{\reset@font\ptcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {6.2}Mint}{\reset@font\ptcSSfont 22}{subsection.6.2}}
-{\reset@font\ptcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode \numberline {6.2.1}Details}{\reset@font\ptcSSSfont 24}{subsubsection.6.2.1}}
-{\reset@font\ptcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Step $1$}{\reset@font\ptcPfont 24}{section*.26}}
-{\reset@font\ptcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Steps $2 - 4$}{\reset@font\ptcPfont 24}{section*.27}}
-{\reset@font\ptcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Steps $5 - 6$}{\reset@font\ptcPfont 24}{section*.28}}
-{\reset@font\ptcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Step $7$}{\reset@font\ptcPfont 24}{section*.29}}
-{\reset@font\ptcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Steps $8 - 10$}{\reset@font\ptcPfont 24}{section*.30}}
-{\reset@font\ptcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Steps $11 - 12$}{\reset@font\ptcPfont 24}{section*.31}}
-{\reset@font\ptcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Step $13$}{\reset@font\ptcPfont 25}{section*.32}}
-{\reset@font\ptcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {6.3}Transfer}{\reset@font\ptcSSfont 26}{subsection.6.3}}
-{\reset@font\ptcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode \numberline {6.3.1}Details}{\reset@font\ptcSSSfont 29}{subsubsection.6.3.1}}
-{\reset@font\ptcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Step $1$}{\reset@font\ptcPfont 29}{section*.36}}
-{\reset@font\ptcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Step $2$}{\reset@font\ptcPfont 29}{section*.37}}
-{\reset@font\ptcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Step $3$}{\reset@font\ptcPfont 29}{section*.38}}
-{\reset@font\ptcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Steps $4 - 5$}{\reset@font\ptcPfont 29}{section*.39}}
-{\reset@font\ptcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Steps $6 - 7$}{\reset@font\ptcPfont 29}{section*.40}}
-{\reset@font\ptcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Steps $8 - 9$}{\reset@font\ptcPfont 30}{section*.41}}
-{\reset@font\ptcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Steps $10 - 11$}{\reset@font\ptcPfont 30}{section*.42}}
-{\reset@font\ptcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Step $12$}{\reset@font\ptcPfont 31}{section*.43}}
-{\reset@font\ptcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Steps $13 - 15$}{\reset@font\ptcPfont 31}{section*.44}}
-{\reset@font\ptcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Steps $16 - 17$}{\reset@font\ptcPfont 31}{section*.45}}
-{\reset@font\ptcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Steps $18 - 19$}{\reset@font\ptcPfont 32}{section*.46}}
-{\reset@font\ptcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Steps $20 - 21$}{\reset@font\ptcPfont 32}{section*.47}}
-{\reset@font\ptcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {6.4}Burn}{\reset@font\ptcSSfont 33}{subsection.6.4}}
-{\reset@font\ptcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode \numberline {6.4.1}Details}{\reset@font\ptcSSSfont 36}{subsubsection.6.4.1}}
-{\reset@font\ptcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Step $1$}{\reset@font\ptcPfont 36}{section*.50}}
-{\reset@font\ptcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Steps $2 - 3$}{\reset@font\ptcPfont 36}{section*.51}}
-{\reset@font\ptcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Steps $4-5$}{\reset@font\ptcPfont 37}{section*.52}}
-{\reset@font\ptcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Steps $6 - 7$}{\reset@font\ptcPfont 37}{section*.53}}
-{\reset@font\ptcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Step $8$}{\reset@font\ptcPfont 38}{section*.54}}
-{\reset@font\ptcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Steps $9 - 11$}{\reset@font\ptcPfont 38}{section*.55}}
-{\reset@font\ptcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Steps $12 - 13$}{\reset@font\ptcPfont 38}{section*.56}}
-{\reset@font\ptcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Steps $14 - 15$}{\reset@font\ptcPfont 38}{section*.57}}
-{\reset@font\ptcSfont\mtc@string\contentsline{section}{\noexpand \leavevmode \numberline {7}ERC-20 (fungible) Tokens}{\reset@font\ptcSfont 39}{section.7}}
-{\reset@font\ptcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {7.1}Preliminaries}{\reset@font\ptcSSfont 39}{subsection.7.1}}
-{\reset@font\ptcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode \numberline {7.1.1}Variables}{\reset@font\ptcSSSfont 40}{subsubsection.7.1.1}}
-{\reset@font\ptcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode \numberline {7.1.2}Key Management}{\reset@font\ptcSSSfont 41}{subsubsection.7.1.2}}
-{\reset@font\ptcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {7.2}Mint}{\reset@font\ptcSSfont 42}{subsection.7.2}}
-{\reset@font\ptcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode \numberline {7.2.1}Details}{\reset@font\ptcSSSfont 44}{subsubsection.7.2.1}}
-{\reset@font\ptcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Step $1$}{\reset@font\ptcPfont 44}{section*.61}}
-{\reset@font\ptcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Steps $2 - 4$}{\reset@font\ptcPfont 44}{section*.62}}
-{\reset@font\ptcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Steps $5 - 6$}{\reset@font\ptcPfont 44}{section*.63}}
-{\reset@font\ptcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Step $7$}{\reset@font\ptcPfont 44}{section*.64}}
-{\reset@font\ptcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Steps $8 - 10$}{\reset@font\ptcPfont 44}{section*.65}}
-{\reset@font\ptcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Steps $11 - 12$}{\reset@font\ptcPfont 44}{section*.66}}
-{\reset@font\ptcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Step $13$}{\reset@font\ptcPfont 45}{section*.67}}
-{\reset@font\ptcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {7.3}Transfer}{\reset@font\ptcSSfont 46}{subsection.7.3}}
-{\reset@font\ptcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode \numberline {7.3.1}Details}{\reset@font\ptcSSSfont 49}{subsubsection.7.3.1}}
-{\reset@font\ptcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Step $1$}{\reset@font\ptcPfont 49}{section*.71}}
-{\reset@font\ptcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Step $2$}{\reset@font\ptcPfont 49}{section*.72}}
-{\reset@font\ptcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Step $3$}{\reset@font\ptcPfont 49}{section*.73}}
-{\reset@font\ptcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Steps $4 - 7$}{\reset@font\ptcPfont 49}{section*.74}}
-{\reset@font\ptcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Steps $8 - 10$}{\reset@font\ptcPfont 49}{section*.75}}
-{\reset@font\ptcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Steps $11 - 12$}{\reset@font\ptcPfont 50}{section*.76}}
-{\reset@font\ptcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Steps $10 - 11$}{\reset@font\ptcPfont 50}{section*.77}}
-{\reset@font\ptcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Step $15$}{\reset@font\ptcPfont 51}{section*.78}}
-{\reset@font\ptcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Steps $16 - 18$}{\reset@font\ptcPfont 52}{section*.79}}
-{\reset@font\ptcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Steps $19 - 20$}{\reset@font\ptcPfont 52}{section*.80}}
-{\reset@font\ptcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Steps $21 - 22$}{\reset@font\ptcPfont 53}{section*.81}}
-{\reset@font\ptcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {7.4}Burn}{\reset@font\ptcSSfont 54}{subsection.7.4}}
-{\reset@font\ptcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode \numberline {7.4.1}Details}{\reset@font\ptcSSSfont 57}{subsubsection.7.4.1}}
-{\reset@font\ptcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Step $1$}{\reset@font\ptcPfont 57}{section*.84}}
-{\reset@font\ptcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Steps $2 - 3$}{\reset@font\ptcPfont 57}{section*.85}}
-{\reset@font\ptcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Steps $4-5$}{\reset@font\ptcPfont 58}{section*.86}}
-{\reset@font\ptcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Steps $6 - 7$}{\reset@font\ptcPfont 58}{section*.87}}
-{\reset@font\ptcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Step $8$}{\reset@font\ptcPfont 58}{section*.88}}
-{\reset@font\ptcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Steps $9 - 11$}{\reset@font\ptcPfont 59}{section*.89}}
-{\reset@font\ptcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Steps $12 - 13$}{\reset@font\ptcPfont 59}{section*.90}}
-{\reset@font\ptcPfont\mtc@string\contentsline{paragraph}{\noexpand \leavevmode \relax Steps $14 - 15$}{\reset@font\ptcPfont 59}{section*.91}}
+{\reset@font\ptcSfont\mtc@string\contentsline{section}{\noexpand \leavevmode \numberline {7}ERC-721 (non-fungible) tokens}{\reset@font\ptcSfont 23}{section.7}}
+{\reset@font\ptcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode \numberline {7.0.1}Variables}{\reset@font\ptcSSSfont 25}{subsubsection.7.0.1}}
+{\reset@font\ptcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode \numberline {7.0.2}Key Management}{\reset@font\ptcSSSfont 26}{subsubsection.7.0.2}}
+{\reset@font\ptcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {7.1}Mint}{\reset@font\ptcSSfont 27}{subsection.7.1}}
+{\reset@font\ptcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode \numberline {7.1.1}Details}{\reset@font\ptcSSSfont 29}{subsubsection.7.1.1}}
+{\reset@font\ptcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {7.2}Transfer}{\reset@font\ptcSSfont 31}{subsection.7.2}}
+{\reset@font\ptcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode \numberline {7.2.1}Details}{\reset@font\ptcSSSfont 34}{subsubsection.7.2.1}}
+{\reset@font\ptcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {7.3}Burn}{\reset@font\ptcSSfont 38}{subsection.7.3}}
+{\reset@font\ptcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode \numberline {7.3.1}Details}{\reset@font\ptcSSSfont 41}{subsubsection.7.3.1}}
+{\reset@font\ptcSfont\mtc@string\contentsline{section}{\noexpand \leavevmode \numberline {8}ERC-20 (fungible) Tokens}{\reset@font\ptcSfont 44}{section.8}}
+{\reset@font\ptcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode \numberline {8.0.1}Variables}{\reset@font\ptcSSSfont 45}{subsubsection.8.0.1}}
+{\reset@font\ptcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode \numberline {8.0.2}Key Management}{\reset@font\ptcSSSfont 46}{subsubsection.8.0.2}}
+{\reset@font\ptcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {8.1}Mint}{\reset@font\ptcSSfont 47}{subsection.8.1}}
+{\reset@font\ptcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode \numberline {8.1.1}Details}{\reset@font\ptcSSSfont 49}{subsubsection.8.1.1}}
+{\reset@font\ptcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {8.2}Transfer}{\reset@font\ptcSSfont 51}{subsection.8.2}}
+{\reset@font\ptcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode \numberline {8.2.1}Details}{\reset@font\ptcSSSfont 54}{subsubsection.8.2.1}}
+{\reset@font\ptcSSfont\mtc@string\contentsline{subsection}{\noexpand \leavevmode \numberline {8.3}Burn}{\reset@font\ptcSSfont 59}{subsection.8.3}}
+{\reset@font\ptcSSSfont\mtc@string\contentsline{subsubsection}{\noexpand \leavevmode \numberline {8.3.1}Details}{\reset@font\ptcSSSfont 62}{subsubsection.8.3.1}}

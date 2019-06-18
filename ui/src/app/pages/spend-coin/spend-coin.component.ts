@@ -49,11 +49,6 @@ export class SpendCoinComponent implements OnInit , AfterContentInit{
   users: any;
 
   /**
-   * Public key of receiver
-   */
-  receiverPublicKey: string;
-
-  /**
    * Name of the transferee
    */
   receiverName: string;
@@ -146,7 +141,6 @@ export class SpendCoinComponent implements OnInit , AfterContentInit{
     let [coin1, coin2] = this.selectedCoinList;
     const {
       transferValue,
-      receiverPublicKey,
       transactions
     } = this;
 
@@ -165,7 +159,6 @@ export class SpendCoinComponent implements OnInit , AfterContentInit{
       coin2['coin_value'],
       this.toHex(transferValue),
       this.toHex(returnValue),
-      receiverPublicKey,
       coin1['salt'],
       coin2['salt'],
       coin1['coin_commitment_index'],
@@ -224,7 +217,9 @@ export class SpendCoinComponent implements OnInit , AfterContentInit{
    * @param num {Number} Number
    */
   toHex(num: number) {
-    if (!num || isNaN(num)) return;
+    if (!num || isNaN(num)){
+      num = 0;
+    }
     var hexValue = (num).toString(16);
     return '0x' + hexValue.padStart(32,"0");
   }

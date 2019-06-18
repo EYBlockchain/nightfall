@@ -1,0 +1,214 @@
+\section{Microservices}
+\label{sec:microservices}
+\secttoc
+
+\subsection{zkp}
+\label{sec:zkp}
+
+\subsubsection{\texttt{f-token-controller.js}}
+\label{sec:f-token-controller}
+Functions to orchestrate mint, transfer, and burn of fungible token commitments.
+\begin{itemize}
+  \item[--] Receives public inputs from the front end;
+  \item[--] Calculates the public inputs of each zk-SNARK;
+  \item[--] Calls \texttt{zokrates.js} -- the ZoKrates JS wrapper -- to compute a witness and to generate a proof.
+  \item[--] Calls \texttt{f-token-zkp.js} -- a web3 transactions module which sends transactions to relevant smart contracts.
+\end{itemize} 
+
+\subsubsection{\texttt{f-token-zkp.js}}
+\label{sec:f-token-zkp}
+Functions to send transactions (relating to fungible commitments) to the smart contracts. Using web3, this js module sends transactions to \texttt{FTokenshield}, \texttt{GM17}, and \texttt{Verifier\_Registry}.
+
+\subsubsection{\texttt{nf-token-controller.js}}
+\label{sec:nf-token-controller}
+Functions to orchestrate mint, transfer, and burn of non-fungible token commitments.
+\begin{itemize}
+  \item[--] Receives public inputs from the front end;
+  \item[--] Calculates the public inputs of each zk-SNARK;
+  \item[--] Calls \texttt{zokrates.js} -- the ZoKrates JS wrapper -- to compute a witness and to generate a proof.
+  \item[--] Calls \texttt{nf-token-zkp.js} -- a web3 transactions module which sends transactions to the \texttt{NFTokenShield} contract.
+\end{itemize}
+
+\subsubsection{\texttt{nf-token-zkp.js}}
+\label{sec:nf-token-zkp}
+Functions to send transactions (relating to non-fungible commitments) to the smart contracts. Using web3, this js module sends transactions to \texttt{NFTokenshield}, \texttt{GM17}, and \texttt{Verifier\_Registry}.
+
+\subsubsection{\texttt{zokrates.js}}
+JS wrapper functions for executing ZoKrates commands within a ZoKrates container. See \hyperref[sec:zokrates]{ZoKrates}.
+
+\subsubsection{\texttt{vk-controller.js}}
+Functions to send verification keys to the \texttt{Verifier\_Registry} contract. See \hyperref[sec:trustedSetup]{Trusted Setup} for context.
+
+\subsubsection{\texttt{vkIds.json}}
+JSON file which stores the vkId's for each of the six zk-SNARK computations (fungible mint, transfer and burn; and non-fungible mint, transfer and burn).\\
+At the time the verification keys are deployed to the \texttt{Verifier\_Registry}, it returns a unique vkId for each verification key. \texttt{vkIds.json} also stores the Ethereum address of the smart contract to which the verification keys were submitted. See \hyperref[sec:trustedSetup]{Trusted Setup} for context.
+
+\subsubsection{\texttt{stats.json}}
+JSON file which stores -- for each of the six zk-SNARK computations -- the time it took to `compute-witness' and `generate-proof' within the ZoKrates container on the User's computer. These time statistics serve as `ETA' estimates for the next time the User generates a proof (and the command line displays a progress bar accordingly).
+
+\begin{center}
+  \begin{mdframed}[backgroundcolor=verylightblue]
+    Where to look?\\
+    \\
+    \begin{tabular}{lp{14cm}}
+      \texttt{./zkp/} & The zkp microservice\\
+    \end{tabular}
+  \end{mdframed}
+\end{center}
+
+
+\subsection{offchain}
+\label{sec:offchain}
+
+\subsubsection{whisper}
+\label{sec:whisper}
+
+\begin{center}
+  \begin{mdframed}[backgroundcolor=verylightblue]
+    Where to look?\\
+    \\
+    \begin{tabular}{lp{14cm}}
+      \url{https://github.com/ethereum/wiki/wiki/Whisper} & Whisper GitHub.\\
+      \url{https://web3js.readthedocs.io/en/1.0/web3-shh.html} & web3 for whisper\\
+      \texttt{./offchain/whisper-controller-stub.js} & A whisper js wrapper for Ganache\\
+      \texttt{./offchain/whisper-controller.js} & A whisper js wrapper for Geth\\
+      \texttt{./offchain/listners.js} & \makecell[lt]{Listens for messages on behalf of the user.\\
+      Decrypts relevant messages.\\
+      Forwards the data to the relevant microservice to\\
+      take action.\\
+      E.g. to store new data in the database.}\\
+    \end{tabular}
+  \end{mdframed}
+\end{center}
+
+\begin{figure}[h]
+  \begin{center}
+    \begin{mdframed}[backgroundcolor=verylightred]
+      \noindent
+      LIMITATION\\
+      \\
+      The \texttt{whisper-controller.js} and The \texttt{whisper-controller-stub.js} only listen for Whisper events (via the \texttt{`subscribe'} methods) \textbf{when the user is logged into the Application}.\\
+      \\
+      If a user logs out, they will miss any incoming Whisper messages. E.g. Bob might not receive notification from Alice that he has been sent a commitment, and will not receive details of the preimage of the commitment, nor the location of the commitment within the on-chain Merkle Tree.\\
+      \\
+      This can be solved with future contributions to the Nightfall repository. Indeed, web3.shh includes the functionality to retrieve past messages already.
+    \end{mdframed}
+  \end{center}
+  \caption{Limitation: Nightfall does not currently receive Whisper messages if the User is not logged in.}
+  %\label{fig:nfMintWarning}
+\end{figure}
+
+\subsubsection{pkd}
+\label{sec:pkd}
+
+Nightfall uses a PKD (Public Key Directory) contract to allow users to lookup both ZKP public keys and Whisper public keys. See \hyperref[part:theProtocols]{The Protocols} for a disambiguation of the different public keys used in Nightfall. The public keys of a user can be retrieved with knowledge of their Ethereum Address.\\
+\\
+The PKD also serves as a simple Name Service; users can register a unique name with the PKD. With this, the public keys of a user can also be retrieved with knowledge of their unique name.\\
+\\
+An example usage of the PKD is:\\
+If Bob wishes to ask Alice to send him an ERC-721 commitment under zero-knowledge: Bob can query Alice's Whisper public key from the PKD, and Alice can then query Bob's ZKP public key from the PKD.
+
+
+\subsection{accounts}
+\label{sec:accounts}
+
+The `accounts' microservice manages a User's Ethereum accounts. (We use the terms Ethereum `address' and Ethereum `account' interchangeably).\\
+\\
+For a user, Alice, her anonymity is preserved by using a new `throwaway' Ethereum address each time she transacts with the Shield contract.\\
+\\
+This microservice generates new Ethereum accounts, and keeps track of them for the application.\\
+\\
+\textit{``But how would Alice pay for the gas costs of sending such a transaction to the Shield contract?''}\\
+\\
+She would have to pay for the verification computation of her zk-SNARK, and for the persistent storage of the public inputs to her zk-SNARK. In order for Alice to fund a new Ethereum account completely anonymously, she would have to mine Ether. This might not be a viable solution for some; as mining rewards can be unpredictable and could be insufficient to cover the gas needed to transact using Nightfall.\\
+\\
+Alternatively, Alice could make each transaction through a delegated third-party, who would send the \texttt{`transfer'} transaction on Alice's behalf. The initial release of Nightfall does not include functionality to delegate transactions to others. Nevertheless, we know that in future updates we can solve the problem of hiding that ``Alice transferred something'' so that observers only see that ``someone transferred something''.
+
+\begin{figure}[h]
+  \begin{center}
+    \begin{mdframed}[backgroundcolor=verylightred]
+      \noindent
+      PRIVACY WARNING\\
+      \\
+      The initial release of Nightfall does not give Alice full anonymity when she interacts with the Shield contract, unless she mines into her anonymous Ethereum accounts.\\
+      \\
+      Future updates will include the functionality to delegate transactions to others. This is a solved problem, which just needs to be implemented.
+    \end{mdframed}
+  \end{center}
+  \caption{Privacy warning: A future update is required to Nightfall to allow user's to reliably and consistently transact with the Shield contract anonymously.}
+  %\label{fig:nfMintWarning}
+\end{figure}
+
+\begin{center}
+  \begin{mdframed}[backgroundcolor=verylightblue]
+    Where to look?\\
+    \\
+    \begin{tabular}{lp{14cm}}
+      \texttt{./accounts/} & The accounts microservice\\
+    \end{tabular}
+  \end{mdframed}
+\end{center}
+
+\subsection{database}
+\label{sec:database}
+
+Nightfall uses mongodb to store private data on a User's local machine.
+
+\begin{figure}[h]
+  \begin{center}
+    \begin{mdframed}[backgroundcolor=verylightred]
+      \noindent
+      SECURITY WARNING\\
+      \\
+      Currently, the `secret keys' for spending token commitments are stored in a User's `User' db. This is not particularly secure, and moderations might need to be made when creating production-ready applications.
+    \end{mdframed}
+  \end{center}
+  \caption{Security warning: Secret keys are currently stored in the User's db.}
+  %\label{fig:nfMintWarning}
+\end{figure}
+
+
+\begin{center}
+  \begin{mdframed}[backgroundcolor=verylightblue]
+    Where to look?\\
+    \\
+    \begin{tabular}{lp{14cm}}
+      \texttt{./database/src/models/} & All schemas.\\
+    \end{tabular}
+  \end{mdframed}
+\end{center}
+
+
+
+\subsection{ui}
+\label{sec:ui}
+
+See the dedicated README for instructions on how to use the UI.\\
+
+\begin{figure}[H]
+  \begin{center}
+    \begin{mdframed}[backgroundcolor=verylightred]
+      \noindent
+      SECURITY WARNING\\
+      \\
+      Currently, random salt values (denoted $\sigma$ in this document) are generated within the UI microservice, or within the api-gateway microservice.\\
+      \\
+      Ensure you're comfortable with the level of randomness achieved by these random number generators.
+    \end{mdframed}
+  \end{center}
+  \caption{Security warning: Ensure you're comfortable with any random number generation in the application}
+  %\label{fig:nfMintWarning}
+\end{figure}
+
+\begin{center}
+  \begin{mdframed}[backgroundcolor=verylightblue]
+    Where to look?\\
+    \\
+    \begin{tabular}{lp{14cm}}
+      \texttt{./ui-src/} & The UI microservice\\
+      \texttt{UI.md} & A demonstration of the UI\\
+    \end{tabular}
+  \end{mdframed}
+\end{center}
+
+

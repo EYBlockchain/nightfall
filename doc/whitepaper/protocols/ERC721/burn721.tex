@@ -1,0 +1,496 @@
+\subsection{Burn}
+\label{sec:721Burn}
+
+We continue with the notation and indices from the prior sections.\\
+\\
+Suppose Bob is the owner of the token commitment $Z_B$ which represents the ERC-721 asset with tokenId $\alpha$ (as discussed in the prior section).
+The asset $\alpha$ can continue to be transferred under zero-knowledge between parties within the Shield contract indefinitely.
+Any third-party observers would not be able to infer "who sent what to whom".\\
+\\
+Recall that whilst the ERC-721 token represented by $\alpha$ has a `private' token commitment representation within the Shield contract, the underlying `public' ERC-721 token is owned by the Shield contract; effectively `locked up' in escrow.\\
+\\
+Suppose Bob (now the owner of $\alpha$ because he knows the secret key $sk^{Z,(n+m+1)}_{B,0}$) wishes to `release' his public ERC-721 token represented by $\alpha$ from escrow.
+Then he will need to effectively `reveal' the contents of his token commitment $Z_B$ in order to convince the Shield contract that he is indeed entitled to withdraw $\alpha$ from escrow.
+We call this act of converting from a `private' token commitment back to its `public' counterpart a `\textbf{burn}'.\\
+\\
+Note that by burning a token commitment, Bob is revealing information which was previously private; namely, the asset $\alpha$. Bob could continue to use an anonymous Ethereum address when calling the `burn' transaction, but analytics of public ERC-721 transactions thereafter will likely eventually reveal that it was Bob who burned $\alpha$. We'll have Bob use his public Ethereum address `burn', for simplicity.\\
+\\
+
+\noindent
+For Bob to burn $Z_B$ within the Shield contract, under zero knowledge, he follows the steps in Figure~\ref{fig:nfBurnAlgorithm}.
+
+\begin{figure}[htp]
+  \ContinuedFloat*
+	\begin{center}
+		\begin{framed}
+      \begin{tabular}{p{16cm}}	
+        \textbf{Non-fungible burn algorithm} \\
+        \\
+        \midrule
+        \textbf{Bob's steps:}\\
+        \begin{enumerate}
+          \setcounter{enumi}{\value{ongoingEnumCounter}}
+          \item Compute $N_B := h(\;\sigma_{\vec{AB}}\;|\;sk^Z_B\;)$, the nullifier of Bob's commitment $Z_B$.
+          \item Get $\psi_{Z_B}$ -- the sister-path of $Z_B$ -- from the Shield contract (see Details below).
+          \item Get the latest Merkle root from the Shield contract: $\roott_{n+m+k-1}$ (see Details below).
+          \item Set public inputs $x = (\alpha,\;N_B,\;\roott_{n+m+k-1})$
+          \item Set private inputs $\omega = (\psi_{Z_A},\;sk_B,\;\sigma_{\vec{AB}})$
+          \item Select $C_{nft-burn}(\;\omega,\;x\;)$ -- the set of constraints which are satisfied if and only if:
+          \begin{enumerate}
+            \item $pk_B$ equals $h(\;sk_B\;)$; (Proof of knowledge of the secret key to $pk_B$) (see Details for why $pk_B$ isn't an input to $C$)
+            \item $Z_B$ equals $h(\;\alpha\;|\;pk_B\;|\;\sigma_{\vec{AB}}\;)$ (Proof of the constituent values of $Z_B$) (see Details for why $Z_B$ isn't an input to $C$)
+            \item $\roott_{n+m+k-1}$ equals $h\br*{\psi_{1}\;|...|\;h\br*{\psi_{d-2}\;|\;h\br*{\psi_{d-1}\;|\;Z_B}\;}...}$ (Proof that $Z_B$ belongs to the on-chain Merkle Tree)
+            \item $N_B$ equals $h(\;\sigma_{\vec{AB}}\;|\;sk^Z_B\;)$ (Proof $N_B$ is indeed the nullifier of $Z_B$)
+          \end{enumerate}
+          \item Generate $\pi := P(\;p_C\;,\;x,\;\omega\;)$; a proof of knowledge of satisfying arguments $(\omega, x)\;s.t.\;C(\omega, x) = 1$. Recall: $p_C$ -- the proving key for $C$ -- will be stored on Alice's computer.
+           
+          The pair $(\pi, x)$ is the zk-SNARK which attests to knowledge of private inputs $\omega$ without revealing them.
+          \item Send $(\pi, x)$ to the Shield contract for verification.
+           
+          Using web3: \texttt{nfTokenShield.burn(payTo, proof, inputs, vkId)}
+
+          where \texttt{payTo} is an Ethereum address, specified by Bob, into which he wishes for the ERC-721 token with tokenId $=\alpha$ to be transferred.
+          %remember where the count (enumi) is up to and store it in ongoingEnumCounter:
+          \setcounter{ongoingEnumCounter}{\value{enumi}}
+        \end{enumerate}
+        \ \\
+        \midrule
+        \textbf{Shield contract's steps:}\\
+        \begin{enumerate}
+          %resume counter
+          \setcounter{enumi}{\value{ongoingEnumCounter}}
+          \item Verify the proof as correct: call a Verifier contract to verify the \texttt{(proof, inputs)} pair against the verification key represented by \texttt{vkId}.
+          \setcounter{ongoingEnumCounter}{\value{enumi}}
+        \end{enumerate}
+        \ \\
+        \hline
+        ... 
+			\end{tabular}
+		\end{framed}
+	\end{center}
+\caption{Non-Fungible Burn Algorithm}
+\label{fig:nfBurnAlgorithm}
+\end{figure}
+
+%continue on next page
+\begin{figure}[htp]
+  \ContinuedFloat %to continue
+	\begin{center}
+		\begin{framed}
+      \begin{tabular}{p{16cm}}
+        \textbf{Verifier contract's steps:}\\
+        \begin{enumerate}
+          \setcounter{enumi}{\value{ongoingEnumCounter}}
+          \item Compute \texttt{result = verify(proof, inputs, vkId)}.
+          
+          I.e. Verify the \texttt{(proof, inputs)} pair against the verification key.
+          \item Return \texttt{result}$\in$\texttt{\{false, true\}} to the Shield contract.
+          \setcounter{ongoingEnumCounter}{\value{enumi}}
+        \end{enumerate}
+        \ \\
+        \midrule
+        \textbf{Shield contract's steps:}\\
+        \begin{enumerate}
+          \setcounter{enumi}{\value{ongoingEnumCounter}}
+          \item If \texttt{result = false}, revert.
+          \item Else:
+          \begin{enumerate}
+            \item Check $\roott_{n+m+k-1}$ is in $\rootsList$. (Revert if not).
+            \item Check $N_B$ is not already in its list of `spent' nullifiers. (Revert if not).
+            \item Transfer the ERC-721 token with tokenId $=\alpha$ from the Shield contract (which has been holding it in escrow) to Bob's \texttt{payTo} Ethereum address.
+            \item Append the nullifier $N_{B}$ to the ever-increasing array $\bm N$.
+          \end{enumerate}
+          \setcounter{ongoingEnumCounter}{\value{enumi}}
+        \end{enumerate}
+        \ \\
+        \midrule
+        \textbf{Bob's steps:}\\
+        \begin{enumerate}
+          \setcounter{enumi}{\value{ongoingEnumCounter}}
+          \item Check the ERC-721 contract to ensure he owns the token with tokenId $=\alpha$.
+          \item Store any relevant data in his local database.
+          \setcounter{ongoingEnumCounter}{0} %reset for next figure
+        \end{enumerate} 
+			\end{tabular}
+		\end{framed}
+	\end{center}
+\caption{Non-Fungible Burn Algorithm} %same caption as the first part of this figure
+%\label{fig:nfBurnAlgorithm} - no label in this second part of the figure
+\end{figure}
+
+
+
+
+\newpage
+\subsubsection{Details}
+\label{sec:721BurnDetails}
+
+We refer to the numbered steps of Figure~\ref{fig:nfBurnAlgorithm}.\\
+\\
+
+\textbf{Step $1$}
+\ \\
+This is handled within \hyperref[sec:nf-token-controller]{\texttt{nf-token-controller.js}}.\\
+\\
+
+\textbf{Steps $2 - 3$}
+\ \\
+These calls to the Shield contract are handled within \hyperref[sec:nf-token-zkp]{\texttt{nf-token-zkp.js}}.\\
+\\
+\noindent
+It is important at this stage to note that there are an unknown number of other parties utilising the Shield smart contract.
+Hence, the dynamic array of tokens $\bm{Z}$ might have grown since Alice appended Bob's $Z_B$ as the $(n+m)^{th}$ leaf of $M$.\\
+\\
+Suppose there have been $k-1$ additional tokens added to $\bm{Z}$ since Alice added Bob's $Z_B$.
+That is,\\
+\begin{align*}
+  \bm{Z}_{n+m+k-1} = (Z_0, Z_1,..., Z_{n-1}, Z_A,
+  Z_{n+1},..., Z_{n+m-1}, Z_B, Z_{n+m+1},..., Z_{n+m+k-1})
+\end{align*}
+\ \\
+\noindent
+We denote the corresponding Merkle Tree which holds tokens $\bm{Z}_{n+m+k-1}$ by $M_{n+m+k-1}$. We denote its root by $\roott_{n+m+k-1}$; an element of $\rootsList$.
+
+
+
+\begin{align*}
+  \scalebox{0.9}{
+    \begin{forest}
+      [{$\roott_{n+m+k-1}:= h\br*{
+                          h\br*{
+                            h\br*{
+                              h\br*{
+                                Z_0,Z_1
+                              },
+                              ...
+                            },
+                            h\br*{
+                              h\br*{
+                                Z_{n-1},Z_A
+                              },
+                              h\br*{
+                                Z_{n+1},...
+                              }
+                            }
+                          },
+                          h\br*{
+                            h\br*{
+                              h\br*{
+                                Z_{n+m-1}, Z_B
+                              },
+                              h\br*{
+                                Z_{n+m+1}, ...
+                              }
+                            },
+                            h\br*{
+                              h\br*{
+                                Z_{n+m+k-1}, 0
+                              },
+                              0
+                            }
+                          }
+                        }
+                      $}
+        [{$ h\br*{
+              h\br*{
+                h\br*{
+                  Z_0,Z_1
+                },
+                ...
+              },
+              h\br*{
+                h\br*{
+                  Z_{n-1},Z_A
+                },
+                h\br*{
+                  Z_{n+1},...
+                }
+              }
+            }
+          $}
+          [{$ h\br*{
+                h\br*{
+                  Z_0,Z_1
+                },
+                ...
+              }
+            $}
+            [{$ h\br*{
+                  Z_0,Z_1
+                }
+              $}
+              [{$Z_0$}][{$Z_1$}]
+            ]
+            [...
+              [...][...]
+            ]
+          ]
+          [{$ h\br*{
+                h\br*{
+                  Z_{n-1},Z_A
+                },
+                h\br*{
+                  Z_{n+1},...
+                }
+              }
+            $}
+            [{$ h\br*{
+                  Z_{n-1},Z_A
+                }
+              $}
+              [{$Z_{n-1}$}][{$Z_A$}]
+            ]
+            [{$ h\br*{
+                  Z_{n+1},...
+                }
+              $}
+              [$Z_{n+1}$][...]
+            ]
+          ]
+        ]
+        [{$ h\br*{
+              h\br*{
+                h\br*{
+                  Z_{n+m-1}, Z_B
+                },
+                h\br*{
+                  Z_{n+m+1}, ...
+                }
+              },
+              h\br*{
+                h\br*{
+                  Z_{n+m+k-1}, 0
+                },
+                0
+              }
+            }
+          $}
+          [{$ h\br*{
+                h\br*{
+                  Z_{n+m-1}, Z_B
+                },
+                h\br*{
+                  Z_{n+m+1}, ...
+                }
+              }
+            $}
+            [{$ h\br*{
+                  Z_{n+m-1}, Z_B
+                }
+              $}
+              [{$Z_{n+m-1}$}][{$Z_B$}]
+            ]
+            [{$ h\br*{
+                  Z_{n+m+1}, ...
+                }
+              $}
+              [{$Z_{n+m+1}$}][...]
+            ]
+          ]
+          [{$ h\br*{
+                h\br*{
+                  Z_{n+m+k-1}, 0
+                },
+                0
+              }
+            $}
+            [{$ h\br*{
+                  Z_{n+m+k-1}, 0
+                }
+              $}
+              [{$Z_{n+m+k-1}$}][0]
+            ]
+            [0
+              [0][0]
+            ]
+          ]
+        ]
+      ]
+    \end{forest}
+  }
+\end{align*}
+
+
+
+\noindent
+Bob retrieves the value of the current Merkle root, $\roott_{n+m+k-1}$, from the Shield contract.\\
+\\
+Since Bob knows that $Z_B$ is at leaf-index $n+m$ of $M_{n+m+k-1}$, Bob can also retrieve the path from the leaf $Z_{n+m}=Z_B$ to the root $\roott_{n+m+k-1}$. Path computations are done in \texttt{zkp/src/compute-vectors.js}.\\
+\\
+We denote this path
+\begin{align*}
+  \phi_{Z_B} = [\phi_{d-1}, \phi_{d-2},..., \phi_{1}, \phi_0]
+\end{align*}
+Note that $\phi_0 = \roott_{n+m+k-1}$.\\
+\\
+Bob also retrieve's the `sister-path' of this path:
+\begin{align*}
+  \psi_{Z_B} = [\psi_{d-1}, \psi_{d-2},..., \psi_{1}, \psi_0]
+\end{align*}
+where $\psi_0 = \phi_0 = \roott_{n+m+k-1}$.\\
+\\
+For ease of reading, let's focus only on the nodes of $M_{n+m+k-1}$ which Bob cares about for the purposes of burning his token commitment $Z_B$:
+
+\begin{align*}
+    \begin{forest}
+      [{$\roott_{n+m+k-1}:=\phi_0=\psi_0$}
+        [{$\psi_1$}
+          [...
+            [...
+              [...][...]
+            ]
+            [...
+              [...][...]
+            ]
+          ]
+          [...
+            [...
+              [...][...]
+            ]
+            [...
+              [...][...]
+            ]
+          ]
+        ]
+        [{$\phi_1$}
+          [{$\phi_2$}
+            [{$\phi_3$}
+              [{$\psi_4$}][{$Z_B$}]
+            ]
+            [{$\psi_3$}
+              [...][...]
+            ]
+          ]
+          [{$\psi_2$}
+            [...
+              [...][0]
+            ]
+            [0
+              [0][0]
+            ]
+          ]
+        ]
+      ]
+    \end{forest}
+\end{align*}
+
+\noindent
+Equipped with $\psi_{Z_B}$, Bob can prove that he owns a token commitment at one of the leaves of $M_{n+m+k-1}$, without revealing that it is "$Z_{n+m}$ located at leaf-index $n+m$".\\
+\\
+
+\textbf{Steps $4-5$}
+\ \\
+These steps are handled within \hyperref[sec:nf-token-controller]{\texttt{nf-token-controller.js}}.\\
+\\
+As a reminder, we let:
+\begin{center}
+  \begin{tabular}{l l}
+    $x = (\alpha,\
+          N_{B},\
+          \roott_{n+m+k-1})$ & Public Inputs used to generate the Proof\\
+    $\omega = (\psi_{Z_B},\
+              sk_B,\
+              \sigma_{\vec{AB}})$ & Private Inputs used to generate the Proof\\
+  \end{tabular}
+\end{center}
+\ \\
+
+\textbf{Steps $6 - 7$}
+\ \\
+These steps are handled within a \hyperref[sec:zokrates]{ZoKrates} container.\\
+\\
+Bob uses the $C_{nft-burn}$ (or $C$) -- the set of constraints for a non-fungible burn, located in \texttt{zkp/code/gm17/nft-burn} (see \hyperref[sec:trustedSetup]{Trusted Setup}). $C_{nft-burn}(\;\omega,\;x\;)$ returns a value of $true$ if Bob provides a set of valid `satisfying' arguments $(\omega, x)$ to $C$.\\
+\\
+Let's elaborate on each of the checks and calculations constraining the inputs to $C$ (we highlight public inputs in \textbf{bold} below):
+\begin{enumerate}
+  \item Calculate $h(sk_B) =: pk_B'$.\\
+    Note that this newly calculated $pk_B'$ should equal $pk_B$ (Bob's public key), but we don't need to pass $pk_B$ as a private input and explicitly check that $pk_B'=pk_B$; a check on the correctness of $sk_B$ (and hence $pk_B'$) is implicitly achieved in the next two steps:
+  \item Calculate $h(\bm{\alpha}\;|\;pk_B'\;|\;\sigma_{\vec{AB}}) =: Z_B'$.\\
+    Note again that this newly calculated $Z_B'$ should equal $Z_B$ (Bob's token commitment), but we don't need to pass $Z_B$ as a private input and explicitly check that $Z_B'=Z_B$; a check on the correctness of $Z_B$ (and hence $Z_B'$) is implicitly achieved in the next step:
+  \item Check inputs $\psi_{Z_B}=[\psi_{d-1}, \psi_{d-2},..., \psi_{1}, \bm{\psi_{0}=\roott_{n+m+k-1}}]$ and the newly calculated $Z_B'$ satisfy:\\
+    $h\br*{\psi_{1}\;|...|\;h\br*{\psi_{d-2}\;|\;h\br*{\psi_{d-1}\;|\;Z_B'}\;}...} = \roott_{n+m+k-1} ( =: \bm{\psi_{0}})$\\
+    Given the one-way nature of our hashing function $h$, the only feasible way we could have arrived at the correct value of $\roott_{n+m+k-1}$ is if the sister-path $\psi_{Z_B}$ is correct, and if $Z_B'$ is correct, which (working backwards) must mean that $sk_B$ is correct.
+
+    How does the circuit know the value of $\roott_{n+m+k-1}$ is correct? It doesn't; but it is a `public input', and we can rely upon the Shield smart contract to check the correctness of all public inputs.\\
+  \\
+  We've therefore shown in the steps so far, that:
+  \begin{itemize}
+    \item[--] Bob is the owner of a token commitment (because he knows its secret key)
+    \item[--] Said token commitment is indeed a leaf of the on-chain Merkle Tree $M_{n+m+k-1}$.
+    \item[--] The token commitment does indeed represent the ERC-721 token with tokenId $=\bm{\alpha}$ (remember that $\alpha$ is a public input to a `burn' zk-SNARK).
+  \end{itemize}
+
+  Bob commits to burning his token $Z_B$ in the next step:
+  \item Check inputs $\sigma_{\vec{AB}}, sk_B, \bm{N_B}$ satisfy:
+    $h(\sigma_{\vec{AB}}\;|\;sk_B) = \bm{N_{B}}$\\
+    $N_B$ is referred to as a `nullifier' because it is understood by all participants to be an indisputable commitment to spend (`nullify') a token commitment. Remember that the token commitment being spent isn't revealed; the earlier steps have allowed Bob to demonstrate hidden knowledge of the secret key $sk_B$ of a token commitment which does indeed exist. By including $sk_B$ in the nullifier's preimage, Bob is binding himself as the executor of this `burn'. By including $\sigma_{\vec{AB}}$, Bob is specifying a serial number which is unique to the token $Z_B$ (thereby distinguishing this nullifier from those which would nullify any other token commitments he may own).
+\end{enumerate}
+Notice how each stage is linked to the last, and that at each of the `Check' stages, private inputs are being reconciled against at least one public input (highlighted in \textbf{bold} to help you notice). By structuring the circuit $C$ in this way, we are able to share only the public inputs with the Shield contract (along with a `proof' $\pi_{C,x,\omega}$). We'll see shortly that the Shield contract checks the correctness of each of the public inputs against its current states.\\
+\\
+
+\noindent
+If all of the above constraints are satisfied by the public and private inputs, ZoKrates will generate the proof $\pi_{C,x,\omega}$; a proof of knowledge of satisfying arguments $(\omega, x) \ s.t. \ C(\omega, x) = 1$.\\
+\\
+
+
+
+
+
+
+
+\textbf{Step $8$}
+\ \\
+This transaction is handled within \hyperref[sec:nf-token-zkp]{\texttt{nf-token-zkp.js}}.\\
+\\
+Having generated $\pi_{C,x,\omega}$, Bob then sends the following to the Shield contract from his Ethereum address $E_B$:
+\begin{align*}
+  &E_B\\
+  &\pi_{C,x,\omega}\\
+  &x = (\alpha, N_{B}, \roott_{n+m+k-1})
+\end{align*}
+\\
+Recall that everyone knows the checks and calculations which have been performed in the circuit $C_{nft-burn}$, because it is a public file in the Nightfall repository. Further, everyone knows the verification key $vk_C$ which uniquely represents this circuit, because it has been publicly stored in the Verifier Registry contract. Therefore, when Bob shares the pair $(x, \pi_{C,x,\omega})$, and the `unique id' of the relevant verification key $vk_C$; everyone will interpret this information as the Bob's intention to burn; and everyone will be convinced that he knows the secret key which permits him to transfer ownership of a token commitment; and everyone will be convinced that that token commitment represents the ERC-721 token with tokenId $=\alpha$.\\
+\\
+
+
+
+\textbf{Steps $9 - 11$}
+\ \\
+The Verifier Registry contract already has stored within it the verification key $vk_C$.
+It runs a verification function $V(vk_C, \pi_{C,x,\omega}, x)$.
+\begin{align*}
+  V: (vk_C, \pi_{C,x,\omega}, x) \to \{0,1\}
+\end{align*}
+where:
+\[
+    V=
+\begin{cases}
+    1,& \text{if } \pi_{C,x,\omega} \text{ and } x \text{ satisfy } vk_C\\
+    0,& \text{otherwise}
+\end{cases}
+\]
+\ \\
+
+
+
+\textbf{Steps $12 - 13$}
+\ \\
+If the Verifier contract returns $1$ ($true$) (verified) to the Shield contract, then the Shield contract will be satisfied that Bob's proof and public inputs represent his commitment to burning a token commitment, and to withdrawing its underlying ERC-721 token $=\alpha$. If the Verifier contract returns $0$, then the transaction will revert.\\
+\\
+Let's suppose Bob's $(x, \pi_{C,x,\omega})$ pair is verified.\\
+\\
+Following verification of the proof, the Shield contract will do the following:
+\begin{enumerate}
+  \item Check $\roott_{n+m+k-1}$ is in $\rootsList$.\\
+    (If not, the burn will fail)
+  \item Check $N_B$ is not already in the list of nullifiers, which we denote $\bm{N}$.\\
+    (If $N_B$ is already in $\bm{N}$, the burn will fail)
+  \item Transfer the ERC-721 token with tokenId $=\alpha$ from the Shield     contract (i.e. from escrow) to Bob's Ethereum address.
+  \item Append the nullifier $N_{B}$ to the ever-increasing array $\bm N$.
+\end{enumerate}
+
+
+\textbf{Steps $14 - 15$}
+\ \\
+Bob is now the owner of the public ERC-721 token. The Nightfall UI queries the linked ERC-721 contract for tokens Bob owns.
+If Bob ever wished to convert this token back into a token commitment, he would need to do a non-fungible `mint' (discussed earlier).

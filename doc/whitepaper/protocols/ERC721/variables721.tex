@@ -1,0 +1,53 @@
+\subsubsection{Variables}
+Here we describe the variables used in this section. 
+
+\begin{center}
+	\begin{tabular}{lp{14cm}}
+    $A, B$      & Participants Alice and Bob.\\
+    \\
+    $pk_A$      & The public key belonging to Alice.\\
+    $sk_A$      & The secret key belonging to Alice.\\
+                & Note: there are several (secret key, public key) pairs in this protocol)\\
+    \\
+		$E_A$       & The Ethereum address of Alice.\\
+		$\Xi_{A,i}$ & An `anonymous' Ethereum address belonging to Alice, where $i\in\mathbb{N}$ is an index, for distinguishing between multiple anonymous addresses. \\
+    \\
+    $\alpha$    & A unique representation of some non-fungible asset e.g. a tokenId in ERC-721.\\
+                & Note that in respect of non-fungible tokens, Nightfall currently focusses solely ERC-721 tokens.
+                  It would be relatively simple to adapt Nightfall's application to deal with other non-fungible token standards.\\
+    $\alpha_A$  & A non-fungible asset $\alpha$ that is in Alice's possession. \\
+    \\
+		$\sigma$      & A salt used to provide uniqueness to commitment preimages.\\
+		$\sigma_{\vec{AB}}$ & Stresses that a salt is being shared privately from Alice to Bob.\\
+    \\
+		$Z$         & An ERC-721 commitment; a zero-knowledge commitment representing ownership of some underlying ERC-721 asset. \\
+    $Z_A$       & Stresses that an ERC-721 commitment belongs to Alice.\\
+    $Z_{\alpha}$ & Stresses that an ERC-721 commitment represents the asset $\alpha$.\\
+    $Z_{l}$     & Stresses that an ERC-721 commitment is the $l^{th}$ leaf of a Merkle Tree (see below for $M$).\\
+                & Note that the meaning of these (seemingly colliding or ambiguous) subscripts will be clear from context.\\
+    \\
+    $N$         & A nullifier for an ERC-721 commitment $Z$.\\
+    $N_A$       & A nullifier for the ERC-721 commitment $Z_A$.\\
+    $N_{\alpha}$ & A nullifier for the ERC-721 commitment $Z_{\alpha}$.\\
+    \\
+		$M$         & A binary Merkle Tree.\\
+    $M_l$       & A binary Merkle Tree with $l$ non-zero leaves (where leaves are populated in order `from left to right').\\
+    $\roott_l$    & The root of $M_l$ (`$M$' is omitted because context will be clear).\\
+    \\
+    $\phi_{L}$  & $[\phi_{L}(d-1), \phi_{L}(d-2),..., \phi_{L}(1), \phi_{L}(0)]$ - The path from a leaf $L$ to the root of a Merkle Tree $M$, where $\phi_L(0) = \roott$.\\
+    $\phi$      & $[\phi_{d-1}, \phi_{d-2},..., \phi_{1}, \phi_0]$ - Alternative notation for the path from a leaf, where the leaf $L$ is clear from the context. $\phi_0 = \roott$.\\
+    $\psi_{L}$  & $[\psi_{L}(d-1), \psi_{L}(d-2),..., \psi_{L}(1), \psi_{L}(0)]$ - The sister-path from a leaf $L$ to the root of a Merkle Tree $M$, where $\psi_L(0) = \phi_L(0) = \roott$.\\
+    $\psi$      &  $[\psi_{d-1}, \psi_{d-2},..., \psi_{1}, \psi_0]$ - Alternative notation for the sister-path from a leaf, where the leaf $L$ is clear from the context. $\psi_0 = \roott$.\\
+    \\
+		$x$         & Public inputs to a zk-SNARK. \\
+		$\omega$    & Private inputs to a zk-SNARK.\\
+		$C$         &  An arithmetic circuit $C: (\omega, x) \to \{0,1\}$.\\
+		$p_C$       & A proving key for the circuit $C$. (Not to be confused with $pk$ which denotes a public key). \\
+		$vk_C$      & A verification key for the circuit $C$. \\
+    $\pi(p_C, x, \omega)$ & A proof for the circuit $C$, public inputs $x$, and private inputs $\omega$ \\
+    $\pi_{C, x, \omega}$ & An abbreviation of the above. \\
+    $\pi$       & An abbreviation of the above, when the context of the proof is clear. \\
+    \\
+    $h()$       & A one-way hashing function. Nightfall currently uses sha256 hashing throughout.\\
+	\end{tabular}
+\end{center}
