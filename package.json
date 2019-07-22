@@ -23,6 +23,7 @@
   },
   "homepage": "https://github.com/EYBlockchain/nightfall#readme",
   "dependencies": {
+    "lodash": "^4.17.15",
     "typescript": "^2.9.2"
   },
   "devDependencies": {
