@@ -40,10 +40,8 @@ services:
       - ganache_test
     volumes:
       - ./offchain/src:/app/src
-      - ./offchain/response:/app/response
       - ./offchain/build-test:/app/build
       - ./offchain/.babelrc:/app/.babelrc
-      - ./offchain/__tests__:/app/__tests__
       - ./zkp-utils:/app/node_modules/zkp-utils
       - ./config:/app/config
     environment:

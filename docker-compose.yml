@@ -35,7 +35,6 @@ services:
       - ganache
     volumes:
       - ./offchain/src:/app/src
-      - ./offchain/response:/app/response
       - ./offchain/build:/app/build
       - ./offchain/.babelrc:/app/.babelrc
       - ./offchain/__tests__:/app/__tests__
