@@ -9,7 +9,7 @@ async function unlockUserAccount(req, res, next) {
   const { address, password } = req.body;
 
   try {
-    await unlockAccount(address, "password");
+    await unlockAccount(address, password);
     res.data = { message: 'Unlocked' };
     next();
   } catch (err) {
