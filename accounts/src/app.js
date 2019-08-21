@@ -21,7 +21,7 @@ app.use(function logError(err, req, res, next) {
   console.error(
     `${req.method}:${req.url}
     ${JSON.stringify({ error: err.message })}
-    ${JSON.stringify({ errorStack: err.stack.split("\n") }, null, 1)}
+    ${JSON.stringify({ errorStack: err.stack.split('\n') }, null, 1)}
     ${JSON.stringify({ body: req.body })}
     ${JSON.stringify({ params: req.params })}
     ${JSON.stringify({ query: req.query })}
