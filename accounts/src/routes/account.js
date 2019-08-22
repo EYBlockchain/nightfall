@@ -3,7 +3,6 @@ import { newAccount, sendEtherToAccount, getBalance, pay } from '../services/acc
 
 const router = express.Router({ mergeParams: true });
 
-
 async function createAccount(req, res, next) {
   const { password } = req.body;
   try {

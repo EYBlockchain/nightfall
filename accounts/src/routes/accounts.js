@@ -1,5 +1,3 @@
-/* eslint-disable func-names */
-
 import express from 'express';
 import { unlockAccount } from '../services/accounts';
 
