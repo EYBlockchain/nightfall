@@ -1,410 +1,365 @@
 const request = require('request');
 
 const Config = require('../config/config').getProps();
-const host = Config.zkp.host + ':' + Config.zkp.port;
 
+const host = `${Config.zkp.host}:${Config.zkp.port}`;
 
 const loadVks = (details, headers) => {
   return new Promise((resolve, reject) => {
     const options = {
-      url : host + '/vk',
-      method : 'POST',
+      url: `${host}/vk`,
+      method: 'POST',
       json: true,
       headers: {
-        "Content-Type": "application/json; charset=utf-8",
-        "address": headers.address,
-        "password": headers.password
+        'Content-Type': 'application/json; charset=utf-8',
+        address: headers.address,
+        password: headers.password,
       },
-      body: details
-    }
-    request(options, (err, res, body) => {
-      if(err)
-        return reject(err);
-      if(body.statusCode !== 200)
-        return reject(body);
-      resolve(body);
-    })
-  })
-}
-
-const mintToken = ({address}, body) => {
-  return new Promise((resolve, reject) => {
-    const options = {
-      url : host + '/token/mint',
-      method : 'POST',
-      json: true,
-      headers: { address },
-      body
-    }
-    request(options, (err, res, body) => {
-      if(err)
-        return reject(err);
-      if(body.statusCode !== 200)
-        return reject(body);
-      resolve(body);
-    })
-  })
-}
-
-const spendToken = ({address}, body) => {
-  return new Promise((resolve, reject) => {
-    const options = {
-      url : host + '/token/transfer',
-      method : 'POST',
-      json: true,
-      headers: { address },
-      body
-    }
-    request(options, (err, res, body) => {
-      if(err)
-        return reject(err);
-      if(body.statusCode !== 200)
-        return reject(body);
-      resolve(body);
-    })
-  })
-}
-
-const burnToken = ({address}, body) => {
-  return new Promise((resolve, reject) => {
-    const options = {
-      url : host + '/token/burn',
-      method : 'POST',
-      json: true,
-      headers: { address },
-      body
-    }
-    request(options, (err, res, body) => {
-      if(err)
-        return reject(err);
-      if(body.statusCode !== 200)
-        return reject(body);
-      resolve(body);
-    })
-  })
-}
-
-const mintCoin = ({address}, body) => {
-  return new Promise((resolve, reject) => {
-    const options = {
-      url : host + '/coin/mint',
-      method : 'POST',
-      json: true,
-      headers: { address },
-      body
-    }
-    request(options, (err, res, body) => {
-      if(err)
-        return reject(err);
-      if(body.statusCode !== 200)
-        return reject(body);
-      resolve(body);
-    })
+      body: details,
+    };
+    request(options, (err, res, data) => {
+      if (err) return reject(err);
+      if (data.statusCode !== 200) return reject(data);
+      return resolve(data);
+    });
   });
-}
+};
 
-const transferCoin = ({address}, body) => {
+const mintToken = ({ address }, body) => {
   return new Promise((resolve, reject) => {
     const options = {
-      url : host + '/coin/transfer',
-      method : 'POST',
+      url: `${host}/token/mint`,
+      method: 'POST',
       json: true,
       headers: { address },
-      body
-    }
-    request(options, (err, res, body) => {
-      if(err)
-        return reject(err);
-      if(body.statusCode !== 200)
-        return reject(body);
-      resolve(body);
-    })
-  })
-}
+      body,
+    };
+    request(options, (err, res, data) => {
+      if (err) return reject(err);
+      if (data.statusCode !== 200) return reject(data);
+      return resolve(data);
+    });
+  });
+};
 
-const burnCoin = (details, {address}) => {
+const spendToken = ({ address }, body) => {
   return new Promise((resolve, reject) => {
     const options = {
-      url : host + '/coin/burn',
-      method : 'POST',
-      json: true,
-      headers: {address},
-      body: details
-    }
-    request(options, (err, res, body) => {
-      if(err)
-        return reject(err);
-      if(body.statusCode !== 200)
-        return reject(body);
-      resolve(body);
-    })
-  })
-}
-
-const mintNFToken = ({address}, body) => {
-  return new Promise((resolve, reject) => {
-    const options = {
-      url : host + '/nft/mint',
-      method : 'POST',
+      url: `${host}/token/transfer`,
+      method: 'POST',
       json: true,
       headers: { address },
-      body
-    }
-    request(options, (err, res, body) => {
-      if(err)
-        return reject(err);
-      if(body.statusCode !== 200)
-        return reject(body);
-      resolve(body);
-    })
-  })
-}
+      body,
+    };
+    request(options, (err, res, data) => {
+      if (err) return reject(err);
+      if (data.statusCode !== 200) return reject(data);
+      return resolve(data);
+    });
+  });
+};
 
-const transferNFToken = ({address}, body) => {
+const burnToken = ({ address }, body) => {
   return new Promise((resolve, reject) => {
     const options = {
-      url : host + '/nft/transfer',
-      method : 'POST',
+      url: `${host}/token/burn`,
+      method: 'POST',
       json: true,
       headers: { address },
-      body
-    }
-    request(options, (err, res, body) => {
-      if(err)
-        return reject(err);
-      if(body.statusCode !== 200)
-        return reject(body);
-      resolve(body);
-    })
-  })
-}
+      body,
+    };
+    request(options, (err, res, data) => {
+      if (err) return reject(err);
+      if (data.statusCode !== 200) return reject(data);
+      return resolve(data);
+    });
+  });
+};
 
-const burnNFToken = ({address}, body) => {
+const mintCoin = ({ address }, body) => {
   return new Promise((resolve, reject) => {
     const options = {
-      url : host + '/nft/burn',
-      method : 'POST',
+      url: `${host}/coin/mint`,
+      method: 'POST',
       json: true,
       headers: { address },
-      body
-    }
-    request(options, (err, res, body) => {
-      if(err)
-        return reject(err);
-      if(body.statusCode !== 200)
-        return reject(body);
-      resolve(body);
-    })
-  })
-}
+      body,
+    };
+    request(options, (err, res, data) => {
+      if (err) return reject(err);
+      if (data.statusCode !== 200) return reject(data);
+      return resolve(data);
+    });
+  });
+};
 
-const transferFToken = ({address}, body) => {
+const transferCoin = ({ address }, body) => {
   return new Promise((resolve, reject) => {
     const options = {
-      url : host + '/ft/transfer',
-      method : 'POST',
+      url: `${host}/coin/transfer`,
+      method: 'POST',
       json: true,
       headers: { address },
-      body
-    }
-    request(options, (err, res, body) => {
-      if(err)
-        return reject(err);
-      if(body.statusCode !== 200)
-        return reject(body);
-      resolve(body);
-    })
-  })
-}
+      body,
+    };
+    request(options, (err, res, data) => {
+      if (err) return reject(err);
+      if (data.statusCode !== 200) return reject(data);
+      return resolve(data);
+    });
+  });
+};
 
-const setTokenShield = ({address}, body) => {
+const burnCoin = (details, { address }) => {
   return new Promise((resolve, reject) => {
     const options = {
-      url : host + '/token/shield',
-      method : 'POST',
+      url: `${host}/coin/burn`,
+      method: 'POST',
       json: true,
       headers: { address },
-      body
-    }
-    request(options, (err, res, body) => {
-      if(err)
-        return reject(err);
-      if(body.statusCode !== 200)
-        return reject(body);
-      resolve(body);
-    })
-  })
-}
+      body: details,
+    };
+    request(options, (err, res, data) => {
+      if (err) return reject(err);
+      if (data.statusCode !== 200) return reject(data);
+      return resolve(data);
+    });
+  });
+};
 
-
-const setCoinShield = ({address}, body) => {
+const mintNFToken = ({ address }, body) => {
   return new Promise((resolve, reject) => {
     const options = {
-      url : host + '/coin/shield',
-      method : 'POST',
+      url: `${host}/nft/mint`,
+      method: 'POST',
       json: true,
       headers: { address },
-      body
-    }
-    request(options, (err, res, body) => {
-      if(err)
-        return reject(err);
-      if(body.statusCode !== 200)
-        return reject(body);
-      resolve(body);
-    })
-  })
-}
+      body,
+    };
+    request(options, (err, res, data) => {
+      if (err) return reject(err);
+      if (data.statusCode !== 200) return reject(data);
+      return resolve(data);
+    });
+  });
+};
 
-
-const unSetCoinShield = ({address}) => {
+const transferNFToken = ({ address }, body) => {
   return new Promise((resolve, reject) => {
     const options = {
-      url : host + '/coin/shield',
-      method : 'DELETE',
-      json: true,
-      headers: { address }
-    }
-    request(options, (err, res, body) => {
-      if(err)
-        return reject(err);
-      if(body.statusCode !== 200)
-        return reject(body);
-      resolve(body);
-    })
-  })
-}
-
-const unSetTokenShield = ({address}) => {
-  return new Promise((resolve, reject) => {
-    const options = {
-      url : host + '/token/shield',
-      method : 'DELETE',
-      json: true,
-      headers: { address }
-    }
-    request(options, (err, res, body) => {
-      if(err)
-        return reject(err);
-      if(body.statusCode !== 200)
-        return reject(body);
-      resolve(body);
-    })
-  })
-}
-
-const mintFToken = ({address}, body) => {
-  return new Promise((resolve, reject) => {
-    const options = {
-      url : host + '/ft/mint',
-      method : 'POST',
+      url: `${host}/nft/transfer`,
+      method: 'POST',
       json: true,
       headers: { address },
-      body
-    }
-    request(options, (err, res, body) => {
-      if(err)
-        return reject(err);
-      if(body.statusCode !== 200)
-        return reject(body);
-      resolve(body);
-    })
-  })
-}
+      body,
+    };
+    request(options, (err, res, data) => {
+      if (err) return reject(err);
+      if (data.statusCode !== 200) return reject(data);
+      return resolve(data);
+    });
+  });
+};
 
-const burnFToken = ({address}, body) => {
+const burnNFToken = ({ address }, body) => {
   return new Promise((resolve, reject) => {
     const options = {
-      url : host + '/ft/burn',
-      method : 'POST',
+      url: `${host}/nft/burn`,
+      method: 'POST',
       json: true,
       headers: { address },
-      body
-    }
-    request(options, (err, res, body) => {
-      if(err)
-        return reject(err);
-      if(body.statusCode !== 200)
-        return reject(body);
-      resolve(body);
-    })
-  })
-}
+      body,
+    };
+    request(options, (err, res, data) => {
+      if (err) return reject(err);
+      if (data.statusCode !== 200) return reject(data);
+      return resolve(data);
+    });
+  });
+};
+
+const transferFToken = ({ address }, body) => {
+  return new Promise((resolve, reject) => {
+    const options = {
+      url: `${host}/ft/transfer`,
+      method: 'POST',
+      json: true,
+      headers: { address },
+      body,
+    };
+    request(options, (err, res, data) => {
+      if (err) return reject(err);
+      if (data.statusCode !== 200) return reject(data);
+      return resolve(data);
+    });
+  });
+};
+
+const setTokenShield = ({ address }, body) => {
+  return new Promise((resolve, reject) => {
+    const options = {
+      url: `${host}/token/shield`,
+      method: 'POST',
+      json: true,
+      headers: { address },
+      body,
+    };
+    request(options, (err, res, data) => {
+      if (err) return reject(err);
+      if (data.statusCode !== 200) return reject(data);
+      return resolve(data);
+    });
+  });
+};
+
+const setCoinShield = ({ address }, body) => {
+  return new Promise((resolve, reject) => {
+    const options = {
+      url: `${host}/coin/shield`,
+      method: 'POST',
+      json: true,
+      headers: { address },
+      body,
+    };
+    request(options, (err, res, data) => {
+      if (err) return reject(err);
+      if (data.statusCode !== 200) return reject(data);
+      return resolve(data);
+    });
+  });
+};
+
+const unSetCoinShield = ({ address }) => {
+  return new Promise((resolve, reject) => {
+    const options = {
+      url: `${host}/coin/shield`,
+      method: 'DELETE',
+      json: true,
+      headers: { address },
+    };
+    request(options, (err, res, data) => {
+      if (err) return reject(err);
+      if (data.statusCode !== 200) return reject(data);
+      return resolve(data);
+    });
+  });
+};
+
+const unSetTokenShield = ({ address }) => {
+  return new Promise((resolve, reject) => {
+    const options = {
+      url: `${host}/token/shield`,
+      method: 'DELETE',
+      json: true,
+      headers: { address },
+    };
+    request(options, (err, res, data) => {
+      if (err) return reject(err);
+      if (data.statusCode !== 200) return reject(data);
+      return resolve(data);
+    });
+  });
+};
+
+const mintFToken = ({ address }, body) => {
+  return new Promise((resolve, reject) => {
+    const options = {
+      url: `${host}/ft/mint`,
+      method: 'POST',
+      json: true,
+      headers: { address },
+      body,
+    };
+    request(options, (err, res, data) => {
+      if (err) return reject(err);
+      if (data.statusCode !== 200) return reject(data);
+      return resolve(data);
+    });
+  });
+};
+
+const burnFToken = ({ address }, body) => {
+  return new Promise((resolve, reject) => {
+    const options = {
+      url: `${host}/ft/burn`,
+      method: 'POST',
+      json: true,
+      headers: { address },
+      body,
+    };
+    request(options, (err, res, data) => {
+      if (err) return reject(err);
+      if (data.statusCode !== 200) return reject(data);
+      return resolve(data);
+    });
+  });
+};
 
 const checkCorrectnessToken = (headers, body) => {
   return new Promise((resolve, reject) => {
     const options = {
-      url : host + '/token/checkCorrectness',
-      method : 'POST',
+      url: `${host}/token/checkCorrectness`,
+      method: 'POST',
       json: true,
       headers,
-      body
-    }
-    request(options, (err, res, body) => {
-      if(err)
-        return reject(err);
-      if(body.statusCode !== 200)
-        return reject(body);
-      resolve(body);
-    })
-  })
-}
+      body,
+    };
+    request(options, (err, res, data) => {
+      if (err) return reject(err);
+      if (data.statusCode !== 200) return reject(data);
+      return resolve(data);
+    });
+  });
+};
 
 const checkCorrectnessCoin = (headers, body) => {
   return new Promise((resolve, reject) => {
     const options = {
-      url : host + '/coin/checkCorrectness',
-      method : 'POST',
+      url: `${host}/coin/checkCorrectness`,
+      method: 'POST',
       json: true,
       headers,
-      body
-    }
-    request(options, (err, res, body) => {
-      if(err)
-        return reject(err);
-      if(body.statusCode !== 200)
-        return reject(body);
-      resolve(body);
-    })
-  })
-}
+      body,
+    };
+    request(options, (err, res, data) => {
+      if (err) return reject(err);
+      if (data.statusCode !== 200) return reject(data);
+      return resolve(data);
+    });
+  });
+};
 
-const getCoinShield = ({address}) => {
+const getCoinShield = ({ address }) => {
   return new Promise((resolve, reject) => {
     const options = {
-      url : host + '/coin/shield',
-      method : 'GET',
+      url: `${host}/coin/shield`,
+      method: 'GET',
       json: true,
-      headers: { address }
-    }
-    request(options, (err, res, body) => {
-      if(err)
-        return reject(err);
-      if(body.statusCode !== 200)
-        return reject(body);
-      resolve(body);
-    })
-  })
-}
+      headers: { address },
+    };
+    request(options, (err, res, data) => {
+      if (err) return reject(err);
+      if (data.statusCode !== 200) return reject(data);
+      return resolve(data);
+    });
+  });
+};
 
-const getTokenShield = ({address}) => {
+const getTokenShield = ({ address }) => {
   return new Promise((resolve, reject) => {
     const options = {
-      url : host + '/token/shield',
-      method : 'GET',
+      url: `${host}/token/shield`,
+      method: 'GET',
       json: true,
-      headers: { address }
-    }
-    request(options, (err, res, body) => {
-      if(err)
-        return reject(err);
-      if(body.statusCode !== 200)
-        return reject(body);
-      resolve(body);
-    })
-  })
-}
-
+      headers: { address },
+    };
+    request(options, (err, res, data) => {
+      if (err) return reject(err);
+      if (data.statusCode !== 200) return reject(data);
+      return resolve(data);
+    });
+  });
+};
 
 module.exports = {
   loadVks,
@@ -427,5 +382,5 @@ module.exports = {
   checkCorrectnessToken,
   checkCorrectnessCoin,
   getCoinShield,
-  getTokenShield
+  getTokenShield,
 };

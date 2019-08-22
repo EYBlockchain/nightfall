@@ -93,10 +93,9 @@ export class BurnCoinComponent implements OnInit , AfterContentInit {
         this.isRequesting = false;
         if (data &&
           data['data'] &&
-          data['data']['data'] &&
-          data['data']['data'].length
+          data['data'].length
          ) {
-          this.transactions = data['data']['data'].map((tx, indx) => {
+          this.transactions = data['data'].map((tx, indx) => {
             tx.selected = false;
             tx.id = indx;
             return tx;

@@ -32,7 +32,7 @@ describe('utils.js tests', () => {
       expect('5').toEqual(utils.hexToField('0x1e', 25)); // 30(dec) = 0x1e mod 25 = 5
     });
 
-    test("hexToFieldPreserve should correctly convert hex into a 'blocks' of finite field elements, of specified bit size, in decimal representation", () => {
+    test(`hexToFieldPreserve should correctly convert hex into a 'blocks' of finite field elements, of specified bit size, in decimal representation`, () => {
       expect(['1', '3', '2']).toEqual(utils.hexToFieldPreserve('0x1e', 2)); // 0x1e = 30 = 11110 = [01, 11, 10] = [1,3,2]
       expect(['0', '1', '3', '2']).toEqual(utils.hexToFieldPreserve('0x1e', 2, 4)); // 0x1e = 30 = 11110 = [01, 11, 10] = [1,3,2]
     });
@@ -76,7 +76,7 @@ describe('utils.js tests', () => {
       expect(utils.getBitLengthDec(dec)).toEqual('64');
     });
 
-    test("decToFieldPreserve should correctly convert dec into a 'blocks' of finite field elements, of specified bit size, in decimal representation", () => {
+    test(`decToFieldPreserve should correctly convert dec into a 'blocks' of finite field elements, of specified bit size, in decimal representation`, () => {
       expect(['1', '3', '2']).toEqual(utils.decToFieldPreserve(30, 2)); // 30 = 11110 = [01, 11, 10] = [1,3,2]
     });
   });

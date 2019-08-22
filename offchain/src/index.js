@@ -2,10 +2,9 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import { pkdRouter, whisperRouter } from './routes';
 
-
 const app = express();
 
-app.use((req, res, next) => {
+app.use(function cors(req, res, next) {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS, PUT, PATCH, DELETE');
   res.header(
@@ -25,6 +24,4 @@ app.use(bodyParser.json());
 app.use('/pkd', pkdRouter);
 app.use('/whisper', whisperRouter);
 
-app.listen(80, '0.0.0.0', () => {
-  console.log('zkp OffChain RESTful API server started on ::: 80');
-});
+app.listen(80, '0.0.0.0', () => console.log('zkp OffChain RESTful API server started on ::: 80'));

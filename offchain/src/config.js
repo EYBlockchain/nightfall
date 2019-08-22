@@ -46,21 +46,14 @@ const props = {
  * Set the environment
  * @param { string } environment - environment of app
  */
-const setEnv = environment => {
+export function setEnv(environment) {
   if (props[environment]) {
     env = environment;
   }
-};
+}
 setEnv(process.env.NODE_ENV);
 
 /**
  * get the appropriate environment config
  */
-const getProps = () => {
-  return props[env];
-};
-
-export default {
-  setEnv,
-  getProps,
-};
+export const getProps = () => props[env];

@@ -57,7 +57,7 @@ As a minimum it must contain the Whisper key pair.
 This version returns the raw hex Whisper payload
 */
 export async function subscribe() {
-  return new Error("This interface isn't implemented in the stub");
+  return new Error('This interface isnt implemented in the stub');
 }
 
 /**

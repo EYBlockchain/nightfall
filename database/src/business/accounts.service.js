@@ -1,7 +1,18 @@
-/* eslint-disable camelcase */
+import { exec } from 'child_process';
+import { getProps } from '../config';
+import { COLLECTIONS } from '../common/constants';
+import { userMapper } from '../mappers';
 
-import enums from '../common/constants.json';
-import userMapper from '../mappers/user';
+const { mongo } = getProps();
+
+function updateUserRole() {
+  return new Promise((resolve, reject) =>
+    exec(
+      `mongo ${mongo.databaseName} --host=${mongo.host} -u ${mongo.admin} -p ${mongo.adminPassword} setup-mongo-acl-for-new-users.js`,
+      err => (err ? reject(err) : resolve()),
+    ),
+  );
+}
 
 export default class AccountService {
   constructor(_db) {
@@ -13,13 +24,8 @@ export default class AccountService {
    * @param {object} options - an object containing public key
    * @returns {object} a user document matching the public key
    */
-  async getUser(options) {
-    try {
-      const user = await this.db.findOne(enums.COLLECTIONS.USER, options);
-      return Promise.resolve(user);
-    } catch (e) {
-      return Promise.reject(e);
-    }
+  getUser(options) {
+    return this.db.findOne(COLLECTIONS.USER, options);
   }
 
   /**
@@ -28,15 +34,10 @@ export default class AccountService {
    * @returns {object} a user object
    */
   async createAccount(data) {
-    try {
-      const mappedData = userMapper(data);
-      await this.db.addUser(data.name, data.password);
-      await this.db.updateUserRole();
-      const user = await this.db.saveData(enums.COLLECTIONS.USER, mappedData);
-      return Promise.resolve(user);
-    } catch (e) {
-      return Promise.reject(e);
-    }
+    const mappedData = await userMapper(data);
+    await this.db.addUser(data.name, data.password);
+    await updateUserRole();
+    return this.db.saveData(COLLECTIONS.USER, mappedData);
   }
 
   /**
@@ -44,13 +45,7 @@ export default class AccountService {
    * @returns {array} a user collection
    */
   async getUsers() {
-    try {
-      const condition = {};
-      const users = await this.db.getData(enums.COLLECTIONS.USER, condition);
-      return Promise.resolve(users);
-    } catch (e) {
-      return Promise.reject(e);
-    }
+    return this.db.getData(COLLECTIONS.USER, {});
   }
 
   /**
@@ -60,20 +55,16 @@ export default class AccountService {
    * @returns {string} a account
    */
   async updateUserWithPrivateAccount(privateAccountDetails) {
-    try {
-      const updateData = {
-        $push: {
-          accounts: {
-            address: privateAccountDetails.address,
-            password: privateAccountDetails.password,
-          },
+    const updateData = {
+      $push: {
+        accounts: {
+          address: privateAccountDetails.address,
+          password: privateAccountDetails.password,
         },
-      };
-      await this.db.updateData(enums.COLLECTIONS.USER, {}, updateData);
-      return Promise.resolve(privateAccountDetails.address);
-    } catch (e) {
-      return Promise.reject(e);
-    }
+      },
+    };
+    await this.db.updateData(COLLECTIONS.USER, {}, updateData);
+    return privateAccountDetails.address;
   }
 
   /**
@@ -81,14 +72,9 @@ export default class AccountService {
    * @param {object} headers - req object header
    * @returns {array} all private accounts
    */
-  async getPrivateAccounts(headers) {
-    try {
-      const condition = { address: headers.address };
-      const addresses = await this.db.getData(enums.COLLECTIONS.USER, condition);
-      return Promise.resolve(addresses);
-    } catch (e) {
-      return Promise.reject(e);
-    }
+  getPrivateAccounts(headers) {
+    const condition = { address: headers.address };
+    return this.db.getData(COLLECTIONS.USER, condition);
   }
 
   /**
@@ -97,185 +83,246 @@ export default class AccountService {
    * @returns {object} a matched private account details
    */
   async getPrivateAccountDetails(account) {
-    try {
-      const condition = {
-        'accounts.address': account,
-      };
-      const projection = {
-        'accounts.$': 1,
-      };
-      const [{ accounts }] = await this.db.getData(enums.COLLECTIONS.USER, condition, projection);
-      return Promise.resolve(accounts[0]);
-    } catch (e) {
-      return Promise.reject(e);
-    }
+    const condition = {
+      'accounts.address': account,
+    };
+    const projection = {
+      'accounts.$': 1,
+    };
+    const [{ accounts }] = await this.db.getData(COLLECTIONS.USER, condition, projection);
+    return accounts[0];
   }
 
-  async updateWhisperIdentity(shhIdentity) {
-    try {
-      return await this.db.updateData(
-        enums.COLLECTIONS.USER,
-        {},
-        {
-          shh_identity: shhIdentity,
-        },
-      );
-    } catch (err) {
-      return Promise.reject(err);
-    }
-  }
-
-  async getWhisperIdentity() {
-    try {
-      const users = await this.db.getData(enums.COLLECTIONS.USER);
-      const shhIdentity = users[0].shh_identity || '';
-      return Promise.resolve({ shhIdentity });
-    } catch (e) {
-      return Promise.reject(e);
-    }
-  }
-
-  async addCoinShieldContractAddress({ contract_name, contract_address }) {
-    await this.db.updateData(
-      enums.COLLECTIONS.USER,
+  /**
+   * This function will update user whisper key generated at login
+   * @param {String} shhIdentity - key hash
+   * @returns {Promise}
+   */
+  updateWhisperIdentity(shhIdentity) {
+    return this.db.updateData(
+      COLLECTIONS.USER,
+      {},
       {
-        'coin_shield_contracts.contract_address': { $ne: contract_address },
+        shh_identity: shhIdentity,
+      },
+    );
+  }
+
+  /**
+   * This function will fetch user's whisper key from its user collection
+   * @returns {Promise} which resolve to whisper key.
+   */
+  async getWhisperIdentity() {
+    const users = await this.db.getData(COLLECTIONS.USER);
+    const shhIdentity = users[0].shh_identity || '';
+    return { shhIdentity };
+  }
+
+  /**
+   * This function will push coinShield contract info in user collection
+   * and also make this contract as selected contract for by user for ERC-20 related transactions
+   * @param {Object} contractInfo = { contractName, contractAddress }
+   * contractName - name of coinShield contract
+   * contractAddress - address of coinShield contract
+   * @returns {Promise}
+   */
+  async addCoinShieldContractAddress({ contractName, contractAddress }) {
+    await this.db.updateData(
+      COLLECTIONS.USER,
+      {
+        'coin_shield_contracts.contract_address': { $ne: contractAddress },
       },
       {
         $push: {
           coin_shield_contracts: {
-            contract_name,
-            contract_address,
+            contract_name: contractName,
+            contract_address: contractAddress,
           },
         },
       },
     );
-    await this.selectCoinShieldContractAddress({ contract_address });
+    await this.selectCoinShieldContractAddress({ contractAddress });
   }
 
+  /**
+   * This function will update coinShield contract info in user collection
+   * and also set/uset as selected contract based on 'isSelected' flag
+   * @param {Object} contractInfo { contractName, contractAddress, isSelected, isCoinShieldPreviousSelected}
+   * contractName - name of coinShield contract
+   * contractAddress - address of coinShield contract
+   * isSelected - set/unset conteract as selected contract
+   * isCoinShieldPreviousSelected - current state of contract; is selected one or not
+   * @returns {Promise}
+   */
   async updateCoinShieldContractAddress({
-    contract_name,
-    contract_address,
+    contractName,
+    contractAddress,
     isSelected,
     isCoinShieldPreviousSelected,
   }) {
     await this.db.updateData(
-      enums.COLLECTIONS.USER,
+      COLLECTIONS.USER,
       {
-        'coin_shield_contracts.contract_address': contract_address,
+        'coin_shield_contracts.contract_address': contractAddress,
       },
       {
         $set: {
-          [contract_name !== undefined
+          [contractName !== undefined
             ? 'coin_shield_contracts.$.contract_name'
-            : undefined]: contract_name,
+            : undefined]: contractName,
         },
       },
     );
-    if (isSelected) await this.selectCoinShieldContractAddress({ contract_address });
+    if (isSelected) await this.selectCoinShieldContractAddress({ contractAddress });
     else if (isCoinShieldPreviousSelected)
-      await this.selectCoinShieldContractAddress({ contract_address: null });
+      await this.selectCoinShieldContractAddress({ contractAddress: null });
   }
 
-  async selectCoinShieldContractAddress({ contract_address }) {
-    await this.db.updateData(
-      enums.COLLECTIONS.USER,
+  /**
+   * This function will make provided contractAddress as selected contract
+   * (Private Method)
+   * @param {Object} { contractAddress }
+   * contractAddress - address of coinShield contract
+   * @returns {Promise}
+   */
+  selectCoinShieldContractAddress({ contractAddress }) {
+    return this.db.updateData(
+      COLLECTIONS.USER,
       {},
       {
-        selected_coin_shield_contract: contract_address,
+        selected_coin_shield_contract: contractAddress,
       },
     );
   }
 
-  async deleteCoinShieldContractAddress({ contract_address }) {
+  /**
+   * This function will delete coinShield contract info from user collection
+   * and also remove contract address from selection
+   * @param {Object} { contractAddress }
+   * contractAddress - address of coinShield contract
+   * @returns {Promise}
+   */
+  async deleteCoinShieldContractAddress({ contractAddress }) {
     await this.db.updateData(
-      enums.COLLECTIONS.USER,
+      COLLECTIONS.USER,
       {},
       {
         $pull: {
-          coin_shield_contracts: { contract_address },
+          coin_shield_contracts: { contract_address: contractAddress },
         },
       },
     );
 
-    const toUpdate = await this.db.findOne(enums.COLLECTIONS.USER, {
-      selected_coin_shield_contract: contract_address,
+    const toUpdate = await this.db.findOne(COLLECTIONS.USER, {
+      selected_coin_shield_contract: contractAddress,
     });
 
     if (!toUpdate) return null;
-    await this.selectCoinShieldContractAddress({ contract_address: null });
+    await this.selectCoinShieldContractAddress({ contractAddress: null });
     return toUpdate;
   }
 
-  async addTokenShieldContractAddress({ contract_name, contract_address }) {
+  /**
+   * This function will push tokenShield contract info in user collection
+   * and also make this contract as selected contract for by user for ERC-721 related transactions
+   * @param {Object} contractInfo = { contractName, contractAddress }
+   * contractName - name of tokenShield contract
+   * contractAddress - address of tokenShield contract
+   * @returns {Promise}
+   */
+  async addTokenShieldContractAddress({ contractName, contractAddress }) {
     await this.db.updateData(
-      enums.COLLECTIONS.USER,
+      COLLECTIONS.USER,
       {
-        'token_shield_contracts.contract_address': { $ne: contract_address },
+        'token_shield_contracts.contract_address': { $ne: contractAddress },
       },
       {
         $push: {
           token_shield_contracts: {
-            contract_name,
-            contract_address,
+            contract_name: contractName,
+            contract_address: contractAddress,
           },
         },
       },
     );
-    await this.selectTokenShieldContractAddress({ contract_address });
+    await this.selectTokenShieldContractAddress({ contractAddress });
   }
 
+  /**
+   * This function will update tokenShield contract info in user collection
+   * and also set/uset as selected contract based on 'isSelected' flag
+   * @param {Object} contractInfo { contractName, contractAddress, isSelected, isTokenShieldPreviousSelected}
+   * contractName - name of tokenShield contract
+   * contractAddress - address of tokenShield contract
+   * isSelected - set/unset conteract as selected contract
+   * isTokenShieldPreviousSelected - current state of contract; is selected one or not
+   * @returns {Promise}
+   */
   async updateTokenShieldContractAddress({
-    contract_name,
-    contract_address,
+    contractName,
+    contractAddress,
     isSelected,
     isTokenShieldPreviousSelected,
   }) {
     await this.db.updateData(
-      enums.COLLECTIONS.USER,
+      COLLECTIONS.USER,
       {
-        'token_shield_contracts.contract_address': contract_address,
+        'token_shield_contracts.contract_address': contractAddress,
       },
       {
         $set: {
-          [contract_name !== undefined
+          [contractName !== undefined
             ? 'token_shield_contracts.$.contract_name'
-            : undefined]: contract_name,
+            : undefined]: contractName,
         },
       },
     );
-    if (isSelected) await this.selectTokenShieldContractAddress({ contract_address });
+    if (isSelected) await this.selectTokenShieldContractAddress({ contractAddress });
     else if (isTokenShieldPreviousSelected)
-      await this.selectTokenShieldContractAddress({ contract_address: null });
+      await this.selectTokenShieldContractAddress({ contractAddress: null });
   }
 
-  async selectTokenShieldContractAddress({ contract_address }) {
-    await this.db.updateData(
-      enums.COLLECTIONS.USER,
+  /**
+   * This function will make provided contractAddress as selected contract
+   * (Private Method)
+   * @param {Object} { contractAddress }
+   * contractAddress - address of tokenShield contract
+   * @returns {Promise}
+   */
+  selectTokenShieldContractAddress({ contractAddress }) {
+    return this.db.updateData(
+      COLLECTIONS.USER,
       {},
       {
-        selected_token_shield_contract: contract_address,
+        selected_token_shield_contract: contractAddress,
       },
     );
   }
 
-  async deleteTokenShieldContractAddress({ contract_address }) {
+  /**
+   * This function will delete tokenShield contract info from user collection
+   * and also remove contract address from selection
+   * @param {Object} { contractAddress }
+   * contractAddress - address of tokenShield contract
+   * @returns {Promise}
+   */
+  async deleteTokenShieldContractAddress({ contractAddress }) {
     await this.db.updateData(
-      enums.COLLECTIONS.USER,
+      COLLECTIONS.USER,
       {},
       {
         $pull: {
-          token_shield_contracts: { contract_address },
+          token_shield_contracts: { contract_address: contractAddress },
         },
       },
     );
 
-    const toUpdate = await this.db.findOne(enums.COLLECTIONS.USER, {
-      selected_token_shield_contract: contract_address,
+    const toUpdate = await this.db.findOne(COLLECTIONS.USER, {
+      selected_token_shield_contract: contractAddress,
     });
 
     if (!toUpdate) return null;
-    await this.selectTokenShieldContractAddress({ contract_address: null });
+    await this.selectTokenShieldContractAddress({ contractAddress: null });
     return toUpdate;
   }
 }

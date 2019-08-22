@@ -1,3 +1,5 @@
+/* eslint-disable import/no-unresolved */
+
 import Utils from 'zkp-utils';
 import AccountUtils from '../src/account-utils/account-utils';
 
@@ -87,7 +89,7 @@ describe('f-token-controller.js tests', () => {
 
     expect(Z_A_C).toEqual(zTest);
     expect(0).toEqual(parseInt(zIndex, 10));
-    console.log("Alice's account ", (await controller.getBalance(accounts[0])).toNumber());
+    console.log(`Alice's account `, (await controller.getBalance(accounts[0])).toNumber());
   });
 
   test('Should mint another ERC-20 commitment Z_A_D for Alice for asset D', async () => {
@@ -96,7 +98,7 @@ describe('f-token-controller.js tests', () => {
 
     expect(Z_A_D).toEqual(zTest);
     expect(1).toEqual(parseInt(zIndex, 10));
-    console.log("Alice's account ", (await controller.getBalance(accounts[0])).toNumber());
+    console.log(`Alice's account `, (await controller.getBalance(accounts[0])).toNumber());
   });
 
   test('Should transfer a ERC-20 commitment to Bob (two coins get nullified, two created; one coin goes to Bob, the other goes back to Alice as change)', async () => {
@@ -152,7 +154,7 @@ describe('f-token-controller.js tests', () => {
     );
   });
 
-  test("Should burn Alice's remaining ERC-20 commitment", async () => {
+  test(`Should burn Alice's remaining ERC-20 commitment`, async () => {
     const accounts = await AccountUtils.getEthAccounts();
     const bal1 = await controller.getBalance(accounts[3]);
     const bal = await controller.getBalance(accounts[0]);

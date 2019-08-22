@@ -90,11 +90,10 @@ services:
       - mongo_test
     volumes:
       - ./database/src:/app/src
-      - ./database/response:/app/response
       - ./database/.babelrc:/app/.babelrc
       - ./zkp-utils:/app/node_modules/zkp-utils
       - ./config:/app/config
-      - ./database/script_to_configure_roles.js:/app/script_to_configure_roles.js
+      - ./database/setup-mongo-acl-for-new-users.js:/app/setup-mongo-acl-for-new-users.js
     environment:
       - NODE_ENV=test
     networks: 

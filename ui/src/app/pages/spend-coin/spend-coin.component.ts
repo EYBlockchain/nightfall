@@ -97,8 +97,8 @@ export class SpendCoinComponent implements OnInit , AfterContentInit {
       .subscribe(
         (data) => {
         this.isRequesting = false;
-        if (data && data['data']['data'] && data['data']['data'].length ) {
-          this.transactions = data['data']['data'].map((tx, indx) => {
+        if (data && data['data'].length ) {
+          this.transactions = data['data'].map((tx, indx) => {
             tx.selected = false;
             tx.id = indx;
             return tx;

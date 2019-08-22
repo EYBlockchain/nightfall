@@ -598,7 +598,7 @@ async function burn(C, skA, S_C, zC, zCIndex, account, _payTo) {
     new Element(payTo, 'field'),
     new Element(C, 'field', 1),
     new Element(Nc, 'field'),
-    new Element(root, 'field')
+    new Element(root, 'field'),
   ]);
   console.log('inputs:');
   console.log(inputs);

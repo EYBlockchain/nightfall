@@ -1,11 +1,6 @@
-/* eslint-disable camelcase */
-/* eslint-disable import/no-commonjs */
+import { Schema } from 'mongoose';
 
-import mongoose from 'mongoose';
-
-const { Schema } = mongoose;
-
-const FTTokenTransactionSchema = new Schema(
+export default new Schema(
   {
     type: {
       type: String,
@@ -31,6 +26,3 @@ const FTTokenTransactionSchema = new Schema(
   },
   { timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } },
 );
-
-mongoose.set('debug', true);
-module.exports = FTTokenTransactionSchema;

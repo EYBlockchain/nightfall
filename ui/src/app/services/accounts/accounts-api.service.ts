@@ -92,7 +92,7 @@ export class AccountsApiService {
    * Method to initiate a HTTP request to get ERC-20 token commitments of logged in user.
    */
   getCoins() {
-    const url = config.zkp.root + 'address/coin';
+    const url = config.zkp.root + 'ft/details';
     return this.http.get(url).pipe(
       map((data: any) => {
         console.log('coins', data);
@@ -110,7 +110,7 @@ export class AccountsApiService {
    * Method to initiate a HTTP request to get ERC-721 tokens of logged in user.
    */
   getNFTBalance() {
-    const url = config.zkp.root + 'address/nft-balance';
+    const url = config.zkp.root + 'nft/details';
     return this.http.get(url).pipe(
       tap(data => {}),
       catchError(err => {

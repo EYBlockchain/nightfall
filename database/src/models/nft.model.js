@@ -1,11 +1,6 @@
-/* eslint-disable camelcase */
-/* eslint-disable import/no-commonjs */
+import { Schema } from 'mongoose';
 
-import mongoose from 'mongoose';
-
-const { Schema } = mongoose;
-
-const NFTTokenSchema = new Schema(
+export default new Schema(
   {
     uri: {
       type: String,
@@ -39,6 +34,3 @@ const NFTTokenSchema = new Schema(
   },
   { timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } },
 );
-
-mongoose.set('debug', true);
-module.exports = NFTTokenSchema;

@@ -1,3 +1,5 @@
+/* eslint-disable func-names */
+
 import express from 'express';
 import listeners from '../listeners';
 import {
@@ -6,8 +8,7 @@ import {
   subscribeObject,
   sendObject,
 } from '../whisper-controller-stub';
-
-import Response from '../../response/response';
+import Response from '../../response';
 
 // class for creating response object
 const router = express.Router();
@@ -27,7 +28,7 @@ const router = express.Router();
  *    }
  *  }
  */
-router.post('/generateShhIdentity', async (req, res) => {
+router.post('/generateShhIdentity', async function(req, res) {
   const response = Response();
   try {
     const { address } = req.body;
@@ -60,7 +61,7 @@ router.post('/generateShhIdentity', async (req, res) => {
  *    }
  *  }
  */
-router.get('/getWhisperPublicKey', async (req, res) => {
+router.get('/getWhisperPublicKey', async function(req, res) {
   const response = Response();
   try {
     const { shhIdentity } = req.query;
@@ -96,7 +97,7 @@ router.get('/getWhisperPublicKey', async (req, res) => {
  *
  */
 
-router.post('/subscribe', async (req, res) => {
+router.post('/subscribe', async function(req, res) {
   const response = Response();
   try {
     const { shhIdentity, topic, jwtToken, sk_A: skA } = req.body;
@@ -134,7 +135,7 @@ router.post('/subscribe', async (req, res) => {
  *  }
  *
  */
-router.post('/sendMessage', async (req, res) => {
+router.post('/sendMessage', async function(req, res) {
   const response = Response();
   try {
     const { message, shhPkRecipient, shhIdentity } = req.body;

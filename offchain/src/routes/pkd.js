@@ -1,5 +1,6 @@
-import express from 'express';
+/* eslint-disable func-names */
 
+import express from 'express';
 import {
   setZkpPublicKey,
   setWhisperPublicKey,
@@ -12,12 +13,11 @@ import {
   getAddressFromName,
   isNameInUse,
 } from '../pkd-controller';
-
-import Response from '../../response/response'; // class for creating response object
+import Response from '../../response'; // class for creating response object
 
 const router = express.Router();
 
-router.get('/name/exists', async (req, res) => {
+router.get('/name/exists', async function(req, res) {
   const response = Response();
   try {
     const status = await isNameInUse(req.query.name);
@@ -33,7 +33,7 @@ router.get('/name/exists', async (req, res) => {
 
 router
   .route('/name')
-  .post(async (req, res) => {
+  .post(async function(req, res) {
     const { name } = req.body;
     const { address } = req.headers;
     console.log(address, 'name post');
@@ -49,7 +49,7 @@ router
       res.status(500).json(response);
     }
   })
-  .get(async (req, res) => {
+  .get(async function(req, res) {
     const { address } = req.headers;
     console.log(address, 'name get');
     const response = Response();
@@ -65,11 +65,8 @@ router
     }
   });
 
-router.post('/set-all-publickey', async (req, res) => {
-  const {
-    pk,
-    whisper_pk: whisperPk
-  } = req.body;
+router.post('/set-all-publickey', async function(req, res) {
+  const { pk, whisper_pk: whisperPk } = req.body;
   const { address } = req.headers;
   const response = Response();
 
@@ -87,7 +84,7 @@ router.post('/set-all-publickey', async (req, res) => {
 
 router
   .route('/zkp-publickey')
-  .post(async (req, res) => {
+  .post(async function(req, res) {
     const { pk } = req.body;
     const { address } = req.headers;
     const response = Response();
@@ -103,7 +100,7 @@ router
       res.status(500).json(response);
     }
   })
-  .get(async (req, res) => {
+  .get(async function(req, res) {
     const { name } = req.query;
     const response = Response();
 
@@ -121,7 +118,7 @@ router
 
 router
   .route('/whisperkey')
-  .post(async (req, res) => {
+  .post(async function(req, res) {
     const { whisper_pk: whisperPk } = req.body;
     const { address } = req.headers;
     const response = Response();
@@ -138,7 +135,7 @@ router
       res.status(500).json(response);
     }
   })
-  .get(async (req, res) => {
+  .get(async function(req, res) {
     const { name } = req.query;
     const response = Response();
 
@@ -154,7 +151,7 @@ router
     }
   });
 
-router.get('/address', async (req, res) => {
+router.get('/address', async function(req, res) {
   const { name } = req.query;
   const response = Response();
 
@@ -170,7 +167,7 @@ router.get('/address', async (req, res) => {
   }
 });
 
-router.get('/names', async (req, res) => {
+router.get('/names', async function(req, res) {
   const response = Response();
   try {
     const data = await getNames();

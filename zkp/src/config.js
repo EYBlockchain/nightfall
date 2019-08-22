@@ -98,7 +98,7 @@ const props = {
         host: 'http://ganache',
         port: '8545',
       },
-      volume: 'nightfall_zkp-code'
+      volume: 'nightfall_zkp-code',
     },
   },
   test: {
@@ -112,7 +112,7 @@ const props = {
         host: 'http://ganache_test',
         port: '8545',
       },
-      volume: 'nightfall_zkp_code_test'
+      volume: 'nightfall_zkp_code_test',
     },
   },
 };
@@ -121,19 +121,17 @@ const props = {
  * Set the environment
  * @param { string } environment - environment of app
  */
-const setEnv = environment => {
+function setEnv(environment) {
   if (props[environment]) {
     env = environment;
   }
-};
+}
 setEnv(process.env.NODE_ENV);
 
 /**
  * get the appropriate environment config
  */
-const getProps = () => {
-  return props[env];
-};
+const getProps = () => props[env];
 
 export default {
   setEnv,

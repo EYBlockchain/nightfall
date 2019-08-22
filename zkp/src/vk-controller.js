@@ -16,7 +16,10 @@ import fZkp from './f-token-zkp';
 
 const utils = Utils('/app/config/stats.json');
 const config = Config.getProps();
-const web3 = new Web3(Web3.givenProvider || new Web3.providers.HttpProvider(`${config.zkp.rpc.host}:${config.zkp.rpc.port}`));
+const web3 = new Web3(
+  Web3.givenProvider ||
+    new Web3.providers.HttpProvider(`${config.zkp.rpc.host}:${config.zkp.rpc.port}`),
+);
 
 const NFtokenShield = contract(jsonfile.readFileSync('./build/contracts/NFTokenShield.json'));
 NFtokenShield.setProvider(web3.currentProvider);
@@ -74,7 +77,7 @@ async function loadVk(vkJsonFile, vkDescription, account) {
     fs.writeFile(config.VK_IDS, vkIdsAsJson, err => {
       if (err) {
         console.log(
-          "fs.writeFile has failed when writing the new vk information to vkIds.json. Here's the error:",
+          `fs.writeFile has failed when writing the new vk information to vkIds.json. Here's the error:`,
         );
         reject(err);
       }

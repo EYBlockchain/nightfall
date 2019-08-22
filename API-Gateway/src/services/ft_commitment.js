@@ -35,7 +35,6 @@ export async function checkCorrectnessCoin(req, res, next) {
 		}
 	 * req.body {
 	 		A: '0x00000000000000000000000000002710',
-		  S_A: '0x14DE022C9B4A437B346F04646BD7809DEB81C38288E9614478351D'
 		}
 	 * @param {*} req
 	 * @param {*} res
@@ -46,19 +45,19 @@ export async function mintCoin(req, res, next) {
   try {
     const { data } = await zkp.mintCoin(req.user, {
       A: req.body.A,
-      pk_A: req.user.pk_A
+      pk_A: req.user.pk_A,
     });
 
     data.coin_index = parseInt(data.coin_index, 16);
     data.action_type = 'minted';
 
-    await db.addCoin(
-      _.extend(req.body, data, {
-        account: req.user.address,
-        name: req.user.name,
-        pk_A: req.user.pk_A,
-      }),
-    );
+    await db.addCoin(req.user, {
+      amount: req.body.A,
+      salt: data.S_A,
+      commitment: data.coin,
+      commitmentIndex: data.coin_index,
+      isMinted: true,
+    });
 
     response.statusCode = 200;
     response.data = data;
@@ -102,10 +101,9 @@ export async function mintCoin(req, res, next) {
      */
 export async function transferCoin(req, res, next) {
   const response = new Response();
-  const userAddress = req.user.address;
-  const userName = req.headers.name;
 
   try {
+    // Generate a new one-time-use Ethereum address for the transferor to use
     const password = (req.user.address + Date.now()).toString();
     const address = (await accounts.createAccount(password)).data;
     await db.updateUserWithPrivateAccount(req.user, { address, password });
@@ -113,29 +111,92 @@ export async function transferCoin(req, res, next) {
 
     const { pk } = await offchain.getZkpPublicKeyFromName(req.body.receiver_name); // fetch pk from PKD by passing username
     req.body.pk_B = pk;
-    req.body.pk_A = req.user.pk_A;
 
     const { data } = await zkp.transferCoin({ address }, req.body);
     data.z_E_index = parseInt(data.z_E_index, 16);
     data.z_F_index = parseInt(data.z_F_index, 16);
 
-    req.body.action_type = 'transferred';
-
-    const coinData = _.extend(req.body, data, {
-      name: req.user.name,
+    // update slected coin1 with tansferred data
+    await db.updateCoin(req.user, {
+      amount: req.body.C,
+      salt: req.body.S_C,
+      commitment: req.body.z_C,
+      commitmentIndex: req.body.z_C_index,
+      transferredAmount: req.body.E,
+      transferredSalt: data.S_E,
+      transferredCommitment: data.z_E,
+      transferredCommitmentIndex: data.z_E_index,
+      changeAmount: req.body.F,
+      changeSalt: data.S_F,
+      changeCommitment: data.z_F,
+      changeCommitmentIndex: data.z_F_index,
+      transferee: req.body.receiver_name,
+      isTransferred: true,
     });
 
-    await db.updateCoin(req.user, coinData);
+    // update slected coin2 with tansferred data
+    await db.updateCoin(req.user, {
+      amount: req.body.D,
+      salt: req.body.S_D,
+      commitment: req.body.z_D,
+      commitmentIndex: req.body.z_D_index,
+      transferredAmount: req.body.E,
+      transferredSalt: data.S_E,
+      transferredCommitment: data.z_E,
+      transferredCommitmentIndex: data.z_E_index,
+      changeAmount: req.body.F,
+      changeSalt: data.S_F,
+      changeCommitment: data.z_F,
+      changeCommitmentIndex: data.z_F_index,
+      transferee: req.body.receiver_name,
+      isTransferred: true,
+    });
+
+    // transfer is only case where we need to call api to add coin transaction
+    // rest of case inserting coin or updating coin will add respective transfer log.
+    await db.addCoinTransaction(req.user, {
+      amount: req.body.E,
+      salt: data.S_E,
+      commitment: data.z_E,
+      commitmentIndex: data.z_E_index,
+      changeAmount: req.body.F,
+      changeSalt: data.S_F,
+      changeCommitment: data.z_F,
+      changeCommitmentIndex: data.z_F_index,
+      transferee: req.body.receiver_name,
+      isTransferred: true,
+      usedCoins: [
+        {
+          amount: req.body.C,
+          commitment: req.body.z_C,
+        },
+        {
+          amount: req.body.D,
+          commitment: req.body.z_D,
+        },
+      ],
+    });
+
+    // add change to user database
+    if (parseInt(req.body.F)) {
+      await db.addCoin(req.user, {
+        amount: req.body.F,
+        salt: data.S_F,
+        commitment: data.z_F,
+        commitmentIndex: data.z_F_index,
+        isChange: true,
+      });
+    }
 
     // note:
     // E is the value transferred to the transferee
     // F is the value returned as 'change' to the transferor
     await whisperTransaction(req, {
-      E: req.body.E,
-      S_E: data.S_E,
+      amount: req.body.E,
+      salt: data.S_E,
       pk: req.body.pk_B,
-      z_E: data.z_E,
-      z_E_index: data.z_E_index,
+      commitment: data.z_E,
+      commitmentIndex: data.z_E_index,
       transferee: req.body.receiver_name,
       for: 'coin',
     });
@@ -168,17 +229,20 @@ export async function burnCoin(req, res, next) {
   const response = new Response();
 
   try {
-    const payToAddress = (await offchain.getAddressFromName(req.body.payTo || req.user.name)).address;
+    const payToAddress = req.body.payTo
+      ? (await offchain.getAddressFromName(req.body.payTo)).address
+      : req.user.address;
 
-    const { data } = await zkp.burnCoin({...req.body,  payTo: payToAddress }, req.user);
-    data.action_type = 'burned';
+    const { data } = await zkp.burnCoin({ ...req.body, payTo: payToAddress }, req.user);
 
-    const senderAddress = req.user.address;
-    await db.updateCoinForBurn(req.user, {
-      ...req.body,
-      ...data,
-      account: senderAddress,
-      receiver_name: (req.body.payTo || req.user.name)
+    // update slected coin with tansferred data
+    await db.updateCoin(req.user, {
+      amount: req.body.A,
+      salt: req.body.S_A,
+      commitment: req.body.z_A,
+      commitmentIndex: req.body.z_A_index,
+      transferee: req.body.payTo || req.user.name,
+      isBurned: true,
     });
 
     const user = await db.fetchUser(req.user);
@@ -186,20 +250,20 @@ export async function burnCoin(req, res, next) {
     if (req.body.payTo) {
       await whisperTransaction(req, {
         amount: Number(req.body.A),
-        shield_contract_address: user.selected_coin_shield_contract,
+        shieldContractAddress: user.selected_coin_shield_contract,
         transferee: req.body.payTo,
         transferor: req.user.name,
-        transferor_address: req.user.address,
+        transferorAddress: req.user.address,
         for: 'FToken',
       }); // send ft token data to BOB side
     } else {
       await db.addFTTransaction(req.user, {
         amount: Number(req.body.A),
-        shield_contract_address: user.selected_coin_shield_contract,
+        shieldContractAddress: user.selected_coin_shield_contract,
         transferee: req.body.payTo,
         transferor: req.user.name,
-        transferor_address: req.user.address,
-        is_received: true,
+        transferorAddress: req.user.address,
+        isReceived: true,
       });
     }
 

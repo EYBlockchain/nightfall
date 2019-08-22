@@ -1,20 +1,17 @@
-/* eslint-disable no-shadow */
-
 import mongoose from 'mongoose';
+import { getProps } from '../config';
 
-const config = require('../config').getProps();
-
-const { host, port, databaseName, admin, password } = config.mongo;
+const config = getProps();
+const { host, port, databaseName, admin, adminPassword } = config.mongo;
 
 const connections = {
   admin: mongoose.createConnection(
-    `mongodb://${admin}:${password}@${host}:${port}/${databaseName}`,
+    `mongodb://${admin}:${adminPassword}@${host}:${port}/${databaseName}`,
     { useNewUrlParser: true, useCreateIndex: true },
   ),
 };
 
-/* eslint-disable-next-line */
-module.exports = async function(req, res, next) {
+export default async function(req, res, next) {
   try {
     // signup need admin privalage as it create user sepcific tables.
     if (req.path === '/createAccount') {
@@ -47,7 +44,6 @@ module.exports = async function(req, res, next) {
     throw new Error('DB connection assign failed');
   } catch (err) {
     console.log(err);
-    next(err);
+    return next(err);
   }
-  return 0;
-};
+}

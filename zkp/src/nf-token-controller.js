@@ -390,7 +390,7 @@ async function transfer(A, pk_B, S_A, S_B, sk_A, z_A, z_A_index, account) {
   // Calculate new arguments for the proof:
   const n = utils.recursiveHashConcat(S_A, sk_A);
   if (n !== utils.hashConcat(S_A, sk_A))
-    throw new Error("hashConcat and recursiveHashConcat didn't agree");
+    throw new Error(`hashConcat and recursiveHashConcat didn't agree`);
   const z_B = utils.recursiveHashConcat(utils.strip0x(A).slice(-config.HASHLENGTH * 2), pk_B, S_B);
 
   // we need the Merkle path from the token commitment to the root, expressed as Elements
@@ -516,7 +516,7 @@ async function burn(A, Sk_A, S_A, z_A, z_A_index, account, payTo) {
   // Calculate new arguments for the proof:
   const Na = utils.recursiveHashConcat(S_A, Sk_A);
   if (Na !== utils.hashConcat(S_A, Sk_A))
-    throw new Error("hashConcat and recursiveHashConcat didn't agree");
+    throw new Error(`hashConcat and recursiveHashConcat didn't agree`);
   const Pk_A = utils.recursiveHashConcat(Sk_A);
   const path = await cv.computePath(account, nfTokenShield, z_A, z_A_index).then(result => {
     return {
@@ -550,7 +550,7 @@ async function burn(A, Sk_A, S_A, z_A, z_A_index, account, payTo) {
     new Element(payTo, 'field'),
     new Element(A, 'field'),
     new Element(Na, 'field'),
-    new Element(root, 'field')
+    new Element(root, 'field'),
   ]);
   console.log('inputs:');
   console.log(inputs);

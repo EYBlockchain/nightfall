@@ -1,15 +1,10 @@
-/* eslint-disable camelcase */
-/* eslint-disable import/no-commonjs */
+import { Schema } from 'mongoose';
 
-import mongoose from 'mongoose';
-
-const { Schema } = mongoose;
-
-const TokenTransactionSchema = new Schema(
+export default new Schema(
   {
     type: {
       type: String,
-      enum: ['mint', 'transfer', 'received', 'burned'],
+      enum: ['minted', 'transferred', 'received', 'burned'],
       required: true,
     },
     token_uri: {
@@ -36,10 +31,10 @@ const TokenTransactionSchema = new Schema(
 
     // transferee info
     transferee: String,
-    transferee_public_key: String,
-    transferee_salt: String,
-    transferee_token_commitment: String,
-    transferee_token_commitment_index: Number,
+
+    transferred_salt: String,
+    transferred_token_commitment: String,
+    transferred_token_commitment_index: Number,
   },
   {
     timestamps: {
@@ -48,6 +43,3 @@ const TokenTransactionSchema = new Schema(
     },
   },
 );
-
-mongoose.set('debug', true);
-module.exports = TokenTransactionSchema;

@@ -3,6 +3,7 @@ mochawesome-report
 zkp/src/vkIds.json
 zkp/migrations
 zkp/code
+account-utils
 zkp-utils/node_modules
 offchain/migrations
 ui

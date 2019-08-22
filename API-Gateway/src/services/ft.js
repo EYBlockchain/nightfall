@@ -26,8 +26,8 @@ export async function mintFToken(req, res, next) {
 
     await db.addFTTransaction(req.user, {
       amount: req.body.amount,
-      shield_contract_address: user.selected_coin_shield_contract,
-      is_minted: true,
+      shieldContractAddress: user.selected_coin_shield_contract,
+      isMinted: true,
     });
 
     response.statusCode = 200;
@@ -65,18 +65,18 @@ export async function transferFToken(req, res, next) {
 
     await db.addFTTransaction(req.user, {
       amount: req.body.amount,
-      shield_contract_address: user.selected_coin_shield_contract,
+      shieldContractAddress: user.selected_coin_shield_contract,
       transferee: req.body.receiver_name,
-      transferee_address: address,
-      is_transferred: true,
+      transfereeAddress: address,
+      isTransferred: true,
     });
 
     await whisperTransaction(req, {
       amount: req.body.amount,
-      shield_contract_address: user.selected_coin_shield_contract,
+      shieldContractAddress: user.selected_coin_shield_contract,
       transferee: req.body.receiver_name,
       transferor: req.user.name,
-      transferor_address: req.user.address,
+      transferorAddress: req.user.address,
       for: 'FToken',
     }); // send ft token data to BOB side
 
@@ -111,8 +111,8 @@ export async function burnFToken(req, res, next) {
 
     await db.addFTTransaction(req.user, {
       amount: req.body.amount,
-      shield_contract_address: user.selected_coin_shield_contract,
-      is_burned: true,
+      shieldContractAddress: user.selected_coin_shield_contract,
+      isBurned: true,
     });
 
     response.statusCode = 200;

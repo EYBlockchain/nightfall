@@ -1,10 +1,15 @@
-/* eslint-disable import/no-commonjs */
+import Utils from 'zkp-utils';
 
-module.exports = ({ name, email, address, shhIdentity }) => {
-  const user = {};
-  user.name = name;
-  user.email = email;
-  user.address = address.toLowerCase();
-  user.shh_identity = shhIdentity || '';
-  return user;
-};
+const utils = Utils('/app/config/stats.json');
+
+export default async function({ name, email, address, shhIdentity }) {
+  const hash = await utils.rndHex(27);
+  return {
+    name,
+    email,
+    address: address.toLowerCase(),
+    shh_identity: shhIdentity,
+    secretkey: hash,
+    publickey: utils.hash(hash),
+  };
+}

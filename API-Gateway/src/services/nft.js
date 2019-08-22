@@ -35,9 +35,9 @@ export async function mintNFToken(req, res, next) {
 
     await db.addNFToken(req.user, {
       uri: reqBody.tokenURI,
-      token_id: reqBody.tokenID,
-      shield_contract_address: user.selected_token_shield_contract,
-      is_minted: true,
+      tokenId: reqBody.tokenID,
+      shieldContractAddress: user.selected_token_shield_contract,
+      isMinted: true,
     });
 
     response.statusCode = 200;
@@ -81,22 +81,22 @@ export async function transferNFToken(req, res, next) {
 
     const nftToken = {
       uri: req.body.uri,
-      token_id: req.body.tokenID,
-      shield_contract_address: req.body.contractAddress,
+      tokenId: req.body.tokenID,
+      shieldContractAddress: req.body.contractAddress,
     };
 
     await db.updateNFToken(req.user, {
       ...nftToken,
       transferee: req.body.receiver_name,
-      transferee_address: address,
-      is_transferred: true,
+      transfereeAddress: address,
+      isTransferred: true,
     });
 
     await whisperTransaction(req, {
       ...nftToken,
       transferee: req.body.receiver_name,
       transferor: req.user.name,
-      transferor_address: req.user.address,
+      transferorAddress: req.user.address,
       for: 'NFTToken',
     }); // send nft token data to BOB side
 
@@ -137,9 +137,9 @@ export async function burnNFToken(req, res, next) {
 
     await db.updateNFToken(req.user, {
       uri: req.body.uri,
-      token_id: req.body.tokenID,
-      shield_contract_address: req.body.contractAddress,
-      is_burned: true,
+      tokenId: req.body.tokenID,
+      shieldContractAddress: req.body.contractAddress,
+      isBurned: true,
     });
 
     response.statusCode = 200;
@@ -168,7 +168,7 @@ export async function getNFTokens(req, res, next) {
   try {
     const user = await db.fetchUser(req.user);
     const data = await db.getNFTokens(req.user, {
-      shield_contract_address: user.selected_token_shield_contract,
+      shieldContractAddress: user.selected_token_shield_contract,
       limit: req.query.limit,
       pageNo: req.query.pageNo,
     });

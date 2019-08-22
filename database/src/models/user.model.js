@@ -1,13 +1,6 @@
-/* eslint-disable camelcase */
-/* eslint-disable func-names */
-/* eslint-disable import/no-commonjs */
+import { Schema } from 'mongoose';
 
-import mongoose from 'mongoose';
-
-const { Schema } = mongoose;
-const utils = require('zkp-utils')('/app/config/stats.json');
-
-const UserSchema = new Schema({
+export default new Schema({
   name: { type: String, required: true },
   email: { type: String, required: true },
   address: { type: String, requird: true },
@@ -45,15 +38,3 @@ const UserSchema = new Schema({
     },
   ],
 });
-
-UserSchema.pre('save', function(next) {
-  const user = this;
-  utils.rndHex(27).then(sk => {
-    user.secretkey = sk;
-    user.publickey = utils.hash(sk);
-    next();
-  });
-});
-
-mongoose.set('debug', true);
-module.exports = UserSchema;
