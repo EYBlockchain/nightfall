@@ -29,7 +29,8 @@ There is a volume conflict sometimes, please run `docker volume rm nightfall_zkp
 Then run
 
 ```sh
-make truffle-compile truffle-migrate zkp-start
+make truffle-compile truffle-migrate
+npm run generate-keys
 ```
 
 and wait until you see the message `VK setup complete` in the console.
