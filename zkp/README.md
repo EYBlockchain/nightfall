@@ -6,7 +6,21 @@ This module is responsbile for setting up cryptographic key pairs which, relying
 
 ## Tasks you can perform
 
+### Generate key pairs
+
+You will need key pairs to run the full application. And the `setupAll` script does indeed perform this step as part of the demonstration [in the main project README](../README.md). Generating the key pairs uses randomness as an input, so every time you setup, the pairs will be different. **If you are attaching Nightfall to an existing deployment then you will import those keys and you will NOT generate your own key pairs** since yours would be incompatible with the deployed application.
+
+⚠️ This task will run approximately one to three hours depending on your machine.
+
+📖 ​This task has a recipe in [the Nightfall makefile](../Makefile), execute it using `make zkp-generate-keys` from the top-level folder. Or you can directly run:
+
+```sh
+docker-compose run --rm zkp --env NODE_ENV=setup npx babel-node code/index.js
+```
+
 ### Run zkp service unit tests
+
+*Requires key pairs to be generated already.*
 
 After following the steps from [the main README.md](../README.md), "Installing Nightfall"' section,
 
@@ -36,19 +50,6 @@ directories.
 - `utils.test.js` - These are unit tests for utils used for running the tests.
 
 Note that, the zkp service tests take a while to run (approx. 2 hours)
-
-### Generate key pairs
-
-You will need key pairs to run the full application. And the `setupAll` script does indeed perform this step as part of the demonstration [in the main project README](../README.md). Generating the key pairs uses randomness as an input, so every time you setup, the pairs will be different. **If you are attaching Nightfall to an existing deployment then you will import those keys and you will NOT generate your own key pairs** since yours would be incompatible with the deployed application.
-
-⚠️ This task will run approximately one to three hours depending on your machine.
-
-📖 ​This task has a recipe in [the Nightfall makefile](../Makefile), execute it using `make zkp-generate-keys` from the top-level folder. Or you can directly run:
-
-```sh 
-docker-compose run --rm zkp --env NODE_ENV=setup npx babel-node code/index.js
-```
-
 
 
 ### Development
