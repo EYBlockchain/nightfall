@@ -51,11 +51,11 @@ export async function transferFToken(req, res, next) {
   const response = new Response();
 
   try {
-    const { address } = await offchain.getAddressFromName(req.body.receiver_name);
+    const transfereeAddress = await offchain.getAddressFromName(req.body.receiver_name);
 
     await zkp.transferFToken(req.user, {
       amount: req.body.amount,
-      toAddress: address,
+      toAddress: transfereeAddress,
     });
 
     const user = await db.fetchUser(req.user);
@@ -64,7 +64,7 @@ export async function transferFToken(req, res, next) {
       amount: req.body.amount,
       shieldContractAddress: user.selected_coin_shield_contract,
       transferee: req.body.receiver_name,
-      transfereeAddress: address,
+      transfereeAddress,
       isTransferred: true,
     });
 
