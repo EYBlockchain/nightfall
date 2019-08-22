@@ -1,4 +1,3 @@
-import Response from './response/response';
 import { AccountService, NftCommitmentService, FtCommitmentService } from '../business';
 
 /**
@@ -16,11 +15,9 @@ async function addCoinShieldContractAddress(req, res, next) {
   const accountService = new AccountService(req.user.db);
   try {
     await accountService.addCoinShieldContractAddress(req.body);
-    const response = new Response(200, { message: 'Contract Information Added' }, null);
-    res.json(response);
+    res.data = { message: 'Contract Information Added' };
+    next();
   } catch (err) {
-    const response = new Response(500, null, { message: err.message });
-    res.status(500).json(response);
     next(err);
   }
 }
@@ -37,11 +34,9 @@ async function deleteCoinShieldContractAddress(req, res, next) {
   const accountService = new AccountService(req.user.db);
   try {
     const status = await accountService.deleteCoinShieldContractAddress(req.query);
-    const response = new Response(200, { message: 'Contract Information Removed', status }, null);
-    res.json(response);
+    res.data = { message: 'Contract Information Removed', status };
+    next();
   } catch (err) {
-    const response = new Response(500, null, { message: err.message });
-    res.status(500).json(response);
     next(err);
   }
 }
@@ -61,11 +56,9 @@ async function updateCoinShieldContractAddress(req, res, next) {
   const accountService = new AccountService(req.user.db);
   try {
     await accountService.updateCoinShieldContractAddress(req.body);
-    const response = new Response(200, { message: 'Contract Information Updated' }, null);
-    res.json(response);
+    res.data = { message: 'Contract Information Updated' };
+    next();
   } catch (err) {
-    const response = new Response(500, null, { message: err.message });
-    res.status(500).json(response);
     next(err);
   }
 }
@@ -85,11 +78,9 @@ async function addTokenShieldContractAddress(req, res, next) {
   const accountService = new AccountService(req.user.db);
   try {
     await accountService.addTokenShieldContractAddress(req.body);
-    const response = new Response(200, { message: 'Contract Information Added' }, null);
-    res.json(response);
+    res.data = { message: 'Contract Information Added' };
+    next();
   } catch (err) {
-    const response = new Response(500, null, { message: err.message });
-    res.status(500).json(response);
     next(err);
   }
 }
@@ -106,11 +97,9 @@ async function deleteTokenShieldContractAddress(req, res, next) {
   const accountService = new AccountService(req.user.db);
   try {
     const status = await accountService.deleteTokenShieldContractAddress(req.query);
-    const response = new Response(200, { message: 'Contract Information Removed', status }, null);
-    res.json(response);
+    res.data = { message: 'Contract Information Removed', status };
+    next();
   } catch (err) {
-    const response = new Response(500, null, { message: err.message });
-    res.status(500).json(response);
     next(err);
   }
 }
@@ -130,11 +119,9 @@ async function updateTokenShieldContractAddress(req, res, next) {
   const accountService = new AccountService(req.user.db);
   try {
     await accountService.updateTokenShieldContractAddress(req.body);
-    const response = new Response(200, { message: 'Contract Information Updated' }, null);
-    res.json(response);
+    res.data = { message: 'Contract Information Updated' };
+    next();
   } catch (err) {
-    const response = new Response(500, null, { message: err.message });
-    res.status(500).json(response);
     next(err);
   }
 }
@@ -150,11 +137,9 @@ async function updateWhisperIdentity(req, res, next) {
   const accountService = new AccountService(req.user.db);
   try {
     await accountService.updateWhisperIdentity(shhIdentity);
-    const response = new Response(200, { message: 'Whisper-key updated' }, null);
-    res.json(response);
+    res.data = { message: 'Whisper-key updated' };
+    next();
   } catch (err) {
-    const response = new Response(500, null, { message: err.message });
-    res.status(500).json(response);
     next(err);
   }
 }
@@ -168,12 +153,9 @@ async function updateWhisperIdentity(req, res, next) {
 async function getWhisperIdentity(req, res, next) {
   const accountService = new AccountService(req.user.db);
   try {
-    const keys = await accountService.getWhisperIdentity();
-    const response = new Response(200, { ...keys }, null);
-    res.json(response);
+    res.data = await accountService.getWhisperIdentity();
+    next();
   } catch (err) {
-    const response = new Response(500, null, { message: err.message });
-    res.status(500).json(response);
     next(err);
   }
 }
@@ -195,12 +177,9 @@ async function getCountHandler(req, res, next) {
         totalAmount += Number(coin.coin_value);
       });
     }
-    const data = { tokenCount: tokens ? tokens.length : 0, totalAmount };
-    const response = new Response(200, data, null);
-    res.json(response);
+    res.data = { tokenCount: tokens ? tokens.length : 0, totalAmount };
+    next();
   } catch (err) {
-    const response = new Response(500, null, { message: err.message });
-    res.status(500).json(response);
     next(err);
   }
 }
@@ -214,12 +193,9 @@ async function getCountHandler(req, res, next) {
 async function getUserByName(req, res, next) {
   const accountService = new AccountService(req.user.db);
   try {
-    const data = await accountService.getUser({ name: req.body.name });
-    const response = new Response(200, data, null);
-    res.json(response);
+    res.data = await accountService.getUser({ name: req.body.name });
+    next();
   } catch (err) {
-    const response = new Response(500, null, { message: err.message });
-    res.status(500).json(response);
     next(err);
   }
 }
@@ -237,12 +213,9 @@ async function getUserByName(req, res, next) {
 async function createAccountHandler(req, res, next) {
   const accountService = new AccountService(req.user.db);
   try {
-    const data = await accountService.createAccount(req.body);
-    const response = new Response(200, data, null);
-    res.json(response);
+    res.data = await accountService.createAccount(req.body);
+    next();
   } catch (err) {
-    const response = new Response(500, null, { message: err.message });
-    res.status(500).json(response);
     next(err);
   }
 }
@@ -260,12 +233,9 @@ async function createAccountHandler(req, res, next) {
 async function createPrivateAccountHandler(req, res, next) {
   const accountService = new AccountService(req.user.db);
   try {
-    const data = await accountService.updateUserWithPrivateAccount(req.body);
-    const response = new Response(200, data, null);
-    res.json(response);
+    res.data = await accountService.updateUserWithPrivateAccount(req.body);
+    next();
   } catch (err) {
-    const response = new Response(500, null, { message: err.message });
-    res.status(500).json(response);
     next(err);
   }
 }
@@ -279,12 +249,9 @@ async function createPrivateAccountHandler(req, res, next) {
 async function getUserHandler(req, res, next) {
   const accountService = new AccountService(req.user.db);
   try {
-    const data = await accountService.getUser();
-    const response = new Response(200, data, null);
-    res.json(response);
+    res.data = await accountService.getUser();
+    next();
   } catch (err) {
-    const response = new Response(500, null, { message: err.message });
-    res.status(500).json(response);
     next(err);
   }
 }

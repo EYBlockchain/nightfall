@@ -32,7 +32,7 @@ initializeFtCommitmentRoutes(router);
 app.use(formatResponse);
 
 app.use(function logError(err, req, res, next) {
-  console.error(
+  logger.error(
     `${req.method}:${req.url}
     ${JSON.stringify({ error: err.message })}
     ${JSON.stringify({ errorStack: err.stack.split('\n') }, null, 1)}
@@ -48,6 +48,6 @@ app.use(formatError);
 app.use(errorHandler);
 
 const server = app.listen(80, '0.0.0.0', () =>
-  console.log('zkp database RESTful API server started on ::: 80'),
+  logger.log('zkp database RESTful API server started on ::: 80'),
 );
 server.timeout = 0;
