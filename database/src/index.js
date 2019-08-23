@@ -48,6 +48,6 @@ app.use(formatError);
 app.use(errorHandler);
 
 const server = app.listen(80, '0.0.0.0', () =>
-  logger.log('zkp database RESTful API server started on ::: 80'),
+  logger.info('zkp database RESTful API server started on ::: 80'),
 );
 server.timeout = 0;
