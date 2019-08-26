@@ -22,7 +22,7 @@ export class BurnTokenComponent implements OnInit, AfterContentInit {
   /**
    * Selected Token List
    */
-  selectedTokenList:any = [];
+  selectedTokenList: any = [];
   /**
    * Used to identify the selected ERC-721 token commitment.
    */
@@ -40,10 +40,10 @@ export class BurnTokenComponent implements OnInit, AfterContentInit {
   /**
    * Non Fungeble Token name , read from ERC-721 contract.
    */
-  nftName:string;
+  nftName: string;
 
   /**
-   * To store all users 
+   * To store all users
    */
   users: any;
 
@@ -56,7 +56,7 @@ export class BurnTokenComponent implements OnInit, AfterContentInit {
    * Reference of combo box
    */
   @ViewChild('select') select: NgSelectComponent;
-  
+
   constructor(
     private toastr: ToastrService,
     private tokenApiService: TokenApiService,
@@ -70,7 +70,7 @@ export class BurnTokenComponent implements OnInit, AfterContentInit {
     this.getUsers();
   }
 
-  ngAfterContentInit(){
+  ngAfterContentInit() {
     setTimeout(() => {
       this.select.filterInput.nativeElement.focus();
     }, 500);
@@ -88,7 +88,7 @@ export class BurnTokenComponent implements OnInit, AfterContentInit {
     if (!selectedToken) {
       this.toastr.error('All fields are mandatory');
       return;
-    };
+    }
     this.isRequesting = true;
     this.tokenApiService.burnToken(
       selectedToken.token_id,
@@ -107,7 +107,7 @@ export class BurnTokenComponent implements OnInit, AfterContentInit {
       }, error => {
         this.isRequesting = false;
         this.toastr.error('Please try again', 'Error');
-    })
+    });
   }
 
   /**
@@ -127,17 +127,17 @@ export class BurnTokenComponent implements OnInit, AfterContentInit {
     }, error => {
       this.isRequesting = false;
       this.toastr.error('Please Enter a valid SKU.', error);
-    })
+    });
   }
 
   /**
-   * Method to set new coin list in select box, on removing. 
+   * Method to set new coin list in select box, on removing.
    * @param item {Object} Item to be removed.
    */
   onRemove(item) {
     console.log('selected items', this.selectedTokenList, item);
-    let newList = this.selectedTokenList.filter((it)=>{
-      return item._id != it._id;
+    const newList = this.selectedTokenList.filter((it) => {
+      return item._id !== it._id;
     });
     this.selectedTokenList = newList;
     console.log('selected new items', this.selectedTokenList);
@@ -146,22 +146,22 @@ export class BurnTokenComponent implements OnInit, AfterContentInit {
   /**
    * For implementing type ahead feature, this method will be called for searching
    * the user entered item from the list of items.
-   * 
+   *
    * @param term User want to search
    * @param item selected item.
    */
-  customSearchFn(term: string, item: any){
-    if(!item){
+  customSearchFn(term: string, item: any) {
+    if (!item) {
       return;
     }
     term = term.toLocaleLowerCase();
-    let itemToSearch = item.token_uri.toLowerCase();
+    const itemToSearch = item.token_uri.toLowerCase();
     return itemToSearch.indexOf(term) > -1;
   }
 
   /**
    * Method to retrive all users.
-   * 
+   *
    */
   getUsers () {
     this.isRequesting = true;
@@ -171,8 +171,8 @@ export class BurnTokenComponent implements OnInit, AfterContentInit {
         this.users = data['data'];
       }, error => {
         this.isRequesting = false;
-        this.toastr.error('Please try again.', "Error");
-      })
+        this.toastr.error('Please try again.', 'Error');
+      });
   }
 
 }

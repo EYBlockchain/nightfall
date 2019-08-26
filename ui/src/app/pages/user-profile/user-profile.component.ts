@@ -22,12 +22,12 @@ export class UserProfileComponent extends Config implements OnInit {
    * Flag for http request status
    */
   isRequesting =  false;
-  
+
   constructor(
     private toastr: ToastrService,
     private accountService: AccountsApiService
   ) {
-    super("");
+    super('');
   }
 
   ngOnInit(): void {
@@ -37,16 +37,16 @@ export class UserProfileComponent extends Config implements OnInit {
   /**
    * Get the current logged in user details
    */
-  getUser(){
+  getUser() {
     this.accountService.getUser().subscribe(
       data => {
-        console.log("data", data)
-        this.user = data['data']
-      }, 
+        console.log('data', data);
+        this.user = data['data'];
+      },
       error => {
-        console.log("error in user get", error)
+        console.log('error in user get', error);
       }
-    )
+    );
   }
 
 }

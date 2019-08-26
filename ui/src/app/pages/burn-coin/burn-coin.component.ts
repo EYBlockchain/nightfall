@@ -2,7 +2,7 @@ import { Component, OnInit, ViewChild, AfterContentInit } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
 import { CoinApiService } from '../../services/coins/coin-api.service';
 import { Router } from '@angular/router';
-import {UtilService} from '../../services/utils/util.service'
+import {UtilService} from '../../services/utils/util.service';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import { AccountsApiService } from '../../services/accounts/accounts-api.service';
 /**
@@ -14,7 +14,7 @@ import { AccountsApiService } from '../../services/accounts/accounts-api.service
   providers: [AccountsApiService, CoinApiService, UtilService],
   styleUrls: ['./burn-coin.component.css']
 })
-export class BurnCoinComponent implements OnInit , AfterContentInit{
+export class BurnCoinComponent implements OnInit , AfterContentInit {
   /**
    * Transaction list
    */
@@ -26,7 +26,7 @@ export class BurnCoinComponent implements OnInit , AfterContentInit{
   /**
    * Seleceted list of ERC-20 commitment
    */
-  selectedCoinList:any = [];
+  selectedCoinList: any = [];
   /**
    * If no coins are available, set this property as false;
    */
@@ -42,10 +42,10 @@ export class BurnCoinComponent implements OnInit , AfterContentInit{
   /**
    * Fungeble Token name , read from ERC-20 contract.
    */
-  ftName:string;
+  ftName: string;
 
   /**
-   * To store all users 
+   * To store all users
    */
   users: any;
 
@@ -58,7 +58,7 @@ export class BurnCoinComponent implements OnInit , AfterContentInit{
    * Reference of combo box
    */
   @ViewChild('select') select: NgSelectComponent;
-  
+
   constructor(
     private toastr: ToastrService,
     private utilService: UtilService,
@@ -75,11 +75,11 @@ export class BurnCoinComponent implements OnInit , AfterContentInit{
     this.getUsers();
   }
 
-  ngAfterContentInit(){
+  ngAfterContentInit() {
     setTimeout(() => {
       this.select.filterInput.nativeElement.focus();
   }, 500);
-    
+
   }
 
   /**
@@ -93,10 +93,9 @@ export class BurnCoinComponent implements OnInit , AfterContentInit{
         this.isRequesting = false;
         if (data &&
           data['data'] &&
-          data['data']['data'] &&
-          data['data']['data'].length
+          data['data'].length
          ) {
-          this.transactions = data['data']['data'].map((tx, indx) => {
+          this.transactions = data['data'].map((tx, indx) => {
             tx.selected = false;
             tx.id = indx;
             return tx;
@@ -106,7 +105,7 @@ export class BurnCoinComponent implements OnInit , AfterContentInit{
         }
       }, error => {
         this.isRequesting = false;
-      })
+      });
   }
 
   /**
@@ -114,9 +113,9 @@ export class BurnCoinComponent implements OnInit , AfterContentInit{
    */
   initiateBurn () {
     this.selectedCoin = this.selectedCoinList[0];
-    console.log(this.selectedCoin,'selected coin')
-    let coin = this.selectedCoin;
-    if (!coin) return;
+    console.log(this.selectedCoin, 'selected coin');
+    const coin = this.selectedCoin;
+    if (!coin) { return; }
     const {
       transactions,
       index
@@ -139,17 +138,17 @@ export class BurnCoinComponent implements OnInit , AfterContentInit{
       }, error => {
         this.isRequesting = false;
         this.toastr.error('Please try again', 'Error');
-    })
+    });
   }
-  
+
   /**
-   * Method to set new coin list in select box, on removing. 
+   * Method to set new coin list in select box, on removing.
    * @param item {Object} Item to be removed.
    */
   onRemove(item) {
     console.log('selected items', this.selectedCoinList, item);
-    let newList = this.selectedCoinList.filter((it)=>{
-      return item._id != it._id;
+    const newList = this.selectedCoinList.filter((it) => {
+      return item._id !== it._id;
     });
     this.selectedCoinList = newList;
     console.log('selected new items', this.selectedCoinList);
@@ -157,22 +156,22 @@ export class BurnCoinComponent implements OnInit , AfterContentInit{
 
   /**
    * Method to serach an item from the combobox.
-   * 
+   *
    * @param term {String} Term that user entered
    * @param item {Item} Item which searched by user.
    */
-  customSearchFn(term: string, item: any){
-    if(!item){
+  customSearchFn(term: string, item: any) {
+    if (!item) {
       return;
-    } 
+    }
     term = term.toLocaleLowerCase();
-    let itemToSearch = this.utilService.convertToNumber(item.coin_value).toString().toLocaleLowerCase();
+    const itemToSearch = this.utilService.convertToNumber(item.coin_value).toString().toLocaleLowerCase();
     return itemToSearch.indexOf(term) > -1;
   }
 
   /**
    * Method to retrive all users.
-   * 
+   *
    */
   getUsers () {
     this.isRequesting = true;
@@ -182,9 +181,9 @@ export class BurnCoinComponent implements OnInit , AfterContentInit{
         this.users = data['data'];
       }, error => {
         this.isRequesting = false;
-        this.toastr.error('Please try again.', "Error");
-      })
+        this.toastr.error('Please try again.', 'Error');
+      });
   }
-  
+
 }
 

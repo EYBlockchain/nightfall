@@ -13,9 +13,9 @@ import { TokenApiService } from '../../services/tokens/token-api.service';
   styleUrls: ['./mint-public-token.component.css']
 })
 export class MintPublicTokenComponent implements OnInit {
- 
+
   /**
-   * For ERC-721 token name 
+   * For ERC-721 token name
    */
   tokenURI: string;
   /**
@@ -26,8 +26,8 @@ export class MintPublicTokenComponent implements OnInit {
   /**
    * Non Fungeble Token name , read from ERC-721 contract.
    */
-  nftName:string;
-  
+  nftName: string;
+
   constructor(
     private toastr: ToastrService,
     private tokenApiService: TokenApiService,
@@ -51,7 +51,7 @@ export class MintPublicTokenComponent implements OnInit {
       }, error => {
         this.isRequesting = false;
         this.toastr.error('Please try again', 'Error');
-    })
+    });
   }
 
 }

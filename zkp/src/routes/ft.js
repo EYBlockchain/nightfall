@@ -1,101 +1,75 @@
 import { Router } from 'express';
 import fTokenController from '../f-token-controller';
-import Response from '../../response'; // class for creating response object
 
 const router = Router();
 
-async function mint(req, res) {
+async function mint(req, res, next) {
   const { amount } = req.body;
   const { address } = req.headers;
-  const response = new Response();
 
   try {
     const status = await fTokenController.buyFToken(amount, address);
-    response.statusCode = 200;
-    response.data = status;
-    res.json(response);
+    res.data = status;
+    next();
   } catch (err) {
-    console.log(err);
-    response.statusCode = 500;
-    response.data = err;
-    res.status(500).json(response);
+    next(err);
   }
 }
 
-async function transfer(req, res) {
+async function transfer(req, res, next) {
   const { amount, toAddress } = req.body;
   const { address } = req.headers;
-  const response = new Response();
 
   try {
     const status = await fTokenController.transferFToken(amount, address, toAddress);
-    response.statusCode = 200;
-    response.data = status;
-    res.json(response);
+    res.data = status;
+    next();
   } catch (err) {
-    console.log(err);
-    response.statusCode = 500;
-    response.data = err;
-    res.status(500).json(response);
+    next(err);
   }
 }
 
-async function burn(req, res) {
+async function burn(req, res, next) {
   const { amount } = req.body;
   const { address } = req.headers;
-  const response = new Response();
 
   try {
     const status = await fTokenController.burnFToken(amount, address);
-    response.statusCode = 200;
-    response.data = status;
-    res.json(response);
+    res.data = status;
+    next();
   } catch (err) {
-    console.log(err);
-    response.statusCode = 500;
-    response.data = err;
-    res.status(500).json(response);
+    next(err);
   }
 }
 
-async function getAddress(req, res) {
+async function getAddress(req, res, next) {
   const { address } = req.headers;
-  const response = new Response();
 
   try {
     const ftAddress = await fTokenController.getFTAddress(address);
-    response.statusCode = 200;
-    response.data = {
+    res.data = {
       ftAddress,
     };
-    res.json(response);
+    next();
   } catch (err) {
-    console.log(err);
-    response.statusCode = 500;
-    response.data = err;
-    res.status(500).json(response);
+    next(err);
   }
 }
 
-async function getInfo(req, res) {
+async function getInfo(req, res, next) {
   const { address } = req.headers;
-  const response = new Response();
 
   try {
     const balance = await fTokenController.getBalance(address);
     const { symbol, name } = await fTokenController.getTokenInfo(address);
-    response.statusCode = 200;
-    response.data = {
+    res.data = {
       balance,
       symbol,
       name,
     };
-    res.json(response);
+    next();
   } catch (err) {
-    console.log(err);
-    response.statusCode = 500;
-    response.data = err;
-    res.status(500).json(response);
+    next(err);
   }
 }
 

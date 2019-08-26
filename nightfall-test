@@ -31,7 +31,7 @@ npm ci
 
 printf "${GREEN}*** Installing zkp-util dependencies"
 pushd zkp-utils
-npm install
+npm ci
 popd
 
 printf "${GREEN}*** Launching containerized ganache-test ***${NC}\n"

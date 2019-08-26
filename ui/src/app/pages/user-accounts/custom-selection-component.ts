@@ -21,13 +21,13 @@ export class CustomSelectionComponent implements ViewCell, OnInit {
    */
   @Input() value: string | number;
   /**
-   * Entire row data 
+   * Entire row data
    */
   @Input() rowData: any;
 
   ngOnInit() {
-      console.log('this.value',this.value);
-      this.renderValue = (this.value)? 'True':'False';
+      console.log('this.value', this.value);
+      this.renderValue = (this.value) ? 'True' : 'False';
   }
 
 }

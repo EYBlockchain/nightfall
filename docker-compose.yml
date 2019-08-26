@@ -12,19 +12,17 @@ services:
       - ./accounts/src:/app/src
       - ./accounts/config:/app/config
       - ./accounts/.babelrc:/app/.babelrc
-    environment:
-      VIRTUAL_HOST: accounts.nightfall.docker
 
   api-gateway:
     build:
-      context: ./API-Gateway
+      context: ./api-gateway
       dockerfile: Dockerfile
     restart: on-failure
     volumes:
       - ./api-gateway/src:/app/src
       - ./api-gateway/.babelrc:/app/.babelrc
-    environment:
-      VIRTUAL_HOST: api.nightfall.docker
+    ports:
+      - "8001:80"
 
   offchain:
     build:
@@ -42,8 +40,6 @@ services:
       - ./zkp-utils:/app/node_modules/zkp-utils
       - ./account-utils:/app/src/account-utils
       - ./config:/app/config
-    environment:
-      VIRTUAL_HOST: offchain.nightfall.docker
 
   zkp:
     build:
@@ -54,7 +50,6 @@ services:
       - ganache
     volumes:
       - ./zkp/src:/app/src
-      - ./zkp/response:/app/response
       - ./zkp/build:/app/build
       - ./zkp/code:/app/code
       - ./zkp/.babelrc:/app/.babelrc
@@ -63,9 +58,6 @@ services:
       - ./zkp/__tests__:/app/__tests__
       - ./config:/app/config
       - /var/run/docker.sock:/var/run/docker.sock
-    environment:
-      - VIRTUAL_HOST=zkp.nightfall.docker
-      - NODE_ENV=docker
 
   ui:
     build:
@@ -76,8 +68,8 @@ services:
       - ./ui/src:/app/src
       - ./ui/angular.json:/app/angular.json
       - ./ui/tsconfig.json:/app/tsconfig.json
-    environment:
-      VIRTUAL_HOST: nightfall.docker
+    ports:
+      - "8000:80"
 
   ganache:
     image: trufflesuite/ganache-cli:latest
@@ -94,13 +86,10 @@ services:
       - mongo
     volumes:
       - ./database/src:/app/src
-      - ./database/response:/app/response
       - ./database/.babelrc:/app/.babelrc
       - ./zkp-utils:/app/node_modules/zkp-utils
       - ./config:/app/config
-      - ./database/script_to_configure_roles.js:/app/script_to_configure_roles.js
-    environment:
-      VIRTUAL_HOST: database.nightfall.docker
+      - ./database/setup-mongo-acl-for-new-users.js:/app/setup-mongo-acl-for-new-users.js
 
   mongo:
     image: mongo

@@ -7,5 +7,5 @@
  */
 export const environment = {
   production: false,
-  url: 'http://api.nightfall.docker/'
+  url: 'http://localhost:8001/'
 };

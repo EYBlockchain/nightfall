@@ -4,8 +4,6 @@
 @desc constants used by a nubmer of other modules
 */
 
-/* eslint-disable import/no-commonjs */
-
 let env = 'local'; // set the environment to local if not mentioned while starting the app
 const props = {
   local: {
@@ -14,10 +12,9 @@ const props = {
       port: '27017',
       databaseName: 'nightfall',
       admin: 'admin',
-      password: 'admin',
+      adminPassword: 'admin',
     },
-    enable_logger: true,
-    crypt_secret: 'secret', // used for encrypt and dercypt user other accounts password. [used in utils/crypto.js]
+    isLoggerEnable: true,
   },
   test: {
     mongo: {
@@ -25,10 +22,9 @@ const props = {
       port: '27017',
       databaseName: 'nightfall_test',
       admin: 'admin',
-      password: 'admin',
+      adminPassword: 'admin',
     },
-    enable_logger: true,
-    crypt_secret: 'secret', // used for encrypt and dercypt user other accounts password. [used in utils/crypto.js]
+    isLoggerEnable: true,
   },
 };
 
@@ -36,21 +32,14 @@ const props = {
  * Set the environment
  * @param { string } environment - environment of app
  */
-const setEnv = environment => {
+export function setEnv(environment) {
   if (props[environment]) {
     env = environment;
   }
-};
+}
 setEnv(process.env.NODE_ENV);
 
 /**
  * get the appropriate environment config
  */
-const getProps = () => {
-  return props[env];
-};
-
-module.exports = {
-  setEnv,
-  getProps,
-};
+export const getProps = () => props[env];

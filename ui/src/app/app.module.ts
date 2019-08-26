@@ -16,7 +16,7 @@ import { LoginComponent } from './pages/login/login.component';
 import { MintTokensComponent } from './pages/mint-token/mint-token.component';
 import { MintCoinsComponent } from './pages/mint-coin/mint-coin.component';
 import { SpendTokenComponent } from './pages/spend-token/spend-token.component';
-import { CreateAccountsComponent } from './pages/create-accounts/create-accounts.component'
+import { CreateAccountsComponent } from './pages/create-accounts/create-accounts.component';
 import { SpendCoinComponent } from './pages/spend-coin/spend-coin.component';
 import { BurnCoinComponent } from './pages/burn-coin/burn-coin.component';
 import { SimpleGlobal } from 'ng2-simple-global';
@@ -87,7 +87,7 @@ import { AppAutoFocusDirective } from './shared/autofocus.directive';
     ReactiveFormsModule,
     Ng2SmartTableModule,
     CommonModule,
-    NgbModule.forRoot(),
+    NgbModule,
     RouterModule.forRoot(
       appRoutes // <-- debugging purposes only
     ),
@@ -101,7 +101,7 @@ import { AppAutoFocusDirective } from './shared/autofocus.directive';
 
   ],
 
-  providers: [   
+  providers: [
     {
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,

@@ -51,4 +51,4 @@ export const tokenTypes = {
   'asset' : '1',
   'loan-beneficiary' : '2',
   'insurance' : '3'
-}
+};

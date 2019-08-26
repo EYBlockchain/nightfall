@@ -22,7 +22,7 @@ export class SpendPublicTokenComponent implements OnInit, AfterContentInit {
   isRequesting = false;
 
   /**
-   * To store all users 
+   * To store all users
    */
   users;
 
@@ -34,28 +34,28 @@ export class SpendPublicTokenComponent implements OnInit, AfterContentInit {
   /**
    * To store ERC-721 tokens
    */
-  tokenList:any =[];
+  tokenList: any = [];
 
   /**
    * Selected Token List
    */
-  selectedTokenList:any = [];
+  selectedTokenList: any = [];
 
   /**
    * To store the selected ERC-721 token.
    */
-  selectedToken:any;
+  selectedToken: any;
 
   /**
    * Non Fungeble Token name , read from ERC-721 contract.
    */
-  nftName:string;
-  
+  nftName: string;
+
   /**
    * Reference of combo box
    */
   @ViewChild('select') select: NgSelectComponent;
-  
+
   constructor(
     private toastr: ToastrService,
     private tokenApiService: TokenApiService,
@@ -69,7 +69,7 @@ export class SpendPublicTokenComponent implements OnInit, AfterContentInit {
      this.nftName = localStorage.getItem('nftName');
   }
 
-  ngAfterContentInit(){
+  ngAfterContentInit() {
     setTimeout(() => {
       this.select.filterInput.nativeElement.focus();
     }, 500);
@@ -77,7 +77,7 @@ export class SpendPublicTokenComponent implements OnInit, AfterContentInit {
 
   /**
    * Method to retrive all users.
-   * 
+   *
    */
   getUsers () {
     this.isRequesting = true;
@@ -87,8 +87,8 @@ export class SpendPublicTokenComponent implements OnInit, AfterContentInit {
         this.users = data['data'];
       }, error => {
         this.isRequesting = false;
-        this.toastr.error('Please try again.', "Error");
-      })
+        this.toastr.error('Please try again.', 'Error');
+      });
   }
 
   /**
@@ -105,31 +105,31 @@ export class SpendPublicTokenComponent implements OnInit, AfterContentInit {
       }, error => {
         this.isRequesting = false;
         this.toastr.error('Please try again', error);
-    })
+    });
   }
 
   /**
    * Method list down all ERC-721 tokens.
    */
-  getTokenList(){
-    this.tokenApiService.getNFTTokens().subscribe( (data:any) => {
+  getTokenList() {
+    this.tokenApiService.getNFTTokens().subscribe( (data: any) => {
       this.isRequesting = false;
       this.tokenList = data['data'];
     }, error => {
       this.isRequesting = false;
       console.log('getTokenList error', error);
-  })
+  });
   }
 
 
   /**
-   * Method to set new coin list in select box, on removing. 
+   * Method to set new coin list in select box, on removing.
    * @param item {Object} Item to be removed.
    */
   onRemove(item) {
     console.log('selected items', this.selectedTokenList, item);
-    let newList = this.selectedTokenList.filter((it)=>{
-      return item._id != it._id;
+    const newList = this.selectedTokenList.filter((it) => {
+      return item._id !== it._id;
     });
     this.selectedTokenList = newList;
     console.log('selected new items', this.selectedTokenList);
@@ -137,16 +137,16 @@ export class SpendPublicTokenComponent implements OnInit, AfterContentInit {
 
   /**
    * Method to serach an item from the combobox.
-   * 
+   *
    * @param term {String} Term that user entered
    * @param item {Item} Item which searched by user.
    */
-  customSearchFn(term: string, item: any){
-    if(!item){
+  customSearchFn(term: string, item: any) {
+    if (!item) {
       return;
     }
     term = term.toLowerCase();
-    let itemToSearch = item.uri.toString().toLowerCase();
+    const itemToSearch = item.uri.toString().toLowerCase();
     return itemToSearch.indexOf(term) > -1;
   }
 

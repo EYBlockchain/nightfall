@@ -14,12 +14,12 @@ import { SimpleGlobal } from 'ng2-simple-global';
 })
 export class NavComponent implements OnInit {
   @Input() name: any;
-  adminAuth: boolean = false;
+  adminAuth = false;
   userRole: any;
-  assetId:any;
+  assetId: any;
 
   constructor(
-    private auth: AuthService, 
+    private auth: AuthService,
     private router: Router,
     private sg: SimpleGlobal
   ) { }

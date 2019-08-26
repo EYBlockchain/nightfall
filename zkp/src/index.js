@@ -8,7 +8,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import { ftCommitmentRoutes, ftRoutes, nftCommitmentRoutes, nftRoutes } from './routes';
 import vkController from './vk-controller';
-import Response from '../response'; // class for creating response object
+import { formatResponse, formatError, errorHandler } from './middlewares';
 
 const app = express();
 
@@ -39,20 +39,34 @@ app.use('/coin', ftCommitmentRoutes);
 app.use('/ft', ftRoutes);
 app.use('/nft', nftRoutes);
 
-app.route('/vk').post(async function runVkController(req, res) {
-  const response = new Response();
-
+app.route('/vk').post(async function runVkController(req, res, next) {
   try {
     await vkController.runController();
-    response.statusCode = 200;
-    res.json(response);
+    res.data = { message: 'vk loaded' };
+    next();
   } catch (err) {
-    console.log(err);
-    response.statusCode = 500;
-    response.data = err;
-    res.status(500).json(response);
+    next(err);
   }
 });
+
+app.use(formatResponse);
+
+app.use(function logError(err, req, res, next) {
+  console.error(
+    `${req.method}:${req.url}
+    ${JSON.stringify({ error: err.message })}
+    ${JSON.stringify({ errorStack: err.stack.split('\n') }, null, 1)}
+    ${JSON.stringify({ body: req.body })}
+    ${JSON.stringify({ params: req.params })}
+    ${JSON.stringify({ query: req.query })}
+  `,
+  );
+  console.error(JSON.stringify(err, null, 2));
+  next(err);
+});
+
+app.use(formatError);
+app.use(errorHandler);
 
 const server = app.listen(80, '0.0.0.0', () =>
   console.log('Zero-Knowledge-Proof RESTful API server started on ::: 80'),

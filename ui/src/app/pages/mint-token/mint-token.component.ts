@@ -19,7 +19,7 @@ export class MintTokensComponent implements OnInit, AfterContentInit {
   /**
    * To store the random hex string.
    */
-  serialNumber = "";
+  serialNumber = '';
   /**
    * Flag for http request
    */
@@ -28,7 +28,7 @@ export class MintTokensComponent implements OnInit, AfterContentInit {
   /**
    * Selected Token List
    */
-  selectedTokenList:any = [];
+  selectedTokenList: any = [];
   /**
    * To store user selected token.
    */
@@ -37,12 +37,12 @@ export class MintTokensComponent implements OnInit, AfterContentInit {
   /**
    * To store ERC-721 tokens
    */
-  tokenList:any = [];
+  tokenList: any = [];
 
   /**
    * Non Fungeble Token name , read from ERC-721 contract.
    */
-  nftName:string;
+  nftName: string;
 
   /**
    * Reference of combo box
@@ -56,13 +56,13 @@ export class MintTokensComponent implements OnInit, AfterContentInit {
     private router: Router
   ) { }
 
-  
+
   ngOnInit() {
     this.getTokenList();
     this.nftName = localStorage.getItem('nftName');
   }
 
-  ngAfterContentInit(){
+  ngAfterContentInit() {
     setTimeout(() => {
       this.select.filterInput.nativeElement.focus();
     }, 500);
@@ -77,23 +77,23 @@ export class MintTokensComponent implements OnInit, AfterContentInit {
       this.tokenApiService.mintToken(this.selectedToken).subscribe(tokenDetails => {
         console.log('Token Minted is ' + tokenDetails['data']['z_A']);
         this.isRequesting = false;
-        this.toastr.success('Token Minted is ' + tokenDetails['data']['z_A'].slice(0,20)+'...');
+        this.toastr.success('Token Minted is ' + tokenDetails['data']['z_A'].slice(0, 20) + '...');
         this.router.navigate(['/overview'], { queryParams: { selectedTab: 'tokens' } });
       }, error => {
         this.isRequesting = false;
         this.toastr.error('Please try again', 'Error');
-    })
+    });
   }
 
 
   /**
-   * Method to set new coin list in select box, on removing. 
+   * Method to set new coin list in select box, on removing.
    * @param item {Object} Item to be removed.
    */
   onRemove(item) {
     console.log('selected items', this.selectedTokenList, item);
-    let newList = this.selectedTokenList.filter((it)=>{
-      return item._id != it._id;
+    const newList = this.selectedTokenList.filter((it) => {
+      return item._id !== it._id;
     });
     this.selectedTokenList = newList;
     console.log('selected new items', this.selectedTokenList);
@@ -101,16 +101,16 @@ export class MintTokensComponent implements OnInit, AfterContentInit {
 
   /**
    * Method to serach an item from the combobox.
-   * 
+   *
    * @param term {String} Term that user entered
    * @param item {Item} Item which searched by user.
    */
-  customSearchFn(term: string, item: any){
-    if(!item){
+  customSearchFn(term: string, item: any) {
+    if (!item) {
       return;
     }
     term = term.toLocaleLowerCase();
-    let itemToSearch = item.uri.toString().toLocaleLowerCase();
+    const itemToSearch = item.uri.toString().toLocaleLowerCase();
     return itemToSearch.indexOf(term) > -1;
   }
 
@@ -118,14 +118,14 @@ export class MintTokensComponent implements OnInit, AfterContentInit {
   /**
    * Method to list down all ERC-721 tokens.
    */
-  getTokenList(){
-    this.tokenApiService.getNFTTokens().subscribe( (data:any) => {
+  getTokenList() {
+    this.tokenApiService.getNFTTokens().subscribe( (data: any) => {
       this.isRequesting = false;
       this.tokenList = data['data'];
     }, error => {
       this.isRequesting = false;
       console.log('getTokenList error', error);
-  })
+  });
   }
 
 }

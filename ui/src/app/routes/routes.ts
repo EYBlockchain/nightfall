@@ -4,7 +4,7 @@ import { LoginComponent } from '../pages/login/login.component';
 import { MintTokensComponent } from '../pages/mint-token/mint-token.component';
 import { MintCoinsComponent } from '../pages/mint-coin/mint-coin.component';
 import { SpendTokenComponent } from '../pages/spend-token/spend-token.component';
-import { CreateAccountsComponent } from '../pages/create-accounts/create-accounts.component'
+import { CreateAccountsComponent } from '../pages/create-accounts/create-accounts.component';
 import { SpendCoinComponent } from '../pages/spend-coin/spend-coin.component';
 import { BurnCoinComponent } from '../pages/burn-coin/burn-coin.component';
 import {TokenListComponent} from '../pages/token-list/token-list.component';
@@ -26,15 +26,15 @@ import { SpendPublicCoinComponent } from '../pages/spend-public-coin/spend-publi
 export const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
   { path: 'createAccount', component: CreateAccountsComponent },
-  { path: 'settings', 
-    component: UserSettingsComponent, 
+  { path: 'settings',
+    component: UserSettingsComponent,
     children: [
-      {path: '', redirectTo: 'profile', pathMatch: 'full'}, 
+      {path: '', redirectTo: 'profile', pathMatch: 'full'},
       {path: 'profile', component: UserProfileComponent},
       {path: 'accounts', component: UserAccountsComponent}
     ],
-    canActivate: [AuthService] 
-  }, 
+    canActivate: [AuthService]
+  },
   { path: 'overview', component: OverviewComponent, canActivate: [AuthService] },
   { path: 'token/mint', component: MintTokensComponent , canActivate: [AuthService]},
   { path: 'token/public/mint', component: MintPublicTokenComponent , canActivate: [AuthService]},

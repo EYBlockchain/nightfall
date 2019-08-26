@@ -5,7 +5,7 @@ import { HttpClient } from '@angular/common/http';
 import 'rxjs/add/operator/map';
 import 'rxjs/add/observable/forkJoin';
 import { HttpHeaders } from '@angular/common/http';
-import { catchError,tap, map } from 'rxjs/operators';
+import { catchError, tap, map } from 'rxjs/operators';
 import { config } from '../../shared/config';
 
 /**
@@ -16,7 +16,7 @@ export class AccountsApiService {
 
   root = config.apiGateway.root;
   searchAPI = 'asset';
-  
+
   constructor(private http: HttpClient) {}
 
   /**
@@ -35,7 +35,7 @@ export class AccountsApiService {
     const httpOptions = {
       headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
     };
-    const url = config.apiGateway.root+'offchain-service/pkd/names';
+    const url = config.apiGateway.root + 'offchain-service/pkd/names';
 
     return this.http
       .get(url, httpOptions)
@@ -67,16 +67,17 @@ export class AccountsApiService {
    * @param pageNo Page number
    * @param limit Page limit
    */
-  getTransactions(type: string, pageNo:number, limit:number) {
+  getTransactions(type: string, pageNo: number, limit: number) {
     let url;
-    if(type == 'tokens')
+    if (type === 'tokens') {
       url = config.database.root + 'token/transaction?type=' + type + '&pageNo=' + pageNo + '&limit=' + limit;
-    else if(type == 'publictokens')
+    } else if (type === 'publictokens') {
       url = config.database.root + 'nft/transaction?type=' + type + '&pageNo=' + pageNo + '&limit=' + limit;
-    else if(type == 'publiccoins')
+ } else if (type === 'publiccoins') {
       url = config.database.root + 'ft/transaction?type=' + type + '&pageNo=' + pageNo + '&limit=' + limit;
-    else
-      url = config.database.root + 'coin/transaction?pageNo=' + pageNo + '&limit='+ limit;
+ } else {
+      url = config.database.root + 'coin/transaction?pageNo=' + pageNo + '&limit=' + limit;
+ }
 
     return this.http.get(url).pipe(
       tap(data => {}),
@@ -91,11 +92,11 @@ export class AccountsApiService {
    * Method to initiate a HTTP request to get ERC-20 token commitments of logged in user.
    */
   getCoins() {
-    const url = config.zkp.root + 'address/coin'
+    const url = config.zkp.root + 'ft/details';
     return this.http.get(url).pipe(
-      map((data:any) => {
+      map((data: any) => {
         console.log('coins', data);
-        data.data.balance = Number('0x'+data.data.balance);
+        data.data.balance = Number('0x' + data.data.balance);
         return data;
       }),
       catchError(err => {
@@ -109,7 +110,7 @@ export class AccountsApiService {
    * Method to initiate a HTTP request to get ERC-721 tokens of logged in user.
    */
   getNFTBalance() {
-    const url = config.zkp.root + 'address/nft-balance'
+    const url = config.zkp.root + 'nft/details';
     return this.http.get(url).pipe(
       tap(data => {}),
       catchError(err => {
@@ -145,8 +146,8 @@ export class AccountsApiService {
 
   /**
    * Method to initiate a HTTP request to create new account
-   * 
-   * @param account 
+   *
+   * @param account
    */
   createAccount(account) {
     const httpOptions = {
@@ -163,16 +164,16 @@ export class AccountsApiService {
 
   /**
    * Method to initiate a HTTP request to login the account
-   * 
+   *
    * @param account {Object} Account details
-   * 
+   *
    */
   login(account) {
     const httpOptions = {
       headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
     };
     const url = this.root + 'login';
-    let body = {
+    const body = {
       name: account.accountName,
       password: account.passphrase,
     };
@@ -186,7 +187,7 @@ export class AccountsApiService {
   /**
    * Method to initiate a HTTP request to Add shield contract address
    */
-  addContractAddress(account){
+  addContractAddress(account) {
     const httpOptions = {
       headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
     };
@@ -201,25 +202,25 @@ export class AccountsApiService {
   /**
    * Method to initiate a HTTP request to update shield contract address
    */
-  updateContractAccounts(account){
+  updateContractAccounts(account) {
     const httpOptions = {
       headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
     };
     const url = config.apiGateway.root + 'user/contractAddress';
     const body = {};
-    if(account.coinShield){
-      body['coinShield'] ={
+    if (account.coinShield) {
+      body['coinShield'] = {
         contractAddress: account.contractAdd,
         contractName: account.contractName,
         isSelected: account.selection
-      }
+      };
 
-    }else if(account.tokenShield){
-      body['tokenShield'] ={
+    } else if (account.tokenShield) {
+      body['tokenShield'] = {
         contractAddress: account.contractAdd,
         contractName: account.contractName,
         isSelected: account.selection
-      }
+      };
     }
     return this.http.put(url, body, httpOptions).pipe(tap(data => console.log('update ERC-20 Account')));
   }
@@ -227,17 +228,17 @@ export class AccountsApiService {
   /**
    * Method to initiate a HTTP request to delete shield contract address
    */
-  deleteContractAddress(account){
+  deleteContractAddress(account) {
     const httpOptions = {
       headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
     };
-    let url = config.apiGateway.root + 'user/contractAddress?'
-    if(account.coinShield){
-      url = url + 'coin_shield='+account.contractAdd;
-    }else if(account.tokenShield){
-      url = url + 'token_shield='+account.contractAdd;
+    let url = config.apiGateway.root + 'user/contractAddress?';
+    if (account.coinShield) {
+      url = url + 'coin_shield=' + account.contractAdd;
+    } else if (account.tokenShield) {
+      url = url + 'token_shield=' + account.contractAdd;
     }
-    return this.http.delete(url,httpOptions).pipe(tap(data => console.log('update ERC-20 Account')));
+    return this.http.delete(url, httpOptions).pipe(tap(data => console.log('update ERC-20 Account')));
   }
 
   /**
@@ -271,12 +272,12 @@ export class AccountsApiService {
     );
   }
 
-  
+
   /**
    * Error handler for http request.
-   * 
-   * @param operation 
-   * @param result 
+   *
+   * @param operation
+   * @param result
    */
   private handleError<T>(operation = 'operation', result?: T) {
     return (error: any): Observable<T> => {

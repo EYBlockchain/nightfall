@@ -16,7 +16,7 @@ import { NgSelectComponent } from '@ng-select/ng-select';
   styleUrls: ['./spend-coin.component.css']
 })
 
-export class SpendCoinComponent implements OnInit , AfterContentInit{
+export class SpendCoinComponent implements OnInit , AfterContentInit {
 
   /**
    *  To store ERC-20 token commitment transaction objects
@@ -26,7 +26,7 @@ export class SpendCoinComponent implements OnInit , AfterContentInit{
   /**
    * To store the selected ERC-20 token commitments
    */
-  selectedCoinList: any=[];
+  selectedCoinList: any = [];
 
   /**
    * Flag for http request
@@ -44,7 +44,7 @@ export class SpendCoinComponent implements OnInit , AfterContentInit{
   noCoin = false;
 
   /**
-   * To store all users 
+   * To store all users
    */
   users: any;
 
@@ -56,7 +56,7 @@ export class SpendCoinComponent implements OnInit , AfterContentInit{
   /**
    *  Fungeble Token name , read from ERC-20 contract.
    */
-  ftName:string;
+  ftName: string;
 
   /**
    * Reference of combo box
@@ -70,7 +70,7 @@ export class SpendCoinComponent implements OnInit , AfterContentInit{
     private utilService: UtilService,
     private router: Router
   ) {
-    
+
     this.customSearchFn = this.customSearchFn.bind(this);
   }
 
@@ -80,7 +80,7 @@ export class SpendCoinComponent implements OnInit , AfterContentInit{
     this.fetchCoins();
   }
 
-  ngAfterContentInit(){
+  ngAfterContentInit() {
     setTimeout(() => {
       this.select.filterInput.nativeElement.focus();
     }, 500);
@@ -92,13 +92,13 @@ export class SpendCoinComponent implements OnInit , AfterContentInit{
   fetchCoins () {
     this.transactions = null;
     this.isRequesting = true;
-    let address = localStorage.getItem('address');
+    const address = localStorage.getItem('address');
     this.coinApiService.fetchCoins(address)
-      .subscribe( 
+      .subscribe(
         (data) => {
         this.isRequesting = false;
-        if (data && data['data']['data'] && data['data']['data'].length ) {
-          this.transactions = data['data']['data'].map((tx, indx) => {
+        if (data && data['data'].length ) {
+          this.transactions = data['data'].map((tx, indx) => {
             tx.selected = false;
             tx.id = indx;
             return tx;
@@ -109,12 +109,12 @@ export class SpendCoinComponent implements OnInit , AfterContentInit{
       }, (error) => {
         console.log('error', error);
         this.isRequesting = false;
-      })
+      });
   }
 
   /**
    * Method to retrive all users.
-   * 
+   *
    */
   getUsers () {
     this.isRequesting = true;
@@ -124,8 +124,8 @@ export class SpendCoinComponent implements OnInit , AfterContentInit{
         this.users = data['data'];
       }, error => {
         this.isRequesting = false;
-        this.toastr.error('Please try again.', "Error");
-      })
+        this.toastr.error('Please try again.', 'Error');
+      });
   }
 
   /**
@@ -138,7 +138,7 @@ export class SpendCoinComponent implements OnInit , AfterContentInit{
       this.toastr.error('Invalid Coin Selection.');
       return;
     }
-    let [coin1, coin2] = this.selectedCoinList;
+    const [coin1, coin2] = this.selectedCoinList;
     const {
       transferValue,
       transactions
@@ -152,7 +152,7 @@ export class SpendCoinComponent implements OnInit , AfterContentInit{
     this.isRequesting = true;
     let returnValue = Number(coin1['coin_value']) + Number(coin2['coin_value']);
     returnValue -= transferValue;
-    console.log("RETURNVALUE", returnValue,transferValue, this.toHex(returnValue), this.toHex(transferValue))
+    console.log('RETURNVALUE', returnValue, transferValue, this.toHex(returnValue), this.toHex(transferValue));
 
     this.coinApiService.transferCoin(
       coin1['coin_value'],
@@ -172,23 +172,23 @@ export class SpendCoinComponent implements OnInit , AfterContentInit{
         this.isRequesting = false;
         this.toastr.success('Transfer to Recipient ' + this.receiverName);
         transactions.splice(Number(coin1['id']), 1);
-        transactions.splice(Number(coin2['id'])-1, 1);
+        transactions.splice(Number(coin2['id']) - 1, 1);
         this.fetchCoins();
         this.router.navigate(['/overview'], { queryParams: { selectedTab: 'coins' } });
       }, error => {
         this.isRequesting = false;
         this.toastr.error('Please try again', 'Error');
-    })
+    });
   }
 
   /**
-   * Method to set new coin list in select box, on removing. 
+   * Method to set new coin list in select box, on removing.
    * @param item {Object} Item to be removed.
    */
   onRemove(item) {
     console.log('selected items', this.selectedCoinList, item);
-    let newList = this.selectedCoinList.filter((it)=>{
-      return item._id != it._id;
+    const newList = this.selectedCoinList.filter((it) => {
+      return item._id !== it._id;
     });
     this.selectedCoinList = newList;
     console.log('selected new items', this.selectedCoinList);
@@ -196,30 +196,30 @@ export class SpendCoinComponent implements OnInit , AfterContentInit{
 
   /**
    * Method to serach an item from the combobox.
-   * 
+   *
    * @param term {String} Term that user entered
    * @param item {Item} Item which searched by user.
    */
-  customSearchFn(term: string, item: any){
-    if(!item){
+  customSearchFn(term: string, item: any) {
+    if (!item) {
       return;
     }
     term = term.toLocaleLowerCase();
-    let itemToSearch = this.utilService.convertToNumber(item.coin_value).toString().toLocaleLowerCase();
+    const itemToSearch = this.utilService.convertToNumber(item.coin_value).toString().toLocaleLowerCase();
     return itemToSearch.indexOf(term) > -1;
   }
 
   /**
    * Method to convert number to hex string
-   * 
+   *
    * @param num {Number} Number
    */
   toHex(num: number) {
-    if (!num || isNaN(num)){
+    if (!num || isNaN(num)) {
       num = 0;
     }
-    var hexValue = (num).toString(16);
-    return '0x' + hexValue.padStart(32,"0");
+    const hexValue = (num).toString(16);
+    return '0x' + hexValue.padStart(32, '0');
   }
 
 }

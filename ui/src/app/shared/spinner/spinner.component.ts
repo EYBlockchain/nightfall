@@ -11,8 +11,8 @@ import { Component, OnInit , Input, OnDestroy } from '@angular/core';
 export class SpinnerComponent  implements OnDestroy {
 
   /**
-   *  To set the timeout 
-   */  
+   *  To set the timeout
+   */
   private currentTimeout: any;
   /**
    * Flag to know spinner is running delayed.
@@ -41,7 +41,7 @@ export class SpinnerComponent  implements OnDestroy {
           this.cancelTimeout();
       }, this.delay);
   }
- 
+
   /**
    * Method to cancel the timeout.
    */

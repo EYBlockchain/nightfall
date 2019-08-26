@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { catchError,tap } from 'rxjs/operators';
+import { catchError, tap } from 'rxjs/operators';
 import { Observable } from 'rxjs/Observable';
 
 import { config } from '../../shared/config';
@@ -11,16 +11,16 @@ import { config } from '../../shared/config';
  */
 @Injectable()
 export class TokenApiService {
-  
-  assetHash :string;
+
+  assetHash: string;
 
   constructor(private http: HttpClient) {}
 
-  
+
   /**
-   * 
-   * Method to initiate a HTTP request to mint ERC-721 token commitment. 
-   * 
+   *
+   * Method to initiate a HTTP request to mint ERC-721 token commitment.
+   *
    * @param token {String} Amount to mint
    */
   mintToken(token: any) {
@@ -44,16 +44,16 @@ export class TokenApiService {
 
 /**
  * Method to initiate a HTTP request to transfer ERC-721 token commitments.
- * 
+ *
  * @param A {String} Token Id
  * @param uri {String} Token name
  * @param S_A {String} Serial number of token
- * @param z_A {String} Token2 commitment 
+ * @param z_A {String} Token2 commitment
  * @param sk_A {String} Secret key of Alice
  * @param receiver_name {String} Rceiver name
  * @param z_A_index {String} Token commitment index
  */
-  spendToken(A: string, uri: string, S_A: string, z_A: string, sk_A: string, receiver_name:string, z_A_index: number) {
+  spendToken(A: string, uri: string, S_A: string, z_A: string, sk_A: string, receiver_name: string, z_A_index: number) {
     const httpOptions = {
       headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
     };
@@ -76,7 +76,7 @@ export class TokenApiService {
 
   /**
    * Method to initiate a HTTP request to burn ERC-721 token commitments.
-   * 
+   *
    * @param A {String} Token Id
    * @param uri {String} Token name
    * @param S_A {String} Serial number of token
@@ -84,7 +84,7 @@ export class TokenApiService {
    * @param Sk_A {String} Secret key of Alice
    * @param z_A_index {String} Token commitment index
    */
-  burnToken(A: string, uri: string, S_A: string, z_A: string, Sk_A: string, z_A_index: number, payTo:string) {
+  burnToken(A: string, uri: string, S_A: string, z_A: string, Sk_A: string, z_A_index: number, payTo: string) {
     const httpOptions = {
       headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
     };
@@ -105,7 +105,7 @@ export class TokenApiService {
 
 /**
  * Fetch ERC-721 token commitmnets
- * 
+ *
  * @param pageNo {Number} Page number
  * @param limit {Number} Page limit
  */
@@ -116,11 +116,11 @@ export class TokenApiService {
     let url = config.database.root + 'token?';
 
     if (pageNo) {
-      url += 'pageNo='+pageNo+'&'
+      url += 'pageNo=' + pageNo + '&';
     }
 
     if (limit) {
-      url += 'limit='+limit+'&';
+      url += 'limit=' + limit + '&';
     }
 
     return this.http
@@ -145,7 +145,7 @@ export class TokenApiService {
 
  /**
   * Method to initiate a HTTP request to mint ERC-721 token.
-  * 
+  *
   * @param tokenURI {String} Token name
   */
   mintNFToken (tokenURI: string) {
@@ -164,7 +164,7 @@ export class TokenApiService {
 
   /**
    * Method to initiate a HTTP request to transfer ERC-721 token.
-   * 
+   *
    * @param nftToken {Object} Selected ERC-721 token
    * @param receiver_name {String} receiver name
    */
@@ -181,7 +181,7 @@ export class TokenApiService {
 
  /**
   * Method to initiate a HTTP request to burn ERC-721 token.
-  * 
+  *
   * @param nftToken {Object} Selected ERC-721 token
   */
   burnNFToken (nftToken: any) {
@@ -196,10 +196,10 @@ export class TokenApiService {
       .post(url, body, httpOptions)
       .pipe(tap(data => console.log(`Token minted `)), catchError(this.handleError('mintNFToken', [])));
   }
-  
+
   /**
    * Method to initiate a HTTP request to get all ERC-721 tokens.
-   * 
+   *
    * @param pageNo {Number} Page number
    * @param limit {Number} Page limit
    */
@@ -210,11 +210,11 @@ export class TokenApiService {
     let url = config.apiGateway.root + 'nft?';
 
     if (pageNo) {
-      url += 'pageNo='+pageNo+'&'
+      url += 'pageNo=' + pageNo + '&';
     }
 
     if (limit) {
-      url += 'limit='+limit+'&';
+      url += 'limit=' + limit + '&';
     }
 
     return this.http
@@ -224,7 +224,7 @@ export class TokenApiService {
 
   /**
    * Method to handle error on HTTp request.
-   * @param operation {String} 
+   * @param operation {String}
    * @param result {Object}
    */
  private handleError<T>(operation = 'operation', result?: T) {

@@ -22,12 +22,12 @@ export class MintPublicCoinComponent implements OnInit {
    /**
    * Amount to Mint ERC-20 token
    */
-  amount:number;
-  
+  amount: number;
+
   /**
    * Fungeble Token name , read from ERC-20 contract.
    */
-  ftName:string;
+  ftName: string;
 
   constructor(
     private toastr: ToastrService,
@@ -35,7 +35,7 @@ export class MintPublicCoinComponent implements OnInit {
     private utilService: UtilService,
     private router: Router
   ) {
-    
+
   }
 
   ngOnInit () {
@@ -49,13 +49,13 @@ export class MintPublicCoinComponent implements OnInit {
     this.isRequesting = true;
     this.coinApiService.mintPublicCoin(localStorage.getItem('address'), this.amount).subscribe(transaction => {
       this.isRequesting = false;
-      this.toastr.success('Public coin minted successfully.');     
+      this.toastr.success('Public coin minted successfully.');
       this.router.navigate(['/overview'], { queryParams: { selectedTab: 'publiccoins' } });
     }, error => {
         this.isRequesting = false;
-        this.toastr.error('Please try again', 'Error');      
-    })
+        this.toastr.error('Please try again', 'Error');
+    });
   }
-  
+
 }
 

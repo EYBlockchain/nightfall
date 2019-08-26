@@ -22,13 +22,13 @@ export class CustomTextComponent implements ViewCell, OnInit {
    */
   @Input() value: string;
   /**
-   * Entire row data 
+   * Entire row data
    */
   @Input() rowData: any;
 
   ngOnInit() {
-      console.log('this.value',this.value);
-      this.renderValue = this.value.slice(0,20) + '...';
+      console.log('this.value', this.value);
+      this.renderValue = this.value.slice(0, 20) + '...';
   }
 
 }

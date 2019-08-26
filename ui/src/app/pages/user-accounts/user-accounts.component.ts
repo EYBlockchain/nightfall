@@ -33,12 +33,12 @@ export class UserAccountsComponent extends Config implements OnInit {
   /**
    * Default Shield contract details.
    */
-  defaultContractDetails:any;
+  defaultContractDetails: any;
 
 
-  formatedDefaultData:any;
+  formatedDefaultData: any;
 
-  formatedData:any;
+  formatedData: any;
 
   /**
    * Configuration of custom table.
@@ -46,7 +46,7 @@ export class UserAccountsComponent extends Config implements OnInit {
   settings = {
     columns: {
       contractAdd: {
-        type:'custom',
+        type: 'custom',
         title: 'Shield Contract Address',
         filter: false,
         renderComponent: CustomTextComponent,
@@ -55,10 +55,10 @@ export class UserAccountsComponent extends Config implements OnInit {
         title: 'Contract Name',
         filter: false
       },
-      selection:{
-        title:'Selection',
-        type:'custom',
-        class:'selection-checkbox',
+      selection: {
+        title: 'Selection',
+        type: 'custom',
+        class: 'selection-checkbox',
         editor: {
           type: 'checkbox'
         },
@@ -66,31 +66,31 @@ export class UserAccountsComponent extends Config implements OnInit {
         renderComponent: CustomSelectionComponent
       }
     },
-    noDataMessage:"No linked shield contract addresses are available.",
-    pager:{
-      display:false
+    noDataMessage: 'No linked shield contract addresses are available.',
+    pager: {
+      display: false
     },
-    add:{
-      addButtonContent:'',
-      createButtonContent:'',
-      cancelButtonContent:'',
+    add: {
+      addButtonContent: '',
+      createButtonContent: '',
+      cancelButtonContent: '',
       confirmCreate: true,
     },
-    edit:{
-      editButtonContent:'',
-      saveButtonContent:'',
-      cancelButtonContent:'',
+    edit: {
+      editButtonContent: '',
+      saveButtonContent: '',
+      cancelButtonContent: '',
       confirmSave: true,
     },
-    delete:{
-      deleteButtonContent	:'',
+    delete: {
+      deleteButtonContent	: '',
       confirmDelete: true,
     }
   };
 
   /**
    *  Event emitter to detect, when default account data is populated in UI.
-   */ 
+   */
   public onChange: EventEmitter<any> = new EventEmitter<any>();
 
   /**
@@ -102,83 +102,83 @@ export class UserAccountsComponent extends Config implements OnInit {
     private toastr: ToastrService,
     private accountService: AccountsApiService
   ) {
-    super("");
+    super('');
     this.source = new LocalDataSource();
     this.loadAccountDetails();
   }
 
-  ngOnInit(){
+  ngOnInit() {
     this._serviceSubscription = this.onChange.subscribe({
       next: (event: any) => {
           console.log(`Received message #${event.message}`);
-          let rows = Array.from(document.querySelectorAll('.ng2-smart-actions'));
-          rows.forEach((item :HTMLElement, key)=>{
-            if(key !=0){
+          const rows = Array.from(document.querySelectorAll('.ng2-smart-actions'));
+          rows.forEach((item: HTMLElement, key) => {
+            if (key !== 0) {
               item.innerHTML = '<b>Default</b>';
             }
           });
       }
-    })
+    });
   }
-    
-  
+
+
   /**
    * Method to format the data in the accepted format for the custom table.
-   * 
+   *
    * @param data {Object} Unformated data source
    */
-  formatDataSource(data){
-    let coin_shield_contracts = data.coin_shield_contracts || [];
-    let token_shield_contracts = data.token_shield_contracts || [];
-    let selected_coin_shield_contract = data.selected_coin_shield_contract;
-    let selected_token_shield_contract = data.selected_token_shield_contract;
-    let formatedData = []
-    token_shield_contracts.map((item)=>{
-      let token721 =   {
+  formatDataSource(data) {
+    const coin_shield_contracts = data.coin_shield_contracts || [];
+    const token_shield_contracts = data.token_shield_contracts || [];
+    const selected_coin_shield_contract = data.selected_coin_shield_contract;
+    const selected_token_shield_contract = data.selected_token_shield_contract;
+    const formatedData = [];
+    token_shield_contracts.map((item) => {
+      const token721 =   {
             contractAdd: item.contract_address,
-            contractName:item.contract_name,
-            selection: (selected_token_shield_contract === item.contract_address)? true: false,
-            tokenShield:true
+            contractName: item.contract_name,
+            selection: (selected_token_shield_contract === item.contract_address) ? true : false,
+            tokenShield: true
         };
         formatedData.push(token721);
     });
-    coin_shield_contracts.map((item)=>{
-      let token20 =   {
+    coin_shield_contracts.map((item) => {
+      const token20 =   {
             contractAdd: item.contract_address,
-            contractName:item.contract_name,
-            selection:(selected_coin_shield_contract === item.contract_address)? true: false,
+            contractName: item.contract_name,
+            selection: (selected_coin_shield_contract === item.contract_address) ? true : false,
             coinShield: true
         };
         formatedData.push(token20);
     });
 
-    
+
     return formatedData.reverse();
   }
 
   /**
    * Method to format the default shield contract data in the accepted format for the custom table.
-   * 
+   *
    * @param data {Object} Unformated data source
    */
-  formatDefaultShieldContractData(data, 
-    userDetails, 
-    nftContractDetails, 
+  formatDefaultShieldContractData(data,
+    userDetails,
+    nftContractDetails,
     ftContractDetails) {
-    let selected_coin_shield_contract = userDetails.selected_coin_shield_contract;
-    let selected_token_shield_contract = userDetails.selected_token_shield_contract;
-    let formatedData = []
-    let token721 = {
+    const selected_coin_shield_contract = userDetails.selected_coin_shield_contract;
+    const selected_token_shield_contract = userDetails.selected_token_shield_contract;
+    const formatedData = [];
+    const token721 = {
       contractAdd: data.tokenShield.contract_address,
       contractName: data.tokenShield.contract_name,
-      selection: (!selected_token_shield_contract || selected_token_shield_contract === data.tokenShield.contract_address)? true: false,
+      selection: (!selected_token_shield_contract || selected_token_shield_contract === data.tokenShield.contract_address) ? true : false,
       tokenShield: true,
       tokenAddress: nftContractDetails.nftAddress
     };
-    let token20 = {
+    const token20 = {
       contractAdd: data.coinShield.contract_address,
       contractName: data.coinShield.contract_name,
-      selection: (!selected_coin_shield_contract || selected_coin_shield_contract === data.coinShield.contract_address)? true: false,
+      selection: (!selected_coin_shield_contract || selected_coin_shield_contract === data.coinShield.contract_address) ? true : false,
       coinShield: true,
       tokenAddress: ftContractDetails.ftAddress
     };
@@ -188,67 +188,67 @@ export class UserAccountsComponent extends Config implements OnInit {
 
   /**
    * Method to add new shield contract address and its name.
-   * 
+   *
    * @param event {Object} New eneterd data
    */
-  addAccount(event){
+  addAccount(event) {
     console.log('addAccount', event.newData);
-    if(!this.isValidAccountForm(event.newData)){
-      this.toastr.error("Please fill all the fields.");
+    if (!this.isValidAccountForm(event.newData)) {
+      this.toastr.error('Please fill all the fields.');
       event.confirm.reject(event.newData);
       return;
     }
-    this.accountService.addContractAddress(event.newData).subscribe((data)=>{
+    this.accountService.addContractAddress(event.newData).subscribe((data) => {
       this.loadAccountDetails();
       event.confirm.resolve(event.newData);
-    },(error)=>{
+    }, (error) => {
       console.log('addAccount error ', error);
-      this.toastr.error("Please try again!");
+      this.toastr.error('Please try again!');
       event.confirm.reject(event.newData);
     });
   }
 
   /**
    * Method to edit shield contract address and its name.
-   * 
+   *
    * @param event {Object} edited data
    */
-  editAccount(event){
+  editAccount(event) {
     console.log('edit', event);
     console.log('addAccount', event.newData);
-    if(!this.isValidAccountForm(event.newData)){
-      this.toastr.error("Please fill all the fields.");
+    if (!this.isValidAccountForm(event.newData)) {
+      this.toastr.error('Please fill all the fields.');
       event.confirm.reject(event.newData);
       return;
     }
-    this.accountService.updateContractAccounts(event.newData).subscribe((data)=>{
+    this.accountService.updateContractAccounts(event.newData).subscribe((data) => {
       this.loadAccountDetails();
       event.confirm.resolve(event.newData);
-    },(error)=>{
+    }, (error) => {
       console.log('edit error ', error);
-      this.toastr.error("Please try again!");
+      this.toastr.error('Please try again!');
       event.confirm.reject(event.newData);
     });
   }
 
   /**
    * Method to delete shield contract address and its name.
-   * 
+   *
    * @param event {Object} data to delete
    */
-  deleteAccount(event){
+  deleteAccount(event) {
     console.log('delete', event);
-    if(!this.isValidAccountForm(event.data)){
-      this.toastr.error("Please fill all the fields.");
+    if (!this.isValidAccountForm(event.data)) {
+      this.toastr.error('Please fill all the fields.');
       event.confirm.reject(event.data);
       return;
     }
-    this.accountService.deleteContractAddress(event.data).subscribe((data)=>{
+    this.accountService.deleteContractAddress(event.data).subscribe((data) => {
       this.loadAccountDetails();
       event.confirm.resolve(event.data);
-    },(error)=>{
+    }, (error) => {
       console.log('edit error ', error);
-      this.toastr.error("Please try again!");
+      this.toastr.error('Please try again!');
       event.confirm.reject(event.data);
     });
   }
@@ -256,53 +256,53 @@ export class UserAccountsComponent extends Config implements OnInit {
   /**
    * Method to populate existing shield contract addresses and its name in custom table.
    */
-  loadAccountDetails(){
-    let shieldDetails  = this.accountService.getDefaultShieldAddress();
-    let userContracts = this.accountService.getUser();
-    let nftContract = this.accountService.getNFTAddress();
-    let ftContracts = this.accountService.getFTAddress();
+  loadAccountDetails() {
+    const shieldDetails  = this.accountService.getDefaultShieldAddress();
+    const userContracts = this.accountService.getUser();
+    const nftContract = this.accountService.getNFTAddress();
+    const ftContracts = this.accountService.getFTAddress();
     Observable.forkJoin([shieldDetails, userContracts, nftContract, ftContracts]).subscribe(
-      (response)=>{
-        let defaultContractDetails = response[0]['data'];
-        let userContractDetails  = response[1]['data'];
-        let nftContractDetails  = response[2]['data'];
-        let ftContractDetails  = response[3]['data'];
+      (response) => {
+        const defaultContractDetails = response[0]['data'];
+        const userContractDetails  = response[1]['data'];
+        const nftContractDetails  = response[2]['data'];
+        const ftContractDetails  = response[3]['data'];
 
-        console.log(response[2], response[3])
+        console.log(response[2], response[3]);
         this.formatedDefaultData = this.formatDefaultShieldContractData(
-          defaultContractDetails, 
-          userContractDetails, 
-          nftContractDetails, 
+          defaultContractDetails,
+          userContractDetails,
+          nftContractDetails,
           ftContractDetails);
         this.formatedData = this.formatDataSource(userContractDetails);
         this.source.load(this.formatedData );
-        
+
       },
-      (error)=>{
+      (error) => {
         console.log('error', error);
       }
-    )
+    );
   }
 
   /**
    * Method to get the default shield contract details.
    */
-  getDefaultShieldContractDetails(){
+  getDefaultShieldContractDetails() {
     this.accountService.getDefaultShieldAddress().subscribe(
-      (data:any) => {
+      (data: any) => {
         this.defaultContractDetails = data['data'];
-    },(error)=>{
+    }, (error) => {
       console.log('error', error);
     });
   }
 
   /**
    * Method to validate the account object.
-   * 
+   *
    * @param account {Object} Account object
    */
-  isValidAccountForm(account){
-    if(account.contractAdd && account.contractName){
+  isValidAccountForm(account) {
+    if (account.contractAdd && account.contractName) {
         return true;
     }
     return false;
@@ -311,9 +311,9 @@ export class UserAccountsComponent extends Config implements OnInit {
   /**
    * Destory lifecycle hook to clean up subscriptions.
    */
-  ngDestroy(){
+  ngDestroy() {
     this._serviceSubscription.unsubscribe();
   }
 
-  
+
 }

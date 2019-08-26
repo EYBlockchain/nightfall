@@ -26,8 +26,8 @@ export class CreateAccountsComponent implements OnInit {
   isRequesting = false;
 
   constructor(
-      private fb: FormBuilder, 
-      private APIservice: AccountsApiService, 
+      private fb: FormBuilder,
+      private APIservice: AccountsApiService,
       private router: Router,
       private toastr: ToastrService,
       private utilService: UtilService) {
@@ -56,12 +56,12 @@ export class CreateAccountsComponent implements OnInit {
     this.isRequesting = true;
      this.APIservice.createAccount(this.createAccount.value).subscribe(
       data => {
-        this.toastr.success("Account Created", "Success");
+        this.toastr.success('Account Created', 'Success');
         this.isRequesting = false;
         this.router.navigate(['/login']);
       },
       (err: HttpErrorResponse) => {
-        this.toastr.error("Please try again", "Error");
+        this.toastr.error('Please try again', 'Error');
         this.isRequesting = false;
       }
     );

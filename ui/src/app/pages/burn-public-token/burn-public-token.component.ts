@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild} from '@angular/core';
+import { Component, OnInit, ViewChild, AfterContentInit} from '@angular/core';
 import { Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { TokenApiService } from '../../services/tokens/token-api.service';
@@ -14,12 +14,12 @@ import { NgSelectComponent } from '@ng-select/ng-select';
   styleUrls: ['./burn-public-token.component.css']
 })
 
-export class BurnPublicTokenComponent implements OnInit {
+export class BurnPublicTokenComponent implements OnInit , AfterContentInit {
 
   /**
    * Selected Token List
    */
-  selectedTokenList:any = [];
+  selectedTokenList: any = [];
   /**
    * Used to identify the selected ERC-721 token.
    */
@@ -33,12 +33,12 @@ export class BurnPublicTokenComponent implements OnInit {
   /**
    *  List of all ERC-721 tokens.
    */
-  tokenList:any =[];
+  tokenList: any = [];
 
   /**
    * Non Fungeble Token name , read from ERC-721 contract.
    */
-  nftName:string;
+  nftName: string;
 
   /**
    * Reference of combo box
@@ -56,7 +56,7 @@ export class BurnPublicTokenComponent implements OnInit {
     this.nftName = localStorage.getItem('nftName');
   }
 
-  ngAfterContentInit(){
+  ngAfterContentInit() {
     setTimeout(() => {
       this.select.filterInput.nativeElement.focus();
     }, 500);
@@ -82,8 +82,8 @@ export class BurnPublicTokenComponent implements OnInit {
   /**
    * Method to list down all ERC-721 tokens.
    */
-  getTokenList(){
-    this.tokenApiService.getNFTTokens().subscribe( (data:any) => {
+  getTokenList() {
+    this.tokenApiService.getNFTTokens().subscribe( (data: any) => {
       this.isRequesting = false;
       this.tokenList = data['data'];
       console.log('getTokenList', data);
@@ -100,8 +100,8 @@ export class BurnPublicTokenComponent implements OnInit {
    */
   onRemove(item) {
     console.log('selected items', this.selectedTokenList, item);
-    let newList = this.selectedTokenList.filter((it)=>{
-      return item._id != it._id;
+    const newList = this.selectedTokenList.filter((it) => {
+      return item._id !== it._id;
     });
     this.selectedTokenList = newList;
     console.log('selected new items', this.selectedTokenList);
@@ -113,12 +113,12 @@ export class BurnPublicTokenComponent implements OnInit {
    * @param term {String} Term that user entered
    * @param item {Item} Item which searched by user.
    */
-  customSearchFn(term: string, item: any){
-    if(!item){
+  customSearchFn(term: string, item: any) {
+    if (!item) {
       return;
     }
     term = term.toLowerCase();
-    let itemToSearch = item.uri.toString().toLowerCase();
+    const itemToSearch = item.uri.toString().toLowerCase();
     return itemToSearch.indexOf(term) > -1;
   }
 

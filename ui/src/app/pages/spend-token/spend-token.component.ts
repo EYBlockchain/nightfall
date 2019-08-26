@@ -25,7 +25,7 @@ export class SpendTokenComponent implements OnInit, AfterContentInit {
   /**
    * Selected Token List
    */
-  selectedTokenList:any = [];
+  selectedTokenList: any = [];
 
   /**
    * To store the selected ERC-721 token commitment.
@@ -48,20 +48,20 @@ export class SpendTokenComponent implements OnInit, AfterContentInit {
   index: string;
 
   /**
-   * To store all users 
+   * To store all users
    */
   users: any;
 
   /**
    * Total collection of objects to calculate pages for pagination.
    */
-  totalCollection:Promise<number>;
+  totalCollection: Promise<number>;
 
   /**
    * Non Fungeble Token name , read from ERC-721 contract.
    */
-  nftName:string;
-  
+  nftName: string;
+
   /**
    * Reference of combo box
    */
@@ -81,7 +81,7 @@ export class SpendTokenComponent implements OnInit, AfterContentInit {
     this.nftName = localStorage.getItem('nftName');
   }
 
-  ngAfterContentInit(){
+  ngAfterContentInit() {
     setTimeout(() => {
       this.select.filterInput.nativeElement.focus();
     }, 500);
@@ -100,7 +100,7 @@ export class SpendTokenComponent implements OnInit, AfterContentInit {
     if (!selectedToken || !receiverName) {
       this.toastr.error('All fields are mandatory');
       return;
-    };
+    }
 
     this.isRequesting = true;
     this.tokenApiService.spendToken(
@@ -120,7 +120,7 @@ export class SpendTokenComponent implements OnInit, AfterContentInit {
       }, error => {
         this.isRequesting = false;
         this.toastr.error('Please try again', 'Error');
-    })
+    });
   }
 
   /**
@@ -134,8 +134,8 @@ export class SpendTokenComponent implements OnInit, AfterContentInit {
         this.users = data['data'];
       }, error => {
         this.isRequesting = false;
-        this.toastr.error('Please try again.', "Error");
-      })
+        this.toastr.error('Please try again.', 'Error');
+      });
   }
 
   /**
@@ -155,17 +155,17 @@ export class SpendTokenComponent implements OnInit, AfterContentInit {
     }, error => {
       this.isRequesting = false;
       this.toastr.error('Please try again.', error);
-    })
+    });
   }
 
   /**
-   * Method to set new coin list in select box, on removing. 
+   * Method to set new coin list in select box, on removing.
    * @param item {Object} Item to be removed.
    */
   onRemove(item) {
     console.log('selected items', this.selectedTokenList, item);
-    let newList = this.selectedTokenList.filter((it)=>{
-      return item._id != it._id;
+    const newList = this.selectedTokenList.filter((it) => {
+      return item._id !== it._id;
     });
     this.selectedTokenList = newList;
     console.log('selected new items', this.selectedTokenList);
@@ -173,16 +173,16 @@ export class SpendTokenComponent implements OnInit, AfterContentInit {
 
   /**
    * Method to serach an item from the combobox.
-   * 
+   *
    * @param term {String} Term that user entered
    * @param item {Item} Item which searched by user.
    */
-  customSearchFn(term: string, item: any){
-    if(!item){
+  customSearchFn(term: string, item: any) {
+    if (!item) {
       return;
     }
     term = term.toLowerCase();
-    let itemToSearch = item.token_uri.toString().toLowerCase();
+    const itemToSearch = item.token_uri.toString().toLowerCase();
     return itemToSearch.indexOf(term) > -1;
   }
 

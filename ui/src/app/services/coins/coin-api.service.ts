@@ -16,10 +16,10 @@ export class CoinApiService {
  }
 
  /**
-  * Method to initiate a HTTP request to mint ERC-20 token commitment. 
+  * Method to initiate a HTTP request to mint ERC-20 token commitment.
   * @param A {String} Amount to mint
   * @param pk_A {String} Public key of Alice
-  * @param S_A {String} Random Serial number 
+  * @param S_A {String} Random Serial number
   */
  mintCoin(A: string, pk_A: string) {
   const httpOptions = {
@@ -29,7 +29,7 @@ export class CoinApiService {
   const body = {
     A: A,
     pk_A
-  }
+  };
 
   const url = config.apiGateway.root + 'coin/mint';
 
@@ -40,7 +40,7 @@ export class CoinApiService {
  }
 
  /**
-  * Method to initiate a HTTP request to mint ERC-20 token. 
+  * Method to initiate a HTTP request to mint ERC-20 token.
   * @param account {Object} Account object
   * @param amount {Number} Amount to mint
   */
@@ -51,7 +51,7 @@ export class CoinApiService {
     const body = {
       amount : amount,
       account: account
-    }
+    };
     const url = config.apiGateway.root + 'ft/mint';
     return this.http
       .post(url, body, httpOptions)
@@ -60,7 +60,7 @@ export class CoinApiService {
 
   /**
    *  Method to initiate a HTTP request to transfer ERC-20 token.
-   * 
+   *
    * @param amount {Number} Amount to transfer
    * @param account {Object} Account object
    * @param receiver_name {String} Receiver name
@@ -72,7 +72,7 @@ export class CoinApiService {
     const body = {
       amount : amount,
       receiver_name
-    }
+    };
     const url = config.apiGateway.root + 'ft/transfer';
     return this.http
       .post(url, body, httpOptions)
@@ -81,7 +81,7 @@ export class CoinApiService {
 
   /**
    * Method to initiate a HTTP request to burn ERC-20 token.
-   * 
+   *
    * @param account {Object} Account details
    * @param amount {Number} Amount to burn
    */
@@ -92,7 +92,7 @@ export class CoinApiService {
     const body = {
       amount : amount,
       account: account
-    }
+    };
     const url = config.apiGateway.root + 'ft/burn';
     return this.http
       .post(url, body, httpOptions)
@@ -101,7 +101,7 @@ export class CoinApiService {
 
   /**
    * Method to initiate a HTTP request to fetch ERC-20 token commitments.
-   * 
+   *
    * @param account {Object} Account details
    */
   fetchCoins(account) {
@@ -117,7 +117,7 @@ export class CoinApiService {
 
   /**
    * Method to initiate a HTTP request to burn ERC-20 token commitments.
-   * 
+   *
    * @param A {String} Amount to burn
    * @param sk_A {String} Seceret key of Alice
    * @param S_A {String} Serial number
@@ -129,8 +129,8 @@ export class CoinApiService {
     A: string,
     sk_A: string,
     S_A: string,
-    z_A_index:string,
-    z_A:string,
+    z_A_index: string,
+    z_A: string,
     pk_A: string,
     payTo: string
   ) {
@@ -146,7 +146,7 @@ export class CoinApiService {
       z_A_index,
       z_A,
       payTo
-    }
+    };
     const url = config.apiGateway.root + 'coin/burn';
     return this.http
       .post(url, body, httpOptions)
@@ -154,9 +154,9 @@ export class CoinApiService {
   }
 
   /**
-   * 
+   *
    * Method to initiate a HTTP request to transfer ERC-20 token commitments.
-   * 
+   *
    * @param C {String} Amount of selected token1
    * @param D {String} Amount of selected token2
    * @param E {String} Amount of token to transfer
@@ -168,8 +168,8 @@ export class CoinApiService {
    * @param z_D_index {String} Token2 commitment index
    * @param S_E {String} Serial number of token to transfer
    * @param S_F {String} Serial number of change token
-   * @param z_C {String} Token1 commitment 
-   * @param z_D {String} Token2 commitment 
+   * @param z_C {String} Token1 commitment
+   * @param z_D {String} Token2 commitment
    * @param sk_A {String} Secret key of Alice
    * @param pk_A {String} Public key of Alice
    * @param receiver_name {String} Rceiver name
@@ -216,7 +216,7 @@ export class CoinApiService {
 
   /**
    * Method for HTTP error handler
-   * 
+   *
    * @param operation {String}
    * @param result {Object}
    */

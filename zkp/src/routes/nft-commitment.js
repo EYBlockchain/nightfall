@@ -3,40 +3,33 @@
 import { Router } from 'express';
 import Utils from 'zkp-utils';
 import nfController from '../nf-token-controller';
-import Response from '../../response'; // class for creating response object
 
 const utils = Utils('/app/config/stats.json');
 const router = Router();
 
-async function mint(req, res) {
+async function mint(req, res, next) {
   const { address } = req.headers;
   const { A, pk_A } = req.body;
   const S_A = await utils.rndHex(27);
-  const response = new Response();
 
   try {
     const [z_A, z_A_index] = await nfController.mint(A, pk_A, S_A, address);
 
-    response.statusCode = 200;
-    response.data = {
+    res.data = {
       z_A,
       z_A_index,
       S_A,
     };
-    res.json(response);
+    next();
   } catch (err) {
-    console.log(err);
-    response.statusCode = 500;
-    response.data = err;
-    res.status(500).json(response);
+    next(err);
   }
 }
 
-async function transfer(req, res) {
+async function transfer(req, res, next) {
   const { A, pk_B, S_A, sk_A, z_A, z_A_index } = req.body;
   const S_B = await utils.rndHex(27);
   const { address } = req.headers;
-  const response = new Response();
   try {
     const { z_B, z_B_index, txObj } = await nfController.transfer(
       A,
@@ -48,27 +41,21 @@ async function transfer(req, res) {
       z_A_index,
       address,
     );
-
-    response.statusCode = 200;
-    response.data = {
+    res.data = {
       z_B,
       z_B_index,
       txObj,
       S_B,
     };
-    res.json(response);
+    next();
   } catch (err) {
-    console.log(err);
-    response.statusCode = 500;
-    response.data = err;
-    res.status(500).json(response);
+    next(err);
   }
 }
 
-async function burn(req, res) {
+async function burn(req, res, next) {
   const { A, S_A, Sk_A, z_A, z_A_index, payTo } = req.body;
   const { address } = req.headers;
-  const response = new Response();
   try {
     await nfController.burn(
       A,
@@ -79,21 +66,16 @@ async function burn(req, res) {
       address,
       payTo, // payed to same user.
     );
-    response.statusCode = 200;
-    response.data = {
+    res.data = {
       z_A,
     };
-    res.json(response);
+    next();
   } catch (err) {
-    console.log(err);
-    response.statusCode = 500;
-    response.data = err;
-    res.status(500).json(response);
+    next(err);
   }
 }
 
-async function checkCorrectness(req, res) {
-  const response = new Response();
+async function checkCorrectness(req, res, next) {
   console.log('\nzkp/src/restapi', '\n/token/checkCorrectness', '\nreq.body', req.body);
 
   try {
@@ -101,77 +83,56 @@ async function checkCorrectness(req, res) {
     const { A, pk, S_A, z_A, z_A_index } = req.body;
 
     const results = await nfController.checkCorrectness(A, pk, S_A, z_A, z_A_index, address);
-    console.log('\nzkp/src/restapi', '\n/token/checkCorrectness', '\nresults', results);
-
-    response.statusCode = 200;
-    response.data = results;
-    res.json(response);
+    res.data = results;
+    next();
   } catch (err) {
-    console.log(err);
-    response.statusCode = 500;
-    response.data = err;
-    res.status(500).json(response);
+    next(err);
   }
 }
 
-async function setTokenShieldAddress(req, res) {
+async function setTokenShieldAddress(req, res, next) {
   const { address } = req.headers;
   const { tokenShield } = req.body;
-  const response = new Response();
 
   try {
     await nfController.setShield(tokenShield, address);
     await nfController.getNFTName(address);
-    response.statusCode = 200;
-    response.data = {
+    res.data = {
       message: 'TokenShield Address Set.',
     };
-    res.json(response);
+    next();
   } catch (err) {
-    console.log('/token/shield', err);
-    nfController.unSetShield(address);
-    response.statusCode = 500;
-    response.data = err;
-    res.status(500).json(response);
+    next(err);
   }
 }
 
-async function getTokenShieldAddress(req, res) {
+async function getTokenShieldAddress(req, res, next) {
   const { address } = req.headers;
-  const response = new Response();
 
   try {
     const shieldAddress = await nfController.getShieldAddress(address);
     const name = await nfController.getNFTName(address);
-    response.statusCode = 200;
-    response.data = {
+    res.data = {
       shieldAddress,
       name,
     };
-    res.json(response);
+    next();
   } catch (err) {
-    console.log(err);
-    response.statusCode = 500;
-    response.data = err;
-    res.status(500).json(response);
+    next(err);
   }
 }
 
-async function unsetTokenShieldAddress(req, res) {
+async function unsetTokenShieldAddress(req, res, next) {
   const { address } = req.headers;
-  const response = new Response();
 
   try {
     nfController.unSetShield(address);
-    response.statusCode = 200;
-    response.data = {
+    res.data = {
       message: 'TokenShield Address Unset.',
     };
-    res.json(response);
+    next();
   } catch (err) {
-    response.statusCode = 500;
-    response.data = err;
-    res.status(500).json(response);
+    next(err);
   }
 }
 

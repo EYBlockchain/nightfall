@@ -9,7 +9,7 @@
     "fix": "npm run format && npm run lint -- --fix",
     "format": "prettier --write \"**/*.{json,css,scss,md,html}\"",
     "lint": "eslint .",
-    "ui:lint": "cd ui/ && npm ci && cd ../ && tslint -p ./ui/src/tsconfig.app.json",
+    "ui:lint": "cd ui/ && npm ci && npm run lint",
     "lint:md": "markdownlint -i node_modules -i build ."
   },
   "repository": {

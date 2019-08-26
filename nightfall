@@ -25,7 +25,7 @@ docker pull michaelconnor/zok:2Jan2019
 
 printf "${GREEN}*** Installing zkp-util dependencies"
 pushd zkp-utils
-npm install
+npm ci
 popd
 
 printf "${GREEN}*** Launching containerized ganache ***${NC}\n"

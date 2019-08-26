@@ -61,18 +61,12 @@ The Nightfall demonstration requires the following software to run:
     `brew link --overwrite node@10 --force`
 - Xcode Command line tools:
   - If running macOS, install Xcode then run `xcode-select --install` to install command line tools.
-- dotdocker
-  - <https://github.com/aj-may/dotdocker/>
 
 ### Starting servers
 
 Start Docker:
 
 - On Mac, open Docker.app.
-
-Start dotdocker:
-
-- `dotdocker start`
 
 ### Installing Nightfall
 
@@ -122,7 +116,7 @@ and wait until you see the message `Compiled successfully` in the console.
 This brings up each microservice using docker-compose and finally builds a UI running on a local
 Angular server.
 
-Navigate your web browser to <http://nightfall.docker> to start using Nightfall (give everything
+Navigate your web browser to <http://localhost:8000> to start using Nightfall (give everything
 enough time to start up). There are instructions on how to use the application in the
 [UI.md](./UI.md) file.
 

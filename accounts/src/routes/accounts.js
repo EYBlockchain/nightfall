@@ -1,21 +1,20 @@
 import express from 'express';
-import Response from './response/response';
 import { unlockAccount } from '../services/accounts';
 
 const router = express.Router({ mergeParams: true });
 
-router.post('/unlock', async (req, res) => {
+async function unlockUserAccount(req, res, next) {
   const { address, password } = req.body;
 
   try {
     await unlockAccount(address, password);
-
-    const response = new Response(200, { message: 'Unlocked' }, null);
-    res.json(response);
+    res.data = { message: 'Unlocked' };
+    next();
   } catch (err) {
-    const response = new Response(500, null, err);
-    res.status(500).json(response);
+    next(err);
   }
-});
+}
+
+router.post('/unlock', unlockUserAccount);
 
 export default router;

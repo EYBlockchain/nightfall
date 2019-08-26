@@ -4,7 +4,7 @@ import { AccountsApiService } from '../../services/accounts/accounts-api.service
 import {Config} from '../../config/config';
 
 /**
- * User Settings Component is a container componet, which loads user profile component and account components 
+ * User Settings Component is a container componet, which loads user profile component and account components
  * as child.
  */
 @Component({
@@ -29,7 +29,7 @@ export class UserSettingsComponent extends Config implements OnInit {
     private toastr: ToastrService,
     private accountService: AccountsApiService
   ) {
-    super("");
+    super('');
   }
 
   ngOnInit(): void {
@@ -39,16 +39,16 @@ export class UserSettingsComponent extends Config implements OnInit {
   /**
    * Get the current logged in user details
    */
-  getUser(){
+  getUser() {
     this.accountService.getUser().subscribe(
       data => {
-        console.log("data", data)
-        this.user = data['data']
-      }, 
+        console.log('data', data);
+        this.user = data['data'];
+      },
       error => {
-        console.log("error in user get", error)
+        console.log('error in user get', error);
       }
-    )
+    );
   }
 
 }

@@ -16,7 +16,7 @@ export class TokenListComponent implements OnInit {
   /**
    * Flag for http request
    */
-  isRequesting: boolean =  false;
+  isRequesting =  false;
 
   /**
  *  Transaction list
@@ -31,7 +31,7 @@ export class TokenListComponent implements OnInit {
   /**
    * For pagination purpose
    */
-  pageNo=1;
+  pageNo = 1;
 
   /**
    * For pagination purpose, initial value for page size is set it as 4
@@ -41,12 +41,12 @@ export class TokenListComponent implements OnInit {
   /**
    * Total collection of objects to calculate pages for pagination.
    */
-  totalCollection:Promise<number>;
+  totalCollection: Promise<number>;
 
   /**
    * Non Fungeble Token name , read from ERC-721 contract.
    */
-  nftName:string;
+  nftName: string;
 
   constructor(
     private tokenApiService: TokenApiService,
@@ -60,11 +60,11 @@ export class TokenListComponent implements OnInit {
 
   /**
    * Method to handle pagination.
-   * 
+   *
    * @param pageN {Number} Page number
    */
   pageChanged (pageNo) {
-    if (isNaN(pageNo)) return;
+    if (isNaN(pageNo)) { return; }
     this.pageNo = pageNo;
     this.fetchTokens();
   }
@@ -79,21 +79,21 @@ export class TokenListComponent implements OnInit {
     this.tokenApiService.fetchTokens(this.pageNo, this.pageSize)
     .subscribe( data => {
       this.isRequesting = false;
-      if (data && 
+      if (data &&
         data['data'] &&
         data['data']['data'] &&
         data['data']['data'].length) {
         this.transactions = data['data']['data'];
 
-        if (this.totalCollection) return;
-        this.totalCollection = Promise.resolve(parseInt(data['data']['totalCount']));
+        if (this.totalCollection) { return; }
+        this.totalCollection = Promise.resolve(parseInt(data['data']['totalCount'], 10));
       } else {
         this.noToken = true;
       }
     }, error => {
       this.isRequesting = false;
-      this.toastr.error('Please Enter a valid SKU.', error);      
-    })
+      this.toastr.error('Please Enter a valid SKU.', error);
+    });
   }
 
 }

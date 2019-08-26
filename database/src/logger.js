@@ -1,29 +1,26 @@
-/* eslint-disable camelcase */
-/* eslint-disable import/no-commonjs */
-
 import { createLogger, format, transports } from 'winston';
-import fs from 'fs';
+import mongoose from 'mongoose';
+import { getProps } from './config';
 
-import 'winston-daily-rotate-file';
+const { isLoggerEnable } = getProps();
 
-const { enable_logger } = require('./config').getProps();
+const consoleLogger = {
+  info: message => console.log(message),
+  error: message => console.error(message),
+};
 
-const logDir = 'logs';
+let winstonLogger;
 
-// Create the log directory if it does not exist
-if (!fs.existsSync(logDir)) {
-  fs.mkdirSync(logDir);
+if (isLoggerEnable) {
+  winstonLogger = createLogger({
+    level: 'debug',
+    format: format.combine(format.colorize(), format.simple()),
+    transports: [new transports.Console()],
+  });
+
+  mongoose.set('debug', true);
 }
 
-module.exports = createLogger({
-  level: 'debug',
-  format: format.combine(format.colorize(), format.simple()),
-  transports: [new transports.Console()],
-});
+const logger = winstonLogger || consoleLogger;
 
-if (!enable_logger) {
-  module.exports = {
-    info: message => console.log(message),
-    error: message => console.error(message),
-  };
-}
+export default logger;

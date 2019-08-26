@@ -10,10 +10,10 @@ async function addFToken(data, userData) {
       },
       {
         amount: data.amount,
-        shield_contract_address: data.shield_contract_address,
+        shieldContractAddress: data.shieldContractAddress,
         transferor: data.transferor,
-        transferor_address: data.transferor_address,
-        is_received: true,
+        transferorAddress: data.transferorAddress,
+        isReceived: true,
       },
     );
   } catch (err) {
@@ -31,11 +31,11 @@ async function addNFToken(data, userData) {
       },
       {
         uri: data.uri,
-        token_id: data.token_id,
-        shield_contract_address: data.shield_contract_address,
+        tokenId: data.tokenId,
+        shieldContractAddress: data.shieldContractAddress,
         transferor: data.transferor,
-        transferor_address: data.transferor_address,
-        is_received: true,
+        transferorAddress: data.transferorAddress,
+        isReceived: true,
       },
     );
   } catch (err) {
@@ -59,11 +59,11 @@ async function addTokenCommitment(data, userData) {
         authorization: userData.jwtToken,
       },
       {
-        A: data.A,
-        pk: data.pk,
-        S_A: data.S_A,
-        z_A: data.z_A,
-        z_A_index: data.z_A_index,
+        A: data.tokenId,
+        pk: data.transfereePublicKey,
+        S_A: data.salt,
+        z_A: data.commitment,
+        z_A_index: data.commitmentIndex,
       },
     );
 
@@ -80,13 +80,13 @@ async function addTokenCommitment(data, userData) {
       },
       {
         tokenUri: data.tokenUri,
-        A: data.A,
-        S_A: data.S_A,
-        pk: data.pk,
-        z_A: data.z_A,
-        z_A_index: data.z_A_index,
-        is_received: true,
-        ...correctnessChecks.data,
+        tokenId: data.tokenId,
+        salt: data.salt,
+        commitment: data.commitment,
+        commitmentIndex: data.commitmentIndex,
+        isReceived: true,
+        zCorrect: correctnessChecks.data.z_correct,
+        zOnchainCorrect: correctnessChecks.data.z_onchain_correct,
       },
     );
   } catch (err) {
@@ -110,11 +110,11 @@ async function addCoinCommitment(data, userData) {
         authorization: userData.jwtToken,
       },
       {
-        E: data.E,
-        S_E: data.S_E,
+        E: data.amount,
+        S_E: data.salt,
         pk: data.pk,
-        z_E: data.z_E,
-        z_E_index: data.z_E_index,
+        z_E: data.commitment,
+        z_E_index: data.commitmentIndex,
       },
     );
 
@@ -130,15 +130,13 @@ async function addCoinCommitment(data, userData) {
         authorization: userData.jwtToken,
       },
       {
-        E: data.E,
-        S_E: data.S_E,
-        pk: data.pk,
-        z_E: data.z_E,
-        z_E_index: data.z_E_index,
-        is_received: true,
-        action_type: 'received',
-        toSave: 'receiverSide',
-        ...correctnessChecks.data,
+        amount: data.amount,
+        salt: data.salt,
+        commitment: data.commitment,
+        commitmentIndex: data.commitmentIndex,
+        isReceived: true,
+        zCorrect: correctnessChecks.data.zCorrect,
+        zOnchainCorrect: correctnessChecks.data.zOnchainCorrect,
       },
     );
   } catch (err) {

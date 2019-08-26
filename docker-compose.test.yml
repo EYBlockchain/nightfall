@@ -17,9 +17,9 @@ services:
     networks: 
       - test_net
 
-  api-gateway_test:
+  api-gateway-test:
     build:
-      context: ./API-Gateway
+      context: ./api-gateway
       dockerfile: Dockerfile
     restart: on-failure
     volumes:
@@ -27,7 +27,8 @@ services:
       - ./api-gateway/.babelrc:/app/.babelrc
     environment:
       - NODE_ENV=test
-      - VIRTUAL_HOST=api-test.nightfall.docker
+    ports:
+      - "8001:80"
     networks: 
       - test_net
 
@@ -60,12 +61,10 @@ services:
       - ganache_test
     volumes:
       - ./zkp/src:/app/src
-      - ./zkp/response:/app/response
       - ./zkp/build-test:/app/build
       - ./zkp/code:/app/code
       - ./zkp/.babelrc:/app/.babelrc
       - ./zkp-utils:/app/node_modules/zkp-utils
-      - ./zkp/__tests__:/app/__tests__
       - ./config:/app/config
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
@@ -90,11 +89,10 @@ services:
       - mongo_test
     volumes:
       - ./database/src:/app/src
-      - ./database/response:/app/response
       - ./database/.babelrc:/app/.babelrc
       - ./zkp-utils:/app/node_modules/zkp-utils
       - ./config:/app/config
-      - ./database/script_to_configure_roles.js:/app/script_to_configure_roles.js
+      - ./database/setup-mongo-acl-for-new-users.js:/app/setup-mongo-acl-for-new-users.js
     environment:
       - NODE_ENV=test
     networks: 
