@@ -1,4 +1,3 @@
-import Response from './response/response';
 import { NftCommitmentService } from '../business';
 
 /**
@@ -21,12 +20,9 @@ async function addTokenHandler(req, res, next) {
   try {
     const nftCommitmentService = new NftCommitmentService(req.user.db);
     await nftCommitmentService.addNewToken(req.body);
-    const response = new Response(200, { message: 'inserted' }, null);
-    res.json(response);
+    res.data = { message: 'inserted' };
+    next();
   } catch (err) {
-    console.log(err);
-    const response = new Response(500, null, { message: err.message });
-    res.status(500).json(response);
     next(err);
   }
 }
@@ -43,12 +39,9 @@ async function addTokenHandler(req, res, next) {
 async function getTokenHandler(req, res, next) {
   const nftCommitmentService = new NftCommitmentService(req.user.db);
   try {
-    const tokens = await nftCommitmentService.getToken(req.query);
-    const response = new Response(200, tokens, null);
-    res.json(response);
+    res.data = await nftCommitmentService.getToken(req.query);
+    next();
   } catch (err) {
-    const response = new Response(500, null, { message: err.message });
-    res.status(500).json(response);
     next(err);
   }
 }
@@ -77,11 +70,9 @@ async function updateTokenHandler(req, res, next) {
   const nftCommitmentService = new NftCommitmentService(req.user.db);
   try {
     await nftCommitmentService.updateToken(req.body);
-    const response = new Response(200, { message: 'updated' }, null);
-    res.json(response);
+    res.data = { message: 'updated' };
+    next();
   } catch (err) {
-    const response = new Response(500, null, { message: err.message });
-    res.status(500).json(response);
     next(err);
   }
 }
@@ -95,12 +86,9 @@ async function updateTokenHandler(req, res, next) {
 async function getPrivateTokenTransactions(req, res, next) {
   const nftCommitmentService = new NftCommitmentService(req.user.db);
   try {
-    const transactions = await nftCommitmentService.getPrivateTokenTransactions(req.query);
-    const response = new Response(200, transactions, null);
-    res.json(response);
+    res.data = await nftCommitmentService.getPrivateTokenTransactions(req.query);
+    next();
   } catch (err) {
-    const response = new Response(500, null, { message: err.message });
-    res.status(500).json(response);
     next(err);
   }
 }

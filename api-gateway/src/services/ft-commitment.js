@@ -104,8 +104,7 @@ export async function transferCoin(req, res, next) {
     await db.updateUserWithPrivateAccount(req.user, { address, password });
     await accounts.unlockAccount({ address, password });
 
-    const { pk } = await offchain.getZkpPublicKeyFromName(req.body.receiver_name); // fetch pk from PKD by passing username
-    req.body.pk_B = pk;
+    req.body.pk_B = await offchain.getZkpPublicKeyFromName(req.body.receiver_name); // fetch pk from PKD by passing username
 
     const { data } = await zkp.transferCoin({ address }, req.body);
     data.z_E_index = parseInt(data.z_E_index, 16);

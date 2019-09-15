@@ -1,5 +1,4 @@
 import Web3 from 'web3';
-import config from 'config';
 
 export default {
   connection() {
@@ -11,7 +10,9 @@ export default {
    */
   connect() {
     console.log('Blockchain Connecting ...');
-    const provider = new Web3.providers.WebsocketProvider(config.get('web3Provider'));
+    const provider = new Web3.providers.WebsocketProvider(
+      `${process.env.BLOCKCHAIN_HOST}:${process.env.BLOCKCHAIN_PORT}`,
+    );
 
     provider.on('error', console.error);
     provider.on('connect', () => console.log('Blockchain Connected ...'));

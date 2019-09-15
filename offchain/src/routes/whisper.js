@@ -1,5 +1,3 @@
-/* eslint-disable func-names */
-
 import express from 'express';
 import listeners from '../listeners';
 import {
@@ -8,17 +6,15 @@ import {
   subscribeObject,
   sendObject,
 } from '../whisper-controller-stub';
-import Response from '../../response';
 
-// class for creating response object
 const router = express.Router();
 
 /**
  * End point to generate shh identity
  *
  *
- *  req.body ={
- *	 "address":"0xba4155c13e63b0466e86948355a03a6f97c129bc"
+ *  req.body = {
+ *   "address":"0xba4155c13e63b0466e86948355a03a6f97c129bc"
  *  }
  *
  *  res = {
@@ -28,30 +24,26 @@ const router = express.Router();
  *    }
  *  }
  */
-router.post('/generateShhIdentity', async function(req, res) {
-  const response = Response();
+async function createWhisperKeyForAccount(req, res, next) {
   try {
     const { address } = req.body;
     const id = {
       address,
     };
     const shhIdentity = await generateWhisperKeys(id);
-    response.statusCode = 200;
-    response.data = shhIdentity;
-    res.json(response);
+    res.data = shhIdentity;
+    next();
   } catch (err) {
-    response.statusCode = 500;
-    response.err = { message: err.message };
-    res.status(500).json(response);
+    next(err);
   }
-});
+}
 
 /**
  * End point to get whisper Public Key from shhidentity
  *
  *
- *  req.body ={
- *	 "whisperPublicKey":"7eb4ec915a6380b267039da38bf982e984cffce0e59f59d4b95abeb23249b50b"
+ *  req.query = {
+ *   "shhIdentity":"7eb4ec915a6380b267039da38bf982e984cffce0e59f59d4b95abeb23249b50b"
  *  }
  *
  *  res = {
@@ -61,30 +53,26 @@ router.post('/generateShhIdentity', async function(req, res) {
  *    }
  *  }
  */
-router.get('/getWhisperPublicKey', async function(req, res) {
-  const response = Response();
+async function getWhisperKeyFromShhId(req, res, next) {
   try {
     const { shhIdentity } = req.query;
     const id = {
       shhIdentity,
     };
     const whisperPublicKey = await getWhisperPublicKey(id);
-    response.statusCode = 200;
-    response.data = { whisperPublicKey };
-    res.json(response);
+    res.data = { whisperPublicKey };
+    next();
   } catch (err) {
-    response.statusCode = 500;
-    response.err = { message: err.message };
-    res.status(500).json(response);
+    next(err);
   }
-});
+}
 
 /**
  * Endpoint to subscribe a topic
  *
  * req.body = {
- *	 "shhIdentity": "38b58388dafc045e571562c6f1b2e255e540e9073d4743f634154fddc993203a",
- *	 "topic":"0xeca7945f",
+ *   "shhIdentity": "38b58388dafc045e571562c6f1b2e255e540e9073d4743f634154fddc993203a",
+ *   "topic":"0xeca7945f",
  *   "subscribedFor":"contract"
  * }
  *
@@ -97,8 +85,7 @@ router.get('/getWhisperPublicKey', async function(req, res) {
  *
  */
 
-router.post('/subscribe', async function(req, res) {
-  const response = Response();
+async function subscribeTopic(req, res, next) {
   try {
     const { shhIdentity, topic, jwtToken, sk_A: skA } = req.body;
     const usrData = { jwtToken, skA };
@@ -108,23 +95,20 @@ router.post('/subscribe', async function(req, res) {
     };
 
     await subscribeObject(idRecipient, topic, usrData, listeners);
-    response.statusCode = 200;
-    response.data = { subscribed: true };
-    res.json(response);
+    res.data = { subscribed: true };
+    next();
   } catch (err) {
-    response.statusCode = 500;
-    response.err = { message: err.message };
-    res.status(500).json(response);
+    next(err);
   }
-});
+}
 
 /**
  *  Endpoint to post message to other nodes
  *
  *  req.body ={
- *	  "message":{"key":"value"},
- *	   "shhPkRecipient": "0x04e3116a52e0ea1233f6b683630b22733a84d4af93200a2758f9c36a0283c2ddb4466bb0ab2210d03f381f5f63217f0ed938e912e4708e5e7f206adc48a5b8c13e",
- *	   "shhIdentity":"38cd2e8b633bdf665120cf696195a5d595c1446d80a2119211688e6c90ef8afb"
+ *    "message":{"key":"value"},
+ *     "shhPkRecipient": "0x04e3116a52e0ea1233f6b683630b22733a84d4af93200a2758f9c36a0283c2ddb4466bb0ab2210d03f381f5f63217f0ed938e912e4708e5e7f206adc48a5b8c13e",
+ *     "shhIdentity":"38cd2e8b633bdf665120cf696195a5d595c1446d80a2119211688e6c90ef8afb"
  *  }
  *
  *  res = {
@@ -135,23 +119,24 @@ router.post('/subscribe', async function(req, res) {
  *  }
  *
  */
-router.post('/sendMessage', async function(req, res) {
-  const response = Response();
+async function sendMessage(req, res, next) {
   try {
     const { message, shhPkRecipient, shhIdentity } = req.body;
     const idSender = {
       shhIdentity,
     };
-    console.log(idSender);
+
     await sendObject(message, idSender, shhPkRecipient);
-    response.statusCode = 200;
-    response.data = { postMessage: true };
-    res.json(response);
+    res.data = { postMessage: true };
+    next();
   } catch (err) {
-    response.statusCode = 500;
-    response.err = { message: err.message };
-    res.status(500).json(response);
+    next(err);
   }
-});
+}
+
+router.post('/generateShhIdentity', createWhisperKeyForAccount);
+router.get('/getWhisperPublicKey', getWhisperKeyFromShhId);
+router.post('/subscribe', subscribeTopic);
+router.post('/sendMessage', sendMessage);
 
 export default router;

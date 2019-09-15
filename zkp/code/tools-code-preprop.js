@@ -45,7 +45,7 @@ a3, b2, b1, b0, a2, b2, b1, b0, a1, b2, b1, b0, a0, b2, b1, b0
 function outerEllipsisCommaSeparate(data) {
   const cpData = [...data];
   return cpData.map(el =>
-    el.replace(/\[+(.+?)]+([0-9]+)\.\.\.([0-9]+)/g, (m, _b2, _n, _k) => {
+    el.replace(/@\[+(.+?)]+([0-9]+)\.\.\.([0-9]+)/g, (m, _b2, _n, _k) => {
       // m entire matched string
       // b2 square brackets (interior only)
       // n high number

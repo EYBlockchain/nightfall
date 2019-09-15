@@ -180,15 +180,17 @@ async function computePath(account, shieldContract, _myToken, myTokenIndex) {
     'Sister Positions encoding',
     s
       .map(pos => pos.sisterSide)
-      .reverse()
-      .join(''),
+      // .reverse()
+      .join('')
+      .padEnd(config.ZOKRATES_PACKING_SIZE, '0'),
   );
   console.groupEnd();
   const sisterPositions = utils.binToHex(
     s
       .map(pos => pos.sisterSide)
-      .reverse()
-      .join(''),
+      // .reverse()
+      .join('')
+      .padEnd(config.ZOKRATES_PACKING_SIZE, '0'),
   ); // create a hex encoding of all the sister positions
   return { path: s.map(pos => utils.ensure0x(pos.nodeHashOld)), positions: sisterPositions }; // return the sister-path of nodeHashes together with the encoding of which side each is on
 }

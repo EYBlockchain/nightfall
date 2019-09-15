@@ -21,7 +21,7 @@ docker-compose down -v || {
 }
 
 printf "${GREEN}*** Pull zokrates docker image ***${NC}\n"
-docker pull michaelconnor/zok:2Jan2019
+docker pull zokrates/zokrates:0.4.11
 
 printf "${GREEN}*** Installing zkp-util dependencies"
 pushd zkp-utils

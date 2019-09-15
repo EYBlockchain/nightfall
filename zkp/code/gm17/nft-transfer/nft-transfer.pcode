@@ -1,28 +1,23 @@
-import "LIBSNARK/sha256compression"
-import "PACKING/unpack128"
+import "hashes/sha256/512bit.code" as sha256compression
+import "utils/pack/unpack128.code" as unpack128
 
+def CONCAT216x216x216(field[216] a, field[216] b, field[216] c)->(field[648]):
+	return [...a, ...b, ...c]
 
-def CONCAT216x216x216('field' a215...0, 'field' b215...0, 'field' c215...0)->(field648):
-	return a215...0, b215...0, c215...0
+def CONCAT216x216(field[216] a, field[216] b)->(field[432]):
+	return [...a, ...b]
 
-def CONCAT216x216('field' a215...0, 'field' b215...0)->(field432):
-	return a215...0, b215...0
+def shaPad432To512(field[432] a)->(field[512]):
+	return [...a, 1, 70....0, 1,1,0,1,1,0,0,0,0]
 
-//this function is needed because we've used * as a pcode wildcard and ORDEREDCONCAT needs a multiply doh!
-def MUL(field x, field y)->(field1):
-	return x*y
+def shaPad216To512(field[216] a)->(field[512]):
+	return [...a, 1, 287....0, 1,1,0,1,1,0,0,0]
 
-//concatenate two words according to an order bit. If order=0, g is first.  If order=1, f is first
-def ORDEREDCONCAT216x216(field order, 'field' f215...0, 'field' g215...0) ->(field432):
-	{field r* = MUL(order,f*) + MUL(1-order, g*)
-	field s* = MUL(order,g*) + MUL(1-order, f*)}215...0
-	return r215...0,s215...0
+def ORDEREDCONCAT216x216(field order, field[216] f, field[216] g)->(field[432]):
+	field[216] r = if order==0 then g else f fi
+	field[216] s = if order==0 then f else g fi
+	return [...r, ...s]
 
-def shaPad432To512('field' a431...0)->(field512):
-	return a431...0, 1, 70....0, 1,1,0,1,1,0,0,0,0
-
-def shaPad216To512('field' a215...0)->(field512):
-	return a215...0, 1, 287....0, 1,1,0,1,1,0,0,0
 
 //inputs for main are:
 // A - Asset identifier which is the hash return of asset meta data from swarm
@@ -42,110 +37,111 @@ def shaPad216To512('field' a215...0)->(field512):
 
 //Each field element passed to main() can be at most 128bits, to make use of unpack128() so most variables,being 216 bits long, occupy two fields
 
-def main('field' £A1...0, [private field b*bh, private field b*bl]0...31, private field order, 'field' pN1...0, 'field' £pPkb1...0, 'field' £pS1...0, 'field' £pSb1...0, 'field' £pSk1...0, 'field' pR1...0, 'field' pZb1...0)->(field1):
+def main('field' £pA1...0, @[private field b*bh, private field b*bl]0...31, private field pOrder, 'field' pN1...0, 'field' £pPkb1...0, 'field' £pS1...0, 'field' £pSb1...0, 'field' £pSk1...0, 'field' pR1...0, 'field' pZb1...0)->(field1):
 
 	//Unpack the inputs of main() to 128 bits. We'll unpack each field to its own 128 bit strings for simplicity for now. Later efficiencies could be made by grouping some inputs.
 
-	a255...128 = unpack128(A1)
-	a127...0 = unpack128(A0)
+	field[128] a1 = unpack128(pA1) //this may seem long-winded but ZoKrates needs intermediate variables for now
+	field[128] a0 = unpack128(pA0)
+	field[256] a = [...a1, ...a0]
 
-	{b*b255...128 = unpack128(b*bh)}31...0
-	{b*b127...0 = unpack128(b*bl)}31...0
+	field[128] Sk1 = unpack128(pSk1)
+	field[128] Sk0 = unpack128(pSk0)
+	field[256] Sk = [...Sk1, ...Sk0]
 
-	order127...0 = unpack128(order)
-	N255...128 = unpack128(pN1)
-	N127...0 = unpack128(pN0)
-	Pkb255...128 = unpack128(pPkb1)
-	Pkb127...0 = unpack128(pPkb0)
-	S255...128 = unpack128(pS1)
-	S127...0 = unpack128(pS0)
-	Sb255...128 = unpack128(pSb1)
-	Sb127...0 = unpack128(pSb0)
-	Sk255...128 = unpack128(pSk1)
-	Sk127...0 = unpack128(pSk0)
-	R255...128 = unpack128(pR1)
-	R127...0 = unpack128(pR0)
-	Zb255...128 = unpack128(pZb1)
-	Zb127...0 = unpack128(pZb0)
+	field[128] Sb1 = unpack128(pSb1) //this slightly long-winded approach needed so Zokrates can flatten the expressions
+	field[128] Sb0 = unpack128(pSb0)
+	field[256] Sb = [...Sb1, ...Sb0]
 
-	//H(S|Sk) = Nullifier. The padding needs to be added to create a true hash
+	{field[128] b*b1 = unpack128(b*bh)}31...0
+	{field[128] b*b0 = unpack128(b*bl)}31...0
+	{field[256] b*b = [...b*b1, ...b*b0]}31...0
 
-	t431...0 = CONCAT216x216(S215...0, Sk215...0)
+	field[128] S1 = unpack128(pS1)
+	field[128] S0 = unpack128(pS0)
+	field[256] S = [...S1, ...S0]
 
-	t511...0 = shaPad432To512(t431...0)
+	field[128] N1 = unpack128(pN1)
+	field[128] N0 = unpack128(pN0)
+	field[256] N = [...N1, ...N0]
 
-	PrA255...0 = sha256compression(t511...0)
+	field[128] Pkb1 = unpack128(pPkb1)
+	field[128] Pkb0 = unpack128(pPkb0)
+	field[256] Pkb = [...Pkb1, ...Pkb0]
 
-	// Calculation of Pk from H(Sk)
+	field[128] Zb1 = unpack128(pZb1)
+	field[128] Zb0 = unpack128(pZb0)
+	field[256] Zb = [...Zb1, ...Zb0]
 
-	t511...0 = shaPad216To512(Sk215...0)
+	field[128] R1 = unpack128(pR1)
+	field[128] R0 = unpack128(pR0)
+	field[256] R = [...R1, ...R0]
 
-	Pk255...0 = sha256compression(t511...0)
+	field[128] order = unpack128(pOrder)
 
-	// Proof 2. H(A|Pk|S) = Z_A is in the Merkle Tree
 
-	d647...0 = CONCAT216x216x216(a215...0, Pk215...0, S215...0)
+//H(S|Sk) = Nullifier. The padding needs to be added to create a true hash
 
-	//this is too big to handle in a single sha round and our sha can't handle multiple rounds
-	//instead, we will split d, hash both parts and then hash the result - remember to do this in Node too!
+	field[432] t = CONCAT216x216(S[40..256], Sk[40..256])
+	field[512] u = shaPad432To512(t)
+	field[256] PrA = sha256compression(u[0..256],u[256..512])
 
-		//first 432 bits (432 is 216*2 - a convenient number in our 216 bit scheme)
-	t511...0 = shaPad432To512(d431...0)
-	t255...0 = sha256compression(t511...0)
-		//remaining 216 bits
-	u511...0 = shaPad216To512(d647...432)
-	u255...0 = sha256compression(u511...0)
-		//then concat the results msb first
-	d431...0 = CONCAT216x216(u215...0, t215...0)
-		//and hash the result
-	d511...0 = shaPad432To512(d431...0)
-	t255...0 = sha256compression(d511...0)  //we've been using 'd,t,u' as a temporary placeholder in the above to save on variable usage.
+// Calculation of Pk from H(Sk)
 
-	//Prove that we know the path
-	//concat commitment hash with its first through 31st siblings: The padding needs to be added to create a true hash.  Note, for simplicity
-	//we use the 216 lsb from the SHA256.
+	u = shaPad216To512(Sk[40..256])
+	field[256] Pk = sha256compression(u[0..256],u[256..512])
 
-	{t431...0 = ORDEREDCONCAT216x216(order*, t215...0, b*b215...0)
+// Proof 2. H(A|Pk|S) = Z_A is in the Merkle Tree
 
-	t511...0 = shaPad432To512(t431...0)
-
-	t255...0 = sha256compression(t511...0)}31...1
-
-	//concat result with its 32nd sibling: r|a0. The padding needs to be added to create a true hash.  Note, for simplicity
-	//we use the 216 lsb from the SHA256.
-
-	t431...0 = ORDEREDCONCAT216x216(order0, t215...0, b0b215...0)
-
-	t511...0 = shaPad432To512(t431...0)
-
-	PrB255...0 = sha256compression(t511...0)
-
-	// Proof 3. Know A|Pkb|Sb such that H(A|Pkb|Sb) = Zb
-
-	d647...0 = CONCAT216x216x216(a215...0, Pkb215...0, Sb215...0)
-
+	field[648] d = CONCAT216x216x216(a[40..256], Pk[40..256], S[40..256])
 	//this is too big to handle in a single sha round and our sha can't handle multiple rounds
 	//as a work-around, we will split d, hash both parts and then hash the result - remember to do this in Node too!
+	//first 432 bits (432 is 216*2 - a convenient number in our 216 bit scheme)
+	field[512] q = shaPad432To512(d[216..648])
+	field[256] s = sha256compression(q[0..256],q[256..512])
+	//remaining 216 bits
+	u = shaPad216To512(d[0..216])
+	field[256] v = sha256compression(u[0..256],u[256..512])
+	//then concat the results msb first
+	t = CONCAT216x216(v[40..256], s[40..256])
+	//and hash the result
+	q = shaPad432To512(t)
+	s = sha256compression(q[0..256],q[256..512]) //z
 
-		//first 432 bits (432 is 216*2 - a convenient number in our 216 bit scheme)
-	t511...0 = shaPad432To512(d431...0)
-	t255...0 = sha256compression(t511...0)
-		//remaining 216 bits
-	u511...0 = shaPad216To512(d647...432)
-	u255...0 = sha256compression(u511...0)
-		//then concat the results msb first
-	d431...0 = CONCAT216x216(u215...0, t215...0)
-		//and hash the result
-	d511...0 = shaPad432To512(d431...0)
-	PrC255...0 = sha256compression(d511...0)  //we've been using 'd,t,u' as a temporary placeholder in the above to save on variable usage.
+	//concat 1st through 31st siblings
+	{t = ORDEREDCONCAT216x216(order[*], s[40..256], b*b[40..256])
+	u = shaPad432To512(t)
+	s = sha256compression(u[0..256],u[256..512])}31...1
+
+// concat with the 32nd sibling. This should equal the root.
+	t = ORDEREDCONCAT216x216(order[0], s[40..256], b0b[40..256])
+	u = shaPad432To512(t)
+	field[256] PrB = sha256compression(u[0..256],u[256..512])
 
 
-	// H(S|Sk) == N
+// Proof 3. Know A|Pkb|Sb such that H(A|Pkb|Sb) = Zb
 
-	PrA==215...0==N
+	d = CONCAT216x216x216(a[40..256], Pkb[40..256], Sb[40..256])
+	//this is too big to handle in a single sha round and our sha can't handle multiple rounds
+	//as a work-around, we will split d, hash both parts and then hash the result - remember to do this in Node too!
+	//first 432 bits (432 is 216*2 - a convenient number in our 216 bit scheme)
+	q = shaPad432To512(d[216..648])
+	s = sha256compression(q[0..256],q[256..512])
+	//remaining 216 bits
+	u = shaPad216To512(d[0..216])
+	v = sha256compression(u[0..256],u[256..512])
+	//then concat the results msb first
+	t = CONCAT216x216(v[40..256], s[40..256])
+	//and hash the result
+	q = shaPad432To512(t)
+	field[256] PrC = sha256compression(q[0..256],q[256..512]) //zd
 
-	PrB==215...0==R
+//check proofs
 
-	PrC==215...0==Zb
+	PrA[40..256]==N[40..256]
+
+	PrB[40..256]==R[40..256]
+
+	PrC[40..256]==Zb[40..256]
 
 	return 1

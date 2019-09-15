@@ -1,4 +1,3 @@
-import Response from './response/response';
 import { FtService } from '../business';
 
 /**
@@ -18,11 +17,9 @@ async function addFTTransaction(req, res, next) {
   try {
     const ftService = new FtService(req.user.db);
     await ftService.addFTokenTransaction(req.body);
-    const response = new Response(200, { message: 'inserted' }, null);
-    res.json(response);
+    res.data = { message: 'inserted' };
+    next();
   } catch (err) {
-    const response = new Response(500, null, { message: err.message });
-    res.status(500).json(response);
     next(err);
   }
 }
@@ -36,12 +33,9 @@ async function addFTTransaction(req, res, next) {
 async function getFTTransactions(req, res, next) {
   const ftService = new FtService(req.user.db);
   try {
-    const transactions = await ftService.getFTTransactions(req.query);
-    const response = new Response(200, transactions, null);
-    res.json(response);
+    res.data = await ftService.getFTTransactions(req.query);
+    next();
   } catch (err) {
-    const response = new Response(500, null, { message: err.message });
-    res.status(500).json(response);
     next(err);
   }
 }

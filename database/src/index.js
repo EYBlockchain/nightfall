@@ -2,7 +2,7 @@ import express, { Router } from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import logger from './logger';
-import { setDB, dbConnection } from './middlewares';
+import { setDB, dbConnection, formatResponse, formatError, errorHandler } from './middlewares';
 import {
   initializeAccountRoutes,
   initializeNftRoutes,
@@ -29,21 +29,25 @@ initializeNftCommitmentRoutes(router);
 initializeFtRoutes(router);
 initializeFtCommitmentRoutes(router);
 
-app.use(function logError(err, req, res) {
+app.use(formatResponse);
+
+app.use(function logError(err, req, res, next) {
   logger.error(
     `${req.method}:${req.url}
     ${JSON.stringify({ error: err.message })}
+    ${JSON.stringify({ errorStack: err.stack.split('\n') }, null, 1)}
     ${JSON.stringify({ body: req.body })}
     ${JSON.stringify({ params: req.params })}
     ${JSON.stringify({ query: req.query })}
   `,
   );
-  res
-    .status(err.status || 500)
-    .send({ hasError: true, statusCode: err.status, message: err.message, error: err });
+  next(err);
 });
 
+app.use(formatError);
+app.use(errorHandler);
+
 const server = app.listen(80, '0.0.0.0', () =>
-  console.log('zkp database RESTful API server started on ::: 80'),
+  logger.info('zkp database RESTful API server started on ::: 80'),
 );
 server.timeout = 0;

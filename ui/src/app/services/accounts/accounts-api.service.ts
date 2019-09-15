@@ -72,7 +72,7 @@ export class AccountsApiService {
     if (type === 'tokens') {
       url = config.database.root + 'token/transaction?type=' + type + '&pageNo=' + pageNo + '&limit=' + limit;
     } else if (type === 'publictokens') {
-      url = config.database.root + 'nft/transaction?type=' + type + '&pageNo=' + pageNo + '&limit=' + limit;
+      url = config.database.root + 'nft-transaction?type=' + type + '&pageNo=' + pageNo + '&limit=' + limit;
  } else if (type === 'publiccoins') {
       url = config.database.root + 'ft/transaction?type=' + type + '&pageNo=' + pageNo + '&limit=' + limit;
  } else {

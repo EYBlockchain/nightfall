@@ -3,40 +3,40 @@ const props = {
   local: {
     HASHLENGTH: 8, // expected length of a hash in bytes
     accounts: {
-      host: 'http://accounts',
-      port: '80',
+      host: process.env.ACCOUNTS_HOST,
+      port: process.env.ACCOUNTS_PORT,
     },
     zkp: {
-      host: 'http://zkp',
-      port: '80',
+      host: process.env.ZKP_HOST,
+      port: process.env.ZKP_PORT,
     },
     database: {
-      host: 'http://database',
-      port: '80',
+      host: process.env.DATABASE_HOST,
+      port: process.env.DATABASE_PORT,
     },
     offchain: {
-      host: 'http://offchain',
-      port: '80',
+      host: process.env.OFFCHAIN_HOST,
+      port: process.env.OFFCHAIN_PORT,
     },
     isLoggerEnable: true,
   },
   test: {
     HASHLENGTH: 8, // expected length of a hash in bytes
     accounts: {
-      host: 'http://accounts_test',
-      port: '80',
+      host: process.env.ACCOUNTS_HOST,
+      port: process.env.ACCOUNTS_PORT,
     },
     zkp: {
-      host: 'http://zkp_test',
-      port: '80',
+      host: process.env.ZKP_HOST,
+      port: process.env.ZKP_PORT,
     },
     database: {
-      host: 'http://database_test',
-      port: '80',
+      host: process.env.DATABASE_HOST,
+      port: process.env.DATABASE_PORT,
     },
     offchain: {
-      host: 'http://offchain_test',
-      port: '80',
+      host: process.env.OFFCHAIN_HOST,
+      port: process.env.OFFCHAIN_PORT,
     },
     isLoggerEnable: true,
   },

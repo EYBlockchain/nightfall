@@ -12,6 +12,9 @@ services:
       - ./accounts/src:/app/src
       - ./accounts/config:/app/config
       - ./accounts/.babelrc:/app/.babelrc
+    environment:
+      BLOCKCHAIN_HOST: http://ganache
+      BLOCKCHAIN_PORT: 8545
 
   api-gateway:
     build:
@@ -22,7 +25,16 @@ services:
       - ./api-gateway/src:/app/src
       - ./api-gateway/.babelrc:/app/.babelrc
     ports:
-      - "8001:80"
+      - '8001:80'
+    environment:
+      ACCOUNTS_HOST: http://accounts
+      ACCOUNTS_PORT: 80
+      ZKP_HOST: http://zkp
+      ZKP_PORT: 80
+      DATABASE_HOST: http://database
+      DATABASE_PORT: 80
+      OFFCHAIN_HOST: http://offchain
+      OFFCHAIN_PORT: 80
 
   offchain:
     build:
@@ -33,13 +45,21 @@ services:
       - ganache
     volumes:
       - ./offchain/src:/app/src
-      - ./offchain/response:/app/response
       - ./offchain/build:/app/build
       - ./offchain/.babelrc:/app/.babelrc
       - ./offchain/__tests__:/app/__tests__
       - ./zkp-utils:/app/node_modules/zkp-utils
       - ./account-utils:/app/src/account-utils
       - ./config:/app/config
+    environment:
+      AUTHENTICATION_API_HOST: http://api-gateway
+      AUTHENTICATION_API_PORT: 80
+      BLOCKCHAIN_HOST: http://ganache
+      BLOCKCHAIN_PORT: 8545
+      DATABASE_HOST: http://database
+      DATABASE_PORT: 80
+      OFFCHAIN_HOST: http://offchain
+      OFFCHAIN_PORT: 80
 
   zkp:
     build:
@@ -58,6 +78,11 @@ services:
       - ./zkp/__tests__:/app/__tests__
       - ./config:/app/config
       - /var/run/docker.sock:/var/run/docker.sock
+    environment:
+      BLOCKCHAIN_HOST: http://ganache
+      BLOCKCHAIN_PORT: 8545
+      ZKP_HOST: http://zkp
+      ZKP_PORT: 80
 
   ui:
     build:
@@ -69,7 +94,7 @@ services:
       - ./ui/angular.json:/app/angular.json
       - ./ui/tsconfig.json:/app/tsconfig.json
     ports:
-      - "8000:80"
+      - '8000:80'
 
   ganache:
     image: trufflesuite/ganache-cli:latest

@@ -13,11 +13,13 @@ services:
       - ./accounts/config:/app/config
       - ./accounts/.babelrc:/app/.babelrc
     environment:
-      - NODE_ENV=test
-    networks: 
+      NODE_ENV: test
+      BLOCKCHAIN_HOST: http://ganache_test
+      BLOCKCHAIN_PORT: 8545
+    networks:
       - test_net
 
-  api-gateway-test:
+  api-gateway_test:
     build:
       context: ./api-gateway
       dockerfile: Dockerfile
@@ -26,10 +28,18 @@ services:
       - ./api-gateway/src:/app/src
       - ./api-gateway/.babelrc:/app/.babelrc
     environment:
-      - NODE_ENV=test
+      NODE_ENV: test
+      ACCOUNTS_HOST: http://accounts_test
+      ACCOUNTS_PORT: 80
+      ZKP_HOST: http://zkp_test
+      ZKP_PORT: 80
+      DATABASE_HOST: http://database_test
+      DATABASE_PORT: 80
+      OFFCHAIN_HOST: http://offchain_test
+      OFFCHAIN_PORT: 80
     ports:
-      - "8001:80"
-    networks: 
+      - '8001:80'
+    networks:
       - test_net
 
   offchain_test:
@@ -41,15 +51,21 @@ services:
       - ganache_test
     volumes:
       - ./offchain/src:/app/src
-      - ./offchain/response:/app/response
       - ./offchain/build-test:/app/build
       - ./offchain/.babelrc:/app/.babelrc
-      - ./offchain/__tests__:/app/__tests__
       - ./zkp-utils:/app/node_modules/zkp-utils
       - ./config:/app/config
     environment:
-      - NODE_ENV=test
-    networks: 
+      NODE_ENV: test
+      AUTHENTICATION_API_HOST: http://api-gateway_test
+      AUTHENTICATION_API_PORT: 80
+      BLOCKCHAIN_HOST: http://ganache_test
+      BLOCKCHAIN_PORT: 8545
+      DATABASE_HOST: http://database_test
+      DATABASE_PORT: 80
+      OFFCHAIN_HOST: http://offchain_test
+      OFFCHAIN_PORT: 80
+    networks:
       - test_net
 
   zkp_test:
@@ -68,8 +84,12 @@ services:
       - ./config:/app/config
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
-      - NODE_ENV=test
-    networks: 
+      NODE_ENV: test
+      BLOCKCHAIN_HOST: http://ganache_test
+      BLOCKCHAIN_PORT: 8545
+      ZKP_HOST: http://zkp_test
+      ZKP_PORT: 80
+    networks:
       - test_net
 
   ganache_test:
@@ -77,7 +97,7 @@ services:
     command: ganache-cli --accounts=10 --defaultBalanceEther=1000
     ports:
       - 8546:8545
-    networks: 
+    networks:
       - test_net
 
   database_test:
@@ -95,7 +115,7 @@ services:
       - ./database/setup-mongo-acl-for-new-users.js:/app/setup-mongo-acl-for-new-users.js
     environment:
       - NODE_ENV=test
-    networks: 
+    networks:
       - test_net
 
   mongo_test:
@@ -107,7 +127,7 @@ services:
     volumes:
       - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
       - mongo_volume_test:/data/db
-    networks: 
+    networks:
       - test_net
 
   truffle-offchain_test:
@@ -127,7 +147,7 @@ services:
     logging:
       options:
         max-size: 10m
-    networks: 
+    networks:
       - test_net
 
   truffle-zkp_test:
@@ -148,7 +168,7 @@ services:
     logging:
       options:
         max-size: 10m
-    networks: 
+    networks:
       - test_net
 
 volumes:
@@ -165,4 +185,3 @@ networks:
     driver: bridge
     ipam:
       driver: default
-

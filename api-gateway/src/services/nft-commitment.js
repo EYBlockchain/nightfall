@@ -106,8 +106,7 @@ export async function transferToken(req, res, next) {
     await accounts.unlockAccount({ address, password });
 
     // Fetch the transferee's pk from the PKD by passing their username
-    const { pk } = await offchain.getZkpPublicKeyFromName(req.body.receiver_name);
-    req.body.pk_B = pk;
+    req.body.pk_B = await offchain.getZkpPublicKeyFromName(req.body.receiver_name);
 
     // Transfer the token under zero-knowledge:
     // Nullify the transferor's 'token commitment' within the shield contract.
@@ -174,8 +173,7 @@ export async function transferToken(req, res, next) {
 export async function burnToken(req, res, next) {
   const response = new Response();
   try {
-    const payToAddress = (await offchain.getAddressFromName(req.body.payTo || req.user.name))
-      .address;
+    const payToAddress = await offchain.getAddressFromName(req.body.payTo || req.user.name);
     // Release the public token from escrow:
     // Nullify the burnor's 'token commitment' within the shield contract.
     // Transfer the public token from the shield contract to the owner.

@@ -1,4 +1,3 @@
-import Response from './response/response';
 import { FtCommitmentService } from '../business';
 
 /**
@@ -17,11 +16,9 @@ async function addCoinHandler(req, res, next) {
   try {
     const ftCommitmentService = new FtCommitmentService(req.user.db);
     await ftCommitmentService.addNewCoin(req.body);
-    const response = new Response(200, { message: 'inserted' }, null);
-    res.json(response);
+    res.data = { message: 'inserted' };
+    next();
   } catch (err) {
-    const response = new Response(500, null, { message: err.message });
-    res.status(500).json(response);
     next(err);
   }
 }
@@ -34,14 +31,9 @@ async function addCoinHandler(req, res, next) {
 async function getCoinHandler(req, res, next) {
   try {
     const ftCommitmentService = new FtCommitmentService(req.user.db);
-
-    const coins = await ftCommitmentService.getCoin(req.query);
-
-    const response = new Response(200, coins, null);
-    res.json(response);
+    res.data = await ftCommitmentService.getCoin(req.query);
+    next();
   } catch (err) {
-    const response = new Response(500, null, { message: err.message });
-    res.status(500).json(response);
     next(err);
   }
 }
@@ -71,12 +63,9 @@ async function updateCoinHandler(req, res, next) {
   try {
     const ftCommitmentService = new FtCommitmentService(req.user.db);
     await ftCommitmentService.updateCoin(req.body);
-    const response = new Response(200, { message: 'updated' }, null);
-    res.json(response);
+    res.data = { message: 'updated' };
+    next();
   } catch (err) {
-    console.log(err);
-    const response = new Response(500, null, { message: err.message });
-    res.status(500).json(response);
     next(err);
   }
 }
@@ -93,12 +82,9 @@ async function updateCoinHandler(req, res, next) {
 async function getCoinTransactions(req, res, next) {
   try {
     const ftCommitmentService = new FtCommitmentService(req.user.db);
-    const transactions = await ftCommitmentService.getCoinTransactions(req.query);
-    const response = new Response(200, transactions, null);
-    res.json(response);
+    res.data = await ftCommitmentService.getCoinTransactions(req.query);
+    next();
   } catch (err) {
-    const response = new Response(500, null, { message: err.message });
-    res.status(500).json(response);
     next(err);
   }
 }
@@ -134,11 +120,9 @@ async function addCoinTransaction(req, res, next) {
   try {
     const ftCommitmentService = new FtCommitmentService(req.user.db);
     await ftCommitmentService.addCoinTransaction(req.body);
-    const response = new Response(200, { message: 'inserted' }, null);
-    res.json(response);
+    res.data = { message: 'inserted' };
+    next();
   } catch (err) {
-    const response = new Response(500, null, { message: err.message });
-    res.status(500).json(response);
     next(err);
   }
 }

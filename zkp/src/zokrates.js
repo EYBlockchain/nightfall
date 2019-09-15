@@ -7,9 +7,9 @@ volume but experiments with a Mac show this to be too slow, as OSx differs too
 much from a standard linux kernel for this to work efficiently with Docker.
 */
 
-import os from 'os';
 import path from 'path';
 import { Docker } from 'node-docker-api';
+import { readFileSync } from 'jsonfile';
 import Config from './config';
 
 const config = Config.getProps();
@@ -149,7 +149,7 @@ async function setup(container, b = config.ZOKRATES_BACKEND) {
   console.log('Setup: computing (pk,vk) := G(C,toxic) - this can take many minutes...');
 
   const exec = await container.exec.create({
-    Cmd: [config.ZOKRATES_APP_FILEPATH_ABS, 'setup', '--backend', b],
+    Cmd: [config.ZOKRATES_APP_FILEPATH_ABS, 'setup', '--proving-scheme', b],
     AttachStdout: true,
     AttachStderr: true,
   });
@@ -170,104 +170,43 @@ async function generateProof(container, b = config.ZOKRATES_BACKEND, zkpPath) {
     Cmd: [
       config.ZOKRATES_APP_FILEPATH_ABS,
       'generate-proof',
-      '--backend',
+      '--proving-scheme',
       b,
       '-p',
       path.resolve(config.ZOKRATES_CONTAINER_CODE_DIRPATH_ABS, zkpPath, 'proving.key'),
       '-i',
-      path.resolve(config.ZOKRATES_CONTAINER_CODE_DIRPATH_ABS, zkpPath, 'variables.inf'),
+      path.resolve(config.ZOKRATES_CONTAINER_CODE_DIRPATH_ABS, zkpPath, 'out'),
     ], // "| tail -n 9 | head -n 8"],
     // Cmd: [config.ZOKRATES_APP_DIRPATH_ABS + "generate-proof.sh"], //this runs a script which strips the proof parameters out of zokrates generate-proof output
     AttachStdout: true,
     AttachStderr: true,
   });
 
-  const stream = await exec.start(); // await a response stream
-
-  return new Promise((resolve, reject) => {
-    let data = '';
-    const proof = {};
-    stream.setEncoding('utf8');
-    stream.on('data', chunk => {
-      // this is one time we need output
-      data += chunk;
-      //    //you can junk the output until you an '='
-      //    if (chunk.includes("=")) {
-      //      preamble = false
-      //    } else {
-      // save the current chunk in case the next has an "=" in it
-      //      data = chunk.toString("utf8")
-      //    }
-      //    if (!preamble) data += chunk.toString("utf8")
-    });
-    stream.on('error', chunk => {
-      reject(chunk);
-    });
-    stream.on('end', () => {
-      console.log(`\nExtracting the Proof from the container's console`);
-
-      // need to extract the proof from data
-      const lines = data.split(os.EOL); // separate the lines
-
-      for (let i = 0; i < lines.length; i += 1) {
-        lines[i] = lines[i]
-          .replace(/Pairing\.G1Point/, '')
-          .replace(/Pairing\.G2Point/, '')
-          .replace(/[^a-f0-9ABCHKxp_=, \][\n]+/g, ''); // filter anything that isn't part of a proof
-
-        if (!lines[i].includes(' = ')) continue; // eslint-disable-line no-continue
-
-        const split = lines[i].split(' = ');
-        let line = split[1]
-          .replace(/0x/g, '"0x')
-          .replace(/\]/g, '"]')
-          .replace(/,/g, '",')
-          .replace(/\]"/g, ']');
-        if (line.slice(-1) !== ']') line += '"';
-        line = `[${line}]`;
-
-        // sometimes there are odd characters at the start of the line - this filters them
-        const key = split[0]
-          .replace(/[^ABCHK_p]/g, '')
-          .replace(/AA/, 'A')
-          .replace(/BB/, 'B')
-          .replace(/CC/, 'C')
-          .replace(/HH/, 'H')
-          .replace(/KK/, 'K')
-          .replace(/.*(A)/, '$1')
-          .replace(/.*(B)/, '$1')
-          .replace(/.*(C)/, '$1')
-          .replace(/.*(K)/, '$1')
-          .replace(/.*(H)/, '$1');
-
-        proof[key] = JSON.parse(line);
-      }
-
-      // check the proof is reasonable
-      // proof keys depend on the backend
-      let pkeys;
-      switch (b) {
-        case 'gm17':
-          pkeys = ['A', 'B', 'C'];
-          break;
-        default:
-          // "pghr13" - pghr13 is not supported by the opensource Nightfall repo
-          pkeys = ['A', 'A_p', 'B', 'B_p', 'C', 'C_p', 'H', 'K'];
-      }
-      if (
-        !(
-          pkeys.length === Object.keys(proof).length &&
-          pkeys.every((u, i) => {
-            return u === Object.keys(proof)[i];
-          })
-        )
-      ) {
-        reject(new Error(`Incorrect keys for proof object: ${JSON.stringify(proof, null, 2)}`));
-      }
-      if (Object.keys(proof).toString() === '') reject(new Error('No object keys'));
-      else resolve(proof);
-    });
+  await promisifyStream(await exec.start(), 'generate-proof'); // wait for console output to end
+  // move the proof.json into the shared host folder annoyinly you can't get zokrates to write it here
+  const exec2 = await container.exec.create({
+    Cmd: [
+      'mv',
+      path.resolve(config.ZOKRATES_OUTPUTS_DIRPATH_ABS, 'proof.json'),
+      path.resolve(config.ZOKRATES_CONTAINER_CODE_DIRPATH_ABS, zkpPath, 'proof.json'),
+    ],
+    AttachStdout: true,
+    AttachStderr: true,
   });
+  await promisifyStream(await exec2.start(), 'move-proof'); // wait for console output to end
+  const { proof } = readFileSync(
+    path.resolve(config.ZOKRATES_HOST_CODE_DIRPATH_REL, zkpPath, 'proof.json'),
+  );
+  console.log('Read proof.json, with result', proof);
+  // check the proof for reasonableness
+  if (proof.a === undefined || proof.b === undefined || proof.c === undefined) {
+    console.log('\nproof.a', proof.a, '\nproof.b', proof.b, '\nproof.c', proof.c);
+    throw new Error('proof object does not contain a,b, or c parameter(s)');
+  }
+  proof.A = proof.a; // our code expects uppercase keys
+  proof.B = proof.b;
+  proof.C = proof.c;
+  return proof;
 }
 
 /**
@@ -275,7 +214,7 @@ async function generateProof(container, b = config.ZOKRATES_BACKEND, zkpPath) {
 */
 async function exportVerifier(container, b = config.ZOKRATES_BACKEND) {
   const exec = await container.exec.create({
-    Cmd: [config.ZOKRATES_APP_FILEPATH_ABS, 'export-verifier', '--backend', b],
+    Cmd: [config.ZOKRATES_APP_FILEPATH_ABS, 'export-verifier', '--proving-scheme', b],
     AttachStdout: true,
     AttachStderr: true,
   });

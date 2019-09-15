@@ -30,7 +30,7 @@ ABS - absolute path
 */
 const commonConfig = {
   HASHLENGTH: 27, // expected length of a hash in bytes
-  ZOKRATES_IMAGE: 'michaelconnor/zok:2Jan2019', // 20Nov2018", //tag of Zorates docker image
+  ZOKRATES_IMAGE: 'zokrates/zokrates:0.4.11', // 20Nov2018", //tag of Zorates docker image
   ZKP_PWD: 'zkp',
   ZKP_SRC_REL: 'src/',
   ZKP_SAFE_DUMP_DIRPATH_REL: 'code/safe-dump/', // safe-dump is a folder for dumping new files which node or zokrates create onto the host machine. Using the safe-dump folder in this way reduces the risk of overwriting data in the 'code' folder.

@@ -7,7 +7,7 @@
   "scripts": {
     "setup": "NODE_ENV=setup npx babel-node code/index.js",
     "setup-all": "yes | NODE_ENV=setup npx babel-node code/index.js",
-    "start": "nodemon --ignore /src/vkIds.json --ignore config/* --ignore build-test --exec babel-node ./src/index.js",
+    "start": "nodemon --ignore src/vkIds.json --ignore config/ --ignore code/ --ignore build-test --exec babel-node ./src/index.js",
     "test": "jest ./__tests__/*.test.js",
     "generate-keys": "./install.sh"
   },

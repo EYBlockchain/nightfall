@@ -36,7 +36,15 @@ async function keyExtractor(solFilePath, s) {
           .replace(/"IC\[0\]":/, '"IC": [')
           .replace(/"IC\[\d*?\]":/, '')
           .replace(/"query\[0\]":/, '"query": [') // added for GM17
-          .replace(/"query\[\d*?\]":/, ''), // added for GM17
+          .replace(/"query\[\d*?\]":/, '') // added for GM17
+          .replace(/uint256/g, '') // added for ZoKrates 0.4.10
+          .replace(/\(/g, '"') // added for ZoKrates 0.4.10
+          .replace(/\)/g, '"') // added for ZoKrates 0.4.10
+          .replace('"h"', '"H"')
+          .replace('g_alpha', 'Galpha')
+          .replace('h_beta', 'Hbeta')
+          .replace('g_gamma', 'Ggamma')
+          .replace('h_gamma', 'Hgamma'),
       );
     }
   });

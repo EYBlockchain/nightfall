@@ -1,4 +1,3 @@
-import Response from './response/response';
 import { NftService } from '../business';
 
 /**
@@ -21,11 +20,9 @@ async function addNFToken(req, res, next) {
   try {
     const nftService = new NftService(req.user.db);
     await nftService.addNFToken(req.body);
-    const response = new Response(200, { message: 'inserted' }, null);
-    res.json(response);
+    res.data = { message: 'inserted' };
+    next();
   } catch (err) {
-    const response = new Response(500, null, { message: err.message });
-    res.status(500).json(response);
     next(err);
   }
 }
@@ -51,11 +48,9 @@ async function updateNFToken(req, res, next) {
   try {
     const nftService = new NftService(req.user.db);
     await nftService.updateNFToken(req.body);
-    const response = new Response(200, { message: 'updated' }, null);
-    res.json(response);
+    res.data = { message: 'updated' };
+    next();
   } catch (err) {
-    const response = new Response(500, null, { message: err.message });
-    res.status(500).json(response);
     next(err);
   }
 }
@@ -77,12 +72,9 @@ async function updateNFToken(req, res, next) {
 async function getNFTokens(req, res, next) {
   try {
     const nftService = new NftService(req.user.db);
-    const tokens = await nftService.getNFTokens(req.query);
-    const response = new Response(200, tokens, null);
-    res.json(response);
+    res.data = await nftService.getNFTokens(req.query);
+    next();
   } catch (err) {
-    const response = new Response(500, null, { message: err.message });
-    res.status(500).json(response);
     next(err);
   }
 }
@@ -99,12 +91,9 @@ async function getNFTokens(req, res, next) {
 async function getNFTTransactions(req, res, next) {
   const nftService = new NftService(req.user.db);
   try {
-    const transactions = await nftService.getNFTTransactions(req.query);
-    const response = new Response(200, transactions, null);
-    res.json(response);
+    res.data = await nftService.getNFTTransactions(req.query);
+    next();
   } catch (err) {
-    const response = new Response(500, null, { message: err.message });
-    res.status(500).json(response);
     next(err);
   }
 }
@@ -120,12 +109,9 @@ async function getNFTTransactions(req, res, next) {
 async function getNFToken(req, res, next) {
   try {
     const nftService = new NftService(req.user.db);
-    const token = await nftService.getNFToken(req.params.tokenId);
-    const response = new Response(200, { token }, null);
-    res.json(response);
+    res.data = await nftService.getNFToken(req.params.tokenId);
+    next();
   } catch (err) {
-    const response = new Response(500, null, { message: err.message });
-    res.status(500).json(response);
     next(err);
   }
 }
@@ -138,6 +124,6 @@ export default function(router) {
     .patch(updateNFToken)
     .get(getNFTokens);
 
-  router.route('/nft/transaction').get(getNFTTransactions);
+  router.route('/nft-transaction').get(getNFTTransactions);
   router.route('/nft/:tokenId').get(getNFToken);
 }

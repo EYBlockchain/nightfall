@@ -2,42 +2,42 @@ let env = 'local'; // set the environment to local if not mentioned while starti
 const props = {
   local: {
     database: {
-      host: 'http://database',
-      port: '80',
+      host: process.env.DATABASE_HOST,
+      port: process.env.DATABASE_PORT,
     },
     offchain: {
       app: {
-        host: 'http://offchain',
-        port: '80',
+        host: process.env.OFFCHAIN_HOST,
+        port: process.env.OFFCHAIN_PORT,
       },
       rpc: {
-        host: 'http://ganache',
-        port: '8545',
+        host: process.env.BLOCKCHAIN_HOST,
+        port: process.env.BLOCKCHAIN_PORT,
       },
     },
     authenticationApi: {
-      host: 'http://api-gateway',
-      port: '80',
+      host: process.env.AUTHENTICATION_API_HOST,
+      port: process.env.AUTHENTICATION_API_PORT,
     },
   },
   test: {
     database: {
-      host: 'http://database_test',
-      port: '80',
+      host: process.env.DATABASE_HOST,
+      port: process.env.DATABASE_PORT,
     },
     offchain: {
       app: {
-        host: 'http://offchain_test',
-        port: '80',
+        host: process.env.OFFCHAIN_HOST,
+        port: process.env.OFFCHAIN_PORT,
       },
       rpc: {
-        host: 'http://ganache_test',
-        port: '8545',
+        host: process.env.BLOCKCHAIN_HOST,
+        port: process.env.BLOCKCHAIN_PORT,
       },
     },
     authenticationApi: {
-      host: 'http://api-gateway_test',
-      port: '80',
+      host: process.env.AUTHENTICATION_API_HOST,
+      port: process.env.AUTHENTICATION_API_PORT,
     },
   },
 };
