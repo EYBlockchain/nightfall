@@ -11,7 +11,7 @@ the same node server though (nothing gets passed through the blockchain).
 import Utils from 'zkp-utils';
 import EventEmitter from 'events';
 
-const utils = Utils('/app/config/stats.json');
+const utils = Utils('/app/stats-config/stats.json');
 
 class MyEmitter extends EventEmitter {}
 const em = new MyEmitter();
@@ -50,7 +50,7 @@ export async function getWhisperPublicKey(id) {
 
 /**
 function to subscribe to whisper messages.  You need a Whisper key pair for this to work
-@param {object} idRecipient - the 'identity' of the Whisper user.  Contains addresses, names, key material.
+@param {object} idReceiver - the 'identity' of the Whisper user.  Contains addresses, names, key material.
 As a minimum it must contain the Whisper key pair.
 @param {string} topic - the topic to subscribe to
 @param {function} listener - callback that will be called when a topical message is received
@@ -64,7 +64,7 @@ export async function subscribe() {
 function to subscribe to whisper messages.  You need a Whisper key pair for this to work.
 This function expects messages which encode a javascript object and will attempt to
 decode them, returning the original object
-@param {object} idRecipient - the 'identity' of the Whisper user.  Contains addresses, names, key material.
+@param {object} idReceiver - the 'identity' of the Whisper user.  Contains addresses, names, key material.
 As a minimum it must contain the Whisper key pair.
 @param {string} topic - the topic to subscribe to
 @param {object} userData - holds user's JWT token to enable calls through the API gateway
@@ -73,14 +73,14 @@ on the user's behalf
 This version will return a Javascript object as the payload (assuming sendObject was used to send
 the object)
 */
-export async function subscribeObject(idRecipient, topic = TRANSFER_TOPIC, userData, listener) {
-  // const idRecipient = {..._idRecipient}
+export async function subscribeObject(idReceiver, topic = TRANSFER_TOPIC, userData, listener) {
+  // const idReceiver = {..._idReceiver}
   if (utils.strip0x(topic).length !== 8) throw new Error('Whisper topic must be 4 bytes long');
-  if (idRecipient.shhIdentity === undefined)
+  if (idReceiver.shhIdentity === undefined)
     throw new Error(
       'no valid Whisper key pair was found.  Please generate these before subscribing',
     );
-  em.on(topic + wpk[idRecipient.shhIdentity], msg => {
+  em.on(topic + wpk[idReceiver.shhIdentity], msg => {
     listener(msg, userData);
   });
   return em;
@@ -96,9 +96,9 @@ to 'receive'.  It's a little crude and 3s is overkill but will do for now.
 @param {string} message - the javascript object to be sent
 @param {object} idSender - the 'identity' of the sender (used to extract Whisper private key to sign the message)
 @param {bytes4} topic - the topic to post to (four bytes)
-@param {string} pkRecipient - the receipient's public key
+@param {string} pkReceiver - the receipient's public key
 */
-export async function sendObject(message, idSender, pkRecipient, topic = TRANSFER_TOPIC) {
+export async function sendObject(message, idSender, pkReceiver, topic = TRANSFER_TOPIC) {
   if (utils.strip0x(topic).length !== 8) throw new Error('Whisper topic must be 4 bytes long');
   if (idSender.shhIdentity === undefined)
     throw new Error('Whisper identity not found in id object');
@@ -112,9 +112,9 @@ export async function sendObject(message, idSender, pkRecipient, topic = TRANSFE
       '0x01bf61612e35eaf7c6c17d4ab004b6e109bf8e6c15098a5072eab5a9a550ee618280f32826dab12e64114d8b84ffef6da1f7e374efb5e90c6a0c2da7ade276899f88c857cc79840ec79445e37b784b6c362f0e2520045659fe15679be49ad32b1666e65dbbeeec3ca0cb622049165c9d4ed92110c87782bc149c4ddd74de5ea1eded9102f44ffcfba8724b04d935f6a238d894851b7e9c74e2c59e6c76068344feba96fd80ded546ecdada63c098a3a4f28e7f0cc7',
     pow: 0.526478149100257,
     hash: '0x2b30567792f5760e7a415583e7c98bb01b50451883ea6ed1c3ffa4bc1881f7c2',
-    recipientPublicKey: utils.ensure0x(pkRecipient),
+    ReceiverPublicKey: utils.ensure0x(pkReceiver),
   };
   setTimeout(() => {
-    em.emit(topic + utils.ensure0x(pkRecipient), msg);
+    em.emit(topic + utils.ensure0x(pkReceiver), msg);
   }, 3000); // delaying message send
 }

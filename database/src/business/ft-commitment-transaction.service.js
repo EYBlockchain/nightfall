@@ -22,7 +22,7 @@ export default class FtCommitmentTransactionService {
    *  change_salt,
    *  change_commitment,
    *  change_commitment_index,
-   *  transferee,
+   *  receiver,
    *  used_coin_commitments: [{
    *   coin_value: String,
    *   salt: String,

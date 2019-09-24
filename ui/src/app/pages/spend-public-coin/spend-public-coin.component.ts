@@ -32,7 +32,7 @@ export class SpendPublicCoinComponent implements OnInit {
   users: any = [];
 
   /**
-   * Name of the transferee
+   * Name of the receiver
    */
   receiverName: string;
 

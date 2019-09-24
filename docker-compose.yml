@@ -25,7 +25,7 @@ services:
       - ./api-gateway/src:/app/src
       - ./api-gateway/.babelrc:/app/.babelrc
     ports:
-      - '8001:80'
+      - "8001:80"
     environment:
       ACCOUNTS_HOST: http://accounts
       ACCOUNTS_PORT: 80
@@ -50,16 +50,13 @@ services:
       - ./offchain/__tests__:/app/__tests__
       - ./zkp-utils:/app/node_modules/zkp-utils
       - ./account-utils:/app/src/account-utils
-      - ./config:/app/config
+      - ./config:/app/stats-config
+      - ./offchain/config:/app/config
     environment:
       AUTHENTICATION_API_HOST: http://api-gateway
       AUTHENTICATION_API_PORT: 80
       BLOCKCHAIN_HOST: http://ganache
       BLOCKCHAIN_PORT: 8545
-      DATABASE_HOST: http://database
-      DATABASE_PORT: 80
-      OFFCHAIN_HOST: http://offchain
-      OFFCHAIN_PORT: 80
 
   zkp:
     build:
@@ -76,13 +73,13 @@ services:
       - ./zkp-utils:/app/node_modules/zkp-utils
       - ./account-utils:/app/src/account-utils
       - ./zkp/__tests__:/app/__tests__
-      - ./config:/app/config
+      - ./config:/app/stats-config
+      - ./zkp/config:/app/config
       - /var/run/docker.sock:/var/run/docker.sock
     environment:
       BLOCKCHAIN_HOST: http://ganache
       BLOCKCHAIN_PORT: 8545
-      ZKP_HOST: http://zkp
-      ZKP_PORT: 80
+      ZKP_CODE_VOLUME: nightfall_zkp-code
 
   ui:
     build:
@@ -94,13 +91,13 @@ services:
       - ./ui/angular.json:/app/angular.json
       - ./ui/tsconfig.json:/app/tsconfig.json
     ports:
-      - '8000:80'
+      - "8000:80"
 
   ganache:
     image: trufflesuite/ganache-cli:latest
     command: ganache-cli --accounts=10 --defaultBalanceEther=1000
     ports:
-      - 8545:8545
+      - "8545:8545"
 
   database:
     build:
@@ -113,7 +110,7 @@ services:
       - ./database/src:/app/src
       - ./database/.babelrc:/app/.babelrc
       - ./zkp-utils:/app/node_modules/zkp-utils
-      - ./config:/app/config
+      - ./database/config:/app/config
       - ./database/setup-mongo-acl-for-new-users.js:/app/setup-mongo-acl-for-new-users.js
 
   mongo:

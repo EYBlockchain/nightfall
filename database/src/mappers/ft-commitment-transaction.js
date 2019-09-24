@@ -15,7 +15,7 @@ export default function({
   changeCommitment,
   changeCommitmentIndex,
 
-  transferee,
+  receiver,
   usedCoins,
 }) {
   let parsedUsedCoin;
@@ -37,7 +37,7 @@ export default function({
     [changeCommitment ? 'change_coin_commitment' : undefined]: changeCommitment,
     [changeCommitmentIndex ? 'change_coin_commitment_index' : undefined]: changeCommitmentIndex,
 
-    [transferee ? 'transferee' : undefined]: transferee,
+    [receiver ? 'receiver' : undefined]: receiver,
     [usedCoins ? 'used_coin_commitments' : undefined]: parsedUsedCoin,
   };
 }

@@ -89,12 +89,12 @@ async function subscribeTopic(req, res, next) {
   try {
     const { shhIdentity, topic, jwtToken, sk_A: skA } = req.body;
     const usrData = { jwtToken, skA };
-    const idRecipient = {
+    const idReceiver = {
       shhIdentity,
       topic,
     };
 
-    await subscribeObject(idRecipient, topic, usrData, listeners);
+    await subscribeObject(idReceiver, topic, usrData, listeners);
     res.data = { subscribed: true };
     next();
   } catch (err) {
@@ -107,7 +107,7 @@ async function subscribeTopic(req, res, next) {
  *
  *  req.body ={
  *    "message":{"key":"value"},
- *     "shhPkRecipient": "0x04e3116a52e0ea1233f6b683630b22733a84d4af93200a2758f9c36a0283c2ddb4466bb0ab2210d03f381f5f63217f0ed938e912e4708e5e7f206adc48a5b8c13e",
+ *     "shhPkReceiver": "0x04e3116a52e0ea1233f6b683630b22733a84d4af93200a2758f9c36a0283c2ddb4466bb0ab2210d03f381f5f63217f0ed938e912e4708e5e7f206adc48a5b8c13e",
  *     "shhIdentity":"38cd2e8b633bdf665120cf696195a5d595c1446d80a2119211688e6c90ef8afb"
  *  }
  *
@@ -121,12 +121,12 @@ async function subscribeTopic(req, res, next) {
  */
 async function sendMessage(req, res, next) {
   try {
-    const { message, shhPkRecipient, shhIdentity } = req.body;
+    const { message, shhPkReceiver, shhIdentity } = req.body;
     const idSender = {
       shhIdentity,
     };
 
-    await sendObject(message, idSender, shhPkRecipient);
+    await sendObject(message, idSender, shhPkReceiver);
     res.data = { postMessage: true };
     next();
   } catch (err) {

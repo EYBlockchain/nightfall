@@ -27,7 +27,7 @@ export class SpendPublicTokenComponent implements OnInit, AfterContentInit {
   users;
 
   /**
-   * Name of the transferee
+   * Name of the receiver
    */
   receiverName;
 
@@ -100,7 +100,7 @@ export class SpendPublicTokenComponent implements OnInit, AfterContentInit {
     this.selectedToken = this.selectedTokenList[0];
     this.tokenApiService.transferNFToken(this.selectedToken, this.receiverName).subscribe( data => {
         this.isRequesting = false;
-        this.toastr.success('Transfer to Recipient ' + this.receiverName);
+        this.toastr.success('Transfer to Receiver ' + this.receiverName);
         this.router.navigate(['/overview'], { queryParams: { selectedTab: 'publictokens' } });
       }, error => {
         this.isRequesting = false;

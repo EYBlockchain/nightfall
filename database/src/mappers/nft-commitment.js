@@ -5,7 +5,7 @@ export default function({
   commitment,
   commitmentIndex,
 
-  transferee,
+  receiver,
 
   transferredSalt,
   transferredCommitment,
@@ -26,7 +26,7 @@ export default function({
     token_commitment: commitment,
     token_commitment_index: commitmentIndex,
 
-    [transferee ? 'transferee' : undefined]: transferee,
+    [receiver ? 'receiver' : undefined]: receiver,
     [transferredSalt ? 'transferred_salt' : undefined]: transferredSalt,
     [transferredCommitment ? 'transferred_token_commitment' : undefined]: transferredCommitment,
     [transferredCommitmentIndex

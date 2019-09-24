@@ -4,12 +4,10 @@
 @desc This module for computing Merkle paths and formatting proof parameters correctly
 */
 
-import Config from './config';
+import config from 'config';
 import zkp from './nf-token-zkp';
 
-const utils = require('zkp-utils')('/app/config/stats.json');
-
-const config = Config.getProps();
+const utils = require('zkp-utils')('/app/stats-config/stats.json');
 
 /**
 function to compute the sequence of numbers that go after the 'a' in

@@ -23,4 +23,5 @@ export function errorHandler(err, req, res, next) {
     error: err,
     data: null,
   });
+  next(err);
 }

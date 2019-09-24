@@ -58,8 +58,8 @@ router.route('/mint').post(mintCoin);
  * @apiParam (Request body) {String} z_C Coin Commitment of coin C.
  * @apiParam (Request body) {String} z_D Coin Commitment of coin D.
  * @apiParam (Request body) {String} pk_A Public key of Transferror (Alice).
- * @apiParam (Request body) {String} receiver_name Name of Transferee.
- * @apiParam (Request body) {String} pk_B Public key of Transferee (Bob).
+ * @apiParam (Request body) {String} receiver_name Name of Receiver.
+ * @apiParam (Request body) {String} pk_B Public key of Receiver (Bob).
  *
  * @apiExample {js} Example usage:
  * const data = {

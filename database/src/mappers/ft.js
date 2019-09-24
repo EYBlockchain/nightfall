@@ -2,10 +2,10 @@ export default function({
   amount,
   shieldContractAddress,
 
-  transferee,
-  transfereeAddress,
-  transferor,
-  transferorAddress,
+  receiver,
+  receiverAddress,
+  sender,
+  senderAddress,
 
   isMinted,
   isTransferred,
@@ -16,10 +16,10 @@ export default function({
     amount,
     shield_contract_address: shieldContractAddress,
 
-    [transferee ? 'transferee' : undefined]: transferee,
-    [transfereeAddress ? 'transferee_address' : undefined]: transfereeAddress,
-    [transferor ? 'transferor' : undefined]: transferor,
-    [transferorAddress ? 'transferor_address' : undefined]: transferorAddress,
+    [receiver ? 'receiver' : undefined]: receiver,
+    [receiverAddress ? 'receiver_address' : undefined]: receiverAddress,
+    [sender ? 'sender' : undefined]: sender,
+    [senderAddress ? 'sender_address' : undefined]: senderAddress,
 
     [isMinted ? 'is_minted' : undefined]: isMinted,
     [isTransferred ? 'is_transferred' : undefined]: isTransferred,

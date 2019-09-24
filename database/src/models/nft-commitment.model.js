@@ -24,8 +24,8 @@ export default new Schema(
       required: true,
     },
 
-    // transferee info
-    transferee: String,
+    // receiver info
+    receiver: String,
 
     transferred_salt: String,
     transferred_token_commitment: String,

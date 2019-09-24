@@ -8,10 +8,9 @@ enables multiple transfers of an asset to take place. The code also talks direct
 */
 
 import Utils from 'zkp-utils';
-import Config from './config';
+import config from 'config';
 
-const utils = Utils('/app/config/stats.json');
-const config = Config.getProps();
+const utils = Utils('/app/stats-config/stats.json');
 
 /**
 @notice gets a node from the merkle tree data from the nfTokenShield contract.

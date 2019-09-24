@@ -10,9 +10,7 @@ much from a standard linux kernel for this to work efficiently with Docker.
 import path from 'path';
 import { Docker } from 'node-docker-api';
 import { readFileSync } from 'jsonfile';
-import Config from './config';
-
-const config = Config.getProps();
+import config from 'config';
 
 const docker = new Docker({
   socketPath: '/var/run/docker.sock',
@@ -47,7 +45,6 @@ Create and start a container using the zokrates image and make it durable
 */
 async function runContainer() {
   console.log('Running the container');
-  // var config = Config.getProps() //defaults to local if setEnv not called
   const container = await docker.container.create({
     Image: config.ZOKRATES_IMAGE,
     Cmd: ['/bin/bash', '-c', 'tail -f /var/log/alternatives.log'],
@@ -65,13 +62,12 @@ Create and start a container using the zokrates image and make it durable
 async function runContainerMounted(_hostDirPath) {
   // if we're running this under docker-compose, the input directory is fixed, otherwise we need to set it:
   console.log(`ZoKrates running with Nodejs environment ${process.env.NODE_ENV}`);
-  const hostDirPath = process.env.NODE_ENV !== 'setup' ? config.zkp.volume : _hostDirPath;
+  const hostDirPath = process.env.NODE_ENV !== 'setup' ? config.zkpCodeVolume : _hostDirPath;
   // We mount from the safe_dir, to avoid accidental deletion or overwriting of the oringinal files that sit in config.ZOKRATES_HOST_CODE_DIRPATH_REL.
   // We mount to a new 'code' folder in the container. We can't mount to the 'outputs' folder, because we'll overwrite the zokrates app.
   console.log(
     `Running the container; mounted: ${hostDirPath}:${config.ZOKRATES_CONTAINER_CODE_DIRPATH_ABS}:cached`,
   );
-  // var config = Config.getProps() //defaults to local if setEnv not called
 
   try {
     const container = await docker.container.create({
@@ -109,7 +105,6 @@ from ZoKrates.
 */
 async function compile(container, codeFile) {
   console.log('Compiling code in the container - this can take some minutes...');
-  // var config = Config.getProps()
   const exec = await container.exec.create({
     Cmd: [
       config.ZOKRATES_APP_FILEPATH_ABS,
@@ -227,7 +222,6 @@ export default {
   setup,
   generateProof,
   exportVerifier,
-  Config,
   runContainer,
   runContainerMounted,
   killContainer,

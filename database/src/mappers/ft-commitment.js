@@ -14,7 +14,7 @@ export default function({
   changeCommitment,
   changeCommitmentIndex,
 
-  transferee,
+  receiver,
 
   isMinted,
   isTransferred,
@@ -43,7 +43,7 @@ export default function({
     [changeCommitment ? 'change_coin_commitment' : undefined]: changeCommitment,
     [changeCommitmentIndex ? 'change_coin_commitment_index' : undefined]: changeCommitmentIndex,
 
-    [transferee ? 'transferee' : undefined]: transferee,
+    [receiver ? 'receiver' : undefined]: receiver,
 
     [isMinted ? 'is_minted' : undefined]: isMinted,
     [isTransferred ? 'is_transferred' : undefined]: isTransferred,

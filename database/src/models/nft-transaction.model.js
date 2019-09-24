@@ -18,13 +18,13 @@ export default new Schema(
     },
     shield_contract_address: String,
 
-    // transferee info
-    transferee: String,
-    transferee_address: String,
+    // receiver info
+    receiver: String,
+    receiver_address: String,
 
-    // transferor info
-    transferor: String,
-    transferor_address: String,
+    // sender info
+    sender: String,
+    sender_address: String,
   },
   { timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } },
 );

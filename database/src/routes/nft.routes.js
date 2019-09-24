@@ -8,8 +8,8 @@ import { NftService } from '../business';
  *  shieldContractAddress: '0x12b..',
  *  isMinted: true,
  *  isReceived: true,
- *  transferor: 'alice',    [will be only present if is_received = true]
- *  transferorAddress: '0x34a'    [will be only present if is_received = true]
+ *  sender: 'alice',    [will be only present if is_received = true]
+ *  senderAddress: '0x34a'    [will be only present if is_received = true]
  * }
  * 'is_minted' or 'is_received' one at time will be present
  *  depending on new token is minted one or transferred one
@@ -33,8 +33,8 @@ async function addNFToken(req, res, next) {
  *  uri: 'table/t1',
  *  tokenId: '0xa23..',
  *  shieldContractAddress: '0x12b..',
- *  transferee: 'bob'   [will be only present if is_transferred = true]
- *  transfereeAddress: '0x34a'   [will be only present if is_transferred = true]
+ *  receiver: 'bob'   [will be only present if is_transferred = true]
+ *  receiverAddress: '0x34a'   [will be only present if is_transferred = true]
  *  isTransferred: true,
  *  isBurned: true,
  *  isShielded: true

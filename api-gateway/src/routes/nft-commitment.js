@@ -54,10 +54,10 @@ router.route('/mint').post(mintToken);
  * @apiParam (Request body) {String} S_A Salt of token A.
  * @apiParam (Request body) {String} S_B Random generated Salt.
  * @apiParam (Request body) {String} sk_A Secret key of Transferror (Alice).
- * @apiParam (Request body) {String} pk_B Public key of Transferee (Bob).
+ * @apiParam (Request body) {String} pk_B Public key of Receiver (Bob).
  * @apiParam (Request body) {String} z_A Token commitment of token A.
  * @apiParam (Request body) {String} z_A_index Token index of token A.
- * @apiParam (Request body) {String} receiver_name Transferee name.
+ * @apiParam (Request body) {String} receiver_name Receiver name.
  *
  * @apiExample {js} Example usage:
  * const data = {

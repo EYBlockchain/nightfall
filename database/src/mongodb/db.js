@@ -1,4 +1,4 @@
-import { getProps } from '../config';
+import config from 'config';
 import { COLLECTIONS } from '../common/constants';
 import {
   UserSchema,
@@ -11,7 +11,7 @@ import {
   ftCommitmentTransactionSchema,
 } from '../models';
 
-const { mongo } = getProps();
+const mongo = config.get('mongo');
 
 export default class DB {
   constructor(db, username) {

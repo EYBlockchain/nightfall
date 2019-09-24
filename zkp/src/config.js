@@ -4,8 +4,6 @@
 @desc constants used by a nubmer of other modules
 */
 
-let env = 'local'; // set the environment to local if not mentioned while starting the app
-
 /* PATH NAMING CONVENTIONS:
 
 FILENAME_FILEPATH - path up to and including a file called /fileName.extension
@@ -28,7 +26,7 @@ i.e. DIRNAME_DIRPATH_REL: "/dirName/" is a relative path which (on the host mach
 
 ABS - absolute path
 */
-const commonConfig = {
+export default {
   HASHLENGTH: 27, // expected length of a hash in bytes
   ZOKRATES_IMAGE: 'zokrates/zokrates:0.4.11', // 20Nov2018", //tag of Zorates docker image
   ZKP_PWD: 'zkp',
@@ -84,56 +82,4 @@ const commonConfig = {
   INPUT_CHUNK_SIZE: 128,
 
   GASPRICE: 20000000000,
-};
-
-const props = {
-  local: {
-    ...commonConfig,
-    zkp: {
-      app: {
-        host: 'http://zkp',
-        port: '80',
-      },
-      rpc: {
-        host: 'http://ganache',
-        port: '8545',
-      },
-      volume: 'nightfall_zkp-code',
-    },
-  },
-  test: {
-    ...commonConfig,
-    zkp: {
-      app: {
-        host: 'http://zkp_test',
-        port: '80',
-      },
-      rpc: {
-        host: 'http://ganache_test',
-        port: '8545',
-      },
-      volume: 'nightfall_zkp_code_test',
-    },
-  },
-};
-
-/**
- * Set the environment
- * @param { string } environment - environment of app
- */
-function setEnv(environment) {
-  if (props[environment]) {
-    env = environment;
-  }
-}
-setEnv(process.env.NODE_ENV);
-
-/**
- * get the appropriate environment config
- */
-const getProps = () => props[env];
-
-export default {
-  setEnv,
-  getProps,
 };

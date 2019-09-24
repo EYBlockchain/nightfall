@@ -15,7 +15,7 @@ export default class NftCommitmentTransactionService {
    *  salt,
    *  token_commitment,
    *  token_commitment_index,
-   *  transferee,
+   *  receiver,
    *  transferred_salt,
    *  transferred_token_commitment,
    *  transferred_token_commitment_index,

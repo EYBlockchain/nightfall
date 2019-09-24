@@ -6,5 +6,14 @@ module.exports = {
   },
   rules: {
     'no-console': 'off',
-  }
+    'import/no-extraneous-dependencies': [
+      'error', 
+      {
+        'devDependencies': ['integration-test/test.js', 'integration-test/testData.js'],
+      },
+    ],
+  },
+  env: {
+    mocha: true,
+  },
 };

@@ -7,7 +7,7 @@
 import Web3 from 'web3';
 import Utils from 'zkp-utils';
 
-const utils = Utils('/app/config/stats.json');
+const utils = Utils('/app/stats-config/stats.json');
 
 const web3 = new Web3(Web3.givenProvider || 'ws://localhost:8546'); // note ws is required for shh
 const TRANSFER_TOPIC = '0xeca7945f';
@@ -36,21 +36,21 @@ async function getWhisperPublicKey(id) {
 
 /**
 function to subscribe to whisper messages.  You need a Whisper key pair for this to work
-@param {object} idRecipient - the 'identity' of the Whisper user.  Contains addresses, names, key material.
+@param {object} idReceiver - the 'identity' of the Whisper user.  Contains addresses, names, key material.
 As a minimum it must contain the Whisper key pair.
 @param {string} topic - the topic to subscribe to
 @param {function} listener - callback that will be called when a topical message is received
 This version returns the raw hex Whisper payload
 */
-async function subscribe(idRecipient, topic = TRANSFER_TOPIC, listener) {
+async function subscribe(idReceiver, topic = TRANSFER_TOPIC, listener) {
   if (utils.strip0x(topic).length !== 8) throw new Error('Whisper topic must be 4 bytes long');
-  if (idRecipient.shhIdentity === undefined)
+  if (idReceiver.shhIdentity === undefined)
     throw new Error(
       'no valid Whisper key pair was found.  Please generate these before subscribing',
     );
   const subscription = await web3.shh.subscribe('messages', {
     // subscribe to transfer messages to me
-    privateKeyID: idRecipient.shhIdentity,
+    privateKeyID: idReceiver.shhIdentity,
     topics: [topic], // this identifies the topic
   });
   subscription.on('data', listener);
@@ -71,7 +71,7 @@ function decodeMessage(msgHex) {
 function to subscribe to whisper messages.  You need a Whisper key pair for this to work.
 This function expects messages which encode a javascript object and will attempt to
 decode them, returning the original object
-@param {object} idRecipient - the 'identity' of the Whisper user.  Contains addresses, names, key material.
+@param {object} idReceiver - the 'identity' of the Whisper user.  Contains addresses, names, key material.
 As a minimum it must contain the Whisper key pair.
 @param {string} topic - the topic to subscribe to
 @param {object} userData - holds user's JWT token to enable calls through the API gateway
@@ -80,15 +80,15 @@ on the user's behalf
 This version will return a Javascript object as the payload (assuming sendObject was used to send
 the object)
 */
-async function subscribeObject(idRecipient, topic = TRANSFER_TOPIC, userData, listener) {
+async function subscribeObject(idReceiver, topic = TRANSFER_TOPIC, userData, listener) {
   if (utils.strip0x(topic).length !== 8) throw new Error('Whisper topic must be 4 bytes long');
-  if (idRecipient.shhIdentity === undefined)
+  if (idReceiver.shhIdentity === undefined)
     throw new Error(
       'no valid Whisper key pair was found.  Please generate these before subscribing',
     );
   const subscription = await web3.shh.subscribe('messages', {
     // subscribe to transfer messages to me
-    privateKeyID: idRecipient.shhIdentity,
+    privateKeyID: idReceiver.shhIdentity,
     topics: [topic], // this identifies the topic
   });
   subscription.on('data', msg => {
@@ -108,15 +108,15 @@ function to send a Whisper message
 @param {string} message - the message to be sent
 @param {object} idSender - the 'identity' of the sender (used to extract Whisper private key to sign the message)
 @param {bytes4} topic - the topic to post to (four bytes)
-@param {string} pkRecipient - the receipient's public key
+@param {string} pkReceiver - the receipient's public key
 */
-async function sendMessage(message, idSender, pkRecipient, topic = TRANSFER_TOPIC) {
+async function sendMessage(message, idSender, pkReceiver, topic = TRANSFER_TOPIC) {
   if (utils.strip0x(topic).length !== 8) throw new Error('Whisper topic must be 4 bytes long');
   if (idSender.shhIdentity === undefined)
     throw new Error('Whisper identity not found in id object');
   try {
     web3.shh.post({
-      pubKey: pkRecipient, // encrypts using the recipient's public key
+      pubKey: pkReceiver, // encrypts using the receiver's public key
       sig: idSender.shhIdentity, // signs the message using the keyPair ID
       ttl: 10,
       topic,
@@ -151,16 +151,16 @@ to 'receive'.  It's a little crude and 3s is overkill but will do for now.
 @param {string} message - the javascript object to be sent
 @param {object} idSender - the 'identity' of the sender (used to extract Whisper private key to sign the message)
 @param {bytes4} topic - the topic to post to (four bytes)
-@param {string} pkRecipient - the receipient's public key
+@param {string} pkReceiver - the receipient's public key
 */
-async function sendObject(message, idSender, pkRecipient, topic = TRANSFER_TOPIC) {
+async function sendObject(message, idSender, pkReceiver, topic = TRANSFER_TOPIC) {
   if (utils.strip0x(topic).length !== 8) throw new Error('Whisper topic must be 4 bytes long');
   if (idSender.shhIdentity === undefined)
     throw new Error('Whisper identity not found in id object');
   try {
     setTimeout(async () => {
       web3.shh.post({
-        pubKey: pkRecipient, // encrypts using the recipient's public key
+        pubKey: pkReceiver, // encrypts using the receiver's public key
         sig: idSender.shhIdentity, // signs the message using the keyPair ID
         ttl: 10,
         topic,
@@ -168,7 +168,7 @@ async function sendObject(message, idSender, pkRecipient, topic = TRANSFER_TOPIC
         powTime: 3,
         powTarget: 0.5,
       });
-    }, 3000); // a short delay in case the sender and recipient are the same person
+    }, 3000); // a short delay in case the sender and receiver are the same person
     // so that there is time for the application to go from transmit to receive.
   } catch (err) {
     console.error('Error from message post:', err);

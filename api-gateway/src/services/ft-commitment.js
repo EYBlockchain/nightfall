@@ -1,20 +1,12 @@
 import { whisperTransaction } from './whisper';
 import { accounts, db, offchain, zkp } from '../rest';
-import Response from '../routes/response/response';
 
 export async function checkCorrectnessCoin(req, res, next) {
-  const response = new Response();
-
   try {
     const { data } = await zkp.checkCorrectnessCoin(req.headers, req.body);
-
-    response.statusCode = 200;
-    response.data = data;
-    res.json(response);
+    res.data = data;
+    next();
   } catch (err) {
-    response.statusCode = 500;
-    response.data = err;
-    res.status(500).json(response);
     next(err);
   }
 }
@@ -23,20 +15,18 @@ export async function checkCorrectnessCoin(req, res, next) {
 /**
  * This function will mint a coin and add transaction in db
  * req.user {
- 		address: '0x3bd5ae4b9ae233843d9ccd30b16d3dbc0acc5b7f',
-		name: 'alice',
-		pk_A: '0x70dd53411043c9ff4711ba6b6c779cec028bd43e6f525a25af36b8',
-		password: 'alicesPassword'
-	}
+    address: '0x3bd5ae4b9ae233843d9ccd30b16d3dbc0acc5b7f',
+    name: 'alice',
+    pk_A: '0x70dd53411043c9ff4711ba6b6c779cec028bd43e6f525a25af36b8',
+    password: 'alicesPassword'
+  }
  * req.body {
- 		A: '0x00000000000000000000000000002710',
-	}
+    A: '0x00000000000000000000000000002710',
+  }
  * @param {*} req
  * @param {*} res
  */
 export async function mintCoin(req, res, next) {
-  const response = new Response();
-
   try {
     const { data } = await zkp.mintCoin(req.user, {
       A: req.body.A,
@@ -44,7 +34,6 @@ export async function mintCoin(req, res, next) {
     });
 
     data.coin_index = parseInt(data.coin_index, 16);
-    data.action_type = 'minted';
 
     await db.addCoin(req.user, {
       amount: req.body.A,
@@ -54,13 +43,9 @@ export async function mintCoin(req, res, next) {
       isMinted: true,
     });
 
-    response.statusCode = 200;
-    response.data = data;
-    res.json(response);
+    res.data = data;
+    next();
   } catch (err) {
-    response.statusCode = 500;
-    response.data = err;
-    res.status(500).json(response);
     next(err);
   }
 }
@@ -95,10 +80,8 @@ export async function mintCoin(req, res, next) {
  * @param {*} res
  */
 export async function transferCoin(req, res, next) {
-  const response = new Response();
-
   try {
-    // Generate a new one-time-use Ethereum address for the transferor to use
+    // Generate a new one-time-use Ethereum address for the sender to use
     const password = (req.user.address + Date.now()).toString();
     const address = (await accounts.createAccount(password)).data;
     await db.updateUserWithPrivateAccount(req.user, { address, password });
@@ -124,11 +107,11 @@ export async function transferCoin(req, res, next) {
       changeSalt: data.S_F,
       changeCommitment: data.z_F,
       changeCommitmentIndex: data.z_F_index,
-      transferee: req.body.receiver_name,
+      receiver: req.body.receiver_name,
       isTransferred: true,
     });
 
-    // update slected coin2 with tansferred data
+    // update slected coin with tansferred data
     await db.updateCoin(req.user, {
       amount: req.body.D,
       salt: req.body.S_D,
@@ -142,7 +125,7 @@ export async function transferCoin(req, res, next) {
       changeSalt: data.S_F,
       changeCommitment: data.z_F,
       changeCommitmentIndex: data.z_F_index,
-      transferee: req.body.receiver_name,
+      receiver: req.body.receiver_name,
       isTransferred: true,
     });
 
@@ -157,7 +140,7 @@ export async function transferCoin(req, res, next) {
       changeSalt: data.S_F,
       changeCommitment: data.z_F,
       changeCommitmentIndex: data.z_F_index,
-      transferee: req.body.receiver_name,
+      receiver: req.body.receiver_name,
       isTransferred: true,
       usedCoins: [
         {
@@ -183,25 +166,21 @@ export async function transferCoin(req, res, next) {
     }
 
     // note:
-    // E is the value transferred to the transferee
-    // F is the value returned as 'change' to the transferor
+    // E is the value transferred to the receiver
+    // F is the value returned as 'change' to the sender
     await whisperTransaction(req, {
       amount: req.body.E,
       salt: data.S_E,
       pk: req.body.pk_B,
       commitment: data.z_E,
       commitmentIndex: data.z_E_index,
-      transferee: req.body.receiver_name,
+      receiver: req.body.receiver_name,
       for: 'coin',
     });
 
-    response.statusCode = 200;
-    response.data = data;
-    res.json(response);
+    res.data = data;
+    next();
   } catch (err) {
-    response.statusCode = 500;
-    response.data = err;
-    res.status(500).json(response);
     next(err);
   }
 }
@@ -220,22 +199,20 @@ export async function transferCoin(req, res, next) {
  * @param {*} res
  */
 export async function burnCoin(req, res, next) {
-  const response = new Response();
-
   try {
     const payToAddress = req.body.payTo
-      ? (await offchain.getAddressFromName(req.body.payTo)).address
+      ? await offchain.getAddressFromName(req.body.payTo)
       : req.user.address;
 
     const { data } = await zkp.burnCoin({ ...req.body, payTo: payToAddress }, req.user);
 
-    // update slected coin with tansferred data
+    // update slected coin2 with tansferred data
     await db.updateCoin(req.user, {
       amount: req.body.A,
       salt: req.body.S_A,
       commitment: req.body.z_A,
       commitmentIndex: req.body.z_A_index,
-      transferee: req.body.payTo || req.user.name,
+      receiver: req.body.payTo || req.user.name,
       isBurned: true,
     });
 
@@ -245,30 +222,25 @@ export async function burnCoin(req, res, next) {
       await whisperTransaction(req, {
         amount: Number(req.body.A),
         shieldContractAddress: user.selected_coin_shield_contract,
-        transferee: req.body.payTo,
-        transferor: req.user.name,
-        transferorAddress: req.user.address,
+        receiver: req.body.payTo,
+        sender: req.user.name,
+        senderAddress: req.user.address,
         for: 'FToken',
       }); // send ft token data to BOB side
     } else {
       await db.addFTTransaction(req.user, {
         amount: Number(req.body.A),
         shieldContractAddress: user.selected_coin_shield_contract,
-        transferee: req.body.payTo,
-        transferor: req.user.name,
-        transferorAddress: req.user.address,
+        receiver: req.body.payTo,
+        sender: req.user.name,
+        senderAddress: req.user.address,
         isReceived: true,
       });
     }
 
-    response.statusCode = 200;
-    response.data = data;
-    res.json(response);
+    res.data = data;
+    next();
   } catch (err) {
-    console.log('error response burnCoin', err);
-    response.statusCode = 500;
-    response.data = err;
-    res.status(500).json(response);
     next(err);
   }
 }

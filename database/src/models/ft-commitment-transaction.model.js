@@ -33,10 +33,10 @@ export default new Schema(
       },
     ],
 
-    // transferee info
-    transferee: String,
+    // receiver info
+    receiver: String,
 
-    // coin info transferred to transferee
+    // coin info transferred to receiver
     transferred_coin_value: String,
     transferred_salt: String,
     transferred_coin_commitment: String,

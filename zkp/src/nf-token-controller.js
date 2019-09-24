@@ -11,17 +11,16 @@ import Web3 from 'web3';
 import contract from 'truffle-contract';
 import jsonfile from 'jsonfile';
 import Utils from 'zkp-utils';
-import Config from './config';
+import config from 'config';
 import zkp from './nf-token-zkp';
 import zokrates from './zokrates';
 import cv from './compute-vectors';
 import Element from './Element';
 
-const utils = Utils('/app/config/stats.json');
-const config = Config.getProps();
+const utils = Utils('/app/stats-config/stats.json');
+
 const web3 = new Web3(
-  Web3.givenProvider ||
-    new Web3.providers.HttpProvider(`${config.zkp.rpc.host}:${config.zkp.rpc.port}`),
+  Web3.givenProvider || new Web3.providers.HttpProvider(config.get('web3ProviderURL')),
 );
 
 const NFTokenShield = contract(jsonfile.readFileSync('./build/contracts/NFTokenShield.json'));

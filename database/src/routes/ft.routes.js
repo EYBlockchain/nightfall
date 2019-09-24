@@ -5,10 +5,10 @@ import { FtService } from '../business';
  * req.body = {
  *  amount: 20,
  *  shieldContractAddress: "0x033..",
- *  transferee: "BOB",
- *  transfereeAddress: "0xb0b",
- *  transferor: "ALICE",
- *  transferorAddress: "0xA71CE"
+ *  receiver: "BOB",
+ *  receiverAddress: "0xb0b",
+ *  sender: "ALICE",
+ *  senderAddress: "0xA71CE"
  * }
  * @param {*} req
  * @param {*} res

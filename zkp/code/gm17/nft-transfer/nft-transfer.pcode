@@ -26,9 +26,9 @@ def ORDEREDCONCAT216x216(field order, field[216] f, field[216] g)->(field[432]):
 // N - Nullifier of token commitment containing A (Public)
 // Pkb - Public key of Bob who will receive the transferred token
 // S - Serial Number of token commitment of A belonging to sender Alice
-// Sb - Serial Number of token commitment of A belonging to recipient Bob
+// Sb - Serial Number of token commitment of A belonging to receiver Bob
 // Sk - Secret key of Alice
-// Zb - Token commitment of the recipient (Public)
+// Zb - Token commitment of the receiver (Public)
 
 //Note - we now use 216 bits for the Merkle tree calculation.  This is because 432 is the biggest input we can use for sha256
 // if we want 432/2 to end on a byte boundary for easier Solidity computation

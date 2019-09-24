@@ -7,8 +7,8 @@
   "scripts": {
     "setup": "NODE_ENV=setup npx babel-node code/index.js",
     "setup-all": "yes | NODE_ENV=setup npx babel-node code/index.js",
-    "start": "nodemon --ignore src/vkIds.json --ignore config/ --ignore code/ --ignore build-test --exec babel-node ./src/index.js",
-    "test": "jest ./__tests__/*.test.js",
+    "start": "nodemon --ignore src/vkIds.json --ignore stats-config/ --ignore code/ --exec babel-node ./src/index.js",
+    "test": "jest ./__tests__/*.test.js"
     "generate-keys": "./install.sh"
   },
   "contributors": [
@@ -26,6 +26,7 @@
     "beepbeep": "1.2.2",
     "bignumber.js": "^8.0.2",
     "body-parser": "^1.19.0",
+    "config": "^3.2.2",
     "ethereumjs-abi": "^0.6.6",
     "express": "^4.16.4",
     "fs": "0.0.1-security",

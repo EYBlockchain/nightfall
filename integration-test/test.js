@@ -1,43 +1,35 @@
+/* eslint-disable camelcase, func-names */
+
 import { expect } from 'chai';
 import request from 'superagent';
 import prefix from 'superagent-prefix';
 import config from 'config';
-import {
-  testData,
-  configureDependentTestData
-} from './testData';
+import testData from './testData';
 
 const apiServerURL = config.get('apiServerURL');
 
 // independent test data.
-const
-  alice = testData.alice, 
-  bob = testData.bob, 
-  erc20 = testData.erc20;
+const { alice, bob, erc20 } = testData;
 
 // dependent test data. which need to be configured.
-let
-  erc721,
-  erc721Commitment,
-  erc20Commitments;
+let erc721;
+let erc721Commitment;
+let erc20Commitments;
 
-
-describe('****** Integration Test ******\n', function () {
-  before(async function () {
-    await configureDependentTestData();
-    erc721 = testData.erc721;
-    erc721Commitment = testData.erc721Commitment;
-    erc20Commitments = testData.erc20Commitments;
+describe('****** Integration Test ******\n', function() {
+  before(async function() {
+    await testData.configureDependentTestData();
+    ({ erc721, erc721Commitment, erc20Commitments } = testData);
   });
   /*
-  *  Step 1.
-  *  This Suite will create Alice and Bob.
-  */
-  describe('*** Create Users ***', async function () {
+   *  Step 1.
+   *  This step will create accounts for Alice and Bob.
+   */
+  describe('*** Create Users ***', async function() {
     /*
-    * Create account for Alice.
-    */
-    it('Sign up Alice', function (done) {
+     * Create an account for Alice.
+     */
+    it(`Sign up ${alice.name}`, function(done) {
       request
         .post('/createAccount')
         .use(prefix(apiServerURL))
@@ -46,13 +38,13 @@ describe('****** Integration Test ******\n', function () {
         .end((err, res) => {
           if (err) return done(err);
           expect(res).to.have.nested.property('body.data.name');
-          done();
+          return done();
         });
     });
     /*
-    * Create account for bob.
-    */
-    it('Sign up Bob', function (done) {
+     * Create an account for Bob.
+     */
+    it(`Sign up ${bob.name}`, function(done) {
       request
         .post('/createAccount')
         .use(prefix(apiServerURL))
@@ -61,19 +53,19 @@ describe('****** Integration Test ******\n', function () {
         .end((err, res) => {
           if (err) return done(err);
           expect(res).to.have.nested.property('body.data.name');
-          done();
+          return done();
         });
     });
   });
   /*
-  * Step 2.
-  * This Suite will login Alice and Bob/
-  */
-  describe('*** Login Users ***', function () {
+   * Step 2.
+   * This step will log in Alice and Bob.
+   */
+  describe('*** Login Users ***', function() {
     /*
-    * Login User Alice.
-    */
-    it('Sign in Alice', function (done) {
+     * Login User Alice.
+     */
+    it(`Sign in ${alice.name}`, function(done) {
       request
         .post('/login')
         .use(prefix(apiServerURL))
@@ -85,13 +77,13 @@ describe('****** Integration Test ******\n', function () {
 
           alice.token = res.body.data.token;
           alice.sk = res.body.data.secretkey;
-          done();
+          return done();
         });
     });
     /*
-    * Login User Bob.
-    */
-    it('Sign in Bob', function (done) {
+     * Login User Bob.
+     */
+    it(`Sign in ${bob.name}`, function(done) {
       request
         .post('/login')
         .use(prefix(apiServerURL))
@@ -103,27 +95,25 @@ describe('****** Integration Test ******\n', function () {
 
           bob.token = res.body.data.token;
           bob.sk = res.body.data.secretkey;
-          done();
+          return done();
         });
     });
   });
   /*
-  * Step 3 to 8.
-  * This Suite will test ERC-721 & ERC-721 commitment
-  * Mint, Transfer and Burn features.
-  * Story line:
-  *  Alice minted a ERC-721 token. She then Shield(mint ERC-721 commitment) that token
-  *  and transfer to Bob. He then burns received ERC-721 commitment,
-  *  and then transferred resultant ERC-721 token to Alice.
-  * finally, Alice burns received ERC-721 token
-  */
-  describe('*** ERC-721 and ERC-721 Commitment ***', function () {
-    context('Alice\'s tasks: ', function () {
+   * Step 3 to 8.
+   *  These steps will test the creation of ERC-721 tokens and ERC-721 token commitments, as well as the transfer and burning of these tokens and their commitments.
+   *  Alice mints an ERC-721 token. She then shields that token by minting an ERC-721 commitment
+   *  and transfers that commitment to Bob. Bob then burns the received ERC-721 commitment
+   *  and transfers the resulting ERC-721 token to Alice.
+   *  Finally, Alice burns the received ERC-721 token.
+   */
+  describe('*** ERC-721 and ERC-721 Commitment ***', function() {
+    context(`${alice.name} tasks: `, function() {
       /*
-      * Step 3.
-      * Mint ERC-721 Token.
-      */
-      it('Mint ERC-721 token', function (done) {
+       * Step 3.
+       * Mint ERC-721 Token.
+       */
+      it('Mint ERC-721 token', function(done) {
         request
           .post('/nft/mint')
           .use(prefix(apiServerURL))
@@ -134,14 +124,14 @@ describe('****** Integration Test ******\n', function () {
             if (err) return done(err);
             expect(res).to.have.nested.property('body.data.message');
             expect(res.body.data.message).to.be.equal('NFT Mint Successful');
-            done();
+            return done();
           });
       });
       /*
-      * Step 4.
-      * Mint ERC-721 token commitment.
-      */
-      it('Mint ERC-721 token commitment', function (done) {
+       * Step 4.
+       * Mint ERC-721 token commitment.
+       */
+      it('Mint ERC-721 token commitment', function(done) {
         request
           .post('/token/mint')
           .use(prefix(apiServerURL))
@@ -158,14 +148,14 @@ describe('****** Integration Test ******\n', function () {
 
             expect(res.body.data.z_A).to.be.equal(erc721Commitment.mintCommitment);
             expect(res.body.data.z_A_index).to.be.equal(erc721Commitment.mintCommitmentIndex);
-            done();
+            return done();
           });
       });
       /*
-      * Step 5.
-      * Transfer ERC-721 Commitment.
-      */
-      it('Transfer ERC-721 Commitment to Bob', function (done) {
+       * Step 5.
+       * Transfer ERC-721 Commitment.
+       */
+      it('Transfer ERC-721 Commitment to Bob', function(done) {
         request
           .post('/token/transfer')
           .use(prefix(apiServerURL))
@@ -191,21 +181,20 @@ describe('****** Integration Test ******\n', function () {
 
             expect(res.body.data.z_B).to.be.equal(erc721Commitment.transferCommitment);
             expect(res.body.data.z_B_index).to.be.equal(erc721Commitment.transferCommitmentIndex);
-            done();
+            return done();
           });
       });
     });
-    context('Bob\'s tasks: ', function () {
+    context(`${bob.name} tasks: `, function() {
       /*
-      * This act as a delay.
-      * Which is needed, presuming till then transfree Whisper will able receive transferred data.
-      */
-      before((done) => setTimeout(done, 10000));
+       * This acts as a delay, which is needed to ensure that the recipient will be able to receive transferred data through Whisper.
+       */
+      before(done => setTimeout(done, 10000));
       /*
-      * Step 6.
-      * Burn ERC-721 Commitment.
-      */
-      it("Burn ERC-721 Commitment", function (done) {
+       * Step 6.
+       * Burn ERC-721 Commitment.
+       */
+      it('Burn ERC-721 Commitment', function(done) {
         request
           .post('/token/burn')
           .use(prefix(apiServerURL))
@@ -224,14 +213,14 @@ describe('****** Integration Test ******\n', function () {
             expect(res).to.have.nested.property('body.data.message');
             expect(res.body.data.message).to.equal('burn successful');
 
-            done();
+            return done();
           });
       });
       /*
-      * Step 7.
-      * Tranfer ERC-721 Token.
-      */
-      it("Transfer ERC-721 token to Alice", function (done) {
+       * Step 7.
+       * Tranfer ERC-721 Token.
+       */
+      it('Transfer ERC-721 token to Alice', function(done) {
         request
           .post('/nft/transfer')
           .use(prefix(apiServerURL))
@@ -246,21 +235,20 @@ describe('****** Integration Test ******\n', function () {
             if (err) return done(err);
             expect(res).to.have.nested.property('body.data.message');
             expect(res.body.data.message).to.be.equal('NFT Transfer Successful');
-            done();
+            return done();
           });
       });
     });
-    context('Alice\'s tasks: ', function () {
+    context(`${alice.name} tasks: `, function() {
       /*
-      * This act as a delay.
-      * Which is needed, presuming till then transfree Whisper will able receive transferred data.
-      */
-      before((done) => setTimeout(done, 10000));
+       * This acts as a delay, which is needed to ensure that the recipient will be able to receive transferred data through Whisper.
+       */
+      before(done => setTimeout(done, 10000));
       /*
-      * Step 8.
-      * Burn ERC-721 Token.
-      */
-      it('Burn ERC-721 token', function (done) {
+       * Step 8.
+       * Burn ERC-721 Token.
+       */
+      it('Burn ERC-721 token', function(done) {
         request
           .post('/nft/burn')
           .use(prefix(apiServerURL))
@@ -274,33 +262,32 @@ describe('****** Integration Test ******\n', function () {
             if (err) return done(err);
             expect(res).to.have.nested.property('body.data.message');
             expect(res.body.data.message).to.be.equal('NFT Burn Successful');
-            done();
+            return done();
           });
       });
     });
   });
   /*
-  * Step 9 to 16.
-  * This Suite will test ERC-20 & ERC-20 commitment
-  * Mint, Transfer and Burn features.
-  * Story line:
-  *  Alice minted a 5 ERC-20 token. She then Shield(mint ERC-20 commitment) two token with value 2 and 3
-  *  and transfer 4 token to Bob. He then burns received ERC-20 commitment,
-  *  and then transferred resultant  4 ERC-20 token to Alice.
-  * finally, Alice burns her received and change, 5 ERC-20 token
-  */
-  describe('*** ERC-20 and ERC-20 Commitment ***', function () {
-    context('Alice\'s tasks: ', function () {
+   * Step 9 to 16.
+   * These steps will test the creation of ERC-20 tokens and ERC-20 token commitments, as well as the transfer and burning of these tokens and their commitments.
+   * Story line:
+   *  Alice mints 5 ERC-20 tokens. She then shields these tokens by creating 2 ERC-20 commitments with values of 2 and 3 tokens.
+   *  Alice then transfers 4 ERC-20 tokens in commitments to Bob.
+   *  Bob burns the received ERC-20 commitment and transfers the resulting 4 ERC-20 tokens to Alice.
+   *  Finally, Alice burns her received ERC-20 tokens and her remaining ERC-20 token commitment.
+   */
+  describe('*** ERC-20 and ERC-20 Commitment ***', function() {
+    context(`${alice.name} tasks: `, function() {
       /*
-      * Step 9.
-      * Mint ERC-20 token,
-      */
-      it(`Mint ${erc20.mint} ERC-20 tokens`, function (done) {
+       * Step 9.
+       * Mint ERC-20 token,
+       */
+      it(`Mint ${erc20.mint} ERC-20 tokens`, function(done) {
         request
           .post('/ft/mint')
           .use(prefix(apiServerURL))
           .send({
-            amount: erc20.mint
+            amount: erc20.mint,
           })
           .set('Accept', 'application/json')
           .set('Authorization', alice.token)
@@ -308,14 +295,14 @@ describe('****** Integration Test ******\n', function () {
             if (err) return done(err);
             expect(res).to.have.nested.property('body.data.message');
             expect(res.body.data.message).to.be.equal('Mint Successful');
-            done();
+            return done();
           });
       });
       /*
-      * Step 10.
-      * Mint ERC-20 token commitment.
-      */
-      it(`Mint ${erc20.toBeMintedAsCommitment[0]} ERC-20 token commitment`, function (done) {
+       * Step 10.
+       * Mint ERC-20 token commitment.
+       */
+      it(`Mint ${erc20.toBeMintedAsCommitment[0]} ERC-20 token commitment`, function(done) {
         request
           .post('/coin/mint')
           .use(prefix(apiServerURL))
@@ -332,14 +319,14 @@ describe('****** Integration Test ******\n', function () {
 
             expect(res.body.data.coin).to.be.equal(erc20Commitments.mint[0].commitment);
             expect(res.body.data.coin_index).to.be.equal(erc20Commitments.mint[0].commitmentIndex);
-            done();
+            return done();
           });
       });
       /*
-      * Step 11.
-      * Mint ERC-20 token commitment.
-      */
-      it(`Mint ${erc20.toBeMintedAsCommitment[1]} ERC-20 token commitment`, function (done) {
+       * Step 11.
+       * Mint ERC-20 token commitment.
+       */
+      it(`Mint ${erc20.toBeMintedAsCommitment[1]} ERC-20 token commitment`, function(done) {
         request
           .post('/coin/mint')
           .use(prefix(apiServerURL))
@@ -353,28 +340,35 @@ describe('****** Integration Test ******\n', function () {
             expect(res).to.have.nested.property('body.data.coin_index');
 
             erc20Commitments.mint[1].S_A = res.body.data.S_A; // set Salt from response to calculate and verify commitment.
-            
+
             expect(res.body.data.coin).to.be.equal(erc20Commitments.mint[1].commitment);
             expect(res.body.data.coin_index).to.be.equal(erc20Commitments.mint[1].commitmentIndex);
-            done();
+            return done();
           });
       });
       /*
-      * Step 12.
-      * Transfer ERC-20 Commitment.
-      */
-      it(`Transfer ${erc20.transfer} ERC-20 Commitment to Bob`, function (done) {
+       * Step 12.
+       * Transfer ERC-20 Commitment.
+       */
+      it(`Transfer ${erc20.transfer} ERC-20 Commitment to Bob`, function(done) {
         const [C, z_C_index, z_C, S_C] = Object.values(erc20Commitments.mint[0]);
         const [D, z_D_index, z_D, S_D] = Object.values(erc20Commitments.mint[1]);
-        const [E] = Object.values(erc20Commitments.transfer)
-        const [F] = Object.values(erc20Commitments.change)
+        const [E] = Object.values(erc20Commitments.transfer);
+        const [F] = Object.values(erc20Commitments.change);
         request
           .post('/coin/transfer')
           .use(prefix(apiServerURL))
           .send({
-            C, S_C, z_C, z_C_index,
-            D, S_D, z_D, z_D_index,
-            E, F,
+            C,
+            S_C,
+            z_C,
+            z_C_index,
+            D,
+            S_D,
+            z_D,
+            z_D_index,
+            E,
+            F,
             sk_A: alice.sk,
             receiver_name: bob.name,
           })
@@ -396,14 +390,14 @@ describe('****** Integration Test ******\n', function () {
             expect(res.body.data.z_E_index).to.be.equal(erc20Commitments.transfer.commitmentIndex);
             expect(res.body.data.z_F).to.be.equal(erc20Commitments.change.commitment);
             expect(res.body.data.z_F_index).to.be.equal(erc20Commitments.change.commitmentIndex);
-            done();
+            return done();
           });
       });
       /*
-      * Step 13.
-      * Burn ERC-20 Commitment.
-      */
-      it(`Burn ${erc20.change} ERC-20 Commitment`, function (done) {
+       * Step 13.
+       * Burn ERC-20 Commitment.
+       */
+      it(`Burn ${erc20.change} ERC-20 Commitment`, function(done) {
         if (!erc20.change) this.skip();
         request
           .post('/coin/burn')
@@ -413,7 +407,7 @@ describe('****** Integration Test ******\n', function () {
             sk_A: alice.sk,
             S_A: erc20Commitments.change.S_F,
             z_A_index: erc20Commitments.change.commitmentIndex,
-            z_A: erc20Commitments.change.commitment
+            z_A: erc20Commitments.change.commitment,
           })
           .set('Accept', 'application/json')
           .set('Authorization', alice.token)
@@ -423,21 +417,20 @@ describe('****** Integration Test ******\n', function () {
             expect(res).to.have.nested.property('body.data.z_C_index');
             expect(res.body.data.z_C).to.be.equal(erc20Commitments.change.commitment);
             expect(res.body.data.z_C_index).to.be.equal(3);
-            done();
+            return done();
           });
       });
     });
-    context('Bob\'s tasks: ', function () {
+    context(`${bob.name} tasks: `, function() {
       /*
-      * This act as a delay.
-      * Which is needed, presuming till then transfree Whisper will able receive transferred data.
-      */
-      before((done) => setTimeout(done, 10000));
+       * This acts as a delay, which is needed to ensure that the recipient will be able to receive transferred data through Whisper.
+       */
+      before(done => setTimeout(done, 10000));
       /*
-      * Step 14.
-      * Burn ERC-20 Commitment.
-      */
-      it(`Burn ${erc20.transfer} ERC-20 Commitment`, function (done) {
+       * Step 14.
+       * Burn ERC-20 Commitment.
+       */
+      it(`Burn ${erc20.transfer} ERC-20 Commitment`, function(done) {
         request
           .post('/coin/burn')
           .use(prefix(apiServerURL))
@@ -446,7 +439,7 @@ describe('****** Integration Test ******\n', function () {
             sk_A: bob.sk,
             S_A: erc20Commitments.transfer.S_E,
             z_A_index: erc20Commitments.transfer.commitmentIndex,
-            z_A: erc20Commitments.transfer.commitment
+            z_A: erc20Commitments.transfer.commitment,
           })
           .set('Accept', 'application/json')
           .set('Authorization', bob.token)
@@ -456,14 +449,14 @@ describe('****** Integration Test ******\n', function () {
             expect(res).to.have.nested.property('body.data.z_C_index');
             expect(res.body.data.z_C).to.be.equal(erc20Commitments.transfer.commitment);
             expect(res.body.data.z_C_index).to.be.equal(2);
-            done();
+            return done();
           });
       });
       /*
-      * Step 15.
-      * Transfer ERC-20 token
-      */
-      it(`Transfer ${erc20.transfer} ERC-20 tokens to Alice`, function (done) {
+       * Step 15.
+       * Transfer ERC-20 token
+       */
+      it(`Transfer ${erc20.transfer} ERC-20 tokens to Alice`, function(done) {
         request
           .post('/ft/transfer')
           .use(prefix(apiServerURL))
@@ -477,21 +470,20 @@ describe('****** Integration Test ******\n', function () {
             if (err) return done(err);
             expect(res).to.have.nested.property('body.data.message');
             expect(res.body.data.message).to.be.equal('transfer Successful');
-            done();
+            return done();
           });
       });
     });
-    context('Alice\'s tasks: ', function () {
+    context(`${alice.name} tasks: `, function() {
       /*
-      * This act as a delay.
-      * Which is needed, presuming till then transfree Whisper will able receive transferred data.
-      */
-      before((done) => setTimeout(done, 10000));
+       * This acts as a delay, which is needed to ensure that the recipient will be able to receive transferred data through Whisper.
+       */
+      before(done => setTimeout(done, 10000));
       /*
-      * Step 16.
-      * Burn ERC-20 Token.
-      */
-      it(`Burn ${erc20.mint} ERC-20 tokens`, function (done) {
+       * Step 16.
+       * Burn ERC-20 Token.
+       */
+      it(`Burn ${erc20.mint} ERC-20 tokens`, function(done) {
         request
           .post('/ft/burn')
           .use(prefix(apiServerURL))
@@ -504,7 +496,7 @@ describe('****** Integration Test ******\n', function () {
             if (err) return done(err);
             expect(res).to.have.nested.property('body.data.message');
             expect(res.body.data.message).to.be.equal('Burn Successful');
-            done();
+            return done();
           });
       });
     });

@@ -57,7 +57,7 @@ async function getTokenHandler(req, res, next) {
  *  transferredSalt: '0xE9A313C89C449AF6E630C25AB3ACC0FC3BAB821638E0D55599B518',   [will be only present if is_transferred = true]
  *  transferredCommitment: '0xca2c0c099289896be4d72c74f801bed6e4b2cd5297bfcf29325484',   [will be only present if is_transferred = true]
  *  transferredCommitmentIndex: 1,                                                      [will be only present if is_transferred = true]
- *  transferee: 'bob',                                              [will be only present if is_transferred = true]
+ *  receiver: 'bob',                                              [will be only present if is_transferred = true]
  *  isTransferred: true,
  *  isBurned: true
  * }

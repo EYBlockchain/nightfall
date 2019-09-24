@@ -11,8 +11,8 @@ async function addFToken(data, userData) {
       {
         amount: data.amount,
         shieldContractAddress: data.shieldContractAddress,
-        transferor: data.transferor,
-        transferorAddress: data.transferorAddress,
+        sender: data.sender,
+        senderAddress: data.senderAddress,
         isReceived: true,
       },
     );
@@ -33,8 +33,8 @@ async function addNFToken(data, userData) {
         uri: data.uri,
         tokenId: data.tokenId,
         shieldContractAddress: data.shieldContractAddress,
-        transferor: data.transferor,
-        transferorAddress: data.transferorAddress,
+        sender: data.sender,
+        senderAddress: data.senderAddress,
         isReceived: true,
       },
     );
@@ -60,7 +60,7 @@ async function addTokenCommitment(data, userData) {
       },
       {
         A: data.tokenId,
-        pk: data.transfereePublicKey,
+        pk: data.receiverPublicKey,
         S_A: data.salt,
         z_A: data.commitment,
         z_A_index: data.commitmentIndex,

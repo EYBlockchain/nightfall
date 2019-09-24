@@ -53,7 +53,7 @@ async function getCoinHandler(req, res, next) {
  *  changeSalt: '0xAF868DBCFA1418A093A5B933B5459E28C274D03E141C79FB84ACE4',
  *  changeCommitment: '0xdde215a143549a1725d989d48988beb78c98fcfbbb4ffa1f91785b',
  *  changeCommitmentIndex: 3,
- *  transferee: bob,
+ *  receiver: bob,
  *  isTransferred: true,
  * }
  * @param {*} req
@@ -100,7 +100,7 @@ async function getCoinTransactions(req, res, next) {
  *  changeSalt: '0xAF868DBCFA1418A093A5B933B5459E28C274D03E141C79FB84ACE4',
  *  changeCommitment: '0xdde215a143549a1725d989d48988beb78c98fcfbbb4ffa1f91785b',
  *  changeCommitmentIndex: 3,
- *  transferee: bob,
+ *  receiver: bob,
  *  isTransferred: true,
  *  usedCoins: [
  *    {

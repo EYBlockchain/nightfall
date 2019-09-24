@@ -1,8 +1,6 @@
 import { createLogger, format, transports } from 'winston';
 import mongoose from 'mongoose';
-import { getProps } from './config';
-
-const { isLoggerEnable } = getProps();
+import config from 'config';
 
 const consoleLogger = {
   info: message => console.log(message),
@@ -11,7 +9,7 @@ const consoleLogger = {
 
 let winstonLogger;
 
-if (isLoggerEnable) {
+if (config.get('isLoggerEnable')) {
   winstonLogger = createLogger({
     level: 'debug',
     format: format.combine(format.colorize(), format.simple()),

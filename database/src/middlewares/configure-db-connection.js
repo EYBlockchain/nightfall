@@ -1,8 +1,7 @@
 import mongoose from 'mongoose';
-import { getProps } from '../config';
+import config from 'config';
 
-const config = getProps();
-const { host, port, databaseName, admin, adminPassword } = config.mongo;
+const { host, port, databaseName, admin, adminPassword } = config.get('mongo');
 
 const connections = {
   admin: mongoose.createConnection(

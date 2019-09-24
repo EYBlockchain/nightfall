@@ -10,18 +10,16 @@ arbitrary amounts of currency in zero knowlege.
 import Web3 from 'web3';
 import contract from 'truffle-contract';
 import jsonfile from 'jsonfile';
+import config from 'config';
 import zkp from './f-token-zkp';
 import zokrates from './zokrates';
 import cv from './compute-vectors';
 import Element from './Element';
-import Config from './config';
 
-const utils = require('zkp-utils')('/app/config/stats.json');
+const utils = require('zkp-utils')('/app/stats-config/stats.json');
 
-const config = Config.getProps();
 const web3 = new Web3(
-  Web3.givenProvider ||
-    new Web3.providers.HttpProvider(`${config.zkp.rpc.host}:${config.zkp.rpc.port}`),
+  Web3.givenProvider || new Web3.providers.HttpProvider(config.get('web3ProviderURL')),
 );
 
 const FTokenShield = contract(jsonfile.readFileSync('./build/contracts/FTokenShield.json'));

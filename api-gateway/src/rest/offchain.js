@@ -22,7 +22,7 @@ export default {
   isNameInUse(name) {
     const options = {
       url: `${host}/pkd/name/exists`,
-      method: 'POST',
+      method: 'GET',
       json: true,
       qs: { name },
     };
@@ -131,7 +131,7 @@ export default {
     return requestWrapper(options);
   },
 
-  // send whisper message to recipient
+  // send whisper message to receiver
   sendMessage(body) {
     const options = {
       url: `${host}/whisper/sendMessage`,

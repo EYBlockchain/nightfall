@@ -1,8 +1,6 @@
 import jwt from 'jsonwebtoken';
 import { encryptPassword, decryptPassword } from './password';
-import Response from '../routes/response/response';
 
-const response = new Response();
 const noAuthRoutes = ['/login', 'createAccount'];
 const JWT_SECRET = 'secret';
 
@@ -19,12 +17,9 @@ export function authentication(req, res, next) {
   const token = req.headers.authorization;
   if (token) {
     try {
-      return jwt.verify(token, JWT_SECRET, (err, decoded) => {
+      return jwt.verify(token, JWT_SECRET, function callback(err, decoded) {
         if (err) {
-          response.data.token = false;
-          response.status.statusCode = 498;
-          response.status.message = 'Failed To Authenticate';
-          return res.status(498).json(response);
+          return next(err);
         }
         req.user = {};
         req.user.address = decoded.address; // this mostly siging transaction and unlocking account at top most middleware
@@ -38,11 +33,8 @@ export function authentication(req, res, next) {
     } catch (error) {
       return next(error);
     }
-  } else {
-    console.log('OH NO, NO TOKEN');
-    response.data.token = false;
-    response.statusCode = 499;
-    response.data.message = 'No Token Provided';
-    return res.status(499).json(response);
   }
+  const error = new Error('No Token Provided');
+  error.status = 499;
+  return next(error);
 }

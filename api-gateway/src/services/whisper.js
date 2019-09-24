@@ -13,11 +13,11 @@ export async function whisperTransaction(req, dataToSend) {
 
   const { shhIdentity } = await db.getWhisperIdentity(req.user);
   // PKD to get the whisperPK using name "eg: bob"
-  const shhPkRecipient = await offchain.getWhisperPK(receiverName);
+  const shhPkReceiver = await offchain.getWhisperPK(receiverName);
   const details = {
     message: dataToSend,
     shhIdentity,
-    shhPkRecipient,
+    shhPkReceiver,
   };
   await offchain.sendMessage(details);
 }

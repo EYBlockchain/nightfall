@@ -33,7 +33,7 @@ export class SpendTokenComponent implements OnInit, AfterContentInit {
   selectedToken: any;
 
   /**
-   * Name of the transferee
+   * Name of the receiver
    */
   receiverName: string;
 
@@ -113,7 +113,7 @@ export class SpendTokenComponent implements OnInit, AfterContentInit {
       selectedToken.token_commitment_index
     ).subscribe( data => {
         this.isRequesting = false;
-        this.toastr.success('Transfer to Recipient ' + receiverName);
+        this.toastr.success('Transfer to Receiver ' + receiverName);
         transactions.splice(Number(index), 1);
         this.selectedToken = undefined;
         this.router.navigate(['/overview'], { queryParams: { selectedTab: 'tokens' } });

@@ -1,0 +1,42 @@
+name: Run Nightfall Integration test
+
+on:
+  pull_request:
+    branches:
+    - master
+
+jobs:
+  eslint-and-integration-test:
+    name: Run eslint check and Integration test
+    runs-on: ubuntu-18.04
+    
+    steps:
+    - uses: actions/checkout@v1
+    - uses: actions/setup-node@v1
+      with:
+        node-version: '10.15.3'
+    - name: Run check for eslint errors
+      run:  |
+        npm ci
+        npm run lint
+    - name: Pull docker image
+      run:  docker pull zokrates/zokrates:0.4.11
+    - name: Increase swap memory
+      run:  |
+        sudo usermod -a -G sudo runner
+        sudo swapoff -a
+        sudo dd if=/dev/sda1 of=/swapfile bs=1G count=12
+        sudo mkswap /swapfile
+        sudo swapon /swapfile
+        swapon --show
+        grep SwapTotal /proc/meminfo
+    - name: Generate the keys and constraint files for Zero Knowledge Proofs
+      run:  |
+        chmod -R 777 zkp/code/
+        npm run setupAll
+    - name: Remove zokrates Containers
+      run:  |
+        docker stop $(docker ps -a -q)
+        docker rm $(docker ps -a -q)
+    - name: Run Integration test
+      run:  ./nightfall-test

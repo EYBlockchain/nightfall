@@ -48,7 +48,7 @@ export class BurnTokenComponent implements OnInit, AfterContentInit {
   users: any;
 
   /**
-   * Name of the transferee
+   * Name of the receiver
    */
   receiverName: string;
 

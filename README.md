@@ -72,6 +72,13 @@ Start Docker:
 
 Clone the Nightfall repository and use a terminal to enter the directory.
 
+For Linux users:
+
+- Change permission for the directory
+    `sudo chmod 777 -R zkp/code/`
+- Add the Linux user to docker group to run Docker commands without sudo. Then log out and enter again.  
+    `sudo usermod -a -G docker <username>`
+
 Next pull a compatible Docker image of ZoKrates
 
 ```sh
@@ -179,7 +186,7 @@ tokens of an ER721 or ERC20 contract instance respectively.
 
 The demo mode uses Ganache-cli as a blockchain emulator. This is easier than using a true blockchain
 client but has the disadvantage that Ganache-cli doesn't currently support the Whisper protocol,
-which Nightfall uses for exchanging secrets between sender and recipient. Accordingly we've written
+which Nightfall uses for exchanging secrets between sender and receiver. Accordingly we've written
 a Whisper stub, which will emulate whisper for participants who are all on the same node server. If
 you want to run across multiple blockchain nodes and server instances then replace all occurrences
 of the words `whisper-controller-stub` with `whisper-controller` in the code — but you will need to

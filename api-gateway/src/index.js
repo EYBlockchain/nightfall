@@ -20,7 +20,13 @@ import {
   userRoutes,
   shieldRoutes,
 } from './routes';
-import { authentication, unlockAccount } from './middlewares';
+import {
+  authentication, // Authorization filter to verify Role of the user
+  unlockAccount,
+  formatResponse,
+  formatError,
+  errorHandler,
+} from './middlewares';
 
 const app = express();
 const router = Router();
@@ -47,24 +53,27 @@ app.use('/nft', nftRoutes);
 app.use('/user', userRoutes);
 app.use('/shield', shieldRoutes);
 
-// handle bad calls
-app.use((req, res) => res.status(404).send({ url: `${req.originalUrl} not found` }));
+app.use(formatResponse);
 
-app.use(function errorLogger(err, req, res, next) {
+app.use(function logError(err, req, res, next) {
   logger.error(
     `${req.method}:${req.url}
-		${JSON.stringify({ error: err.message })}
-		${JSON.stringify({ body: req.body })}
-		${JSON.stringify({ params: req.params })}
-		${JSON.stringify({ query: req.query })}
-	`,
+    ${JSON.stringify({ error: err.message })}
+    ${JSON.stringify({ errorStack: err.stack.split('\n') }, null, 1)}
+    ${JSON.stringify({ body: req.body })}
+    ${JSON.stringify({ params: req.params })}
+    ${JSON.stringify({ query: req.query })}
+  `,
   );
   next(err);
 });
 
+app.use(formatError);
+app.use(errorHandler);
+
 // handle unhandled promise rejects
 process.on('unhandledRejection', (reason, p) => {
-  console.log('Unhandled Rejection at:', p, 'reason:', reason);
+  logger.error('Unhandled Rejection at:', p, 'reason:', reason);
 });
 
 const server = app.listen(80, '0.0.0.0', () =>

@@ -12,10 +12,10 @@ export default class FtTransactionService {
    *  amount,
    *  shield_contract_address,
    *  type,
-   *  transferor,
-   *  transferor_address,
-   *  transferee,
-   *  transferee_address,
+   *  sender,
+   *  sender_address,
+   *  receiver,
+   *  receiver_address,
    * }
    */
   insertTransaction(data) {

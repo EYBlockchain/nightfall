@@ -1,9 +1,9 @@
 import { exec } from 'child_process';
-import { getProps } from '../config';
+import config from 'config';
 import { COLLECTIONS } from '../common/constants';
 import { userMapper } from '../mappers';
 
-const { mongo } = getProps();
+const mongo = config.get('mongo');
 
 function updateUserRole() {
   return new Promise((resolve, reject) =>

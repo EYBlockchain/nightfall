@@ -4,7 +4,7 @@ import { Router } from 'express';
 import Utils from 'zkp-utils';
 import nfController from '../nf-token-controller';
 
-const utils = Utils('/app/config/stats.json');
+const utils = Utils('/app/stats-config/stats.json');
 const router = Router();
 
 async function mint(req, res, next) {

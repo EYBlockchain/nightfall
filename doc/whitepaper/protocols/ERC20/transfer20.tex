@@ -16,7 +16,7 @@ Alice wishes to be able to transfer ownership of an ERC-20 tokens under zero-kno
       \begin{enumerate}
         \item All details of the value being transacted.
         \item The identity of the sender of the value (`Alice').
-        \item The identity of the recipient of the value.
+        \item The identity of the receiver of the value.
       \end{enumerate}
     \end{framed}
   \end{center}
@@ -45,7 +45,7 @@ Note that a fungible commitment transfer in Nightfall always requires \textbf{tw
 
   To avoid such complexity at this stage, we have chosen ``two inputs, two outputs'' for now.
 
-  \item Having just one output would mean the sender would have to own a set of commitments which sum to exactly the amount required by the recipient (no more, no less). This is impractical for most use cases.
+  \item Having just one output would mean the sender would have to own a set of commitments which sum to exactly the amount required by the receiver (no more, no less). This is impractical for most use cases.
   \item Having just one input increases the likelihood of an observer inferring information from analysis of transactions.
 \end{itemize}
 \ \\

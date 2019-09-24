@@ -49,7 +49,7 @@ export class SpendCoinComponent implements OnInit , AfterContentInit {
   users: any;
 
   /**
-   * Name of the transferee
+   * Name of the receiver
    */
   receiverName: string;
 
@@ -170,7 +170,7 @@ export class SpendCoinComponent implements OnInit , AfterContentInit {
       this.receiverName
     ).subscribe( data => {
         this.isRequesting = false;
-        this.toastr.success('Transfer to Recipient ' + this.receiverName);
+        this.toastr.success('Transfer to Receiver ' + this.receiverName);
         transactions.splice(Number(coin1['id']), 1);
         transactions.splice(Number(coin2['id']) - 1, 1);
         this.fetchCoins();
