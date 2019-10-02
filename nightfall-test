@@ -43,7 +43,6 @@ make offchain-test-migrate
 printf "${GREEN}*** Launching containerized microservices ***${NC}\n"
 docker-compose -f docker-compose.test.yml up -d
 
-
 # Create a child Terminal to see docker log, while running testcases.
 if [ "${machine}" == "Mac" ]; then
 	childTab=$(osascript -e "
@@ -56,6 +55,10 @@ fi
 
 # delay needed to ensure all container are in running state.
 sleep 30
+
+# save all test logs to a file in background
+printf "${GREEN}*** Saving the test logs to nightfall_test.log file ***${NC}\n"
+docker-compose -f docker-compose.test.yml logs -f &> nightfall_test.log &disown
 
 # RUN test suits and remove test containers
 printf "${GREEN}*** Run Integration test ***${NC}\n"

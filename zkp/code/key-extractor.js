@@ -2,8 +2,6 @@
 This programme extracts the key from a verifier.sol programme, as output by
 ZoKrates, and writes it out as json, which can be save to a file and used by
 the modified Verifier contract that we created.
-
-EDIT: Nov 2018: This has been edited from a command-line tool to a function which is called by the overarching 'tools-trusted-setup.js'. The previous 'command line' code has been commented out in case we want to reinstate it at a later time.
 */
 
 import fs from 'fs';
@@ -54,8 +52,6 @@ async function keyExtractor(solFilePath, s) {
   if (!s) console.log(jsonTxt.join('\n'));
   return jsonTxt.join('\n');
 }
-
-// keyExtractor(solFilePath)
 
 export default {
   keyExtractor,

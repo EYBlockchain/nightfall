@@ -7,8 +7,8 @@ Transpile the .pcode
 
 **Note**: To avoid manual setup, you can instead use the automated trusted setup tool from the
 command line: `cd path/to/nightfall/zkp/code/`  
-`node tools-trusted-setup.js`  
-See the dedicated [README](./README-tools-trusted-setup.md) for detailed instructions.
+`node index.js`  
+See the dedicated [README](./README-trusted-setup.md) for detailed instructions.
 
 ##Manual setup From your local machine's command line:
 
@@ -23,12 +23,7 @@ Let's inspect the nft-mint folder:
 `cd nft-mint`  
 `ls`
 
-If you've newly cloned the Nightfall repository, you'll only see one file: `nft-mint.pcode`.  
-The `.pcode` file extension means this file uses an 'abbreviated' syntax, which ZoKrates won't be
-able to interpret. You can use the
-[ZoKrates Preprocessor](https://github.com/EYBlockchain/zokrates-preprocessor) to transpile the
-`.pcode` file into a `.code` file which can be compiled by ZoKrates. Once complete, you should have
-two files in the nft-mint folder: `nft-mint.pcode` and `nft-mint.code`.
+If you've newly cloned the Nightfall repository, you'll only see one file: `nft-mint.code`.  
 
 Now we can run ZoKrates.
 
@@ -71,7 +66,7 @@ Keep the container open for now.
 
 From a new terminal window on your local machine:
 
-Navigate to the folder which contains `tools-key-extractor-standalone.js`:
+Navigate to the folder which contains `key-extractor-standalone.js`:
 
 `cd path/to/nightfall/zkp/code/`
 
@@ -79,7 +74,7 @@ Extract the verification key from `verifier.sol` (which in this example is saved
 `gm17/nft-mint/verifier.sol` (relative to your pwd) on your local machine). We save it to a newly
 created json file:
 
-`node tools-key-extractor-standalone.js -i gm17/nft-mint/verifier.sol >nft-mint-vk.json`
+`node key-extractor-standalone.js -i gm17/nft-mint/verifier.sol >nft-mint-vk.json`
 
 We're all done! We have the proving key and verification key for nft-mint.code. All saved on our
 local machine.

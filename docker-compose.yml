@@ -23,6 +23,7 @@ services:
     restart: on-failure
     volumes:
       - ./api-gateway/src:/app/src
+      - ./api-gateway/config:/app/config
       - ./api-gateway/.babelrc:/app/.babelrc
     ports:
       - "8001:80"

@@ -9,7 +9,7 @@ import express, { Router } from 'express';
 import bodyParser from 'body-parser';
 import proxy from 'express-http-proxy';
 import cors from 'cors';
-import * as Config from './config/config';
+import config from 'config';
 import logger from './logger';
 import {
   rootRouter,
@@ -30,20 +30,16 @@ import {
 
 const app = express();
 const router = Router();
-const config = Config.getProps(); // get the properties of environment
 
 app.use(bodyParser.json()); // set up a filter to parse JSON
 
 app.use(cors()); // cross origin filter
 app.use(authentication);
 
-app.use('/zkp', unlockAccount, proxy(`${config.zkp.host}:${config.zkp.port}`));
-app.use('/database', proxy(`${config.database.host}:${config.database.port}`));
-app.use(
-  '/offchain-service',
-  unlockAccount,
-  proxy(`${config.offchain.host}:${config.offchain.port}`),
-);
+app.use('/zkp', unlockAccount, proxy(config.zkp.url));
+app.use('/database', proxy(config.database.url));
+app.use('/offchain-service', unlockAccount, proxy(config.offchain.url));
+
 app.use('/', unlockAccount, router);
 app.use('/', rootRouter);
 app.use('/token', nftCommitmentRoutes);

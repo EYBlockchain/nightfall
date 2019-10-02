@@ -56,7 +56,7 @@ async function runContainer() {
 }
 
 /**
-Used by the tools-tar-creator.js
+Used by the zkp/code/index.js
 Create and start a container using the zokrates image and make it durable
 */
 async function runContainerMounted(_hostDirPath) {
@@ -138,7 +138,7 @@ async function computeWitness(container, a, zkpPath) {
 }
 
 /**
-@param {string} b - OPTIONAL argument, for the tools-trusted-setup to specify the backend
+@param {string} b - OPTIONAL argument, for the zkp/code/index.js to specify the backend
 */
 async function setup(container, b = config.ZOKRATES_BACKEND) {
   console.log('Setup: computing (pk,vk) := G(C,toxic) - this can take many minutes...');
@@ -154,7 +154,7 @@ async function setup(container, b = config.ZOKRATES_BACKEND) {
 /* TODO - the new zokrates outputs the Proof into a proof.json file, so we won't need the below Regex code to extract the proof.
  */
 /**
-@param {string} b - OPTIONAL argument, for the tools-trusted-setup to specify the backend. For regular ./nightfall runs, the backend defaults to config.ZOKRATES_BACKEND, so the b parameter won't get used.
+@param {string} b - OPTIONAL argument, for the zkp/code/index.js to specify the backend. For regular ./nightfall runs, the backend defaults to config.ZOKRATES_BACKEND, so the b parameter won't get used.
 */
 async function generateProof(container, b = config.ZOKRATES_BACKEND, zkpPath) {
   console.log('\nGenerating Proof := P(pk,w,x)');

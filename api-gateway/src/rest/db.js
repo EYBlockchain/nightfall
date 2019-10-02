@@ -1,8 +1,7 @@
 import request from 'request';
-import { getProps } from '../config/config';
+import config from 'config';
 
-const { database } = getProps();
-const host = `${database.host}:${database.port}`;
+const url = config.get('database.url');
 
 const requestWrapper = options =>
   new Promise(function promiseHandler(resolve, reject) {
@@ -21,7 +20,7 @@ export default {
   // insert user data intro user collection
   createAccount(body) {
     const options = {
-      url: `${host}/createAccount`,
+      url: `${url}/createAccount`,
       method: 'POST',
       json: true,
       body,
@@ -32,7 +31,7 @@ export default {
   // verify password while fetching from user collection
   login(body) {
     const options = {
-      url: `${host}/login`,
+      url: `${url}/login`,
       method: 'POST',
       body,
       json: true,
@@ -43,7 +42,7 @@ export default {
   // fetch logged in user info from. user collection
   fetchUser({ name }, qs) {
     const options = {
-      url: `${host}/user`,
+      url: `${url}/user`,
       method: 'GET',
       json: true,
       headers: { name },
@@ -55,7 +54,7 @@ export default {
   // add anonymous one time used account to user collection
   updateUserWithPrivateAccount({ name }, body) {
     const options = {
-      url: `${host}/privateAccount`,
+      url: `${url}/privateAccount`,
       method: 'POST',
       headers: { name },
       json: true,
@@ -67,7 +66,7 @@ export default {
   // get user's whisper key from user collection
   getWhisperIdentity({ name }) {
     const options = {
-      url: `${host}/user/whisperIdentity`,
+      url: `${url}/user/whisperIdentity`,
       method: 'GET',
       headers: { name },
       json: true,
@@ -78,7 +77,7 @@ export default {
   // update user's whisper key in user collection
   updateWhisperIdentity({ name }, body) {
     const options = {
-      url: `${host}/user/whisperIdentity`,
+      url: `${url}/user/whisperIdentity`,
       method: 'PATCH',
       headers: { name },
       json: true,
@@ -90,7 +89,7 @@ export default {
   // insert non-fungible token info in nft collection
   addNFToken({ name }, body) {
     const options = {
-      url: `${host}/nft`,
+      url: `${url}/nft`,
       method: 'POST',
       json: true,
       headers: { name },
@@ -102,7 +101,7 @@ export default {
   // update non-fungible token info in nft collection
   updateNFToken({ name }, body) {
     const options = {
-      url: `${host}/nft`,
+      url: `${url}/nft`,
       method: 'PATCH',
       json: true,
       headers: { name },
@@ -114,7 +113,7 @@ export default {
   // fetch non-fungible token by tokenId.
   getNFTokenByTokenId({ name }, tokenId) {
     const options = {
-      url: `${host}/nft/`,
+      url: `${url}/nft/`,
       method: 'GET',
       json: true,
       headers: { name },
@@ -126,7 +125,7 @@ export default {
   // fetch non-fungible tokens
   getNFTokens({ name }, qs) {
     const options = {
-      url: `${host}/nft`,
+      url: `${url}/nft`,
       method: 'GET',
       json: true,
       headers: { name },
@@ -138,7 +137,7 @@ export default {
   // insert non-fungible token commitment info in nft_commitment collection
   addToken({ name }, body) {
     const options = {
-      url: `${host}/token`,
+      url: `${url}/token`,
       method: 'POST',
       json: true,
       headers: { name },
@@ -150,7 +149,7 @@ export default {
   // update non-fungible token commitment info in nft_commitment collection
   updateToken({ name }, body) {
     const options = {
-      url: `${host}/token`,
+      url: `${url}/token`,
       method: 'PATCH',
       json: true,
       headers: { name },
@@ -162,7 +161,7 @@ export default {
   // insert fungible token trantion info in ft_transaction collection
   addFTTransaction({ name }, body) {
     const options = {
-      url: `${host}/ft/transaction`,
+      url: `${url}/ft/transaction`,
       method: 'POST',
       json: true,
       headers: { name },
@@ -174,7 +173,7 @@ export default {
   // insert fungible token commitment info in ft_commitment collection
   addCoin({ name }, body) {
     const options = {
-      url: `${host}/coin`,
+      url: `${url}/coin`,
       method: 'POST',
       json: true,
       headers: { name },
@@ -186,7 +185,7 @@ export default {
   // update fungible token commitment info in ft_commitment collection
   updateCoin({ name }, body) {
     const options = {
-      url: `${host}/coin`,
+      url: `${url}/coin`,
       method: 'PATCH',
       json: true,
       headers: { name },
@@ -198,7 +197,7 @@ export default {
   // insert fungible token commitment transaction info in ft_commitment_transaction collection
   addCoinTransaction({ name }, body) {
     const options = {
-      url: `${host}/coin/transaction`,
+      url: `${url}/coin/transaction`,
       method: 'POST',
       json: true,
       headers: { name },
@@ -210,7 +209,7 @@ export default {
   // insert new coin shield contract info for user in user collection
   addCoinShieldContractAddress({ name }, body) {
     const options = {
-      url: `${host}/user/coinShield`,
+      url: `${url}/user/coinShield`,
       method: 'POST',
       headers: { name },
       json: true,
@@ -222,7 +221,7 @@ export default {
   // update coin shield contract info for user in user collection
   updateCoinShieldContractAddress({ name }, body) {
     const options = {
-      url: `${host}/user/coinShield`,
+      url: `${url}/user/coinShield`,
       method: 'PUT',
       headers: { name },
       json: true,
@@ -234,7 +233,7 @@ export default {
   // delete coin shield contract info for user from user collection
   deleteCoinShieldContractAddress({ name }, qs) {
     const options = {
-      url: `${host}/user/coinShield`,
+      url: `${url}/user/coinShield`,
       method: 'DELETE',
       headers: { name },
       json: true,
@@ -246,7 +245,7 @@ export default {
   // insert new token shield contract info for user in user collection
   addTokenShieldContractAddress({ name }, body) {
     const options = {
-      url: `${host}/user/tokenShield`,
+      url: `${url}/user/tokenShield`,
       method: 'POST',
       headers: { name },
       json: true,
@@ -258,7 +257,7 @@ export default {
   // update token shield contract info for user in user collection
   updateTokenShieldContractAddress({ name }, body) {
     const options = {
-      url: `${host}/user/tokenShield`,
+      url: `${url}/user/tokenShield`,
       method: 'PUT',
       headers: { name },
       json: true,
@@ -270,7 +269,7 @@ export default {
   // delete token shield contract info for user from user collection
   deleteTokenShieldContractAddress({ name }, qs) {
     const options = {
-      url: `${host}/user/tokenShield`,
+      url: `${url}/user/tokenShield`,
       method: 'DELETE',
       headers: { name },
       json: true,

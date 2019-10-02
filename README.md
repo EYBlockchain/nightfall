@@ -26,9 +26,10 @@ As well as this file, please be sure to check out:
 
 ## Security updates
 
-Critical security updates will be listed [here](./security-updates.md). If you had previously
-installed Nightfall prior to one of these security updates, please pull the latest code, and follow
-the extra re-installation steps.
+Critical security updates will be listed
+[here](https://github.com/EYBlockchain/nightfall/security/advisories/GHSA-36j7-5gjq-gq3w).
+If you had previously installed Nightfall prior to one of these security updates, please pull the
+latest code, and follow the extra re-installation steps.
 
 ## Getting started
 
@@ -86,7 +87,7 @@ docker pull zokrates/zokrates:0.4.11
 ```
 
 Next we have to generate the keys and constraint files for Zero Knowledge Proofs
-([read more](./zkp/code/README-tools-trusted-setup.md)), this is about 7GB and depends on randomness
+([read more](./zkp/code/README-trusted-setup.md)), this is about 7GB and depends on randomness
 for security. This step can take a while, depending on your hardware. Before you start, check once
 more that you have provisioned enough memory for Docker, as described above:
 
@@ -95,7 +96,8 @@ npm run setupAll
 ```
 
 Note that this is a completely automated run: although questions will be asked by the script they
-will automatically receive a 'yes' answer. Further documentation on the setup process is in [the zkp module documentation](zkp/README.md).
+will automatically receive a 'yes' answer. Further documentation on the setup process is in
+[the zkp module documentation](zkp/README.md).
 
 Please be patient - you can check progress in the terminal window and by using `docker stats` in
 another terminal.

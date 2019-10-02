@@ -24,6 +24,7 @@
   "license": "CC0-1.0",
   "dependencies": {
     "body-parser": "^1.18.2",
+    "config": "^3.2.2",
     "cors": "^2.8.5",
     "express": "^4.16.2",
     "express-http-proxy": "^1.1.0",

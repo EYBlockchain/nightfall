@@ -21,7 +21,7 @@ can be gigabytes in size.
 
 ### ZoKrates
 
-Note: `npm run setup` pulls an image of zokrates from dockerhub (see src/config.js for the current
+Note: `npm run setupAll` pulls an image of zokrates from dockerhub (see src/config.js for the current
 zokrates image being used). Since ZoKrates is still a fast-changing project (with many breaking
 changes being pushed to its repo), it is likely that this opensource Nightfall repo will lag behind
 the latest zokrates images and DSL syntax. This tool will need to updated alongside any new versions
@@ -45,16 +45,12 @@ it._
 If insufficient resources are allocated to Docker, then ZoKrates might silently 'fall over' within
 its container - **this is the most common problem encountered by those who are new to the project**.
 
-### .pcode syntax
+### .code syntax
 
 ZoKrates uses a Domain Specific Language (DSL) which enables constraints to be written in a
-human-readable language. These DSL files have a '.code' file extension. '.code' syntax can become
-quite large and unwieldy quite quickly (thousands of lines, if working with binary).
+human-readable language. These DSL files have a '.code' file extension.
 
-'.pcode' syntax is a further abbreviation of '.code' syntax (the 'p' stands for preprocessor) to
-make things easier to read and write.
-
-tools-trusted-setup.js is written to interpret only .pcode syntax.
+index.js is written to interpret .code syntax.
 
 ## Quick start
 
@@ -90,21 +86,21 @@ zkp
       |
       ft-mint
         |
-        ft-mint.pcode
+        ft-mint.code
 
       ft-transfer
         |
-        ft-transfer.pcode
+        ft-transfer.code
 
-    pghr13 // note: pghr13 is not supported in the Nightfall repo - but tools-trusted-setup.js only supports it to mirror zokrates.
+    pghr13 // note: pghr13 is not supported in the Nightfall repo - but index.js only supports it to mirror zokrates.
       |
       ft-mint
         |
-        ft-mint.pcode
+        ft-mint.code
 
       ft-transfer
         |
-        ft-transfer.pcode
+        ft-transfer.code
 
     safe-dump   // required folder, in case of accidental overwriting from mounting of containers from the host.
       |
@@ -125,8 +121,7 @@ zkp
       ft-mint
         |
         ft-mint-vk.json   // verification key in json format
-        ft-mint.code   // transpiled '.code' file from the '.pcode' file
-        ft-mint.pcode
+        ft-mint.code
         out   // machine-readable file
         out.code   // flattening of the '.code' into a R1CS (rank-1 constraint system)
         proving.key   // proving key, used for generating proofs
@@ -136,24 +131,24 @@ zkp
 
       ft-transfer
         |
-        ft-transfer.pcode
+        ft-transfer.code
 
-    pghr13 // note: pghr13 is not supported in the Nightfall repo - but tools-trusted-setup.js only supports it to mirror zokrates.
+    pghr13 // note: pghr13 is not supported in the Nightfall repo - but index.js only supports it to mirror zokrates.
       |
       ft-mint
         |
-        ft-mint.pcode
+        ft-mint.code
 
       ft-transfer
         |
-        ft-transfer.pcode
+        ft-transfer.code
 
     safe-dump
       |
 ```
 
 If `-i` is not specified, the code will loop through every single folder within `gm17` and perform a
-trusted setup but will ask you before doing each one (unlike `npm run setup-all`, which won't ask).
+trusted setup but will ask you before doing each one (unlike `npm run setupAll`, which won't ask).
 This is done sequentially, because each setup requires a significant amount of computing resources.
 
 ### `-a`
@@ -163,7 +158,7 @@ This is done sequentially, because each setup requires a significant amount of c
 Provide arguments and this tool will compute-witness using those arguments.
 
 e.g.  
-`node src/tools-tar-creator.js -i gm17/parent-dir-of-pcode/ -a "1 0 0 1 1 1 1 0 0"` <--- **notice
+`node src/index.js -i gm17/parent-dir-of-pcode/ -a "1 0 0 1 1 1 1 0 0"` <--- **notice
 the "quotes"!!** The above `-a` will run, within the zokrates container, the following:
 `./zokrates compute-witness -a 1 0 0 1 1 1 1 0 0`
 
@@ -201,7 +196,6 @@ the zokrates console outputs will be streamed to your console.
 
 `npm run setup` will:
 
-- Precompile your .pcode into a .code file
 - Run the following zokrates commands within a mounted container:
   - compile
   - setup

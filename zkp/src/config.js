@@ -36,8 +36,6 @@ export default {
   ZOKRATES_HOST_CODE_DIRPATH_REL: 'code/', // path to code files on the host from process.env.PWD (= path-to-/nightfall/zkp/)
   ZOKRATES_HOST_CODE_PARENTPATH_REL: './',
   //* ****
-  ZOKRATES_CONTAINER_CODE_CALIBRATION_FILEPATH_ABS: 'home/zokrates/code/code-calibration.txt',
-  //* ****
   ZOKRATES_CONTAINER_CODE_DIRPATH_ABS: '/home/zokrates/code/', // path to within the 'code' folder in the container - must exist
   ZOKRATES_CONTAINER_CODE_PARENTPATH_ABS: '/home/zokrates/',
   //* ****

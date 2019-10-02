@@ -1,8 +1,7 @@
 import request from 'request';
-import { getProps } from '../config/config';
+import config from 'config';
 
-const { zkp } = getProps();
-const host = `${zkp.host}:${zkp.port}`;
+const url = config.get('zkp.url');
 
 const requestWrapper = options =>
   new Promise(function promiseHandler(resolve, reject) {
@@ -21,7 +20,7 @@ export default {
   // load new vk
   loadVks(body, headers) {
     const options = {
-      url: `${host}/vk`,
+      url: `${url}/vk`,
       method: 'POST',
       json: true,
       headers: {
@@ -36,7 +35,7 @@ export default {
   // mint non-fungible token commitment
   mintToken({ address }, body) {
     const options = {
-      url: `${host}/token/mint`,
+      url: `${url}/token/mint`,
       method: 'POST',
       json: true,
       headers: { address },
@@ -48,7 +47,7 @@ export default {
   // transfer non-fungible token commitment
   spendToken({ address }, body) {
     const options = {
-      url: `${host}/token/transfer`,
+      url: `${url}/token/transfer`,
       method: 'POST',
       json: true,
       headers: { address },
@@ -60,7 +59,7 @@ export default {
   // burn non-fungible token commitment
   burnToken({ address }, body) {
     const options = {
-      url: `${host}/token/burn`,
+      url: `${url}/token/burn`,
       method: 'POST',
       json: true,
       headers: { address },
@@ -72,7 +71,7 @@ export default {
   // mint fungible token commitment
   mintCoin({ address }, body) {
     const options = {
-      url: `${host}/coin/mint`,
+      url: `${url}/coin/mint`,
       method: 'POST',
       json: true,
       headers: { address },
@@ -84,7 +83,7 @@ export default {
   // transfer fungible token commitment
   transferCoin({ address }, body) {
     const options = {
-      url: `${host}/coin/transfer`,
+      url: `${url}/coin/transfer`,
       method: 'POST',
       json: true,
       headers: { address },
@@ -96,7 +95,7 @@ export default {
   // burn fungible token commitment
   burnCoin(body, { address }) {
     const options = {
-      url: `${host}/coin/burn`,
+      url: `${url}/coin/burn`,
       method: 'POST',
       json: true,
       headers: { address },
@@ -108,7 +107,7 @@ export default {
   // mint non-fungible token
   mintNFToken({ address }, body) {
     const options = {
-      url: `${host}/nft/mint`,
+      url: `${url}/nft/mint`,
       method: 'POST',
       json: true,
       headers: { address },
@@ -120,7 +119,7 @@ export default {
   // transfer non-fungible token
   transferNFToken({ address }, body) {
     const options = {
-      url: `${host}/nft/transfer`,
+      url: `${url}/nft/transfer`,
       method: 'POST',
       json: true,
       headers: { address },
@@ -132,7 +131,7 @@ export default {
   // burn non-fungible token
   burnNFToken({ address }, body) {
     const options = {
-      url: `${host}/nft/burn`,
+      url: `${url}/nft/burn`,
       method: 'POST',
       json: true,
       headers: { address },
@@ -144,7 +143,7 @@ export default {
   // mint fungible token
   mintFToken({ address }, body) {
     const options = {
-      url: `${host}/ft/mint`,
+      url: `${url}/ft/mint`,
       method: 'POST',
       json: true,
       headers: { address },
@@ -156,7 +155,7 @@ export default {
   // transfer fungible token
   transferFToken({ address }, body) {
     const options = {
-      url: `${host}/ft/transfer`,
+      url: `${url}/ft/transfer`,
       method: 'POST',
       json: true,
       headers: { address },
@@ -168,7 +167,7 @@ export default {
   // burn fungible token
   burnFToken({ address }, body) {
     const options = {
-      url: `${host}/ft/burn`,
+      url: `${url}/ft/burn`,
       method: 'POST',
       json: true,
       headers: { address },
@@ -180,7 +179,7 @@ export default {
   // check correctness for non-fungible token commitment once received by whisper listener of bob.
   checkCorrectnessToken(headers, body) {
     const options = {
-      url: `${host}/token/checkCorrectness`,
+      url: `${url}/token/checkCorrectness`,
       method: 'POST',
       json: true,
       headers,
@@ -192,7 +191,7 @@ export default {
   // check correctness for fungible token commitment once received by whisper listener of bob.
   checkCorrectnessCoin(headers, body) {
     const options = {
-      url: `${host}/coin/checkCorrectness`,
+      url: `${url}/coin/checkCorrectness`,
       method: 'POST',
       json: true,
       headers,
@@ -204,7 +203,7 @@ export default {
   // set new non-fungible commitment token shield for user address
   setTokenShield({ address }, body) {
     const options = {
-      url: `${host}/token/shield`,
+      url: `${url}/token/shield`,
       method: 'POST',
       json: true,
       headers: { address },
@@ -216,7 +215,7 @@ export default {
   // get non-fungible commitment token shield address for user address
   getTokenShield({ address }) {
     const options = {
-      url: `${host}/token/shield`,
+      url: `${url}/token/shield`,
       method: 'GET',
       json: true,
       headers: { address },
@@ -227,7 +226,7 @@ export default {
   // remove non-fungible commitment token shield address for user address
   unSetTokenShield({ address }) {
     const options = {
-      url: `${host}/token/shield`,
+      url: `${url}/token/shield`,
       method: 'DELETE',
       json: true,
       headers: { address },
@@ -237,7 +236,7 @@ export default {
   // set new fungible commitment token shield for user address
   setCoinShield({ address }, body) {
     const options = {
-      url: `${host}/coin/shield`,
+      url: `${url}/coin/shield`,
       method: 'POST',
       json: true,
       headers: { address },
@@ -249,7 +248,7 @@ export default {
   // get ungible commitment token shield address for user address
   getCoinShield({ address }) {
     const options = {
-      url: `${host}/coin/shield`,
+      url: `${url}/coin/shield`,
       method: 'GET',
       json: true,
       headers: { address },
@@ -260,7 +259,7 @@ export default {
   // remove ungible commitment token shield address for user address
   unSetCoinShield({ address }) {
     const options = {
-      url: `${host}/coin/shield`,
+      url: `${url}/coin/shield`,
       method: 'DELETE',
       json: true,
       headers: { address },
