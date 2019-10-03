@@ -123,6 +123,6 @@ router.route('/transferNFTCommitment').post(transferToken);
  *		"message":"burn successful"
  *	  }
  */
-router.route('/burn').post(burnToken);
+router.route('/burnNFTCommitment').post(burnToken);
 
 export default router;
