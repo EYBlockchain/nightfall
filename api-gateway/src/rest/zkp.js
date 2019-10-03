@@ -223,7 +223,7 @@ export default {
   // check correctness for non-fungible token commitment once received by whisper listener of bob.
   checkCorrectnessToken(headers, body) {
     const options = {
-      url: `${url}/token/checkCorrectnessForNFTCommitment`,
+      url: `${url}/checkCorrectnessForNFTCommitment`,
       method: 'POST',
       json: true,
       headers,

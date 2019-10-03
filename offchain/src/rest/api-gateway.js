@@ -26,7 +26,7 @@ export default {
   },
   checkCorrectnessToken(headers, body) {
     const options = {
-      url: `${url}/token/checkCorrectnessForNFTCommitment`,
+      url: `${url}/checkCorrectnessForNFTCommitment`,
       method: 'POST',
       json: true,
       headers,
