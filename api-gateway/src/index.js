@@ -36,7 +36,6 @@ app.use(bodyParser.json()); // set up a filter to parse JSON
 app.use(cors()); // cross origin filter
 app.use(authentication);
 
-app.use('/zkp', unlockAccount, proxy(config.zkp.url));
 app.use('/database', proxy(config.database.url));
 app.use('/offchain-service', unlockAccount, proxy(config.offchain.url));
 

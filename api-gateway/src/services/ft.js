@@ -114,7 +114,7 @@ export async function burnFToken(req, res, next) {
 */
 export async function getFTokenAddress(req, res, next) {
   try {
-    res.data = await zkp.getFTokenAddress();
+    res.data = await zkp.getFTokenAddress(req.user);
     next();
   } catch (err) {
     next(err);
@@ -128,7 +128,7 @@ export async function getFTokenAddress(req, res, next) {
  */
 export async function getFTokenInfo(req, res, next) {
   try {
-    res.data = await zkp.getFTokenInfo();
+    res.data = await zkp.getFTokenInfo(req.user);
     next();
   } catch (err) {
     next(err);

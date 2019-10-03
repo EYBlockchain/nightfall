@@ -102,7 +102,7 @@ router.route('/transferNFToken').post(transferNFToken);
 router.route('/burnNFToken').post(burnNFToken);
 
 /**
- * @api {get} /nft List ERC-721 tokens
+ * @api {get} /getNFTTokens List ERC-721 tokens
  * @apiVersion 1.0.0
  * @apiName  List non-fungible tokens
  * @apiGroup ERC-721
@@ -141,7 +141,7 @@ router.route('/burnNFToken').post(burnNFToken);
  *		"totalCount":1
  *	  }
  */
-router.route('/').get(getNFTokens);
+router.route('/getNFTTokens').get(getNFTokens);
 
 /**
  * @api {get} /getNFTokenAddress List ERC-721 tokens

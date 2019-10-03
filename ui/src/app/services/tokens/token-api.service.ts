@@ -207,7 +207,7 @@ export class TokenApiService {
     const httpOptions = {
       headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
     };
-    let url = config.apiGateway.root + 'nft?';
+    let url = config.apiGateway.root + 'getNFTTokens?';
 
     if (pageNo) {
       url += 'pageNo=' + pageNo + '&';
