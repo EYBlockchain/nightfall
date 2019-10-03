@@ -10,14 +10,12 @@ rest api calls, and the heavy-lifitng token-zkp.js and zokrates.js.  It exists s
 import Web3 from 'web3';
 import contract from 'truffle-contract';
 import jsonfile from 'jsonfile';
-import Utils from 'zkp-utils';
+import utils from 'zkp-utils';
 import config from 'config';
 import zkp from './nf-token-zkp';
 import zokrates from './zokrates';
 import cv from './compute-vectors';
 import Element from './Element';
-
-const utils = Utils('/app/stats-config/stats.json');
 
 const web3 = new Web3(
   Web3.givenProvider || new Web3.providers.HttpProvider(config.get('web3ProviderURL')),
@@ -203,41 +201,12 @@ you.
 @param {string} tar - the tar file containing all the code needed to compute the proof
 @returns {object} proof
 */
-async function computeProof(elements, hostDir, proofDescription) {
+async function computeProof(elements, hostDir) {
   if (container === undefined || container === null) await setupComputeProof(hostDir);
-  let timeEst;
-  let startTime;
-  let endTime;
-  let duration;
-  if (proofDescription) {
-    timeEst = await utils.getTimeEst(proofDescription, 'computeWitness');
-    startTime = new Date();
-    setTimeout(() => {
-      utils.progressBar(timeEst);
-    }, 1000);
-  }
-  await zokrates.computeWitness(container, cv.computeVectors(elements), hostDir);
-  if (proofDescription) {
-    await utils.stopProgressBar();
-    endTime = new Date();
-    duration = endTime - startTime;
-    utils.updateTimeEst(proofDescription, 'computeWitness', duration);
-  }
 
-  if (proofDescription) {
-    timeEst = await utils.getTimeEst(proofDescription, 'generateProof');
-    startTime = new Date();
-    setTimeout(() => {
-      utils.progressBar(timeEst);
-    }, 1000);
-  }
+  await zokrates.computeWitness(container, cv.computeVectors(elements), hostDir);
+
   const proof = await zokrates.generateProof(container, undefined, hostDir);
-  if (proofDescription) {
-    await utils.stopProgressBar();
-    endTime = new Date();
-    duration = endTime - startTime;
-    utils.updateTimeEst(proofDescription, 'generateProof', duration);
-  }
 
   console.group(`Proof: ${JSON.stringify(proof, undefined, 2)}`);
   console.groupEnd();
@@ -318,7 +287,6 @@ async function mint(A, pk_A, S_A, account) {
       new Element(z_A, 'field'),
     ],
     hostDir,
-    'MintToken',
   );
 
   proof = Object.values(proof);
@@ -453,7 +421,6 @@ async function transfer(A, pk_B, S_A, S_B, sk_A, z_A, z_A_index, account) {
       new Element(z_B, 'field'),
     ],
     hostDir,
-    'TransferToken',
   );
 
   proof = Object.values(proof);
@@ -575,7 +542,6 @@ async function burn(A, Sk_A, S_A, z_A, z_A_index, account, payTo) {
       new Element(root, 'field'),
     ],
     hostDir,
-    'BurnToken',
   );
 
   proof = Object.values(proof);

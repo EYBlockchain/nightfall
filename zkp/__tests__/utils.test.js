@@ -1,8 +1,7 @@
-import Utils from 'zkp-utils';
+import utils from 'zkp-utils';
 import { createHash } from 'crypto';
 import Config from '../src/config';
 
-const utils = Utils('/app/config/stats.json');
 const config = Config.getProps();
 
 const dec = '17408914224622445472';

@@ -38,8 +38,6 @@ app.use(authentication);
 
 app.use('/zkp', unlockAccount, proxy(config.zkp.url));
 app.use('/database', proxy(config.database.url));
-app.use('/offchain-service', unlockAccount, proxy(config.offchain.url));
-
 app.use('/', unlockAccount, router);
 app.use('/', rootRouter);
 app.use('/token', nftCommitmentRoutes);

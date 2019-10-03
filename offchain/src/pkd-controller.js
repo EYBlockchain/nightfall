@@ -7,10 +7,8 @@ The functions are fairly self-documenting so not individually commented.
 import tc from 'truffle-contract';
 import Web3 from 'web3';
 import jsonfile from 'jsonfile';
-import Utils from 'zkp-utils';
+import utils from 'zkp-utils';
 import config from 'config';
-
-const utils = Utils('/app/stats-config/stats.json');
 
 const bytes32 = name => utils.utf8StringToHex(name, 32);
 const stringify = hex => utils.hexToUtf8String(hex);

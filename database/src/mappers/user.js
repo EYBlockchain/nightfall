@@ -1,6 +1,4 @@
-import Utils from 'zkp-utils';
-
-const utils = Utils('/app/config/stats.json');
+import utils from 'zkp-utils';
 
 export default async function({ name, email, address, shhIdentity }) {
   const hash = await utils.rndHex(27);

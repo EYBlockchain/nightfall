@@ -5,7 +5,7 @@
   "repository": "https://github.com/EYBlockchain/nightfall",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon --ignore stats-config/* --exec babel-node ./src/index.js",
+    "start": "nodemon --exec babel-node ./src/index.js",
     "test": "jest ./__tests__/*.test.js"
   },
   "contributors": [

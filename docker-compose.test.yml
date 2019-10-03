@@ -55,7 +55,6 @@ services:
       - ./offchain/build-test:/app/build
       - ./offchain/.babelrc:/app/.babelrc
       - ./zkp-utils:/app/node_modules/zkp-utils
-      - ./config:/app/stats-config
       - ./offchain/config:/app/config
     environment:
       NODE_ENV: test
@@ -79,7 +78,6 @@ services:
       - ./zkp/code:/app/code
       - ./zkp/.babelrc:/app/.babelrc
       - ./zkp-utils:/app/node_modules/zkp-utils
-      - ./config:/app/stats-config
       - ./zkp/config:/app/config
       - /var/run/docker.sock:/var/run/docker.sock
     environment:

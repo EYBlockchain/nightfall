@@ -1,11 +1,9 @@
 /* eslint-disable import/no-unresolved */
 
-import Utils from 'zkp-utils';
+import utils from 'zkp-utils';
 import AccountUtils from '../src/account-utils/account-utils';
 
 import controller from '../src/f-token-controller';
-
-const utils = Utils('/app/config/stats.json');
 
 jest.setTimeout(7200000);
 

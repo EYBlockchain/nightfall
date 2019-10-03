@@ -1,5 +1,10 @@
 import express from 'express';
-import { addContract, updateContract, deleteContract } from '../services/api-gateway';
+import {
+  addContract,
+  updateContract,
+  deleteContract,
+  getAllRegisteredNames,
+} from '../services/api-gateway';
 
 const router = express.Router();
 
@@ -97,5 +102,34 @@ router.route('/contractAddress').put(updateContract);
  *	  }
  */
 router.route('/contractAddress').delete(deleteContract);
+
+/**
+ * @api {get} /user/getAllRegisteredNames List all registered users
+ * @apiVersion 1.0.0
+ * @apiName  List non-fungible tokensList all registered users
+ * @apiGroup Sheild Contract
+ *
+ * @apiExample {js} Example usage:
+ * const query = {
+ *    name : "vishnu.ps"
+ * }
+ *
+ * $http.get(url, data)
+ *   .success((res, status) => doSomethingHere())
+ *   .error((err, status) => doSomethingHere());
+ *
+ * @apiSuccess (Success 200) {Array} retrieve all registered users.
+ *
+ * @apiSuccessExample {json} Success response:
+ *     HTTPS 200 OK
+ *	  {
+ *		"data":
+ *			{
+ *			}
+ *		],
+ *		"totalCount":1
+ *	  }
+ */
+router.route('/getAllRegisteredNames').get(getAllRegisteredNames);
 
 export default router;

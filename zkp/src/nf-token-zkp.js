@@ -7,10 +7,8 @@ will work. This version works by transforming an existing commitment to a new on
 enables multiple transfers of an asset to take place. The code also talks directly to Verifier.
 */
 
-import Utils from 'zkp-utils';
+import utils from 'zkp-utils';
 import config from 'config';
-
-const utils = Utils('/app/stats-config/stats.json');
 
 /**
 @notice gets a node from the merkle tree data from the nfTokenShield contract.

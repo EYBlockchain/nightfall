@@ -9,12 +9,11 @@ import Web3 from 'web3';
 import contract from 'truffle-contract';
 import jsonfile from 'jsonfile';
 import fs from 'fs';
-import Utils from 'zkp-utils';
+import utils from 'zkp-utils';
 import config from 'config';
 import nfZkp from './nf-token-zkp';
 import fZkp from './f-token-zkp';
 
-const utils = Utils('/app/stats-config/stats.json');
 const web3 = new Web3(
   Web3.givenProvider || new Web3.providers.HttpProvider(config.get('web3ProviderURL')),
 );

@@ -9,7 +9,7 @@ new one, which enables sending of arbritrary amounts. The code also talks direct
 
 import config from 'config';
 
-const utils = require('zkp-utils')('/app/stats-config/stats.json');
+const utils = require('zkp-utils');
 
 /**
 This function loads the verifying key data into the verifier registry smart contract

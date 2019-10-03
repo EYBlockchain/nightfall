@@ -11,24 +11,9 @@ const BI = require('big-integer');
 const hexToBinary = require('hex-to-binary');
 const crypto = require('crypto');
 const { Buffer } = require('safe-buffer');
-const jsonfile = require('jsonfile');
-const fs = require('fs');
-const cliProgress = require('cli-progress');
 
 const hashLength = 27;
 const merkleDepth = 33;
-
-const bar = new cliProgress.Bar({
-  barCompleteChar: '#',
-  barIncompleteChar: '.',
-  fps: 24,
-  stream: process.stdout,
-  barsize: 65,
-  position: 'center',
-});
-let interval;
-let stats = {};
-let statsPath;
 
 // FUNCTIONS ON HEX VALUES
 
@@ -623,101 +608,6 @@ function flattenDeep(arr) {
   );
 }
 
-async function progressBar(timeEst) {
-  const adjustedTimeEst = timeEst > 1000 ? timeEst - 1000 : 0;
-  bar.start(100, 0);
-  let nextPercentage = 0;
-  interval = setInterval(() => {
-    bar.update(nextPercentage);
-    nextPercentage += 1;
-    if (nextPercentage === 100) {
-      clearInterval(this);
-    }
-  }, adjustedTimeEst / 100);
-}
-
-async function stopProgressBar() {
-  clearInterval(interval);
-  bar.stop();
-}
-
-async function getTimeEst(proofDescription, _process) {
-  if (!fs.existsSync(statsPath)) {
-    stats[proofDescription] = {};
-    // if stats.json not found, we don't have any prior time estimates to use for a progress bar. We'll artificially set the time estimates to 0 (which isn't too useful for a developer initially, but will be updated after their first proof).
-    stats[proofDescription].generateProof = 0;
-    stats[proofDescription].computeWitness = 0;
-  } else {
-    stats = await new Promise((resolve, reject) => {
-      jsonfile.readFile(statsPath, (err, data) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(data);
-        }
-      });
-    });
-
-    if (!(proofDescription in stats)) {
-      // if we haven't written stats for this type of proofDescription before, let's create this 'key' in the stats object.
-      stats[proofDescription] = {};
-      stats[proofDescription].generateProof = 0;
-      stats[proofDescription].computeWitness = 0;
-    }
-  }
-
-  switch (_process) {
-    case 'generateProof':
-      return stats[proofDescription].generateProof;
-    default:
-      return stats[proofDescription].computeWitness;
-  }
-}
-
-async function updateTimeEst(proofDescription, _process, newTimeEst) {
-  console.log('Writing new time estimate of', newTimeEst, 'to stats.json file...');
-
-  if (!fs.existsSync(statsPath)) {
-    stats[proofDescription] = {};
-  } else {
-    stats = await new Promise((resolve, reject) => {
-      jsonfile.readFile(statsPath, (err, data) => {
-        if (err) {
-          reject(err);
-        } else {
-          resolve(data);
-        }
-      });
-    });
-
-    if (!(proofDescription in stats)) {
-      // if we haven't written stats for this type of proofDescription before, let's create this 'key' in the stats object.
-      stats[proofDescription] = {};
-    }
-  }
-
-  switch (_process) {
-    case 'generateProof':
-      stats[proofDescription].generateProof = newTimeEst;
-      break;
-    default:
-      stats[proofDescription].computeWitness = newTimeEst;
-  }
-
-  const statsAsJson = JSON.stringify(stats, null, 2);
-  await new Promise((resolve, reject) => {
-    fs.writeFile(statsPath, statsAsJson, err => {
-      if (err) {
-        console.log(
-          `fs.writeFile has failed when writing the new timing information to stats.json. Here's the error:`,
-        );
-        reject(err);
-      }
-      resolve();
-    });
-  });
-}
-
 // function to pad out a Hex value with leading zeros to l bits total length,
 // preserving the '0x' at the start
 function padHex(A, l) {
@@ -733,57 +623,49 @@ function String2Hex(tmp) {
   return str;
 }
 
-module.exports = _statsPath => {
-  statsPath = _statsPath;
-
-  return {
-    isHex,
-    utf8StringToHex,
-    hexToUtf8String,
-    ensure0x,
-    strip0x,
-    hexToBin,
-    hexToBinSimple,
-    hexToBytes,
-    hexToDec,
-    hexToField,
-    hexToFieldPreserve,
-    hexLessThan,
-    getBitLengthHex,
-    sliceRightBitsHex,
-    decToBytes,
-    decToHex,
-    decToBin,
-    getBitLengthDec,
-    decToFieldPreserve,
-    binToDec,
-    binToHex,
-    isProbablyBinary,
-    fieldsToDec,
-    fieldsToHex,
-    xor,
-    xorItems,
-    concat,
-    concatItems,
-    hash,
-    hashConcat,
-    add,
-    parseToDigitsArray,
-    convertBase,
-    splitBinToBitsN,
-    splitDecToBitsN,
-    splitHexToBitsN,
-    splitAndPadBitsN,
-    leftPadBitsN,
-    getLeafIndexFromZCount,
-    rndHex,
-    flattenDeep,
-    progressBar,
-    stopProgressBar,
-    getTimeEst,
-    updateTimeEst,
-    recursiveHashConcat,
-    padHex,
-    String2Hex,
-  };
+module.exports = {
+  isHex,
+  utf8StringToHex,
+  hexToUtf8String,
+  ensure0x,
+  strip0x,
+  hexToBin,
+  hexToBinSimple,
+  hexToBytes,
+  hexToDec,
+  hexToField,
+  hexToFieldPreserve,
+  hexLessThan,
+  getBitLengthHex,
+  sliceRightBitsHex,
+  decToBytes,
+  decToHex,
+  decToBin,
+  getBitLengthDec,
+  decToFieldPreserve,
+  binToDec,
+  binToHex,
+  isProbablyBinary,
+  fieldsToDec,
+  fieldsToHex,
+  xor,
+  xorItems,
+  concat,
+  concatItems,
+  hash,
+  hashConcat,
+  add,
+  parseToDigitsArray,
+  convertBase,
+  splitBinToBitsN,
+  splitDecToBitsN,
+  splitHexToBitsN,
+  splitAndPadBitsN,
+  leftPadBitsN,
+  getLeafIndexFromZCount,
+  rndHex,
+  flattenDeep,
+  recursiveHashConcat,
+  padHex,
+  String2Hex,
 };
