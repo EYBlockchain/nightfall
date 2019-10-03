@@ -178,7 +178,8 @@ export async function getNFTokenAddress(req, res, next) {
  */
 export async function getNFTokenInfo(req, res, next) {
   try {
-    res.data = await zkp.getNFTokenInfo(req.user);
+    const response = await zkp.getNFTokenInfo(req.user);
+    res.data = response.data;
     next();
   } catch (err) {
     next(err);

@@ -128,7 +128,8 @@ export async function getFTokenAddress(req, res, next) {
  */
 export async function getFTokenInfo(req, res, next) {
   try {
-    res.data = await zkp.getFTokenInfo(req.user);
+    const response = await zkp.getFTokenInfo(req.user);
+    res.data = response.data;
     next();
   } catch (err) {
     next(err);
