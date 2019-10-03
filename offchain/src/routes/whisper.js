@@ -136,7 +136,7 @@ async function sendMessage(req, res, next) {
 
 router.post('/generateShhIdentity', createWhisperKeyForAccount);
 router.get('/getWhisperPublicKey', getWhisperKeyFromShhId);
-router.post('/subscribe', subscribeTopic);
+router.post('/subscribeToTopic', subscribeTopic);
 router.post('/sendMessage', sendMessage);
 
 export default router;

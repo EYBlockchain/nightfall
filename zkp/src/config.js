@@ -75,7 +75,6 @@ export default {
   AGREE_CONTRACT_VK: './code/gm17/agree-contract/agree-contract-vk.json',
 
   VK_IDS: './src/vkIds.json',
-  STATS: './src/stats.json',
   VERIFYING_KEY_CHUNK_SIZE: 10,
   INPUT_CHUNK_SIZE: 128,
 

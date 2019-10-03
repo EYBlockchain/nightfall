@@ -246,3 +246,17 @@ export async function deleteContract(req, res, next) {
     next(err);
   }
 }
+
+/**
+ * This function will retrieve all the registered names.
+ * @param {*} req
+ * @param {*} res
+ */
+export async function getAllRegisteredNames(req, res, next) {
+  try {
+    res.data = await offchain.getRegisteredNames();
+    next();
+  } catch (err) {
+    next(err);
+  }
+}

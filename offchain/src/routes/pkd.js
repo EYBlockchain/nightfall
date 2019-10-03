@@ -116,20 +116,14 @@ async function getAllRegisteredNames(req, res, next) {
   }
 }
 
-router.get('/name/exists', checkNameExistence);
-router.get('/address', getAllRegisteredAddresses);
-router.get('/names', getAllRegisteredNames);
-router
-  .route('/name')
-  .post(assignNameToAccount)
-  .get(getNameForAccount);
-router
-  .route('/zkp-publickey')
-  .post(assignZkpPublicKeyToAccount)
-  .get(getZkpPublicKeyForAccountByName);
-router
-  .route('/whisperkey')
-  .post(assignWhisperKeyToAccount)
-  .get(getWhisperKeyForAccountByName);
+router.get('/nameExists', checkNameExistence);
+router.get('/getAllRegisteredAddresses', getAllRegisteredAddresses);
+router.get('/getAllRegisteredNames', getAllRegisteredNames);
+router.post('/setNameToAccount', assignNameToAccount);
+router.get('/getNameForAccount', getNameForAccount);
+router.post('/setPublickeyToAddressInPKD', assignZkpPublicKeyToAccount);
+router.get('/getZkpPublicKeyForAccount', getZkpPublicKeyForAccountByName);
+router.post('/setWhisperKeyToAccount', assignWhisperKeyToAccount);
+router.get('/getWhisperKeyForAccount', getWhisperKeyForAccountByName);
 
 export default router;

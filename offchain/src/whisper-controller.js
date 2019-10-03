@@ -5,9 +5,7 @@
 */
 
 import Web3 from 'web3';
-import Utils from 'zkp-utils';
-
-const utils = Utils('/app/stats-config/stats.json');
+import utils from 'zkp-utils';
 
 const web3 = new Web3(Web3.givenProvider || 'ws://localhost:8546'); // note ws is required for shh
 const TRANSFER_TOPIC = '0xeca7945f';

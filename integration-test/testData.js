@@ -1,7 +1,6 @@
 import config from 'config';
-import Utils from '../zkp-utils';
+import utils from '../zkp-utils';
 
-const utils = Utils('../config/stats');
 const { rndHex, padHex } = utils;
 const HASHLENGTH = config.get('HASHLENGTH');
 

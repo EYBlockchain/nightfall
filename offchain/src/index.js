@@ -22,8 +22,8 @@ app.use(function cors(req, res, next) {
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
-app.use('/pkd', pkdRouter);
-app.use('/whisper', whisperRouter);
+app.use('/', pkdRouter);
+app.use('/', whisperRouter);
 
 app.use(formatResponse);
 

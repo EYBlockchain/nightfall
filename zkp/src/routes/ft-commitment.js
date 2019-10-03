@@ -1,10 +1,9 @@
 /* eslint-disable camelcase */
 
 import { Router } from 'express';
-import Utils from 'zkp-utils';
+import utils from 'zkp-utils';
 import fTokenController from '../f-token-controller';
 
-const utils = Utils('/app/stats-config/stats.json');
 const router = Router();
 
 async function mint(req, res, next) {

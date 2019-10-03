@@ -51,7 +51,6 @@ services:
       - ./offchain/__tests__:/app/__tests__
       - ./zkp-utils:/app/node_modules/zkp-utils
       - ./account-utils:/app/src/account-utils
-      - ./config:/app/stats-config
       - ./offchain/config:/app/config
     environment:
       AUTHENTICATION_API_HOST: http://api-gateway
@@ -74,7 +73,6 @@ services:
       - ./zkp-utils:/app/node_modules/zkp-utils
       - ./account-utils:/app/src/account-utils
       - ./zkp/__tests__:/app/__tests__
-      - ./config:/app/stats-config
       - ./zkp/config:/app/config
       - /var/run/docker.sock:/var/run/docker.sock
     environment:

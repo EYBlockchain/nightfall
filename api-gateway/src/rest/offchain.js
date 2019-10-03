@@ -20,7 +20,7 @@ export default {
   // check, is name already used
   isNameInUse(name) {
     const options = {
-      url: `${url}/pkd/name/exists`,
+      url: `${url}/nameExists`,
       method: 'GET',
       json: true,
       qs: { name },
@@ -31,7 +31,7 @@ export default {
   // associate name to geth account
   setName(address, name) {
     const options = {
-      url: `${url}/pkd/name`,
+      url: `${url}/setNameToAccount`,
       method: 'POST',
       json: true,
       headers: { address },
@@ -43,7 +43,7 @@ export default {
   // associate zkp publickey to geth account
   setZkpPublicKey(address, body) {
     const options = {
-      url: `${url}/pkd/zkp-publickey`,
+      url: `${url}/setPublickeyToAddressInPKD`,
       method: 'POST',
       json: true,
       headers: { address },
@@ -55,7 +55,7 @@ export default {
   // get associated Address for a name
   getAddressFromName(name) {
     const options = {
-      url: `${url}/pkd/address`,
+      url: `${url}/getAllRegisteredAddresses`,
       method: 'GET',
       json: true,
       qs: { name },
@@ -63,10 +63,20 @@ export default {
     return requestWrapper(options);
   },
 
+  // get all registered names
+  getRegisteredNames() {
+    const options = {
+      url: `${url}/getAllRegisteredNames`,
+      method: 'GET',
+      json: true,
+    };
+    return requestWrapper(options);
+  },
+
   // get associated whisper for a name
   getWhisperPK(name) {
     const options = {
-      url: `${url}/pkd/whisperkey`,
+      url: `${url}/getWhisperKeyForAccount`,
       method: 'GET',
       json: true,
       qs: { name },
@@ -77,7 +87,7 @@ export default {
   // get associated zkp publickey for a name
   getZkpPublicKeyFromName(name) {
     const options = {
-      url: `${url}/pkd/zkp-publickey`,
+      url: `${url}/getZkpPublicKeyForAccount`,
       method: 'GET',
       json: true,
       qs: { name },
@@ -88,7 +98,7 @@ export default {
   // associate whisper key to geth account
   setWhisperPK({ address }, whisperPk) {
     const options = {
-      url: `${url}/pkd/whisperkey`,
+      url: `${url}/setWhisperKeyToAccount`,
       method: 'POST',
       json: true,
       headers: { address },
@@ -100,7 +110,7 @@ export default {
   // generate whisper identity for user.
   generateShhIdentity(body) {
     const options = {
-      url: `${url}/whisper/generateShhIdentity`,
+      url: `${url}/generateShhIdentity`,
       method: 'POST',
       json: true,
       body,
@@ -111,7 +121,7 @@ export default {
   // get whisper identity
   getWhisperPublicKey(qs) {
     const options = {
-      url: `${url}/whisper/getWhisperPublicKey`,
+      url: `${url}/getWhisperPublicKey`,
       method: 'GET',
       json: true,
       qs,
@@ -122,7 +132,7 @@ export default {
   // subcribe to a topic
   subscribe(body) {
     const options = {
-      url: `${url}/whisper/subscribe`,
+      url: `${url}/subscribeToTopic`,
       method: 'POST',
       json: true,
       body,
@@ -130,10 +140,10 @@ export default {
     return requestWrapper(options);
   },
 
-  // send whisper message to receiver
+  // send whisper message to recipient
   sendMessage(body) {
     const options = {
-      url: `${url}/whisper/sendMessage`,
+      url: `${url}/sendMessage`,
       method: 'POST',
       json: true,
       body,

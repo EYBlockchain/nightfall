@@ -35,7 +35,7 @@ export class AccountsApiService {
     const httpOptions = {
       headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
     };
-    const url = config.apiGateway.root + 'offchain-service/pkd/names';
+    const url = config.user.root + 'getAllRegisteredNames';
 
     return this.http
       .get(url, httpOptions)

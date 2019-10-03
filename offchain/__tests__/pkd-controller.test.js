@@ -4,7 +4,7 @@
 Authors:
 */
 
-import Utils from 'zkp-utils';
+import utils from 'zkp-utils';
 
 import {
   isNameInUse,
@@ -24,8 +24,6 @@ import {
 } from '../src/pkd-controller';
 
 import AccountUtils from '../src/account-utils/account-utils';
-
-const utils = Utils('/app/config/stats.json');
 
 let whisperPublicKeyInput;
 let zkpPublicKeyInput;
