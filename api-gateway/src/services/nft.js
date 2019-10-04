@@ -3,6 +3,56 @@ import { db, offchain, zkp } from '../rest';
 
 // ERC-721 token
 /**
+ * This function will inset NFT in database
+ * req.user {
+    address: '0x432038accaf756a8936a7f067a8223c2d929d58f',
+    name: 'alice',
+    pk_A: '0xd68df96f6cddd786290b57fcead37ea670dfe94634f553afeedfef',
+    password: 'alicesPassword'
+  }
+ * req.body {
+    uri: 'unique token URI',
+    tokenId: '0x1448d8ab4e0d610000000000000000000000000000000000000000000000000',
+    shieldContractAddress: '0x04b95c76d5075620a655b707a7901462aea8656c',
+    sender: 'a',
+    senderAddress: '0x04b95c76d5075620a655b707a7901462aea8656d',
+  }
+ * @param {*} req
+ * @param {*} res
+ */
+export async function insertNFTToDb(req, res, next) {
+  try {
+    res.data = await db.insertNFToken(req.user, req.body);
+    next();
+  } catch (err) {
+    next(err);
+  }
+}
+
+/**
+ * This function will fetch NFT transactions
+ * req.user {
+    address: '0x432038accaf756a8936a7f067a8223c2d929d58f',
+    name: 'alice',
+    pk_A: '0xd68df96f6cddd786290b57fcead37ea670dfe94634f553afeedfef',
+    password: 'alicesPassword'
+  }
+ * req.query {
+    pageNo: 1,
+    limit: 4
+  }
+ * @param {*} req
+ * @param {*} res
+ */
+export async function getNFTTransactions(req, res, next) {
+  try {
+    res.data = await db.getNFTTransactions(req.user, req.query);
+    next();
+  } catch (err) {
+    next(err);
+  }
+}
+/**
  * This function will mint a non-fungible token
  * req.user {
     address: '0x432038accaf756a8936a7f067a8223c2d929d58f',
@@ -28,7 +78,7 @@ export async function mintNFToken(req, res, next) {
 
     const user = await db.fetchUser(req.user);
 
-    await db.addNFToken(req.user, {
+    await db.insertNFToken(req.user, {
       uri: reqBody.tokenURI,
       tokenId: reqBody.tokenID,
       shieldContractAddress: user.selected_token_shield_contract,
@@ -60,29 +110,28 @@ export async function mintNFToken(req, res, next) {
  * @param {*} res
  */
 export async function transferNFToken(req, res, next) {
+  const { uri, tokenID, contractAddress } = req.body;
+
   try {
     const receiverAddress = await offchain.getAddressFromName(req.body.receiver_name);
-
     const { data } = await zkp.transferNFToken(req.user, {
-      tokenID: req.body.tokenID,
+      tokenID,
       to: receiverAddress,
     });
 
-    const nftToken = {
-      uri: req.body.uri,
-      tokenId: req.body.tokenID,
-      shieldContractAddress: req.body.contractAddress,
-    };
-
-    await db.updateNFToken(req.user, {
-      ...nftToken,
+    await db.updateNFTokenByTokenId(req.user, tokenID, {
+      uri,
+      tokenId: tokenID,
+      shieldContractAddress: contractAddress,
       receiver: req.body.receiver_name,
       receiverAddress,
       isTransferred: true,
     });
 
     await whisperTransaction(req, {
-      ...nftToken,
+      uri,
+      tokenId: tokenID,
+      shieldContractAddress: contractAddress,
       receiver: req.body.receiver_name,
       sender: req.user.name,
       senderAddress: req.user.address,
@@ -113,15 +162,14 @@ export async function transferNFToken(req, res, next) {
  * @param {*} res
  */
 export async function burnNFToken(req, res, next) {
+  const { uri, tokenID, contractAddress } = req.body;
   try {
-    const { data } = await zkp.burnNFToken(req.user, {
-      tokenID: req.body.tokenID,
-    });
+    const { data } = await zkp.burnNFToken(req.user, { tokenID });
 
-    await db.updateNFToken(req.user, {
-      uri: req.body.uri,
-      tokenId: req.body.tokenID,
-      shieldContractAddress: req.body.contractAddress,
+    await db.updateNFTokenByTokenId(req.user, tokenID, {
+      uri,
+      tokenId: tokenID,
+      shieldContractAddress: contractAddress,
       isBurned: true,
     });
 

@@ -19,12 +19,6 @@ export const api = {
  * @ignore
  */
 export const config = {
-  assetSwarm : {
-    root: BaseUrl + 'assets-swarm/'
-  },
-  database: {
-    root: BaseUrl + 'database/'
-  },
   apiGateway: {
     root: BaseUrl
   },

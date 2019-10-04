@@ -1,5 +1,10 @@
 import express from 'express';
-import { loginHandler, createAccountHandler, loadVks } from '../services/api-gateway';
+import {
+  loginHandler,
+  createAccountHandler,
+  loadVks,
+  getTokenCommitmentCounts,
+} from '../services/api-gateway';
 
 const router = express.Router();
 
@@ -85,6 +90,30 @@ router.route('/login').post(loginHandler);
  * @apiUse NameInUse
  */
 router.route('/createAccount').post(createAccountHandler);
+
+/**
+ * @api {get} /getTokenCommitmentCounts fetch counts for both type of tokn commitments (ERC-20 & ERC-721)
+ * @apiVersion 1.0.0
+ * @apiName getTokenCommitmentCounts
+ * @apiGroup User
+ *
+ * $http.get(url, data)
+ *   .success((res, status) => doSomethingHere())
+ *   .error((err, status) => doSomethingHere());
+ *
+ * @apiSuccess (Success 200) {Number} nftCommitmentCount Total no. of ERC-721 commitments.
+ * @apiSuccess (Success 200) {Number} ftCommitmentCount Total no. of ERC-20 commitments.
+ *
+ * @apiSuccessExample {json} Success response:
+ *     HTTPS 200 OK
+ *    {
+ *    "nftCommitmentCount":1,
+ *    "ftCommitmentCount": 12
+ *    }
+ *
+ * @apiUse NameInUse
+ */
+router.get('/getTokenCommitmentCounts', getTokenCommitmentCounts);
 
 // vk APIs
 router.route('/vk').post(loadVks);

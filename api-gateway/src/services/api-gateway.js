@@ -15,8 +15,7 @@ export async function loginHandler(req, res, next) {
   const { name, password } = req.body;
 
   try {
-    const data = await db.login({ name, password });
-    if (!data) throw new Error('User does not exist');
+    const data = await db.configureDBconnection({ name, password });
     await accounts.unlockAccount({ address: data.address, password });
     // get jwt token
     const token = createToken(data, password);
@@ -39,7 +38,7 @@ export async function loginHandler(req, res, next) {
 /**
  * This function will create an account
  * req.body {
-     name: 'bob',
+    name: 'bob',
     email: 'bob@email.com',
     password: 'bobsPassword'
   }
@@ -55,11 +54,12 @@ export async function createAccountHandler(req, res, next) {
     const address = (await accounts.createAccount(password)).data;
     const shhIdentity = '';
 
-    const data = await db.createAccount({
+    const data = await db.createUser({
       ...req.body,
       address,
       shhIdentity,
     });
+
     await accounts.unlockAccount({ address, password });
 
     await offchain.setName(address, name);
@@ -103,11 +103,11 @@ function setShieldContract(user, contractAddress) {
     zkp
       .setTokenShield(user, { tokenShield: contractAddress })
       .then(() => resolve('token'))
-      .catch(() => console.log(`Don't do anything token`));
+      .catch(() => zkp.unSetTokenShield(user));
     zkp
       .setCoinShield(user, { coinShield: contractAddress })
       .then(() => resolve('coin'))
-      .catch(() => console.log(`Don't do anything coin`));
+      .catch(() => zkp.unSetCoinShield(user));
   });
 }
 
@@ -121,19 +121,21 @@ function setShieldContract(user, contractAddress) {
  * @param {*} res
 */
 export async function addContract(req, res, next) {
-  const { contractAddress, contractName } = req.body;
+  const { contractAddress, contractName, isSelected } = req.body;
 
   try {
     const type = await setShieldContract(req.user, contractAddress);
     if (type === 'coin')
-      await db.addCoinShieldContractAddress(req.user, {
+      await db.addFTShieldContractInfo(req.user, {
         contractAddress,
         contractName,
+        isSelected,
       });
     if (type === 'token')
-      await db.addTokenShieldContractAddress(req.user, {
+      await db.addNFTShieldContractInfo(req.user, {
         contractAddress,
         contractName,
+        isSelected,
       });
 
     res.data = { message: `Added of type ${type}` };
@@ -173,36 +175,34 @@ export async function updateContract(req, res, next) {
     if (coinShield) {
       const { contractName, contractAddress, isSelected } = coinShield;
 
-      const isCoinShieldPreviousSelected =
+      const isFTShieldPreviousSelected =
         user.selected_coin_shield_contract === coinShield.contractAddress;
 
-      await db.updateCoinShieldContractAddress(req.user, {
+      await db.updateFTShieldContractInfoByContractAddress(req.user, contractAddress, {
         contractName,
-        contractAddress,
         isSelected,
-        isCoinShieldPreviousSelected,
+        isFTShieldPreviousSelected,
       });
 
       if (isSelected) await zkp.setCoinShield(req.user, { coinShield: contractAddress });
-      else if (isCoinShieldPreviousSelected) await zkp.unSetCoinShield(req.user);
+      else if (isFTShieldPreviousSelected) await zkp.unSetCoinShield(req.user);
     }
 
     // if update tokenShield data
     if (tokenShield) {
       const { contractName, contractAddress, isSelected } = tokenShield;
 
-      const isTokenShieldPreviousSelected =
+      const isNFTShieldPreviousSelected =
         user.selected_token_shield_contract === tokenShield.contractAddress;
 
-      await db.updateTokenShieldContractAddress(req.user, {
+      await db.updateNFTShieldContractInfoByContractAddress(req.user, contractAddress, {
         contractName,
-        contractAddress,
         isSelected,
-        isTokenShieldPreviousSelected,
+        isNFTShieldPreviousSelected,
       });
 
       if (isSelected) await zkp.setTokenShield(req.user, { tokenShield: contractAddress });
-      else if (isTokenShieldPreviousSelected) await zkp.unSetTokenShield(req.user);
+      else if (isNFTShieldPreviousSelected) await zkp.unSetTokenShield(req.user);
     }
 
     res.data = { message: 'Contract Address updated' };
@@ -228,15 +228,17 @@ export async function deleteContract(req, res, next) {
 
   try {
     if (query.coin_shield) {
-      const { data } = await db.deleteCoinShieldContractAddress(req.user, {
-        contractAddress: query.coin_shield,
-      });
+      const data = await db.deleteFTShieldContractInfoByContractAddress(
+        req.user,
+        query.coin_shield,
+      );
       if (data.status) await zkp.unSetCoinShield(req.user);
     }
     if (query.token_shield) {
-      const { data } = await db.deleteTokenShieldContractAddress(req.user, {
-        contractAddress: query.token_shield,
-      });
+      const data = await db.deleteNFTShieldContractInfoByContractAddress(
+        req.user,
+        query.token_shield,
+      );
       if (data.status) await zkp.unSetTokenShield(req.user);
     }
 
@@ -255,6 +257,48 @@ export async function deleteContract(req, res, next) {
 export async function getAllRegisteredNames(req, res, next) {
   try {
     res.data = await offchain.getRegisteredNames();
+    next();
+  } catch (err) {
+    next(err);
+  }
+}
+
+/**
+ * This function will fetch token commitments counts from database
+ * @param {*} req
+ * @param {*} res
+ */
+export async function getTokenCommitmentCounts(req, res, next) {
+  try {
+    const nftCommitments = await db.getNFTCommitments(req.user);
+    const ftCommitments = await db.getFTCommitments(req.user);
+
+    let totalAmount = 0;
+    if (ftCommitments.length) {
+      ftCommitments.forEach(ftCommitment => {
+        totalAmount += Number(ftCommitment.coin_value);
+      });
+    }
+
+    res.data = {
+      nftCommitmentCount: nftCommitments.length,
+      ftCommitmentCount: totalAmount,
+    };
+
+    next();
+  } catch (err) {
+    next(err);
+  }
+}
+
+/**
+ * This function will fetch user details from database
+ * @param {*} req
+ * @param {*} res
+ */
+export async function getUserDetails(req, res, next) {
+  try {
+    res.data = await db.fetchUser(req.user);
     next();
   } catch (err) {
     next(err);

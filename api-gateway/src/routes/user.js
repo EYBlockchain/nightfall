@@ -4,6 +4,7 @@ import {
   updateContract,
   deleteContract,
   getAllRegisteredNames,
+  getUserDetails,
 } from '../services/api-gateway';
 
 const router = express.Router();
@@ -122,14 +123,46 @@ router.route('/contractAddress').delete(deleteContract);
  *
  * @apiSuccessExample {json} Success response:
  *     HTTPS 200 OK
- *	  {
- *		"data":
- *			{
- *			}
- *		],
- *		"totalCount":1
- *	  }
+ *    {
+ *    "data":
+ *      {
+ *      }
+ *    ],
+ *    "totalCount":1
+ *    }
  */
 router.route('/getAllRegisteredNames').get(getAllRegisteredNames);
+
+/**
+ * @api {get} /user/getUserDetails fetch user details
+ * @apiVersion 1.0.0
+ * @apiName  Users information
+ * @apiGroup User
+ *
+ * @apiParam (Request body) {String} coin_shield Address of CoinShield Shield Contract (optional).
+ * @apiParam (Request body) {String} token_shield Address of TokenShield Shield Contract (optional).
+ *
+ *
+ * $http.get(url, data)
+ *   .success((res, status) => doSomethingHere())
+ *   .error((err, status) => doSomethingHere());
+ *
+ * @apiSuccess (Success 200) {String} message.
+ *
+ * @apiSuccessExample {json} Success response:
+ *     HTTPS 200 OK
+ *    {
+ *      "_id" : ObjectId("5d950e51f359c40039add239"),
+ *      "name" : "a",
+ *      "email" : "a",
+ *      "address" : "0x47b5b425eb00bb002e77814e3fa0edcc35f02774",
+ *      "secretkey" : "0x39c45c2c0117aa7473a112bebe6a5f263ece7cec3d95fc580d6c47",
+ *      "publickey" : "0x8a187d107cfaa07492faec946ffde448fe166820865dd6a437b5c4",
+ *      "coin_shield_contracts" : [ ],
+ *      "token_shield_contracts" : [ ],
+ *      "accounts" : [ ],
+ *    }
+ */
+router.get('/getUserDetails', getUserDetails);
 
 export default router;

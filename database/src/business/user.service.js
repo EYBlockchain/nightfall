@@ -1,6 +1,10 @@
 import { exec } from 'child_process';
+import mongoose from 'mongoose';
 import config from 'config';
+import utils from 'zkp-utils';
+
 import { COLLECTIONS } from '../common/constants';
+import dbConnections from '../common/dbConnections';
 import { userMapper } from '../mappers';
 
 const mongo = config.get('mongo');
@@ -14,7 +18,7 @@ function updateUserRole() {
   );
 }
 
-export default class AccountService {
+export default class UserService {
   constructor(_db) {
     this.db = _db;
   }
@@ -24,8 +28,8 @@ export default class AccountService {
    * @param {object} options - an object containing public key
    * @returns {object} a user document matching the public key
    */
-  getUser(options) {
-    return this.db.findOne(COLLECTIONS.USER, options);
+  getUser() {
+    return this.db.findOne(COLLECTIONS.USER);
   }
 
   /**
@@ -33,19 +37,25 @@ export default class AccountService {
    * @param {object} data - data contains user details
    * @returns {object} a user object
    */
-  async createAccount(data) {
-    const mappedData = await userMapper(data);
+  async createUser(data) {
+    const secretkey = await utils.rndHex(27);
+    const publickey = utils.hash(secretkey);
+
+    const mappedData = userMapper({ ...data, secretkey, publickey });
+
     await this.db.addUser(data.name, data.password);
     await updateUserRole();
     return this.db.saveData(COLLECTIONS.USER, mappedData);
   }
 
   /**
-   * This function will return all the user collection
-   * @returns {array} a user collection
+   * This function will update user
+   * @param {Object} data
+   * @returns {Promise}
    */
-  async getUsers() {
-    return this.db.getData(COLLECTIONS.USER, {});
+  async updateUser(data) {
+    const mappedData = userMapper(data);
+    return this.db.updateData(COLLECTIONS.USER, {}, mappedData);
   }
 
   /**
@@ -54,68 +64,48 @@ export default class AccountService {
    * @param {object} privateAccountDetails - contains ethereum private account and password
    * @returns {string} a account
    */
-  async updateUserWithPrivateAccount(privateAccountDetails) {
+  async insertPrivateAccountHandler({ address, password }) {
     const updateData = {
       $push: {
-        accounts: {
-          address: privateAccountDetails.address,
-          password: privateAccountDetails.password,
-        },
+        accounts: { address, password },
       },
     };
-    await this.db.updateData(COLLECTIONS.USER, {}, updateData);
-    return privateAccountDetails.address;
+    return this.db.updateData(COLLECTIONS.USER, {}, updateData);
   }
 
   /**
-   * This function will return all the private ethereum accounts assocated with a public ethereum account
-   * @param {object} headers - req object header
-   * @returns {array} all private accounts
+   * This fucntion is used create db connection for a user if not present.
+   * @param {string} name - user name
+   * @param {string} password - user password
+   * @returns {object} mongo db connection
    */
-  getPrivateAccounts(headers) {
-    const condition = { address: headers.address };
-    return this.db.getData(COLLECTIONS.USER, condition);
+  static async setDBconnection(name, password) {
+    if (!password) throw new Error('Password is empty');
+
+    if (!dbConnections[name]) {
+      dbConnections[name] = await mongoose.createConnection(
+        `mongodb://${name}:${password}@${mongo.host}:${mongo.port}/${mongo.databaseName}`,
+        { useNewUrlParser: true },
+      );
+    }
+    return dbConnections[name];
   }
 
   /**
-   * This function is used to get details of a private acocunts
-   * @param {string} account - private ethereum account
-   * @returns {object} a matched private account details
-   */
-  async getPrivateAccountDetails(account) {
-    const condition = {
-      'accounts.address': account,
-    };
-    const projection = {
-      'accounts.$': 1,
-    };
-    const [{ accounts }] = await this.db.getData(COLLECTIONS.USER, condition, projection);
-    return accounts[0];
-  }
-
-  /**
-   * This function will update user whisper key generated at login
-   * @param {String} shhIdentity - key hash
+   * This function will make provided contractAddress as selected contract
+   * (Private Method)
+   * @param {Object} { contractAddress }
+   * contractAddress - address of coinShield contract
    * @returns {Promise}
    */
-  updateWhisperIdentity(shhIdentity) {
+  selectFTShieldContractAddress({ contractAddress }) {
     return this.db.updateData(
       COLLECTIONS.USER,
       {},
       {
-        shh_identity: shhIdentity,
+        selected_coin_shield_contract: contractAddress,
       },
     );
-  }
-
-  /**
-   * This function will fetch user's whisper key from its user collection
-   * @returns {Promise} which resolve to whisper key.
-   */
-  async getWhisperIdentity() {
-    const users = await this.db.getData(COLLECTIONS.USER);
-    const shhIdentity = users[0].shh_identity || '';
-    return { shhIdentity };
   }
 
   /**
@@ -126,7 +116,7 @@ export default class AccountService {
    * contractAddress - address of coinShield contract
    * @returns {Promise}
    */
-  async addCoinShieldContractAddress({ contractName, contractAddress }) {
+  async addFTShieldContractInfo({ contractName, contractAddress, isSelected }) {
     await this.db.updateData(
       COLLECTIONS.USER,
       {
@@ -141,25 +131,23 @@ export default class AccountService {
         },
       },
     );
-    await this.selectCoinShieldContractAddress({ contractAddress });
+    if (isSelected) await this.selectFTShieldContractAddress({ contractAddress });
   }
 
   /**
    * This function will update coinShield contract info in user collection
    * and also set/uset as selected contract based on 'isSelected' flag
-   * @param {Object} contractInfo { contractName, contractAddress, isSelected, isCoinShieldPreviousSelected}
+   * @param {Object} contractInfo { contractName, contractAddress, isSelected, isFTShieldPreviousSelected}
    * contractName - name of coinShield contract
    * contractAddress - address of coinShield contract
    * isSelected - set/unset conteract as selected contract
-   * isCoinShieldPreviousSelected - current state of contract; is selected one or not
+   * isFTShieldPreviousSelected - current state of contract; is selected one or not
    * @returns {Promise}
    */
-  async updateCoinShieldContractAddress({
-    contractName,
+  async updateFTShieldContractInfoByContractAddress(
     contractAddress,
-    isSelected,
-    isCoinShieldPreviousSelected,
-  }) {
+    { contractName, isSelected, isFTShieldPreviousSelected },
+  ) {
     await this.db.updateData(
       COLLECTIONS.USER,
       {
@@ -173,26 +161,9 @@ export default class AccountService {
         },
       },
     );
-    if (isSelected) await this.selectCoinShieldContractAddress({ contractAddress });
-    else if (isCoinShieldPreviousSelected)
-      await this.selectCoinShieldContractAddress({ contractAddress: null });
-  }
-
-  /**
-   * This function will make provided contractAddress as selected contract
-   * (Private Method)
-   * @param {Object} { contractAddress }
-   * contractAddress - address of coinShield contract
-   * @returns {Promise}
-   */
-  selectCoinShieldContractAddress({ contractAddress }) {
-    return this.db.updateData(
-      COLLECTIONS.USER,
-      {},
-      {
-        selected_coin_shield_contract: contractAddress,
-      },
-    );
+    if (isSelected) await this.selectFTShieldContractAddress({ contractAddress });
+    else if (isFTShieldPreviousSelected)
+      await this.selectFTShieldContractAddress({ contractAddress: null });
   }
 
   /**
@@ -202,7 +173,7 @@ export default class AccountService {
    * contractAddress - address of coinShield contract
    * @returns {Promise}
    */
-  async deleteCoinShieldContractAddress({ contractAddress }) {
+  async deleteFTShieldContractInfoByContractAddress(contractAddress) {
     await this.db.updateData(
       COLLECTIONS.USER,
       {},
@@ -218,8 +189,25 @@ export default class AccountService {
     });
 
     if (!toUpdate) return null;
-    await this.selectCoinShieldContractAddress({ contractAddress: null });
+    await this.selectFTShieldContractAddress({ contractAddress: null });
     return toUpdate;
+  }
+
+  /**
+   * This function will make provided contractAddress as selected contract
+   * (Private Method)
+   * @param {Object} { contractAddress }
+   * contractAddress - address of tokenShield contract
+   * @returns {Promise}
+   */
+  selectNFTShieldContractAddress({ contractAddress }) {
+    return this.db.updateData(
+      COLLECTIONS.USER,
+      {},
+      {
+        selected_token_shield_contract: contractAddress,
+      },
+    );
   }
 
   /**
@@ -230,7 +218,7 @@ export default class AccountService {
    * contractAddress - address of tokenShield contract
    * @returns {Promise}
    */
-  async addTokenShieldContractAddress({ contractName, contractAddress }) {
+  async addNFTShieldContractInfo({ contractName, contractAddress, isSelected }) {
     await this.db.updateData(
       COLLECTIONS.USER,
       {
@@ -245,7 +233,7 @@ export default class AccountService {
         },
       },
     );
-    await this.selectTokenShieldContractAddress({ contractAddress });
+    if (isSelected) await this.selectNFTShieldContractAddress({ contractAddress });
   }
 
   /**
@@ -258,12 +246,10 @@ export default class AccountService {
    * isTokenShieldPreviousSelected - current state of contract; is selected one or not
    * @returns {Promise}
    */
-  async updateTokenShieldContractAddress({
-    contractName,
+  async updateNFTShieldContractInfoByContractAddress(
     contractAddress,
-    isSelected,
-    isTokenShieldPreviousSelected,
-  }) {
+    { contractName, isSelected, isNFTShieldPreviousSelected },
+  ) {
     await this.db.updateData(
       COLLECTIONS.USER,
       {
@@ -277,26 +263,9 @@ export default class AccountService {
         },
       },
     );
-    if (isSelected) await this.selectTokenShieldContractAddress({ contractAddress });
-    else if (isTokenShieldPreviousSelected)
-      await this.selectTokenShieldContractAddress({ contractAddress: null });
-  }
-
-  /**
-   * This function will make provided contractAddress as selected contract
-   * (Private Method)
-   * @param {Object} { contractAddress }
-   * contractAddress - address of tokenShield contract
-   * @returns {Promise}
-   */
-  selectTokenShieldContractAddress({ contractAddress }) {
-    return this.db.updateData(
-      COLLECTIONS.USER,
-      {},
-      {
-        selected_token_shield_contract: contractAddress,
-      },
-    );
+    if (isSelected) await this.selectNFTShieldContractAddress({ contractAddress });
+    else if (isNFTShieldPreviousSelected)
+      await this.selectNFTShieldContractAddress({ contractAddress: null });
   }
 
   /**
@@ -306,7 +275,7 @@ export default class AccountService {
    * contractAddress - address of tokenShield contract
    * @returns {Promise}
    */
-  async deleteTokenShieldContractAddress({ contractAddress }) {
+  async deleteNFTShieldContractInfoByContractAddress(contractAddress) {
     await this.db.updateData(
       COLLECTIONS.USER,
       {},
@@ -322,7 +291,7 @@ export default class AccountService {
     });
 
     if (!toUpdate) return null;
-    await this.selectTokenShieldContractAddress({ contractAddress: null });
+    await this.selectNFTShieldContractAddress({ contractAddress: null });
     return toUpdate;
   }
 }

@@ -12,10 +12,10 @@ import { FtCommitmentService } from '../business';
  * @param {*} req
  * @param {*} res
  */
-async function addCoinHandler(req, res, next) {
+async function insertFTCommitment(req, res, next) {
   try {
     const ftCommitmentService = new FtCommitmentService(req.user.db);
-    await ftCommitmentService.addNewCoin(req.body);
+    await ftCommitmentService.insertFTCommitment(req.body);
     res.data = { message: 'inserted' };
     next();
   } catch (err) {
@@ -28,10 +28,10 @@ async function addCoinHandler(req, res, next) {
  * @param {*} req
  * @param {*} res
  */
-async function getCoinHandler(req, res, next) {
+async function getFTCommitments(req, res, next) {
   try {
     const ftCommitmentService = new FtCommitmentService(req.user.db);
-    res.data = await ftCommitmentService.getCoin(req.query);
+    res.data = await ftCommitmentService.getFTCommitments(req.query);
     next();
   } catch (err) {
     next(err);
@@ -59,10 +59,11 @@ async function getCoinHandler(req, res, next) {
  * @param {*} req
  * @param {*} res
  */
-async function updateCoinHandler(req, res, next) {
+async function updateFTCommitmentByCommitmentHash(req, res, next) {
+  const { commitmentHash } = req.params;
   try {
     const ftCommitmentService = new FtCommitmentService(req.user.db);
-    await ftCommitmentService.updateCoin(req.body);
+    await ftCommitmentService.updateFTCommitmentByCommitmentHash(commitmentHash, req.body);
     res.data = { message: 'updated' };
     next();
   } catch (err) {
@@ -79,10 +80,10 @@ async function updateCoinHandler(req, res, next) {
  * @param {*} req
  * @param {*} res
  */
-async function getCoinTransactions(req, res, next) {
+async function getFTCommitmentTransactions(req, res, next) {
   try {
     const ftCommitmentService = new FtCommitmentService(req.user.db);
-    res.data = await ftCommitmentService.getCoinTransactions(req.query);
+    res.data = await ftCommitmentService.getFTCommitmentTransactions(req.query);
     next();
   } catch (err) {
     next(err);
@@ -116,10 +117,10 @@ async function getCoinTransactions(req, res, next) {
  * @param {*} req
  * @param {*} res
  */
-async function addCoinTransaction(req, res, next) {
+async function insertFTCommitmentTransaction(req, res, next) {
   try {
     const ftCommitmentService = new FtCommitmentService(req.user.db);
-    await ftCommitmentService.addCoinTransaction(req.body);
+    await ftCommitmentService.insertFTCommitmentTransaction(req.body);
     res.data = { message: 'inserted' };
     next();
   } catch (err) {
@@ -130,13 +131,14 @@ async function addCoinTransaction(req, res, next) {
 // initializing routes
 export default function(router) {
   router
-    .route('/coin')
-    .post(addCoinHandler)
-    .get(getCoinHandler)
-    .patch(updateCoinHandler);
+    .route('/ft-commitments')
+    .post(insertFTCommitment)
+    .get(getFTCommitments);
+
+  router.patch('/ft-commitments/:commitmentHash', updateFTCommitmentByCommitmentHash);
 
   router
-    .route('/coin/transaction')
-    .post(addCoinTransaction)
-    .get(getCoinTransactions);
+    .route('/ft-commitments/transactions')
+    .post(insertFTCommitmentTransaction)
+    .get(getFTCommitmentTransactions);
 }

@@ -1,43 +1,22 @@
-import mongoose from 'mongoose';
-import config from 'config';
-
-const { host, port, databaseName, admin, adminPassword } = config.get('mongo');
-
-const connections = {
-  admin: mongoose.createConnection(
-    `mongodb://${admin}:${adminPassword}@${host}:${port}/${databaseName}`,
-    { useNewUrlParser: true, useCreateIndex: true },
-  ),
-};
+import dbConnections from '../common/dbConnections';
 
 export default async function(req, res, next) {
+  req.user = {};
   try {
     // signup need admin privalage as it create user sepcific tables.
-    if (req.path === '/createAccount') {
-      req.user = req.user || {};
-      req.user.connection = connections.admin;
+    if (req.path === '/users' && req.method === 'POST') {
+      req.user.connection = dbConnections.admin;
       return next();
     }
 
-    if (req.path === '/login') {
-      const { name, password } = req.body;
-      if (!connections[name]) {
-        connections[name] = await mongoose.createConnection(
-          `mongodb://${name}:${password}@${host}:${port}/${databaseName}`,
-          { useNewUrlParser: true },
-        );
-      }
-
-      req.user = req.user || {};
-      req.user.connection = connections[name];
+    if (req.path === '/db-connection' && req.method === 'POST') {
       return next();
     }
 
-    const name = req.headers.name || req.body.name || req.query.name;
+    const name = req.headers.loggedinusername || req.username;
     if (name) {
-      if (!connections[name]) next(new Error('user never loggedIn in'));
-      req.user = req.user || {};
-      req.user.connection = connections[name];
+      if (!dbConnections[name]) next(new Error('user never loggedIn in'));
+      req.user.connection = dbConnections[name];
       return next();
     }
     throw new Error('DB connection assign failed');

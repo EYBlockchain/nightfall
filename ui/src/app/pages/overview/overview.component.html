@@ -23,7 +23,7 @@
             <a [routerLink]="['/token/list']">
               <div class="card">
                 <div class="card-body">
-                  <h3 *ngIf="count">{{ count.tokenCount ? count.tokenCount : '0' }}</h3>
+                  <h3 *ngIf="count">{{ count.nftCommitmentCount ? count.nftCommitmentCount : '0' }}</h3>
                   <p class="card-text">{{ nftName }} Commitments</p>
                 </div>
               </div>
@@ -45,7 +45,7 @@
             <a [routerLink]="['/coin/list']">
               <div class="card">
                 <div class="card-body">
-                  <h3 *ngIf="count">{{ count.totalAmount ? count.totalAmount : '0' }}</h3>
+                  <h3 *ngIf="count">{{ count.ftCommitmentCount ? count.ftCommitmentCount : '0' }}</h3>
                   <p class="card-text">{{ ftName }} Commitments</p>
                 </div>
               </div>

@@ -1,6 +1,83 @@
 import { whisperTransaction } from './whisper';
 import { accounts, db, offchain, zkp } from '../rest';
 
+/**
+ * This function will insert FT commitment in database
+ * req.user {
+    address: '0x04b95c76d5075620a655b707a7901462aea8656d',
+    name: 'alice',
+    pk_A: '0x4c45963a12f0dfa530285fde66ac235c8f8ddf8d178098cdb292ac',
+    password: 'alicesPassword'
+ }
+ * req.body {
+    amount: 0x0000002,
+    salt: '0xE9A313C89C449AF6E630C25AB3ACC0FC3BAB821638E0D55599B518',
+    commitment: '0xdd3434566',
+    commitmentIndex: 1,
+    isReceived: true,
+    zCorrect: true,
+    zOnchainCorrect: true,
+  }
+ * @param {*} req
+ * @param {*} res
+ */
+export async function insertFTCommitmentToDb(req, res, next) {
+  try {
+    res.data = await db.insertFTCommitment(req.user, req.body);
+    next();
+  } catch (err) {
+    next(err);
+  }
+}
+
+/**
+ * This function will fetch FT commitments from database
+ * req.user {
+    address: '0x04b95c76d5075620a655b707a7901462aea8656d',
+    name: 'alice',
+    pk_A: '0x4c45963a12f0dfa530285fde66ac235c8f8ddf8d178098cdb292ac',
+    password: 'alicesPassword'
+ }
+ * req.query {
+    pageNo: 1,
+    limit: 4
+  }
+ * @param {*} req
+ * @param {*} res
+ */
+export async function getFTCommitments(req, res, next) {
+  try {
+    res.data = await db.getFTCommitments(req.user, req.query);
+    next();
+  } catch (err) {
+    next(err);
+  }
+}
+
+/**
+ * This function will fetch FT commitment transactions from database
+ * req.user {
+    address: '0x04b95c76d5075620a655b707a7901462aea8656d',
+    name: 'alice',
+    pk_A: '0x4c45963a12f0dfa530285fde66ac235c8f8ddf8d178098cdb292ac',
+    password: 'alicesPassword'
+ }
+ * req.query {
+    pageNo: 1,
+    limit: 4
+  }
+ * @param {*} req
+ * @param {*} res
+ */
+export async function getFTCommitmentTransactions(req, res, next) {
+  try {
+    res.data = await db.getFTCommitmentTransactions(req.user, req.query);
+    next();
+  } catch (err) {
+    next(err);
+  }
+}
+
 export async function checkCorrectnessCoin(req, res, next) {
   try {
     const { data } = await zkp.checkCorrectnessCoin(req.headers, req.body);
@@ -35,7 +112,7 @@ export async function mintCoin(req, res, next) {
 
     data.coin_index = parseInt(data.coin_index, 16);
 
-    await db.addCoin(req.user, {
+    await db.insertFTCommitment(req.user, {
       amount: req.body.A,
       salt: data.S_A,
       commitment: data.coin,
@@ -59,8 +136,8 @@ export async function mintCoin(req, res, next) {
     password: 'alicesPassword'
   }
  * req.body {
-     C: '0x00000000000000000000000000002710',
-      D: '0x00000000000000000000000000001388',
+    C: '0x00000000000000000000000000002710',
+    D: '0x00000000000000000000000000001388',
     E: '0x00000000000000000000000000001770',
     F: '0x00000000000000000000000000002328',
     S_C: '0x14de022c9b4a437b346f04646bd7809deb81c38288e9614478351d',
@@ -69,7 +146,6 @@ export async function mintCoin(req, res, next) {
     z_D_index: 1,
     S_E: '0xEDCE5B0A6607149ECC1293F721924128ABFDCDE553506C792F3DA3',
     S_F: '0x4432C08959B75A846A2E50007B5FAC86B18446B910C67B0255BDE7',
-    sk_A: '0x41ced159d5690ef0ccfe5742783057fc9eb12809af2f16f6f98ffd',
     z_C: '0x39aaa6fe40c2106f49f72c67bc24d377e180baf3fe211c5c90e254',
     z_D: '0x0ca8040181b3fc505eed1ee6892622054ae877ddf8f9dafe93b072',
     pk_A: '0x70dd53411043c9ff4711ba6b6c779cec028bd43e6f525a25af36b8',
@@ -89,12 +165,16 @@ export async function transferCoin(req, res, next) {
 
     req.body.pk_B = await offchain.getZkpPublicKeyFromName(req.body.receiver_name); // fetch pk from PKD by passing username
 
+    // get logged in user's secretkey.
+    const user = await db.fetchUser(req.user);
+    req.body.sk_A = user.secretkey;
+
     const { data } = await zkp.transferCoin({ address }, req.body);
     data.z_E_index = parseInt(data.z_E_index, 16);
     data.z_F_index = parseInt(data.z_F_index, 16);
 
     // update slected coin1 with tansferred data
-    await db.updateCoin(req.user, {
+    await db.updateFTCommitmentByCommitmentHash(req.user, req.body.z_C, {
       amount: req.body.C,
       salt: req.body.S_C,
       commitment: req.body.z_C,
@@ -112,7 +192,7 @@ export async function transferCoin(req, res, next) {
     });
 
     // update slected coin with tansferred data
-    await db.updateCoin(req.user, {
+    await db.updateFTCommitmentByCommitmentHash(req.user, req.body.z_D, {
       amount: req.body.D,
       salt: req.body.S_D,
       commitment: req.body.z_D,
@@ -131,7 +211,7 @@ export async function transferCoin(req, res, next) {
 
     // transfer is only case where we need to call api to add coin transaction
     // rest of case inserting coin or updating coin will add respective transfer log.
-    await db.addCoinTransaction(req.user, {
+    await db.insertFTCommitmentTransaction(req.user, {
       amount: req.body.E,
       salt: data.S_E,
       commitment: data.z_E,
@@ -156,7 +236,7 @@ export async function transferCoin(req, res, next) {
 
     // add change to user database
     if (parseInt(req.body.F, 16)) {
-      await db.addCoin(req.user, {
+      await db.insertFTCommitment(req.user, {
         amount: req.body.F,
         salt: data.S_F,
         commitment: data.z_F,
@@ -175,7 +255,7 @@ export async function transferCoin(req, res, next) {
       commitment: data.z_E,
       commitmentIndex: data.z_E_index,
       receiver: req.body.receiver_name,
-      for: 'coin',
+      for: 'FTCommitment',
     });
 
     res.data = data;
@@ -189,7 +269,6 @@ export async function transferCoin(req, res, next) {
  * This function will burn a coin
  * req.body {
   A: '0x00000000000000000000000000000001',
-  sk_A: '0x283ccbfada111a31df7617deeff4d0daaa3f73b05ba100821d17cc',
   S_A: '0xa31adb1074f977413fddd3953e333529a3494e110251368cc823fb',
   z_A_index: 0,
   z_A: '0x1ec4a9b406fd3d79a01360ccd14c8530443ea9869f8e9560dafa56',
@@ -204,10 +283,13 @@ export async function burnCoin(req, res, next) {
       ? await offchain.getAddressFromName(req.body.payTo)
       : req.user.address;
 
+    const user = await db.fetchUser(req.user);
+    req.body.sk_A = user.secretkey; // get logged in user's secretkey.
+
     const { data } = await zkp.burnCoin({ ...req.body, payTo: payToAddress }, req.user);
 
     // update slected coin2 with tansferred data
-    await db.updateCoin(req.user, {
+    await db.updateFTCommitmentByCommitmentHash(req.user, req.body.z_A, {
       amount: req.body.A,
       salt: req.body.S_A,
       commitment: req.body.z_A,
@@ -215,8 +297,6 @@ export async function burnCoin(req, res, next) {
       receiver: req.body.payTo || req.user.name,
       isBurned: true,
     });
-
-    const user = await db.fetchUser(req.user);
 
     if (req.body.payTo) {
       await whisperTransaction(req, {
@@ -228,7 +308,7 @@ export async function burnCoin(req, res, next) {
         for: 'FToken',
       }); // send ft token data to BOB side
     } else {
-      await db.addFTTransaction(req.user, {
+      await db.insertFTTransaction(req.user, {
         amount: Number(req.body.A),
         shieldContractAddress: user.selected_coin_shield_contract,
         receiver: req.body.payTo,

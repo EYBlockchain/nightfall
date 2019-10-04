@@ -106,9 +106,9 @@ export class SpendTokenComponent implements OnInit, AfterContentInit {
     this.tokenApiService.spendToken(
       selectedToken.token_id,
       selectedToken.token_uri,
+      selectedToken.shield_contract_address,
       selectedToken.salt,
       selectedToken.token_commitment,
-      localStorage.getItem('secretkey'),
       this.receiverName,
       selectedToken.token_commitment_index
     ).subscribe( data => {
@@ -144,7 +144,7 @@ export class SpendTokenComponent implements OnInit, AfterContentInit {
   fetchTokens () {
     this.transactions = null;
     this.isRequesting = true;
-    this.tokenApiService.fetchTokens(undefined, undefined)
+    this.tokenApiService.getNFTCommitments(undefined, undefined)
     .subscribe( data => {
       this.isRequesting = false;
       if (data &&

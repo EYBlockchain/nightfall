@@ -12,7 +12,7 @@ export default class FtService {
    * in ft_transction collection
    * @param {object} data
    */
-  addFTokenTransaction(data) {
+  insertFTokenTransaction(data) {
     const { isReceived, isTransferred, isBurned } = data;
     const mappedData = ftMapper(data);
 

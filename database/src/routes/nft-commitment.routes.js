@@ -16,10 +16,10 @@ import { NftCommitmentService } from '../business';
  * @param {*} req
  * @param {*} res
  */
-async function addTokenHandler(req, res, next) {
+async function insertNFTCommitment(req, res, next) {
   try {
     const nftCommitmentService = new NftCommitmentService(req.user.db);
-    await nftCommitmentService.addNewToken(req.body);
+    await nftCommitmentService.insertNFTCommitment(req.body);
     res.data = { message: 'inserted' };
     next();
   } catch (err) {
@@ -36,10 +36,10 @@ async function addTokenHandler(req, res, next) {
  * @param {*} req
  * @param {*} res
  */
-async function getTokenHandler(req, res, next) {
+async function getNFTCommitments(req, res, next) {
   const nftCommitmentService = new NftCommitmentService(req.user.db);
   try {
-    res.data = await nftCommitmentService.getToken(req.query);
+    res.data = await nftCommitmentService.getNFTCommitments(req.query);
     next();
   } catch (err) {
     next(err);
@@ -66,10 +66,11 @@ async function getTokenHandler(req, res, next) {
  * @param {*} req
  * @param {*} res
  */
-async function updateTokenHandler(req, res, next) {
+async function updateNFTCommitmentByTokenId(req, res, next) {
+  const { tokenId } = req.params;
   const nftCommitmentService = new NftCommitmentService(req.user.db);
   try {
-    await nftCommitmentService.updateToken(req.body);
+    await nftCommitmentService.updateNFTCommitmentByTokenId(tokenId, req.body);
     res.data = { message: 'updated' };
     next();
   } catch (err) {
@@ -83,10 +84,10 @@ async function updateTokenHandler(req, res, next) {
  * @param {*} req
  * @param {*} res
  */
-async function getPrivateTokenTransactions(req, res, next) {
+async function getNFTCommitmentTransactions(req, res, next) {
   const nftCommitmentService = new NftCommitmentService(req.user.db);
   try {
-    res.data = await nftCommitmentService.getPrivateTokenTransactions(req.query);
+    res.data = await nftCommitmentService.getNFTCommitmentTransactions(req.query);
     next();
   } catch (err) {
     next(err);
@@ -96,10 +97,11 @@ async function getPrivateTokenTransactions(req, res, next) {
 // initializing routes
 export default function(router) {
   router
-    .route('/token')
-    .post(addTokenHandler)
-    .get(getTokenHandler)
-    .patch(updateTokenHandler);
+    .route('/nft-commitments')
+    .post(insertNFTCommitment)
+    .get(getNFTCommitments);
 
-  router.route('/token/transaction').get(getPrivateTokenTransactions);
+  router.patch('/nft-commitments/:tokenId', updateNFTCommitmentByTokenId);
+
+  router.get('/nft-commitments/transactions', getNFTCommitmentTransactions);
 }

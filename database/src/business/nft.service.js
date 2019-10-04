@@ -38,8 +38,8 @@ export default class NftService {
    * Also, will insert transaction in nft_transaction collection
    * @param {object} data
    */
-  async updateNFToken(data) {
-    const { tokenId, isBurned, isShielded } = data;
+  async updateNFTokenByTokenId(tokenId, data) {
+    const { isBurned, isShielded } = data;
     const mappedData = nftMapper(data);
 
     await this.db.updateData(
@@ -98,18 +98,6 @@ export default class NftService {
       parseInt(pageNo, 10),
       parseInt(limit, 10),
     );
-  }
-
-  /**
-   * This function fetch a ERC-721 (nft) token by tokenId
-   * @param {string} tokenId - unique tokenId generated at mint
-   * @returns {Promise}
-   */
-  getNFToken(tokenId) {
-    return this.db.findOne(COLLECTIONS.NFT, {
-      token_id: tokenId,
-      is_transferred: { $exists: false },
-    });
   }
 
   /**

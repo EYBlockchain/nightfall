@@ -1,7 +1,9 @@
-export function formatResponse(req, res) {
+export function formatResponse(req, res, next) {
   const { data } = res;
   if (data === undefined) {
-    return res.sendStatus(404);
+    const err = new Error('Url Not Found');
+    err.status = 404;
+    return next(err);
   }
   return res.status(200).send({
     error: null,

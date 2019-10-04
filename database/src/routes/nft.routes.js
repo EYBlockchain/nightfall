@@ -16,7 +16,7 @@ import { NftService } from '../business';
  * @param {*} req
  * @param {*} res
  */
-async function addNFToken(req, res, next) {
+async function insertNFToken(req, res, next) {
   try {
     const nftService = new NftService(req.user.db);
     await nftService.addNFToken(req.body);
@@ -44,10 +44,11 @@ async function addNFToken(req, res, next) {
  * @param {*} req
  * @param {*} res
  */
-async function updateNFToken(req, res, next) {
+async function updateNFTokenByTokenId(req, res, next) {
+  const { tokenId } = req.params;
   try {
     const nftService = new NftService(req.user.db);
-    await nftService.updateNFToken(req.body);
+    await nftService.updateNFTokenByTokenId(tokenId, req.body);
     res.data = { message: 'updated' };
     next();
   } catch (err) {
@@ -98,32 +99,14 @@ async function getNFTTransactions(req, res, next) {
   }
 }
 
-/**
- * This function returns a specfic ERC 721 token by token_id, to get its detail.
- * req.params {
- *  token_id: '0xa23..'
- * }
- * @param {*} req
- * @param {*} res
- */
-async function getNFToken(req, res, next) {
-  try {
-    const nftService = new NftService(req.user.db);
-    res.data = await nftService.getNFToken(req.params.tokenId);
-    next();
-  } catch (err) {
-    next(err);
-  }
-}
-
 // initializing routes
 export default function(router) {
   router
-    .route('/nft')
-    .post(addNFToken)
-    .patch(updateNFToken)
+    .route('/nfts')
+    .post(insertNFToken)
     .get(getNFTokens);
 
-  router.route('/nft-transaction').get(getNFTTransactions);
-  router.route('/nft/:tokenId').get(getNFToken);
+  router.patch('/nfts/:tokenId', updateNFTokenByTokenId);
+
+  router.get('/nfts/transactions', getNFTTransactions);
 }

@@ -51,7 +51,7 @@ export class AccountsApiService {
    * Method to initiate a HTTP request to get a user.
    */
   getUser() {
-    const url = config.database.root + 'user?pk_B=' + localStorage.getItem('publickey');
+    const url = config.apiGateway.root + 'user/getUserDetails';
     return this.http.get(url).pipe(
       tap(data => {}),
       catchError(err => {
@@ -70,13 +70,13 @@ export class AccountsApiService {
   getTransactions(type: string, pageNo: number, limit: number) {
     let url;
     if (type === 'tokens') {
-      url = config.database.root + 'token/transaction?type=' + type + '&pageNo=' + pageNo + '&limit=' + limit;
+      url = config.apiGateway.root + 'token/transactions?pageNo=' + pageNo + '&limit=' + limit;
     } else if (type === 'publictokens') {
-      url = config.database.root + 'nft-transaction?type=' + type + '&pageNo=' + pageNo + '&limit=' + limit;
+      url = config.apiGateway.root + 'nft/transactions?pageNo=' + pageNo + '&limit=' + limit;
  } else if (type === 'publiccoins') {
-      url = config.database.root + 'ft/transaction?type=' + type + '&pageNo=' + pageNo + '&limit=' + limit;
+      url = config.apiGateway.root + 'ft/transactions?&pageNo=' + pageNo + '&limit=' + limit;
  } else {
-      url = config.database.root + 'coin/transaction?pageNo=' + pageNo + '&limit=' + limit;
+      url = config.apiGateway.root + 'coin/transactions?pageNo=' + pageNo + '&limit=' + limit;
  }
 
     return this.http.get(url).pipe(
@@ -123,8 +123,8 @@ export class AccountsApiService {
   /**
    * Method to initiate a HTTP request to get ERC-721 token commitment count of logged in user.
    */
-  getCount() {
-    const url = config.database.root + 'count';
+  getTokenCommitmentCounts() {
+    const url = config.apiGateway.root + 'getTokenCommitmentCounts';
     return this.http.get(url).pipe(
       tap(data => {}),
       catchError(err => {
@@ -194,7 +194,8 @@ export class AccountsApiService {
     const url = config.apiGateway.root + 'user/contractAddress';
     const body = {
       contractAddress: account.contractAdd,
-      contractName: account.contractName
+      contractName: account.contractName,
+      isSelected: account.selection,
     };
     return this.http.post(url, body, httpOptions).pipe(tap(data => console.log('added ERC-20 Account')));
   }

@@ -62,6 +62,23 @@ describe('****** Integration Test ******\n', function() {
    * This step will log in Alice and Bob.
    */
   describe('*** Login Users ***', function() {
+    after(async function() {
+      let res;
+      res = await request
+        .get('/user/getUserDetails')
+        .use(prefix(apiServerURL))
+        .set('Authorization', alice.token);
+
+      alice.sk = res.body.data.secretkey;
+
+      res = await request
+        .get('/user/getUserDetails')
+        .use(prefix(apiServerURL))
+        .set('Authorization', bob.token);
+
+      bob.sk = res.body.data.secretkey;
+    });
+
     /*
      * Login User Alice.
      */
@@ -76,7 +93,6 @@ describe('****** Integration Test ******\n', function() {
           expect(res).to.have.nested.property('body.data.token');
 
           alice.token = res.body.data.token;
-          alice.sk = res.body.data.secretkey;
           return done();
         });
     });
@@ -94,11 +110,11 @@ describe('****** Integration Test ******\n', function() {
           expect(res).to.have.nested.property('body.data.token');
 
           bob.token = res.body.data.token;
-          bob.sk = res.body.data.secretkey;
           return done();
         });
     });
   });
+
   /*
    * Step 3 to 8.
    *  These steps will test the creation of ERC-721 tokens and ERC-721 token commitments, as well as the transfer and burning of these tokens and their commitments.
@@ -164,7 +180,6 @@ describe('****** Integration Test ******\n', function() {
             uri: erc721Commitment.uri,
             S_A: erc721Commitment.S_A,
             S_B: erc721Commitment.S_B,
-            sk_A: alice.sk,
             z_A: erc721Commitment.mintCommitment,
             receiver_name: bob.name,
             z_A_index: erc721Commitment.mintCommitmentIndex,
@@ -202,7 +217,6 @@ describe('****** Integration Test ******\n', function() {
             A: erc721Commitment.tokenID,
             uri: erc721Commitment.uri,
             S_A: erc721Commitment.S_B,
-            Sk_A: bob.sk,
             z_A: erc721Commitment.transferCommitment,
             z_A_index: erc721Commitment.transferCommitmentIndex,
           })
@@ -369,7 +383,6 @@ describe('****** Integration Test ******\n', function() {
             z_D_index,
             E,
             F,
-            sk_A: alice.sk,
             receiver_name: bob.name,
           })
           .set('Accept', 'application/json')
@@ -404,7 +417,6 @@ describe('****** Integration Test ******\n', function() {
           .use(prefix(apiServerURL))
           .send({
             A: erc20Commitments.change.value,
-            sk_A: alice.sk,
             S_A: erc20Commitments.change.S_F,
             z_A_index: erc20Commitments.change.commitmentIndex,
             z_A: erc20Commitments.change.commitment,
@@ -436,7 +448,6 @@ describe('****** Integration Test ******\n', function() {
           .use(prefix(apiServerURL))
           .send({
             A: erc20Commitments.transfer.value,
-            sk_A: bob.sk,
             S_A: erc20Commitments.transfer.S_E,
             z_A_index: erc20Commitments.transfer.commitmentIndex,
             z_A: erc20Commitments.transfer.commitment,

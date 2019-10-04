@@ -25,3 +25,5 @@ Commit hash : (if `develop`)
 ````
 [backtrace]
 ````
+
+#### Logs

@@ -6,6 +6,8 @@ import {
   getNFTokens,
   getNFTokenAddress,
   getNFTokenInfo,
+  insertNFTToDb,
+  getNFTTransactions,
 } from '../services/nft';
 
 const router = express.Router();
@@ -101,14 +103,95 @@ router.route('/transferNFToken').post(transferNFToken);
  */
 router.route('/burnNFToken').post(burnNFToken);
 
+router
+  .route('/')
+  /**
+   * @api {get} /nft List ERC-721 tokens
+   * @apiVersion 1.0.0
+   * @apiName  List non-fungible tokens
+   * @apiGroup ERC-721
+   *
+   * @apiParam (Request query) {String} limit page size (optional).
+   * @apiParam (Request query) {String} pageNo page number (optional).
+   *
+   * @apiExample {js} Example usage:
+   * const qyery = {
+   *    limit: '12',
+   *    pageNo: 2
+   * }
+   *
+   * $http.get(url, data)
+   *   .success((res, status) => doSomethingHere())
+   *   .error((err, status) => doSomethingHere());
+   *
+   * @apiSuccess (Success 200) {Array} data ERC-721 tokens.
+   * @apiSuccess (Success 200) {Array} totalCount Total no. of tokens.
+   *
+   * @apiSuccessExample {json} Success response:
+   *     HTTPS 200 OK
+   *    {
+   *    "data":[
+   *      {
+   *        "is_shielded":false,
+   *        "_id":"5ce25daa09416cc13c79b9f0",
+   *        "uri":"one",
+   *        "token_id":"0x57880c3b9cee300000000000000000000000000000000000000000000000000",
+   *        "is_minted":true,
+   *        "created_at":"2019-05-20T07:56:26.579Z",
+   *        "updated_at":"2019-05-20T07:56:26.579Z",
+   *        "__v":0
+   *      }
+   *    ],
+   *    "totalCount":1
+   *    }
+   */
+  .get(getNFTokens)
+
+  /**
+   * @api {post} /nft insert ERC-721 token in database
+   * @apiVersion 1.0.0
+   * @apiName  insert non-fungible tokens
+   * @apiGroup ERC-721
+   *
+   * @apiParam (Request body) {String} uri
+   * @apiParam (Request body) {String} tokenId
+   * @apiParam (Request body) {String} shieldContractAddress
+   * @apiParam (Request body) {String} sender
+   * @apiParam (Request body) {String} senderAddress
+
+   *
+   * @apiExample {js} Example usage:
+   * const body = {
+   *    uri: 'unique token URI',
+   *    tokenId: '0x1448d8ab4e0d610000000000000000000000000000000000000000000000000',
+   *    shieldContractAddress: '0x04b95c76d5075620a655b707a7901462aea8656c',
+   *    sender: 'a',
+   *    senderAddress: '0x04b95c76d5075620a655b707a7901462aea8656d',
+   * }
+   *
+   * $http.post(url, data)
+   *   .success((res, status) => doSomethingHere())
+   *   .error((err, status) => doSomethingHere());
+   *
+   * @apiSuccess (Success 200) {String} message status message.
+   *
+   * @apiSuccessExample {json} Success response:
+   *     HTTPS 200 OK
+   *    {
+   *      message: 'inserted',
+   *    }
+   */
+  .post(insertNFTToDb);
+
 /**
- * @api {get} /getNFTTokens List ERC-721 tokens
+ * @api {get} /nft/transactions fetch ERC-721 token transactions from database
  * @apiVersion 1.0.0
- * @apiName  List non-fungible tokens
+ * @apiName  List non-fungible token transactions
  * @apiGroup ERC-721
  *
  * @apiParam (Request query) {String} limit page size (optional).
  * @apiParam (Request query) {String} pageNo page number (optional).
+
  *
  * @apiExample {js} Example usage:
  * const qyery = {
@@ -116,32 +199,32 @@ router.route('/burnNFToken').post(burnNFToken);
  *    pageNo: 2
  * }
  *
- * $http.get(url, data)
+ * $http.post(url, data)
  *   .success((res, status) => doSomethingHere())
  *   .error((err, status) => doSomethingHere());
  *
- * @apiSuccess (Success 200) {Array} data ERC-721 tokens.
- * @apiSuccess (Success 200) {Array} totalCount Total no. of tokens.
+ * @apiSuccess (Success 200) {Array} data ERC-721 token transactions.
+ * @apiSuccess (Success 200) {Array} totalCount Total no. of token transactions in database.
  *
  * @apiSuccessExample {json} Success response:
  *     HTTPS 200 OK
- *	  {
- *		"data":[
- *			{
- *				"is_shielded":false,
- *				"_id":"5ce25daa09416cc13c79b9f0",
- *				"uri":"one",
- *				"token_id":"0x57880c3b9cee300000000000000000000000000000000000000000000000000",
- *				"is_minted":true,
- *				"created_at":"2019-05-20T07:56:26.579Z",
- *				"updated_at":"2019-05-20T07:56:26.579Z",
- *				"__v":0
- *			}
- *		],
- *		"totalCount":1
- *	  }
+ *    {
+ *      "data":[
+ *        {
+ *          "_id":"5d951085f359c40039add23b",
+ *          "uri":"one",
+ *          "token_id":"0x119eda3adb1dab00000000000000000000000000000000000000000000000000",
+ *          "type":"minted",
+ *          "created_at":"2019-10-02T21:03:01.491Z",
+ *          "updated_at":"2019-10-02T21:03:01.491Z",
+ *          "__v":0
+ *        }
+ *      ],
+ *      "totalCount":1
+ *      }
+ *    }
  */
-router.route('/getNFTTokens').get(getNFTokens);
+router.route('/transactions').get(getNFTTransactions);
 
 /**
  * @api {get} /getNFTokenShieldContractAddress Retrieve non-fungible token

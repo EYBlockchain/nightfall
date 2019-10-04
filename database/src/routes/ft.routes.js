@@ -13,10 +13,10 @@ import { FtService } from '../business';
  * @param {*} req
  * @param {*} res
  */
-async function addFTTransaction(req, res, next) {
+async function insertFTTransaction(req, res, next) {
   try {
     const ftService = new FtService(req.user.db);
-    await ftService.addFTokenTransaction(req.body);
+    await ftService.insertFTokenTransaction(req.body);
     res.data = { message: 'inserted' };
     next();
   } catch (err) {
@@ -43,7 +43,7 @@ async function getFTTransactions(req, res, next) {
 // initializing routes
 export default function(router) {
   router
-    .route('/ft/transaction')
-    .post(addFTTransaction)
+    .route('/fts/transactions')
+    .post(insertFTTransaction)
     .get(getFTTransactions);
 }

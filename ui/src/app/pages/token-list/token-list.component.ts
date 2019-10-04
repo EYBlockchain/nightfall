@@ -76,7 +76,7 @@ export class TokenListComponent implements OnInit {
   fetchTokens () {
     this.transactions = null;
     this.isRequesting = true;
-    this.tokenApiService.fetchTokens(this.pageNo, this.pageSize)
+    this.tokenApiService.getNFTCommitments(this.pageNo, this.pageSize)
     .subscribe( data => {
       this.isRequesting = false;
       if (data &&

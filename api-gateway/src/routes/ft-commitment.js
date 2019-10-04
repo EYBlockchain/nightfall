@@ -1,5 +1,13 @@
 import express from 'express';
-import { mintCoin, transferCoin, burnCoin, checkCorrectnessCoin } from '../services/ft-commitment';
+import {
+  mintCoin,
+  transferCoin,
+  burnCoin,
+  checkCorrectnessCoin,
+  insertFTCommitmentToDb,
+  getFTCommitments,
+  getFTCommitmentTransactions,
+} from '../services/ft-commitment';
 
 const router = express.Router();
 
@@ -139,5 +147,130 @@ router.route('/transferFTCommitment').post(transferCoin);
  *	  }
  */
 router.route('/burnFTCommitment').post(burnCoin);
+
+router
+  .route('/')
+  /**
+   * @api {post} /coin Insert ERC-20 commitment in database
+   * @apiVersion 1.0.0
+   * @apiName  Insert ERC-20 commitment
+   * @apiGroup ERC-20 commitment
+   *
+   * @apiParam (Request body) {String} amount Hex String.
+   * @apiParam (Request body) {String} salt Salt.
+   * @apiParam (Request body) {String} commitment Token commitment.
+   * @apiParam (Request body) {String} commitmentIndex Token index.
+   * @apiParam (Request body) {Boolean} isMinted if data is for minted token.
+   *
+   * @apiExample {js} Example usage:
+   * const data = {
+   *    amount: '0x00000000000000000000000000000002',
+   *    salt: '0xe9a313c89c449af6e630c25ab3acc0fc3bab821638e0d55599b518',
+   *    commitment: '0xca2c0c099289896be4d72c74f801bed6e4b2cd5297bfcf29325484',
+   *    commitmentIndex: 0,
+   *    isMinted: true
+   * }
+   *
+   * $http.post(url, data)
+   *   .success((res, status) => doSomethingHere())
+   *   .error((err, status) => doSomethingHere());
+   *
+   * @apiSuccess (Success 200) {String} message status message.
+   *
+   * @apiSuccessExample {json} Success response:
+   *     HTTPS 200 OK
+   *    {
+   *    "message":"inserted"
+   *    }
+   */
+  .post(insertFTCommitmentToDb)
+  /**
+   * @api {get} /coin fetch ERC-20 commitments from database
+   * @apiVersion 1.0.0
+   * @apiName  List all ERC-20 commitments
+   * @apiGroup ERC-20 commitment
+   *
+   * @apiParam (Request query) {String} limit page size (optional).
+   * @apiParam (Request query) {String} pageNo page number (optional).
+
+   *
+   * @apiExample {js} Example usage:
+   * const qyery = {
+   *    limit: '12',
+   *    pageNo: 2
+   * }
+   *
+   * $http.post(url, data)
+   *   .success((res, status) => doSomethingHere())
+   *   .error((err, status) => doSomethingHere());
+   *
+   * @apiSuccess (Success 200) {Array} data ERC-20 commitments.
+   * @apiSuccess (Success 200) {Array} totalCount Total no. of tokens.
+   *
+   * @apiSuccessExample {json} Success response:
+   *     HTTPS 200 OK
+   *    {
+   *      "data":[
+   *        {
+   *          "_id":"5d9583cff359c40039add240",
+   *          "coin_value":"0x00000000000000000000000000000002",
+   *          "salt":"0xdba2b9fd61a7a5ff60cc6d025777b736aa1bf74e1fdcb90ee34b33",
+   *          "coin_commitment":"0x33894fa46908748639356cad7e69a2962316f07a9fb711fc2a2997",
+   *          "coin_commitment_index":0,
+   *          "is_minted":true,
+   *          "created_at":"2019-10-03T05:14:55.570Z",
+   *          "updated_at":"2019-10-03T05:14:55.570Z",
+   *        }
+   *      ],
+   *      "totalCount":1
+   *      }
+   *    }
+   */
+  .get(getFTCommitments);
+
+/**
+ * @api {get} /coin/transactions fetch ERC-20 commitment transactions from database
+ * @apiVersion 1.0.0
+ * @apiName  List all ERC-20 commitment transactions
+ * @apiGroup ERC-20 commitment
+ *
+ * @apiParam (Request query) {String} limit page size (optional).
+ * @apiParam (Request query) {String} pageNo page number (optional).
+
+ *
+ * @apiExample {js} Example usage:
+ * const qyery = {
+ *    limit: '12',
+ *    pageNo: 2
+ * }
+ *
+ * $http.post(url, data)
+ *   .success((res, status) => doSomethingHere())
+ *   .error((err, status) => doSomethingHere());
+ *
+ * @apiSuccess (Success 200) {Array} data ERC-20 commitment transactions.
+ * @apiSuccess (Success 200) {Array} totalCount Total no. of token transactions.
+ *
+ * @apiSuccessExample {json} Success response:
+ *     HTTPS 200 OK
+ *    {
+ *      "data":[
+ *        {
+ *         "_id":"5d9583cff359c40039add241",
+ *         "coin_value":"0x00000000000000000000000000000002",
+ *         "salt":"0xdba2b9fd61a7a5ff60cc6d025777b736aa1bf74e1fdcb90ee34b33",
+ *         "coin_commitment":"0x33894fa46908748639356cad7e69a2962316f07a9fb711fc2a2997",
+ *         "coin_commitment_index":0,
+ *         "type":"minted",
+ *         "used_coin_commitments":[],
+ *         "created_at":"2019-10-03T05:14:55.574Z",
+ *         "updated_at":"2019-10-03T05:14:55.574Z",
+ *        }
+ *      ],
+ *      "totalCount":1
+ *      }
+ *    }
+ */
+router.route('/transactions').get(getFTCommitmentTransactions);
 
 export default router;

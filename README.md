@@ -26,9 +26,10 @@ As well as this file, please be sure to check out:
 
 ## Security updates
 
-Critical security updates will be listed [here](https://github.com/EYBlockchain/nightfall/security/advisories/GHSA-36j7-5gjq-gq3w). If you had previously
-installed Nightfall prior to one of these security updates, please pull the latest code, and follow
-the extra re-installation steps.
+Critical security updates will be listed
+[here](https://github.com/EYBlockchain/nightfall/security/advisories/GHSA-36j7-5gjq-gq3w).
+If you had previously installed Nightfall prior to one of these security updates, please pull the
+latest code, and follow the extra re-installation steps.
 
 ## Getting started
 
@@ -95,8 +96,8 @@ npm run setupAll
 ```
 
 Note that this is a completely automated run: although questions will be asked by the script they
-will automatically receive a 'yes' answer. Manual runs are described in the
-[readme](./zkp/code/README-trusted-setup.md).
+will automatically receive a 'yes' answer. Further documentation on the setup process is in
+[the zkp module documentation](zkp/README.md).
 
 Please be patient - you can check progress in the terminal window and by using `docker stats` in
 another terminal.
@@ -155,34 +156,7 @@ docker-compose down -v
 
 ### To run zkp service unit tests
 
-After following the steps from 'Installing Nightfall' section,
-
-There is a volume conflict sometimes, please run `docker volume rm nightfall_zkp-code`
-
-Then run
-
-```sh
-make truffle-compile && make truffle-migrate && make zkp-start
-```
-
-and wait until you see the message `VK setup complete` in the console.
-
-To run tests of ZKP service, open another terminal and run
-
-```sh
-make zkp-test
-```
-
-The relevant files for these tests can be found under `zkp/__tests__` and `offchain/__tests__`
-directories.
-
-- `f-token-controller.test.js` - These are units tests to verify mint, transfer and burn of ERC-20
-  tokens and ERC-20 commitments
-- `nf-token-controller.test.js` - These are units tests to verify mint, transfer and burn of ERC-721
-  tokens and ERC-721 commitments
-- `utils.test.js` - These are unit tests for utils used for running the tests.
-
-Note that, the zkp service tests take a while to run (approx. 2 hours)
+See [the zkp module documentation](zkp/README.md), "run zkp unit tests".
 
 ### To run Nightfall integration test
 

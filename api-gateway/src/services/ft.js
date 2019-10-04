@@ -3,6 +3,56 @@ import { db, offchain, zkp } from '../rest';
 
 // ERC-20 token
 /**
+ * This function will insert FT transactions into database
+ * req.user {
+    address: '0x432038accaf756a8936a7f067a8223c2d929d58f',
+    name: 'alice',
+    pk_A: '0xd68df96f6cddd786290b57fcead37ea670dfe94634f553afeedfef',
+    password: 'alicesPassword'
+  }
+ * req.body {
+    amount: 4,
+    shieldContractAddress: '0x04b95c76d5075620a655b707a7901462aea8656c',
+    sender: 'a',
+    senderAddress: '0x04b95c76d5075620a655b707a7901462aea8656d',
+  }
+ * @param {*} req
+ * @param {*} res
+ */
+export async function insertFTTransactionToDb(req, res, next) {
+  try {
+    res.data = await db.insertFTTransaction(req.user, req.body);
+    next();
+  } catch (err) {
+    next(err);
+  }
+}
+
+/**
+ * This function will fetch FT transactions
+ * req.user {
+    address: '0x432038accaf756a8936a7f067a8223c2d929d58f',
+    name: 'alice',
+    pk_A: '0xd68df96f6cddd786290b57fcead37ea670dfe94634f553afeedfef',
+    password: 'alicesPassword'
+  }
+ * req.query {
+    pageNo: 1,
+    limit: 4
+  }
+ * @param {*} req
+ * @param {*} res
+ */
+export async function getFTTransactions(req, res, next) {
+  try {
+    res.data = await db.getFTTransactions(req.user, req.query);
+    next();
+  } catch (err) {
+    next(err);
+  }
+}
+
+/**
  * This function will mint a fungible token
  * req.body { 
     amount : 200 
@@ -18,7 +68,7 @@ export async function mintFToken(req, res, next) {
 
     const user = await db.fetchUser(req.user);
 
-    await db.addFTTransaction(req.user, {
+    await db.insertFTTransaction(req.user, {
       amount: req.body.amount,
       shieldContractAddress: user.selected_coin_shield_contract,
       isMinted: true,
@@ -51,7 +101,7 @@ export async function transferFToken(req, res, next) {
 
     const user = await db.fetchUser(req.user);
 
-    await db.addFTTransaction(req.user, {
+    await db.insertFTTransaction(req.user, {
       amount: req.body.amount,
       shieldContractAddress: user.selected_coin_shield_contract,
       receiver: req.body.receiver_name,
@@ -91,7 +141,7 @@ export async function burnFToken(req, res, next) {
 
     const user = await db.fetchUser(req.user);
 
-    await db.addFTTransaction(req.user, {
+    await db.insertFTTransaction(req.user, {
       amount: req.body.amount,
       shieldContractAddress: user.selected_coin_shield_contract,
       isBurned: true,

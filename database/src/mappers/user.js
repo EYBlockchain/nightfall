@@ -1,13 +1,10 @@
-import utils from 'zkp-utils';
-
-export default async function({ name, email, address, shhIdentity }) {
-  const hash = await utils.rndHex(27);
+export default function({ name, email, address, shhIdentity, secretkey, publickey }) {
   return {
-    name,
-    email,
-    address: address.toLowerCase(),
-    shh_identity: shhIdentity,
-    secretkey: hash,
-    publickey: utils.hash(hash),
+    [name ? 'name' : undefined]: name,
+    [email ? 'email' : undefined]: email,
+    [address ? 'address' : undefined]: address ? address.toLowerCase() : undefined,
+    [shhIdentity ? 'shh_identity' : undefined]: shhIdentity,
+    [secretkey ? 'secretkey' : undefined]: secretkey,
+    [publickey ? 'publickey' : undefined]: publickey,
   };
 }

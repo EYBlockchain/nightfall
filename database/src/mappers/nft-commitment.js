@@ -2,6 +2,8 @@ export default function({
   tokenUri,
   tokenId,
   salt,
+  shieldContractAddress,
+
   commitment,
   commitmentIndex,
 
@@ -22,6 +24,7 @@ export default function({
   return {
     token_uri: tokenUri,
     token_id: tokenId,
+    [shieldContractAddress ? 'shield_contract_address' : undefined]: shieldContractAddress,
     salt,
     token_commitment: commitment,
     token_commitment_index: commitmentIndex,

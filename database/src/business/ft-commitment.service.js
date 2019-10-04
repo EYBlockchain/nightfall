@@ -13,7 +13,7 @@ export default class FtCommitmentService {
    * in ft_commitment_transction collection
    * @param {object} data
    */
-  addCoinTransaction(data) {
+  insertFTCommitmentTransaction(data) {
     const { isTransferred, isReceived, isChange, isBurned } = data;
 
     let mappedData;
@@ -52,29 +52,29 @@ export default class FtCommitmentService {
    * This function will add new coin to database
    * @param {object} data - contains all the atributes required while minting a coin
    */
-  async addNewCoin(data) {
+  async insertFTCommitment(data) {
     await this.db.saveData(COLLECTIONS.FT_COMMITMENT, ftCommitmentMapper(data));
-    return this.addCoinTransaction(data);
+    return this.insertFTCommitmentTransaction(data);
   }
 
   /**
    * This function will update coin for transfer and burn
    * @param {object} data - contains all the atributes required while transfer and burn of a coin
    */
-  async updateCoin(data) {
-    const { commitment, isBurned } = data;
+  async updateFTCommitmentByCommitmentHash(commitmentHash, data) {
+    const { isBurned } = data;
     const mappedData = ftCommitmentMapper(data);
 
     await this.db.updateData(
       COLLECTIONS.FT_COMMITMENT,
       {
-        coin_commitment: commitment,
+        coin_commitment: commitmentHash,
         is_transferred: { $exists: false },
       },
       { $set: mappedData },
     );
 
-    if (isBurned) await this.addCoinTransaction(data);
+    if (isBurned) await this.insertFTCommitmentTransaction(data);
   }
 
   /**
@@ -83,7 +83,7 @@ export default class FtCommitmentService {
    * @param {object} data - req query object containing public account
    * @returns {array} of coins transaction minted by that
    */
-  getCoin(pageination) {
+  getFTCommitments(pageination) {
     if (!pageination || !pageination.pageNo || !pageination.limit) {
       return this.db.getData(COLLECTIONS.FT_COMMITMENT, {
         is_transferred: { $exists: false },
@@ -109,7 +109,7 @@ export default class FtCommitmentService {
    * from ft_commitment_transction collection
    * @param {object} query
    */
-  getCoinTransactions(query) {
+  getFTCommitmentTransactions(query) {
     return this.ftCommitmentTransactionService.getTransactions(query);
   }
 }

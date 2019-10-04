@@ -10,6 +10,7 @@ export default new Schema(
       type: String,
       required: true,
     },
+    shield_contract_address: String,
     salt: {
       type: String,
       required: true,

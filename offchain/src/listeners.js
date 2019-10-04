@@ -149,9 +149,9 @@ function listeners(data, userData) {
 
   const actualPayload = data.payload;
   switch (actualPayload.for) {
-    case 'coin':
+    case 'FTCommitment':
       return addCoinCommitment(actualPayload, userData);
-    case 'token':
+    case 'NFTCommitment':
       return addTokenCommitment(actualPayload, userData);
     case 'NFTToken':
       return addNFToken(actualPayload, userData);

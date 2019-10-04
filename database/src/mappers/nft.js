@@ -15,9 +15,9 @@ export default function({
   isShielded,
 }) {
   return {
-    uri,
-    token_id: tokenId,
-    shield_contract_address: shieldContractAddress,
+    [uri ? 'uri' : undefined]: uri,
+    [tokenId ? 'token_id' : undefined]: tokenId,
+    [shieldContractAddress ? 'shield_contract_address' : undefined]: shieldContractAddress,
 
     [receiver ? 'receiver' : undefined]: receiver,
     [receiverAddress ? 'receiver_address' : undefined]: receiverAddress,

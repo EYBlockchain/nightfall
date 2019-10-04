@@ -7,9 +7,7 @@
 
 import express, { Router } from 'express';
 import bodyParser from 'body-parser';
-import proxy from 'express-http-proxy';
 import cors from 'cors';
-import config from 'config';
 import logger from './logger';
 import {
   rootRouter,
@@ -36,7 +34,6 @@ app.use(bodyParser.json()); // set up a filter to parse JSON
 app.use(cors()); // cross origin filter
 app.use(authentication);
 
-app.use('/database', proxy(config.database.url));
 app.use('/', unlockAccount, router);
 app.use('/', rootRouter);
 app.use('/', nftCommitmentRoutes);
@@ -49,15 +46,17 @@ app.use('/shield', shieldRoutes);
 app.use(formatResponse);
 
 app.use(function logError(err, req, res, next) {
-  logger.error(
-    `${req.method}:${req.url}
-    ${JSON.stringify({ error: err.message })}
-    ${JSON.stringify({ errorStack: err.stack.split('\n') }, null, 1)}
-    ${JSON.stringify({ body: req.body })}
-    ${JSON.stringify({ params: req.params })}
-    ${JSON.stringify({ query: req.query })}
-  `,
-  );
+  if (err instanceof Error) {
+    logger.error(
+      `${req.method}:${req.url}
+      ${JSON.stringify({ error: err.message })}
+      ${JSON.stringify({ errorStack: err.stack.split('\n') }, null, 1)}
+      ${JSON.stringify({ body: req.body })}
+      ${JSON.stringify({ params: req.params })}
+      ${JSON.stringify({ query: req.query })}
+    `,
+    );
+  }
   next(err);
 });
 

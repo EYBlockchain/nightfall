@@ -11,12 +11,12 @@ export async function whisperTransaction(req, dataToSend) {
   // getIdentity from local db
   const receiverName = req.body.receiver_name || req.body.payTo;
 
-  const { shhIdentity } = await db.getWhisperIdentity(req.user);
+  const user = await db.fetchUser(req.user);
   // PKD to get the whisperPK using name "eg: bob"
   const shhPkReceiver = await offchain.getWhisperPK(receiverName);
   const details = {
     message: dataToSend,
-    shhIdentity,
+    shhIdentity: user.shh_identity,
     shhPkReceiver,
   };
   await offchain.sendMessage(details);
@@ -33,8 +33,7 @@ export async function setWhisperIdentityAndSubscribe(userData) {
     address: userData.address,
   };
   const { shhIdentity } = await offchain.generateShhIdentity(userAddress);
-
-  await db.updateWhisperIdentity(userData, { shhIdentity });
+  await db.updateUser(userData, { shhIdentity });
 
   const { whisperPublicKey } = await offchain.getWhisperPublicKey({ shhIdentity });
   await offchain.setWhisperPK({ address: userAddress.address }, whisperPublicKey);

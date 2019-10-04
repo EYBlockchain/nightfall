@@ -48,7 +48,7 @@ export class CoinListComponent implements OnInit {
   fetchCoins () {
     this.transactions = null;
     this.isRequesting = true;
-    this.coinApiService.fetchCoins(localStorage.getItem('address'))
+    this.coinApiService.fetchCoins()
       .subscribe( data => {
         this.isRequesting = false;
         if (data &&
