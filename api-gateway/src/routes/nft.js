@@ -144,7 +144,8 @@ router.route('/burnNFToken').post(burnNFToken);
 router.route('/getNFTTokens').get(getNFTokens);
 
 /**
- * @api {get} /getNFTokenAddress List ERC-721 tokens
+ * @api {get} /getNFTokenShieldContractAddress Retrieve non-fungible token
+ * address from the shield contract which is set by the user
  * @apiVersion 1.0.0
  * @apiName  List non-fungible tokens
  * @apiGroup ERC-721
@@ -171,7 +172,7 @@ router.route('/getNFTTokens').get(getNFTokens);
  *		]
  *	  }
  */
-router.route('/getNFTokenAddress').get(getNFTokenAddress);
+router.route('/getNFTokenShieldContractAddress').get(getNFTokenAddress);
 
 /**
  * @api {get} /getNFTokenInfo List ERC-721 tokens

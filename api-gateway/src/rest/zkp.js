@@ -143,7 +143,7 @@ export default {
   // get non-fungible token address
   getNFTokenAddress({ address }) {
     const options = {
-      url: `${url}/getNFTokenAddress`,
+      url: `${url}/getNFTokenShieldContractAddress`,
       method: 'GET',
       json: true,
       headers: { address },
@@ -201,7 +201,7 @@ export default {
   // get fungible token address
   getFTokenAddress({ address }) {
     const options = {
-      url: `${url}/getFTokenAddress`,
+      url: `${url}/getFTokenShieldContractAddress`,
       method: 'GET',
       json: true,
       headers: { address },
@@ -247,7 +247,7 @@ export default {
   // set new non-fungible commitment token shield for user address
   setTokenShield({ address }, body) {
     const options = {
-      url: `${url}/setNFTCommitmentShield`,
+      url: `${url}/setNFTCommitmentShieldContractAddress`,
       method: 'POST',
       json: true,
       headers: { address },
@@ -259,7 +259,7 @@ export default {
   // get non-fungible commitment token shield address for user address
   getTokenShield({ address }) {
     const options = {
-      url: `${url}/getNFTCommitmentShield`,
+      url: `${url}/getNFTCommitmentShieldContractAddress`,
       method: 'GET',
       json: true,
       headers: { address },
@@ -280,7 +280,7 @@ export default {
   // set new fungible commitment token shield for user address
   setCoinShield({ address }, body) {
     const options = {
-      url: `${url}/setFTCommitmentShield`,
+      url: `${url}/setFTCommitmentShieldContractAddress`,
       method: 'POST',
       json: true,
       headers: { address },
@@ -289,10 +289,10 @@ export default {
     return requestWrapper(options);
   },
 
-  // get ungible commitment token shield address for user address
+  // get fungible commitment token shield contract address for user address
   getCoinShield({ address }) {
     const options = {
-      url: `${url}/getFTCommitmentShield`,
+      url: `${url}/getFTCommitmentShieldContractAddress`,
       method: 'GET',
       json: true,
       headers: { address },

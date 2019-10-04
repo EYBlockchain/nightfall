@@ -76,7 +76,7 @@ async function getInfo(req, res, next) {
 router.post('/mintFToken', mint);
 router.post('/transferFToken', transfer);
 router.post('/burnFToken', burn);
-router.get('/getFTokenAddress', getAddress);
+router.get('/getFTokenShieldContractAddress', getAddress);
 router.get('/getFTokenInfo', getInfo);
 
 export default router;

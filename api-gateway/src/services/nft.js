@@ -158,8 +158,9 @@ export async function getNFTokens(req, res, next) {
 }
 
 /**
- * This function will get the address of a non-fungible token.
- * @param {*} req
+ * This function will get the non-fungible token contract address from the
+ * shield contract which is set by the user.
+ * * @param {*} req
  * @param {*} res
  */
 export async function getNFTokenAddress(req, res, next) {
@@ -172,7 +173,8 @@ export async function getNFTokenAddress(req, res, next) {
 }
 
 /**
- * This function will get the address of a non-fungible token.
+ * This function will get information of a non-fungible token.
+ * Which will retrieve the balance, name and symbol of the non fungible token
  * @param {*} req
  * @param {*} res
  */

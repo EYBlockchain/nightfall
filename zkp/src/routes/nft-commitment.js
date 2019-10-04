@@ -139,8 +139,8 @@ router.post('/mintNFTCommitment', mint);
 router.post('/transferNFTCommitment', transfer);
 router.post('/burnNFTCommitment', burn);
 router.post('/checkCorrectnessForNFTCommitment', checkCorrectness);
-router.post('/setNFTCommitmentShield', setTokenShieldAddress);
-router.get('/getNFTCommitmentShield', getTokenShieldAddress);
+router.post('/setNFTCommitmentShieldContractAddress', setTokenShieldAddress);
+router.get('/getNFTCommitmentShieldContractAddress', getTokenShieldAddress);
 router.delete('/removeNFTCommitmentshield', unsetTokenShieldAddress);
 
 export default router;
