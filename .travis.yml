@@ -1,8 +1,39 @@
 language: node_js
+
 node_js:
   - 10
   - 12
+
+services:
+  - docker
+  
 script:
-  - npm run prepare
+  # Run ESLint
+  - npm ci
+  - npm run lint
+  
+  # Pull docker image
+  - docker pull zokrates/zokrates:0.4.11
+  
+  # Increase swap memory
+  - sudo usermod -a -G sudo runner
+  - sudo swapoff -a
+  - sudo fallocate -l 12G /swapfile
+  - sudo mkswap /swapfile
+  - sudo swapon /swapfile
+  - swapon --show
+  - grep SwapTotal /proc/meminfo
+  
+  # Generate the keys and constraint files for Zero Knowledge Proofs
+  - chmod -R 777 zkp/code/
+  - npm run setupAll
+  
+  # Remove zokrates Containers
+  - docker stop $(docker ps -a -q)
+  - docker rm $(docker ps -a -q)
+  
+  # Run Integration test
+  - ./nightfall-test
+  
 allow_failures:
   - node_js: 12
