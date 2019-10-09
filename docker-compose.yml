@@ -21,6 +21,11 @@ services:
       context: ./api-gateway
       dockerfile: Dockerfile
     restart: on-failure
+    depends_on:
+      - accounts
+      - offchain      
+      - zkp
+      - database
     volumes:
       - ./api-gateway/src:/app/src
       - ./api-gateway/config:/app/config
