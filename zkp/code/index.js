@@ -169,11 +169,11 @@ async function setup(codeFile, outputDirPath, backend, a) {
         );
       outVals = outVals.reverse(); // the outputs of zokrates are the wrong way around
 
-      if (!s) console.log(`outVals: \n${outVals}`);
-
       let outVal;
+      console.log(outVals);
       switch (utils.isProbablyBinary(outVals)) {
-        case 'decimal':
+        case false:
+          console.log("'field' element detected as output");
           console.group('\nOutput from compute-witness:\n');
           console.log(`output array length: ${outVals.length}\n`);
           console.log(`bin:  ${outVals.forEach(val => utils.decToBin(val))}`);
@@ -181,7 +181,8 @@ async function setup(codeFile, outputDirPath, backend, a) {
           console.log(`hex:  ${outVals.forEach(val => utils.decToHex(val))}`);
           console.groupEnd();
           break;
-        default:
+        case true:
+          console.log("'binary' array detected as output");
           outVal = outVals.join('');
           console.group('\nOutput from compute-witness:\n');
           console.log(`output array length: ${outVals.length}\n`);

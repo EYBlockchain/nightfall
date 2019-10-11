@@ -23,26 +23,26 @@ describe('nf-token-controller.js tests', () => {
   const sAToBG = '0xefefadecb1000000efefadecb1000000efefadecb1000000000000';
   const A_URI = 'Pizza';
 
-  const Z_A_A = utils.recursiveHashConcat(
-    utils.strip0x(A).slice(-(config.HASHLENGTH * 2)),
+  const Z_A_A = utils.concatenateThenHash(
+    utils.strip0x(A).slice(-(config.INPUTS_HASHLENGTH * 2)),
     pkA,
     S_A_A,
   );
 
-  const Z_A_G = utils.recursiveHashConcat(
-    utils.strip0x(G).slice(-(config.HASHLENGTH * 2)),
+  const Z_A_G = utils.concatenateThenHash(
+    utils.strip0x(G).slice(-(config.INPUTS_HASHLENGTH * 2)),
     pkA,
     S_A_G,
   );
 
-  const Z_B_A = utils.recursiveHashConcat(
-    utils.strip0x(A).slice(-(config.HASHLENGTH * 2)),
+  const Z_B_A = utils.concatenateThenHash(
+    utils.strip0x(A).slice(-(config.INPUTS_HASHLENGTH * 2)),
     pkB,
     sAToBA,
   );
 
-  const Z_B_G = utils.recursiveHashConcat(
-    utils.strip0x(G).slice(-(config.HASHLENGTH * 2)),
+  const Z_B_G = utils.concatenateThenHash(
+    utils.strip0x(G).slice(-(config.INPUTS_HASHLENGTH * 2)),
     pkB,
     sAToBG,
   );

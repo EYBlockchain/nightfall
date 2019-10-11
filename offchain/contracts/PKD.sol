@@ -9,7 +9,7 @@ contract PKD{
   mapping ( bytes32 => address) private byName;
   mapping ( address => bytes32) private byAddress;
   mapping ( address => string) private WhisperPublicKeyByAddress;
-  mapping ( address => bytes27) private ZkpPublicKeyByAddress;
+  mapping ( address => bytes32) private ZkpPublicKeyByAddress;
   bytes32[] private names;
 
   function getWhisperPublicKeyFromName(bytes32 name) public view returns(string memory){
@@ -20,17 +20,17 @@ contract PKD{
     return WhisperPublicKeyByAddress[addr];
   }
 
-  function getZkpPublicKeyFromAddress(address addr) public view returns(bytes27){
+  function getZkpPublicKeyFromAddress(address addr) public view returns(bytes32){
     return ZkpPublicKeyByAddress[addr];
   }
 
-  function getZkpPublicKeyFromName(bytes32 name) public view returns(bytes27){
+  function getZkpPublicKeyFromName(bytes32 name) public view returns(bytes32){
     return ZkpPublicKeyByAddress[byName[name]];
   }
 
   function getPublicKeysFromName(bytes32 name) public view returns(
     string  memory whisperPublicKey,
-    bytes27 zkpPublicKey
+    bytes32 zkpPublicKey
     ){
       whisperPublicKey = WhisperPublicKeyByAddress[byName[name]];
       zkpPublicKey = ZkpPublicKeyByAddress[byName[name]];
@@ -38,7 +38,7 @@ contract PKD{
 
   function getPublicKeysFromAddress(address addr) public view returns(
     string  memory whisperPublicKey,
-    bytes27 zkpPublicKey
+    bytes32 zkpPublicKey
     ){
       whisperPublicKey = WhisperPublicKeyByAddress[addr];
       zkpPublicKey = ZkpPublicKeyByAddress[addr];
@@ -46,7 +46,7 @@ contract PKD{
 
   function setPublicKeys(
     string  memory whisperPublicKey,
-    bytes27 zkpPublicKey
+    bytes32 zkpPublicKey
     ) public{
     WhisperPublicKeyByAddress[msg.sender] = whisperPublicKey;
     ZkpPublicKeyByAddress[msg.sender] = zkpPublicKey;
@@ -56,7 +56,7 @@ contract PKD{
     WhisperPublicKeyByAddress[msg.sender] = pk;
   }
 
-  function setZkpPublicKey(bytes27 pk) public{
+  function setZkpPublicKey(bytes32 pk) public{
     ZkpPublicKeyByAddress[msg.sender] = pk;
   }
 

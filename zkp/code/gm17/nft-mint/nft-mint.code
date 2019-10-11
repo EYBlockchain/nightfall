@@ -1,34 +1,41 @@
-import "hashes/sha256/512bit.code" as sha256compression
+import "hashes/sha256/1024bit.code" as sha256of1024
+import "hashes/sha256/512bit.code" as sha256of512
 import "utils/pack/unpack128.code" as unpack128
+import "utils/pack/nonStrictUnpack256.code" as unpack256
 
-def CONCAT216x216x216(field[216] a, field[216] b, field[216] c)->(field[648]):
+def concatenate256x256x256(field[256] a, field[256] b, field[256] c)->(field[768]):
 	return [...a, ...b, ...c]
 
-def CONCAT216x216(field[216] a, field[216] b)->(field[432]):
+def concatenate256x256(field[256] a, field[256] b)->(field[512]):
 	return [...a, ...b]
 
-def shaPad432To512(field[432] a)->(field[512]):
-	return [...a, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,1,0,1,1,0,0,0,0]
+// Provides the padding (only!) for a 512-bit message.
+def shaPad512To1024()->(field[512]):
+	return [1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,  0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0]
 
-def shaPad216To512(field[216] a)->(field[512]):
-	return [...a, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,1,0,1,1,0,0,0]
+// Provides the padding (only!) for a 768-bit message.
+def shaPad768To1024()->(field[256]):
+	return [1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	1,	1,	0,	0,	0,	0,	0,	0,	0,	0]
 
-//inputs for main are:
-// Proving Asset Token 'asset' is in the commitment { commitment= H(asset|publicKey|salt) }
-// - salt (private) is the 216 bit salt for the commitment
-// - publicKey (private) is the 216 bit public key of Alice derived by hashing the secretKey of Alice
-// - commitment - is the 216 bit public commitment
+
+// Inputs for main are:
 // - asset - is the ERC-721 tokenId for the asset
+// - salt (private) is the salt for the commitment
+// - publicKey (private) is the public key of Alice derived by hashing the secretKey of Alice
+// - commitment - is the public commitment
+// - publicInputHash = hash(asset, commitment)
 
-// Note - We truncate the 256 bit SHA hash down to 216 bits to make the code shorter. This will have an effect on security but not for any practical purpose we believe.
+// Each field element passed to main() can be at most 128bits, to make use of unpack128() so most variables occupy two fields (except the publicInputHash, which we maximize as 248-bits)
 
-//Each field element passed to main() can be at most 128bits, to make use of unpack128()
 
-def main(field  assetHigh, field  assetLow, private field  publicKeyHigh, private field  publicKeyLow, private field  saltHigh, private field  saltLow, field  commitmentHigh, field  commitmentLow)->(field):
+def main(field publicInputHash, private field assetHigh, private field  assetLow, private field publicKeyHigh, private field publicKeyLow, private field saltHigh, private field saltLow, private field commitmentHigh, private field commitmentLow)->():
+
 
 	// Unpack the inputs of main() to 128 bits. We'll unpack each field to its own 128 bit string for simplicity for now. Later efficiencies could be made by grouping some inputs.
 
-	field[128] assetHighBits = unpack128(assetHigh) // this may seem long-winded but ZoKrates needs intermediate variables for now
+	field[256] publicInputHashBits = unpack256(publicInputHash)
+
+	field[128] assetHighBits = unpack128(assetHigh)
 	field[128] assetLowBits = unpack128(assetLow)
 	field[256] assetBits = [...assetHighBits, ...assetLowBits]
 
@@ -45,29 +52,26 @@ def main(field  assetHigh, field  assetLow, private field  publicKeyHigh, privat
 	field[256] commitmentBits = [...commitmentHighBits, ...commitmentLowBits]
 
 
-	// Compute commitment = H(asset|publicKey|salt) (sort of):
-	field[648] d = CONCAT216x216x216(assetBits[40..256], publicKeyBits[40..256], saltBits[40..256]) //keep the lowest bytes
-
-	// This is too big to handle in a single sha round and our sha can't handle multiple rounds. As a work-around, we will split d, hash both parts and then hash the result - remember to do this in Node too!
-
-	// First 432 bits (432 is 216*2 - a convenient number in our 216 bit scheme):
-	field[512] t = shaPad432To512(d[216..648]) //note that we take the low bits first
-	field[256] s = sha256compression(t[0..256],t[256..512])
-
-	// Remaining 216 high bits:
-	field[512]u = shaPad216To512(d[0..216])
-	field[256] v = sha256compression(u[0..256],u[256..512])
-
-	// Then concatenate the results msb first:
-	field[432] e = CONCAT216x216(v[40..256], s[40..256])
-
-	// And hash the result:
-	t = shaPad432To512(e)
-	field[256] commitmentBitsCheck = sha256compression(t[0..256],t[256..512])
+	field[512] padding512To1024 = shaPad512To1024()
+	field[256] padding768To1024 = shaPad768To1024()
 
 
-	// This checks if the hash commitmentBitsCheck we computed using 'asset' (which is H(asset|publicKey|salt)) is equal to Z until the 1st 216 bits:
-	commitmentBits[40..256] == commitmentBitsCheck[40..256]
+	// Compute commitment = H(asset|publicKey|salt):
+	field[768] preimage768 = concatenate256x256x256(assetBits, publicKeyBits, saltBits)
+
+	field[256] commitmentBitsCheck = sha256of1024(preimage768[0..256], preimage768[256..512], preimage768[512..768], padding768To1024)
 
 
-	return 1
+	// This checks if the hash commitmentBitsCheck we computed using 'asset' (which is H(asset|publicKey|salt)) is equal to the input commitment:
+	commitmentBits == commitmentBitsCheck
+
+
+	// Check that the 'public inputs' hash to the publicInputHash:
+	field[512] preimage512 = concatenate256x256(assetBits, commitmentBits)
+
+	field[256] publicInputHashBitsCheck = sha256of1024(preimage512[0..256], preimage512[256..512], padding512To1024[0..256], padding512To1024[256..512])
+
+	publicInputHashBits[8..256] == publicInputHashBitsCheck[8..256]
+
+
+	return

@@ -25,7 +25,7 @@ jobs:
       run:  |
         sudo usermod -a -G sudo runner
         sudo swapoff -a
-        sudo dd if=/dev/sda1 of=/swapfile bs=1G count=12
+        sudo fallocate -l 12G /swapfile
         sudo mkswap /swapfile
         sudo swapon /swapfile
         swapon --show

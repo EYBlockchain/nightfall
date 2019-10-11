@@ -12,7 +12,7 @@ const hexToBinary = require('hex-to-binary');
 const crypto = require('crypto');
 const { Buffer } = require('safe-buffer');
 
-const hashLength = 27;
+const inputsHashLength = 32;
 const merkleDepth = 33;
 
 // FUNCTIONS ON HEX VALUES
@@ -207,22 +207,32 @@ function hexToField(hexStr, fieldSize) {
 }
 
 /**
+Left-pads the input hex string with zeros, so that it becomes of size N octets.
+@param {string} hexStr A hex number/string.
+@param {integer} N The string length (i.e. the number of octets).
+@return A hex string (padded) to size N octets, (plus 0x at the start).
+*/
+function leftPadHex(hexStr, n) {
+  return ensure0x(strip0x(hexStr).padStart(n, '0'));
+}
+
+/**
 Used by splitAndPadBitsN function.
 Left-pads the input binary string with zeros, so that it becomes of size N bits.
 @param {string} bitStr A binary number/string.
 @param {integer} N The 'chunk size'.
 @return A binary string (padded) to size N bits.
 */
-function leftPadBitsN(bitStr, N) {
+function leftPadBitsN(bitStr, n) {
   const len = bitStr.length;
   let paddedStr;
-  if (len > N) {
-    return new Error(`String larger than ${N} bits passed to leftPadBitsN`);
+  if (len > n) {
+    return new Error(`String larger than ${n} bits passed to leftPadBitsN`);
   }
-  if (len === N) {
+  if (len === n) {
     return bitStr;
   }
-  paddedStr = '0'.repeat(N - len);
+  paddedStr = '0'.repeat(n - len);
   paddedStr = paddedStr.toString() + bitStr.toString();
   return paddedStr;
 }
@@ -234,16 +244,16 @@ Checks whether a binary number is larger than N bits, and splits its binary repr
 @param {integer} N The 'chunk size'.
 @return An array whose elements are binary 'chunks' which altogether represent the input binary number.
 */
-function splitAndPadBitsN(bitStr, N) {
+function splitAndPadBitsN(bitStr, n) {
   let a = [];
   const len = bitStr.length;
-  if (len <= N) {
-    return [leftPadBitsN(bitStr, N)];
+  if (len <= n) {
+    return [leftPadBitsN(bitStr, n)];
   }
-  const nStr = bitStr.slice(-N); // the rightmost N bits
-  const remainderStr = bitStr.slice(0, len - N); // the remaining rightmost bits
+  const nStr = bitStr.slice(-n); // the rightmost N bits
+  const remainderStr = bitStr.slice(0, len - n); // the remaining rightmost bits
 
-  a = [...splitAndPadBitsN(remainderStr, N), nStr, ...a];
+  a = [...splitAndPadBitsN(remainderStr, n), nStr, ...a];
 
   return a;
 }
@@ -253,11 +263,11 @@ function splitAndPadBitsN(bitStr, N) {
 @param {integer} N The 'chunk size'.
 @return An array whose elements are binary 'chunks' which altogether represent the input hex number.
 */
-function splitHexToBitsN(hexStr, N) {
+function splitHexToBitsN(hexStr, n) {
   const strippedHexStr = strip0x(hexStr);
   const bitStr = hexToBinSimple(strippedHexStr.toString());
   let a = [];
-  a = splitAndPadBitsN(bitStr, N);
+  a = splitAndPadBitsN(bitStr, n);
   return a;
 }
 
@@ -270,15 +280,29 @@ function binToDec(binStr) {
 /** Preserves the magnitude of a hex number in a finite field, even if the order of the field is smaller than hexStr. hexStr is converted to decimal (as fields work in decimal integer representation) and then split into chunks of size packingSize. Relies on a sensible packing size being provided (ZoKrates uses packingSize = 128).
  *if the result has fewer elements than it would need for compatibiity with the dsl, it's padded to the left with zero elements
  */
-function hexToFieldPreserve(hexStr, packingSize, packets) {
+function hexToFieldPreserve(hexStr, packingSize, packets, silenceWarnings) {
   let bitsArr = [];
   bitsArr = splitHexToBitsN(strip0x(hexStr).toString(), packingSize.toString());
+
   let decArr = []; // decimal array
   decArr = bitsArr.map(item => binToDec(item.toString()));
-  // now we need to add any missing zero elements
+
+  // fit the output array to the desired number of packets:
   if (packets !== undefined) {
-    const missing = packets - decArr.length;
-    for (let i = 0; i < missing; i += 1) decArr.unshift('0');
+    if (packets < decArr.length) {
+      const overflow = decArr.length - packets;
+      if (!silenceWarnings)
+        throw new Error(
+          `Field split into an array of ${decArr.length} packets: ${decArr}
+          , but this exceeds the requested packet size of ${packets}. Data would have been lost; possibly unexpectedly. To silence this warning, pass '1' or 'true' as the final parameter.`,
+        );
+      // remove extra packets (dangerous!):
+      for (let i = 0; i < overflow; i += 1) decArr.shift();
+    } else {
+      const missing = packets - decArr.length;
+      // add any missing zero elements
+      for (let i = 0; i < missing; i += 1) decArr.unshift('0');
+    }
   }
   return decArr;
 }
@@ -370,7 +394,11 @@ function decToFieldPreserve(decStr, packingSize) {
   return decArr;
 }
 
-const isProbablyBinary = arr => !arr.find(el => el !== 0 || el !== 1);
+function isProbablyBinary(arr) {
+  const foundField = arr.find(el => el !== 0 && el !== 1);
+  // ...hence it is not binary:
+  return !foundField;
+}
 
 // FUNCTIONS ON FIELDS
 
@@ -442,7 +470,7 @@ function xorItems(...items) {
 Utility function to concatenate two hex strings and return as buffer
 Looks like the inputs are somehow being changed to decimal!
 */
-function concat(a, b) {
+function concatenate(a, b) {
   const length = a.length + b.length;
   const buffer = Buffer.allocUnsafe(length); // creates a buffer object of length 'length'
   for (let i = 0; i < a.length; i += 1) {
@@ -457,45 +485,11 @@ function concat(a, b) {
 /**
 Utility function to concatenate multiple hex strings and return as string
 */
-function concatItems(...items) {
+function concatenateItems(...items) {
   const concatvalue = items
     .map(item => Buffer.from(strip0x(item), 'hex'))
-    .reduce((acc, item) => concat(acc, item));
+    .reduce((acc, item) => concatenate(acc, item));
   return `0x${concatvalue.toString('hex')}`;
-}
-
-function hashC(c) {
-  let hsh = '';
-  let conc = c;
-  while (conc) {
-    const slc = conc.slice(-hashLength * 4); // grab the first 432 bits (or whatever is left)
-    conc = conc.substring(0, conc.length - hashLength * 4); // and remove it from the input string
-    hsh =
-      crypto
-        .createHash('sha256') // hash it and grab 216 bits
-        .update(slc, 'hex')
-        .digest('hex')
-        .slice(-hashLength * 2) + hsh;
-  }
-  return hsh;
-}
-
-/**
-Like hashConcat above, this hashes a concatenation of items but it does it by
-breaking the items up into 432 bit chunks, hashing those, plus any remainder
-and then repeating the process until you end up with a single hash.  That way
-we can generate a hash without needing to use more than a single sha round.  It's
-not the same value as we'd get using rounds but it's at least doable.
-*/
-function recursiveHashConcat(...items) {
-  const conc = items // run all the items together in a string
-    .map(item => Buffer.from(strip0x(item), 'hex'))
-    .reduce((acc, item) => concat(acc, item))
-    .toString('hex');
-
-  let hsh = hashC(conc);
-  while (hsh.length > hashLength * 2) hsh = hashC(hsh); // have we reduced it to a single 216 bit hash?
-  return ensure0x(hsh);
 }
 
 /**
@@ -506,14 +500,21 @@ and then repeating the process until you end up with a single hash.  That way
 we can generate a hash without needing to use more than a single sha round.  It's
 not the same value as we'd get using rounds but it's at least doable.
 */
-function hash(...items) {
-  return recursiveHashConcat(...items);
+function hash(item) {
+  const preimage = strip0x(item);
+
+  const h = `0x${crypto
+    .createHash('sha256')
+    .update(preimage, 'hex')
+    .digest('hex')
+    .slice(-(inputsHashLength * 2))}`;
+  return h;
 }
 
 /**
 Utility function to:
 - convert each item in items to a 'buffer' of bytes (2 hex values), convert those bytes into decimal representation
-- 'concat' each decimally-represented byte together into 'concatenated bytes'
+- 'concatenate' each decimally-represented byte together into 'concatenated bytes'
 - hash the 'buffer' of 'concatenated bytes' (sha256) (sha256 returns a hex output)
 - truncate the result to the right-most 64 bits
 Return:
@@ -522,16 +523,15 @@ update: [input string to hash (an array of bytes (in decimal representaion) [byt
 digest: [output format ("hex" in our case)]
 slice: [begin value] outputs the items in the array on and after the 'begin value'
 */
-function hashConcat(...items) {
+function concatenateThenHash(...items) {
   const concatvalue = items
     .map(item => Buffer.from(strip0x(item), 'hex'))
-    .reduce((acc, item) => concat(acc, item));
+    .reduce((acc, item) => concatenate(acc, item));
 
   const h = `0x${crypto
     .createHash('sha256')
     .update(concatvalue, 'hex')
-    .digest('hex')
-    .slice(-(hashLength * 2))}`;
+    .digest('hex')}`;
   return h;
 }
 
@@ -650,10 +650,10 @@ module.exports = {
   fieldsToHex,
   xor,
   xorItems,
-  concat,
-  concatItems,
+  concatenate,
+  concatenateItems,
   hash,
-  hashConcat,
+  concatenateThenHash,
   add,
   parseToDigitsArray,
   convertBase,
@@ -665,7 +665,7 @@ module.exports = {
   getLeafIndexFromZCount,
   rndHex,
   flattenDeep,
-  recursiveHashConcat,
   padHex,
+  leftPadHex,
   String2Hex,
 };

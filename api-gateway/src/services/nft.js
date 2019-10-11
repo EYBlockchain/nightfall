@@ -67,11 +67,15 @@ export async function getNFTTransactions(req, res, next) {
  * @param {*} res
  */
 export async function mintNFToken(req, res, next) {
+  console.log('mintNFToken req.body.tokenID:', req.body.tokenID);
+  const randomHex = `0x${Math.floor(Math.random() * 10e14)
+    .toString(16)
+    .padEnd(64, '0')}`; // create a random number, left-padded to 64 octets
   const reqBody = {
-    tokenID:
-      req.body.tokenID || `0x${(Math.random() * 1000000000000000000000000000000e46).toString(16)}`,
+    tokenID: req.body.tokenID || randomHex,
     tokenURI: req.body.tokenURI || '',
   };
+  console.log('mintNFToken reqBody.tokenID:', reqBody.tokenID);
 
   try {
     const { data } = await zkp.mintNFToken(req.user, reqBody);
@@ -146,7 +150,7 @@ export async function transferNFToken(req, res, next) {
 }
 
 /**
- * This function will burn fungible token 
+ * This function will burn fungible token
  * req.user {
     address: '0x432038accaf756a8936a7f067a8223c2d929d58f',
     name: 'alice',

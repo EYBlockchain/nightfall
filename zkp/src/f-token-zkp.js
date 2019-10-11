@@ -70,9 +70,8 @@ This function creates an f token commitment.
 @param {contract} fTokenShield - an instance of the TokenShield contract
 @return {integer} coinIndex - the index of the z_B token within the on-chain Merkle Tree
 */
-async function mint(proof, _inputs, vkId, _account, fTokenShield) {
+async function mint(proof, inputs, vkId, value, commitment, _account, fTokenShield) {
   const account = utils.ensure0x(_account);
-  const inputs = [..._inputs, '1'];
 
   console.group('Minting within the Shield contract');
 
@@ -82,17 +81,18 @@ async function mint(proof, _inputs, vkId, _account, fTokenShield) {
   console.log(inputs);
   console.log(`vkId: ${vkId}`);
 
-  const txReceipt = await fTokenShield.mint(proof, inputs, vkId, {
+  const txReceipt = await fTokenShield.mint(proof, inputs, vkId, value, commitment, {
     from: account,
     gas: 6500000,
     gasPrice: config.GASPRICE,
   });
 
-  const { coin_index: coinIndex } = txReceipt.logs[0].args; // log for: event Mint
+  const coinIndex = txReceipt.logs[0].args.commitment_index; // log for: event Mint
 
   const root = await fTokenShield.latestRoot();
   console.log(`Merkle Root after mint: ${root}`);
   console.groupEnd();
+
   return coinIndex;
 }
 
@@ -109,9 +109,19 @@ computed.
 @return {integer} coinFIndex- the index of the z_F token within the on-chain Merkle Tree
 @returns {object} transferResponse - a promise that resolves into the transaction hash
 */
-async function transfer(proof, _inputs, vkId, _account, fTokenShield) {
+async function transfer(
+  proof,
+  inputs,
+  vkId,
+  root,
+  nullifierC,
+  nullifierD,
+  commitmentE,
+  commitmentF,
+  _account,
+  fTokenShield,
+) {
   const account = utils.ensure0x(_account);
-  const inputs = [..._inputs, '1'];
 
   console.group('Transferring within the Shield contract');
 
@@ -121,17 +131,27 @@ async function transfer(proof, _inputs, vkId, _account, fTokenShield) {
   console.log(inputs);
   console.log(`vkId: ${vkId}`);
 
-  const txReceipt = await fTokenShield.transfer(proof, inputs, vkId, {
-    from: account,
-    gas: 6500000,
-    gasPrice: config.GASPRICE,
-  });
+  const txReceipt = await fTokenShield.transfer(
+    proof,
+    inputs,
+    vkId,
+    root,
+    nullifierC,
+    nullifierD,
+    commitmentE,
+    commitmentF,
+    {
+      from: account,
+      gas: 6500000,
+      gasPrice: config.GASPRICE,
+    },
+  );
 
-  const coinEIndex = txReceipt.logs[0].args.coin1_index; // log for: event Transfer
-  const coinFIndex = txReceipt.logs[0].args.coin2_index; // log for: event Transfer
+  const coinEIndex = txReceipt.logs[0].args.commitment1_index; // log for: event Transfer
+  const coinFIndex = txReceipt.logs[0].args.commitment2_index; // log for: event Transfer
 
-  const root = await fTokenShield.latestRoot();
-  console.log(`Merkle Root after transfer: ${root}`);
+  const newRoot = await fTokenShield.latestRoot();
+  console.log(`Merkle Root after transfer: ${newRoot}`);
   console.groupEnd();
 
   return [coinEIndex, coinFIndex, txReceipt];
@@ -154,9 +174,8 @@ computed.
 @param {string} vkId is a unique ID for the vk, used by the verifier contract to lookup the correct vk.
 @returns {object} burnResponse - a promise that resolves into the transaction hash
 */
-async function burn(proof, _inputs, vkId, _account, fTokenShield) {
+async function burn(proof, inputs, vkId, root, nullifier, value, payTo, _account, fTokenShield) {
   const account = utils.ensure0x(_account);
-  const inputs = [..._inputs, '1'];
 
   console.group('Burning within the Shield contract');
 
@@ -166,14 +185,14 @@ async function burn(proof, _inputs, vkId, _account, fTokenShield) {
   console.log(inputs);
   console.log(`vkId: ${vkId}`);
 
-  const txReceipt = await fTokenShield.burn(proof, inputs, vkId, {
+  const txReceipt = await fTokenShield.burn(proof, inputs, vkId, root, nullifier, value, payTo, {
     from: account,
     gas: 6500000,
     gasPrice: config.GASPRICE,
   });
 
-  const root = await fTokenShield.latestRoot();
-  console.log(`Merkle Root after burn: ${root}`);
+  const newRoot = await fTokenShield.latestRoot();
+  console.log(`Merkle Root after burn: ${newRoot}`);
   console.groupEnd();
 
   return txReceipt;
@@ -184,14 +203,13 @@ checks the details of an incoming (newly transferred token), to ensure the data 
 */
 async function checkCorrectness(C, pk, S, z, zIndex, fTokenShield) {
   console.log('Checking h(A|pk|S) = z...');
-  const zCheck = utils.recursiveHashConcat(C, pk, S);
+  const zCheck = utils.concatenateThenHash(C, pk, S);
   const zCorrect = zCheck === z;
   console.log('z:', z);
   console.log('zCheck:', zCheck);
 
   console.log('Checking z exists on-chain...');
-  const leafIndex = utils.getLeafIndexFromZCount(zIndex);
-  const zOnchain = await fTokenShield.M.call(leafIndex, {}); // lookup the nfTokenShield token merkle tree - we hope to find our new z at this index!
+  const zOnchain = await fTokenShield.commitments.call(z, {}); // lookup the nfTokenShield commitment mapping - we hope to find our new z here!
   const zOnchainCorrect = zOnchain === z;
   console.log('z:', z);
   console.log('zOnchain:', zOnchain);

@@ -98,11 +98,6 @@ async function killContainer(container) {
   });
 }
 
-/**
-This function and the following ones are direct equivalents of the corresponding
-ZoKrates function.  They return Promises that resolve to the output (stdout, stderr)
-from ZoKrates.
-*/
 async function compile(container, codeFile) {
   console.log('Compiling code in the container - this can take some minutes...');
   const exec = await container.exec.create({
@@ -119,21 +114,35 @@ async function compile(container, codeFile) {
 }
 
 async function computeWitness(container, a, zkpPath) {
-  console.log('\nCompute-witness: Executing the program C(w,x) with:\n (w,x)=', a, '...');
-  // var config = Config.getProps()
-  console.log('a ', ...a);
-  const exec = await container.exec.create({
-    Cmd: [
-      config.ZOKRATES_APP_FILEPATH_ABS,
-      'compute-witness',
-      '-a',
-      ...a,
-      '-i',
-      path.resolve(config.ZOKRATES_CONTAINER_CODE_DIRPATH_ABS, zkpPath, 'out'),
-    ],
-    AttachStdout: true,
-    AttachStderr: true,
-  });
+  console.log('\nCompute-witness...');
+
+  let exec;
+  // handle the case of debugging compute-witness through the setup tool (where no output path is specified):
+  if (!zkpPath) {
+    // then we're debugging
+    exec = await container.exec.create({
+      Cmd: [config.ZOKRATES_APP_FILEPATH_ABS, 'compute-witness', '-a', ...a],
+      AttachStdout: true,
+      AttachStderr: true,
+    });
+  } else {
+    console.log('./zokrates compute-witness', '-a', ...a, '-i', `code/${zkpPath}out`);
+    console.log(
+      `(you can paste the above line into the container to debug the 'compute-witness' step)`,
+    );
+    exec = await container.exec.create({
+      Cmd: [
+        config.ZOKRATES_APP_FILEPATH_ABS,
+        'compute-witness',
+        '-a',
+        ...a,
+        '-i',
+        path.resolve(config.ZOKRATES_CONTAINER_CODE_DIRPATH_ABS, zkpPath, 'out'),
+      ],
+      AttachStdout: true,
+      AttachStderr: true,
+    });
+  }
   return promisifyStream(await exec.start(), 'compute-witness'); // return a promisified stream
 }
 
@@ -201,6 +210,10 @@ async function generateProof(container, b = config.ZOKRATES_BACKEND, zkpPath) {
   proof.A = proof.a; // our code expects uppercase keys
   proof.B = proof.b;
   proof.C = proof.c;
+  delete proof.a;
+  delete proof.b;
+  delete proof.c;
+
   return proof;
 }
 

@@ -1,5 +1,5 @@
 {
-  "name": "Nightfall",
+  "name": "nightfall",
   "version": "1.0.0",
   "description": "A solution to enable standard ERC-20 and ERC-721 tokens to be transacted on the Ethereum blockchain with complete privacy",
   "main": "index.js",

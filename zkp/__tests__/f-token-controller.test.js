@@ -21,8 +21,8 @@ describe('f-token-controller.js tests', () => {
   const sAToAF = '0x555555555555555555555555555555555555555555555555555555';
   const pkA = utils.hash(skA);
   const pkB = utils.hash(skB);
-  const Z_A_C = utils.recursiveHashConcat(C, pkA, S_A_C);
-  const Z_A_D = utils.recursiveHashConcat(D, pkA, S_A_D);
+  const Z_A_C = utils.concatenateThenHash(C, pkA, S_A_C);
+  const Z_A_D = utils.concatenateThenHash(D, pkA, S_A_D);
   // these constants used to enable a second transfer:
   const G = '0x00000000000000000000000000000030';
   const H = '0x00000000000000000000000000000020';
@@ -30,11 +30,11 @@ describe('f-token-controller.js tests', () => {
   const S_B_G = '0x777777777777777777777777777777777777777777777777777777';
   const sBToEH = '0x888888888888888888888888888888888888888888888888888888';
   const sBToBI = '0x999999999999999999999999999999999999999999999999999999';
-  const Z_B_G = utils.recursiveHashConcat(G, pkB, S_B_G);
-  const Z_B_E = utils.recursiveHashConcat(E, pkB, sAToBE);
+  const Z_B_G = utils.concatenateThenHash(G, pkB, S_B_G);
+  const Z_B_E = utils.concatenateThenHash(E, pkB, sAToBE);
   const pkE = '0x111111111111111111111111111111111111111111111111111112';
   // And a burn
-  const Z_A_F = utils.recursiveHashConcat(F, pkA, sAToAF);
+  const Z_A_F = utils.concatenateThenHash(F, pkA, sAToAF);
 
   // Alice has C + D to start total = 50 ETH
   // Alice sends Bob E and gets F back (Bob has 40 ETH, Alice has 10 ETH)

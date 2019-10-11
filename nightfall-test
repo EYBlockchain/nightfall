@@ -54,7 +54,7 @@ if [ "${machine}" == "Mac" ]; then
 fi
 
 # delay needed to ensure all container are in running state.
-sleep 30
+sleep 10
 
 # save all test logs to a file in background
 printf "${GREEN}*** Saving the test logs to nightfall_test.log file ***${NC}\n"

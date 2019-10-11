@@ -1,25 +1,50 @@
-import "hashes/sha256/512bit.code" as sha256compression
+import "hashes/sha256/1536bit.code" as sha256of1536
+import "hashes/sha256/1024bit.code" as sha256of1024
+import "hashes/sha256/512bit.code" as sha256of512
 import "utils/pack/unpack128.code" as unpack128
+import "utils/pack/nonStrictUnpack256.code" as unpack256
 
-def CONCAT128x216x216(field[128] a, field[216] b, field[216] c)->(field[560]):
+def concatenate128x256x256(field[128] a, field[256] b, field[256] c)->(field[640]):
 	return [...a, ...b, ...c]
 
-def CONCAT216x216(field[216] a, field[216] b)->(field[432]):
+def concatenate256x256(field[256] a, field[256] b)->(field[512]):
 	return [...a, ...b]
 
-def ORDEREDCONCAT216x216(field order, field[216] f, field[216] g)->(field[432]):
-	field[216] r = if order==0 then g else f fi
-	field[216] s = if order==0 then f else g fi
-	return [...r, ...s]
+def concatenate256x256x256x256x256(field[256] a, field[256] b, field[256] c, field[256] d, field[256] e)->(field[1280]):
+	return [...a, ...b, ...c, ...d, ...e]
+
+def orderedConcatenate216x216(field order, field[216] a, field[216] b)->(field[432]):
+	field[216] left = if order==0 then b else a fi
+	field[216] right = if order==0 then a else b fi
+	return [...left, ...right]
 
 def shaPad432To512(field[432] a)->(field[512]):
 	return [...a, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,1,0,1,1,0,0,0,0]
 
-def shaPad216To512(field[216] a)->(field[512]):
-	return [...a, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,1,0,1,1,0,0,0]
+// Provides the padding (only!) for a 256-bit message.
+def shaPad256To512()->(field[256]):
+	return [1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	1,	0,	0,	0,	0,	0,	0,	0,	0]
 
-def shaPad128To512(field[128] a)->(field[512]):
-	return [...a, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1,0,0,0,0,0,0,0]
+// Provides the padding (only!) for a 512-bit message.
+def shaPad512To1024()->(field[512]):
+	return [1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,    0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0]
+
+// Provides the padding (only!) for a 768-bit message.
+def shaPad768To1024()->(field[256]):
+	return [1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	1,	1,	0,	0,	0,	0,	0,	0,	0,	0]
+
+// Provides the padding (only!) for a 640-bit message.
+def shaPad640To1024()->(field[384]):
+	return [1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	1,	0,	1,	0,	0,	0,	0,	0,	0,	0]
+
+// Provides the padding (only!) for a 1280-bit message.
+def shaPad1280To1536()->(field[256]):
+	return [1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	1,	0,	1,	0,	0,	0,	0,	0,	0,	0,	0]
+
+// unpacks the bits in a path field ready for sha-ing
+def unpackPath(field p)->(field[216]):
+	field[256] sister = unpack256(p)
+	return sister[40..256]
 
 
 // Inputs for main are:
@@ -49,13 +74,17 @@ def shaPad128To512(field[128] a)->(field[512]):
 
 // root - the Merkle root (public)
 
-// Note - We truncate the 256 bit SHA hash down to 216 bits to make it fit better with our sha, which can only handle a single round.
+// publicInputHash = hash(root, nullifierC, nullifierD, commitmentE, commitmentF)
 
-//Each field element passed to main() can be at most 128bits, to make use of unpack128() so 216 bit variables span two fields
+// Note - we now use 216 bits for the Merkle tree calculation. This is because 432 is the biggest input we can use for sha256 if we want 432/2 to end on a byte boundary for easier Solidity computation without needing to do full rounds and we need to concatenate the two child hashes. We consider 216 bits to be sufficiently secure. The nullifier, commitment and root retain 256-bit security.
 
-def main(private field valueC, private field  secretKeyAHigh, private field  secretKeyALow, private field  saltCHigh, private field  saltCLow, private field pathC0High, private field pathC0Low, private field pathC1High, private field pathC1Low, private field pathC2High, private field pathC2Low, private field pathC3High, private field pathC3Low, private field pathC4High, private field pathC4Low, private field pathC5High, private field pathC5Low, private field pathC6High, private field pathC6Low, private field pathC7High, private field pathC7Low, private field pathC8High, private field pathC8Low, private field pathC9High, private field pathC9Low, private field pathC10High, private field pathC10Low, private field pathC11High, private field pathC11Low, private field pathC12High, private field pathC12Low, private field pathC13High, private field pathC13Low, private field pathC14High, private field pathC14Low, private field pathC15High, private field pathC15Low, private field pathC16High, private field pathC16Low, private field pathC17High, private field pathC17Low, private field pathC18High, private field pathC18Low, private field pathC19High, private field pathC19Low, private field pathC20High, private field pathC20Low, private field pathC21High, private field pathC21Low, private field pathC22High, private field pathC22Low, private field pathC23High, private field pathC23Low, private field pathC24High, private field pathC24Low, private field pathC25High, private field pathC25Low, private field pathC26High, private field pathC26Low, private field pathC27High, private field pathC27Low, private field pathC28High, private field pathC28Low, private field pathC29High, private field pathC29Low, private field pathC30High, private field pathC30Low, private field pathC31High, private field pathC31Low, private field orderC, private field valueD, private field  saltDHigh, private field  saltDLow, private field pathD0High, private field pathD0Low, private field pathD1High, private field pathD1Low, private field pathD2High, private field pathD2Low, private field pathD3High, private field pathD3Low, private field pathD4High, private field pathD4Low, private field pathD5High, private field pathD5Low, private field pathD6High, private field pathD6Low, private field pathD7High, private field pathD7Low, private field pathD8High, private field pathD8Low, private field pathD9High, private field pathD9Low, private field pathD10High, private field pathD10Low, private field pathD11High, private field pathD11Low, private field pathD12High, private field pathD12Low, private field pathD13High, private field pathD13Low, private field pathD14High, private field pathD14Low, private field pathD15High, private field pathD15Low, private field pathD16High, private field pathD16Low, private field pathD17High, private field pathD17Low, private field pathD18High, private field pathD18Low, private field pathD19High, private field pathD19Low, private field pathD20High, private field pathD20Low, private field pathD21High, private field pathD21Low, private field pathD22High, private field pathD22Low, private field pathD23High, private field pathD23Low, private field pathD24High, private field pathD24Low, private field pathD25High, private field pathD25Low, private field pathD26High, private field pathD26Low, private field pathD27High, private field pathD27Low, private field pathD28High, private field pathD28Low, private field pathD29High, private field pathD29Low, private field pathD30High, private field pathD30Low, private field pathD31High, private field pathD31Low, private field orderD, field  nullifierCHigh, field  nullifierCLow, field  nullifierDHigh, field  nullifierDLow, private field valueE, private field  publicKeyBHigh, private field  publicKeyBLow, private field  saltEHigh, private field  saltELow, field  commitmentEHigh, field  commitmentELow, private field valueF, private field  saltFHigh, private field  saltFLow, field  commitmentFHigh, field  commitmentFLow, field  rootHigh, field  rootLow)->(field):
+// Each field element passed to main() can be at most 128bits, to make use of unpack128() so most variables occupy two fields (except the publicInputHash, which we maximize as 248-bits)
 
-	//Unpack the inputs of main() to 128 bits. We'll unpack each field to its own 128 bit string for simplicity for now. Later efficiencies could be made by grouping some inputs.
+def main(field publicInputHash, private field valueC, private field secretKeyAHigh, private field  secretKeyALow, private field saltCHigh, private field saltCLow, private field[32] pathC, private field orderC, private field valueD, private field saltDHigh, private field saltDLow, private field[32] pathD, private field orderD, private field nullifierCHigh, private field nullifierCLow, private field nullifierDHigh, private field nullifierDLow, private field valueE, private field publicKeyBHigh, private field publicKeyBLow, private field saltEHigh, private field saltELow, private field commitmentEHigh, private field commitmentELow, private field valueF, private field saltFHigh, private field saltFLow, private field commitmentFHigh, private field commitmentFLow, private field rootHigh, private field rootLow)->():
+
+	// Unpack the inputs of main() to 128 bits. We'll unpack each field to its own 128 bit string for simplicity for now. Later efficiencies could be made by grouping some inputs.
+
+	field[256] publicInputHashBits = unpack256(publicInputHash)
 
 	field[128] valueCBits = unpack128(valueC)
 
@@ -67,209 +96,11 @@ def main(private field valueC, private field  secretKeyAHigh, private field  sec
 	field[128] saltCLowBits = unpack128(saltCLow)
 	field[256] saltCBits = [...saltCHighBits, ...saltCLowBits]
 
-	field[128] pathC31HighBits = unpack128(pathC31High)
-	field[128] pathC30HighBits = unpack128(pathC30High)
-	field[128] pathC29HighBits = unpack128(pathC29High)
-	field[128] pathC28HighBits = unpack128(pathC28High)
-	field[128] pathC27HighBits = unpack128(pathC27High)
-	field[128] pathC26HighBits = unpack128(pathC26High)
-	field[128] pathC25HighBits = unpack128(pathC25High)
-	field[128] pathC24HighBits = unpack128(pathC24High)
-	field[128] pathC23HighBits = unpack128(pathC23High)
-	field[128] pathC22HighBits = unpack128(pathC22High)
-	field[128] pathC21HighBits = unpack128(pathC21High)
-	field[128] pathC20HighBits = unpack128(pathC20High)
-	field[128] pathC19HighBits = unpack128(pathC19High)
-	field[128] pathC18HighBits = unpack128(pathC18High)
-	field[128] pathC17HighBits = unpack128(pathC17High)
-	field[128] pathC16HighBits = unpack128(pathC16High)
-	field[128] pathC15HighBits = unpack128(pathC15High)
-	field[128] pathC14HighBits = unpack128(pathC14High)
-	field[128] pathC13HighBits = unpack128(pathC13High)
-	field[128] pathC12HighBits = unpack128(pathC12High)
-	field[128] pathC11HighBits = unpack128(pathC11High)
-	field[128] pathC10HighBits = unpack128(pathC10High)
-	field[128] pathC9HighBits = unpack128(pathC9High)
-	field[128] pathC8HighBits = unpack128(pathC8High)
-	field[128] pathC7HighBits = unpack128(pathC7High)
-	field[128] pathC6HighBits = unpack128(pathC6High)
-	field[128] pathC5HighBits = unpack128(pathC5High)
-	field[128] pathC4HighBits = unpack128(pathC4High)
-	field[128] pathC3HighBits = unpack128(pathC3High)
-	field[128] pathC2HighBits = unpack128(pathC2High)
-	field[128] pathC1HighBits = unpack128(pathC1High)
-	field[128] pathC0HighBits = unpack128(pathC0High)
-
-	field[128] pathC31LowBits = unpack128(pathC31Low)
-	field[128] pathC30LowBits = unpack128(pathC30Low)
-	field[128] pathC29LowBits = unpack128(pathC29Low)
-	field[128] pathC28LowBits = unpack128(pathC28Low)
-	field[128] pathC27LowBits = unpack128(pathC27Low)
-	field[128] pathC26LowBits = unpack128(pathC26Low)
-	field[128] pathC25LowBits = unpack128(pathC25Low)
-	field[128] pathC24LowBits = unpack128(pathC24Low)
-	field[128] pathC23LowBits = unpack128(pathC23Low)
-	field[128] pathC22LowBits = unpack128(pathC22Low)
-	field[128] pathC21LowBits = unpack128(pathC21Low)
-	field[128] pathC20LowBits = unpack128(pathC20Low)
-	field[128] pathC19LowBits = unpack128(pathC19Low)
-	field[128] pathC18LowBits = unpack128(pathC18Low)
-	field[128] pathC17LowBits = unpack128(pathC17Low)
-	field[128] pathC16LowBits = unpack128(pathC16Low)
-	field[128] pathC15LowBits = unpack128(pathC15Low)
-	field[128] pathC14LowBits = unpack128(pathC14Low)
-	field[128] pathC13LowBits = unpack128(pathC13Low)
-	field[128] pathC12LowBits = unpack128(pathC12Low)
-	field[128] pathC11LowBits = unpack128(pathC11Low)
-	field[128] pathC10LowBits = unpack128(pathC10Low)
-	field[128] pathC9LowBits = unpack128(pathC9Low)
-	field[128] pathC8LowBits = unpack128(pathC8Low)
-	field[128] pathC7LowBits = unpack128(pathC7Low)
-	field[128] pathC6LowBits = unpack128(pathC6Low)
-	field[128] pathC5LowBits = unpack128(pathC5Low)
-	field[128] pathC4LowBits = unpack128(pathC4Low)
-	field[128] pathC3LowBits = unpack128(pathC3Low)
-	field[128] pathC2LowBits = unpack128(pathC2Low)
-	field[128] pathC1LowBits = unpack128(pathC1Low)
-	field[128] pathC0LowBits = unpack128(pathC0Low)
-
-	field[256] pathC31Bits = [...pathC31HighBits, ...pathC31LowBits]
-	field[256] pathC30Bits = [...pathC30HighBits, ...pathC30LowBits]
-	field[256] pathC29Bits = [...pathC29HighBits, ...pathC29LowBits]
-	field[256] pathC28Bits = [...pathC28HighBits, ...pathC28LowBits]
-	field[256] pathC27Bits = [...pathC27HighBits, ...pathC27LowBits]
-	field[256] pathC26Bits = [...pathC26HighBits, ...pathC26LowBits]
-	field[256] pathC25Bits = [...pathC25HighBits, ...pathC25LowBits]
-	field[256] pathC24Bits = [...pathC24HighBits, ...pathC24LowBits]
-	field[256] pathC23Bits = [...pathC23HighBits, ...pathC23LowBits]
-	field[256] pathC22Bits = [...pathC22HighBits, ...pathC22LowBits]
-	field[256] pathC21Bits = [...pathC21HighBits, ...pathC21LowBits]
-	field[256] pathC20Bits = [...pathC20HighBits, ...pathC20LowBits]
-	field[256] pathC19Bits = [...pathC19HighBits, ...pathC19LowBits]
-	field[256] pathC18Bits = [...pathC18HighBits, ...pathC18LowBits]
-	field[256] pathC17Bits = [...pathC17HighBits, ...pathC17LowBits]
-	field[256] pathC16Bits = [...pathC16HighBits, ...pathC16LowBits]
-	field[256] pathC15Bits = [...pathC15HighBits, ...pathC15LowBits]
-	field[256] pathC14Bits = [...pathC14HighBits, ...pathC14LowBits]
-	field[256] pathC13Bits = [...pathC13HighBits, ...pathC13LowBits]
-	field[256] pathC12Bits = [...pathC12HighBits, ...pathC12LowBits]
-	field[256] pathC11Bits = [...pathC11HighBits, ...pathC11LowBits]
-	field[256] pathC10Bits = [...pathC10HighBits, ...pathC10LowBits]
-	field[256] pathC9Bits = [...pathC9HighBits, ...pathC9LowBits]
-	field[256] pathC8Bits = [...pathC8HighBits, ...pathC8LowBits]
-	field[256] pathC7Bits = [...pathC7HighBits, ...pathC7LowBits]
-	field[256] pathC6Bits = [...pathC6HighBits, ...pathC6LowBits]
-	field[256] pathC5Bits = [...pathC5HighBits, ...pathC5LowBits]
-	field[256] pathC4Bits = [...pathC4HighBits, ...pathC4LowBits]
-	field[256] pathC3Bits = [...pathC3HighBits, ...pathC3LowBits]
-	field[256] pathC2Bits = [...pathC2HighBits, ...pathC2LowBits]
-	field[256] pathC1Bits = [...pathC1HighBits, ...pathC1LowBits]
-	field[256] pathC0Bits = [...pathC0HighBits, ...pathC0LowBits]
-
 	field[128] valueDBits = unpack128(valueD)
 
 	field[128] saltDHighBits = unpack128(saltDHigh)
 	field[128] saltDLowBits = unpack128(saltDLow)
 	field[256] saltDBits = [...saltDHighBits, ...saltDLowBits]
-
-	field[128] pathD31HighBits = unpack128(pathD31High)
-	field[128] pathD30HighBits = unpack128(pathD30High)
-	field[128] pathD29HighBits = unpack128(pathD29High)
-	field[128] pathD28HighBits = unpack128(pathD28High)
-	field[128] pathD27HighBits = unpack128(pathD27High)
-	field[128] pathD26HighBits = unpack128(pathD26High)
-	field[128] pathD25HighBits = unpack128(pathD25High)
-	field[128] pathD24HighBits = unpack128(pathD24High)
-	field[128] pathD23HighBits = unpack128(pathD23High)
-	field[128] pathD22HighBits = unpack128(pathD22High)
-	field[128] pathD21HighBits = unpack128(pathD21High)
-	field[128] pathD20HighBits = unpack128(pathD20High)
-	field[128] pathD19HighBits = unpack128(pathD19High)
-	field[128] pathD18HighBits = unpack128(pathD18High)
-	field[128] pathD17HighBits = unpack128(pathD17High)
-	field[128] pathD16HighBits = unpack128(pathD16High)
-	field[128] pathD15HighBits = unpack128(pathD15High)
-	field[128] pathD14HighBits = unpack128(pathD14High)
-	field[128] pathD13HighBits = unpack128(pathD13High)
-	field[128] pathD12HighBits = unpack128(pathD12High)
-	field[128] pathD11HighBits = unpack128(pathD11High)
-	field[128] pathD10HighBits = unpack128(pathD10High)
-	field[128] pathD9HighBits = unpack128(pathD9High)
-	field[128] pathD8HighBits = unpack128(pathD8High)
-	field[128] pathD7HighBits = unpack128(pathD7High)
-	field[128] pathD6HighBits = unpack128(pathD6High)
-	field[128] pathD5HighBits = unpack128(pathD5High)
-	field[128] pathD4HighBits = unpack128(pathD4High)
-	field[128] pathD3HighBits = unpack128(pathD3High)
-	field[128] pathD2HighBits = unpack128(pathD2High)
-	field[128] pathD1HighBits = unpack128(pathD1High)
-	field[128] pathD0HighBits = unpack128(pathD0High)
-
-	field[128] pathD31LowBits = unpack128(pathD31Low)
-	field[128] pathD30LowBits = unpack128(pathD30Low)
-	field[128] pathD29LowBits = unpack128(pathD29Low)
-	field[128] pathD28LowBits = unpack128(pathD28Low)
-	field[128] pathD27LowBits = unpack128(pathD27Low)
-	field[128] pathD26LowBits = unpack128(pathD26Low)
-	field[128] pathD25LowBits = unpack128(pathD25Low)
-	field[128] pathD24LowBits = unpack128(pathD24Low)
-	field[128] pathD23LowBits = unpack128(pathD23Low)
-	field[128] pathD22LowBits = unpack128(pathD22Low)
-	field[128] pathD21LowBits = unpack128(pathD21Low)
-	field[128] pathD20LowBits = unpack128(pathD20Low)
-	field[128] pathD19LowBits = unpack128(pathD19Low)
-	field[128] pathD18LowBits = unpack128(pathD18Low)
-	field[128] pathD17LowBits = unpack128(pathD17Low)
-	field[128] pathD16LowBits = unpack128(pathD16Low)
-	field[128] pathD15LowBits = unpack128(pathD15Low)
-	field[128] pathD14LowBits = unpack128(pathD14Low)
-	field[128] pathD13LowBits = unpack128(pathD13Low)
-	field[128] pathD12LowBits = unpack128(pathD12Low)
-	field[128] pathD11LowBits = unpack128(pathD11Low)
-	field[128] pathD10LowBits = unpack128(pathD10Low)
-	field[128] pathD9LowBits = unpack128(pathD9Low)
-	field[128] pathD8LowBits = unpack128(pathD8Low)
-	field[128] pathD7LowBits = unpack128(pathD7Low)
-	field[128] pathD6LowBits = unpack128(pathD6Low)
-	field[128] pathD5LowBits = unpack128(pathD5Low)
-	field[128] pathD4LowBits = unpack128(pathD4Low)
-	field[128] pathD3LowBits = unpack128(pathD3Low)
-	field[128] pathD2LowBits = unpack128(pathD2Low)
-	field[128] pathD1LowBits = unpack128(pathD1Low)
-	field[128] pathD0LowBits = unpack128(pathD0Low)
-
-	field[256] pathD31Bits = [...pathD31HighBits, ...pathD31LowBits]
-	field[256] pathD30Bits = [...pathD30HighBits, ...pathD30LowBits]
-	field[256] pathD29Bits = [...pathD29HighBits, ...pathD29LowBits]
-	field[256] pathD28Bits = [...pathD28HighBits, ...pathD28LowBits]
-	field[256] pathD27Bits = [...pathD27HighBits, ...pathD27LowBits]
-	field[256] pathD26Bits = [...pathD26HighBits, ...pathD26LowBits]
-	field[256] pathD25Bits = [...pathD25HighBits, ...pathD25LowBits]
-	field[256] pathD24Bits = [...pathD24HighBits, ...pathD24LowBits]
-	field[256] pathD23Bits = [...pathD23HighBits, ...pathD23LowBits]
-	field[256] pathD22Bits = [...pathD22HighBits, ...pathD22LowBits]
-	field[256] pathD21Bits = [...pathD21HighBits, ...pathD21LowBits]
-	field[256] pathD20Bits = [...pathD20HighBits, ...pathD20LowBits]
-	field[256] pathD19Bits = [...pathD19HighBits, ...pathD19LowBits]
-	field[256] pathD18Bits = [...pathD18HighBits, ...pathD18LowBits]
-	field[256] pathD17Bits = [...pathD17HighBits, ...pathD17LowBits]
-	field[256] pathD16Bits = [...pathD16HighBits, ...pathD16LowBits]
-	field[256] pathD15Bits = [...pathD15HighBits, ...pathD15LowBits]
-	field[256] pathD14Bits = [...pathD14HighBits, ...pathD14LowBits]
-	field[256] pathD13Bits = [...pathD13HighBits, ...pathD13LowBits]
-	field[256] pathD12Bits = [...pathD12HighBits, ...pathD12LowBits]
-	field[256] pathD11Bits = [...pathD11HighBits, ...pathD11LowBits]
-	field[256] pathD10Bits = [...pathD10HighBits, ...pathD10LowBits]
-	field[256] pathD9Bits = [...pathD9HighBits, ...pathD9LowBits]
-	field[256] pathD8Bits = [...pathD8HighBits, ...pathD8LowBits]
-	field[256] pathD7Bits = [...pathD7HighBits, ...pathD7LowBits]
-	field[256] pathD6Bits = [...pathD6HighBits, ...pathD6LowBits]
-	field[256] pathD5Bits = [...pathD5HighBits, ...pathD5LowBits]
-	field[256] pathD4Bits = [...pathD4HighBits, ...pathD4LowBits]
-	field[256] pathD3Bits = [...pathD3HighBits, ...pathD3LowBits]
-	field[256] pathD2Bits = [...pathD2HighBits, ...pathD2LowBits]
-	field[256] pathD1Bits = [...pathD1HighBits, ...pathD1LowBits]
-	field[256] pathD0Bits = [...pathD0HighBits, ...pathD0LowBits]
 
 	field[128] nullifierCHighBits = unpack128(nullifierCHigh)
 	field[128] nullifierCLowBits = unpack128(nullifierCLow)
@@ -311,378 +142,83 @@ def main(private field valueC, private field  secretKeyAHigh, private field  sec
 	field[128] orderDBits = unpack128(orderD)
 
 
+	field[256] padding256To512 = shaPad256To512()
+	field[512] padding512To1024 = shaPad512To1024()
+	field[256] padding768To1024 = shaPad768To1024()
+	field[384] padding640To1024 = shaPad640To1024()
+	field[256] padding1280To1536 = shaPad1280To1536()
+
+
+
 	// First we construct a proof that the nullifiers nulliferC and nullifierD are correct:
+	// H(saltC|secretKeyA) = nullifierC.
+	// H(saltD|secretKeyA) = nullifierD.
 
-	// Concatenate saltC|secretKeyA.
-	field[432] t = CONCAT216x216(saltCBits[40..256], secretKeyABits[40..256])
-	field[512] u = shaPad432To512(t)
-	field[256] nullifierCBitsCheck = sha256compression(u[0..256],u[256..512])
+	field[512] preimage512 = concatenate256x256(saltCBits, secretKeyABits)
+	field[256] nullifierCBitsCheck = sha256of1024(preimage512[0..256], preimage512[256..512], padding512To1024[0..256], padding512To1024[256..512])
 
-	// Concatenate saltD|secretKeyA.
-	t = CONCAT216x216(saltDBits[40..256], secretKeyABits[40..256])
-	u = shaPad432To512(t)
-	field[256] nullifierDBitsCheck = sha256compression(u[0..256],u[256..512])
+	preimage512 = concatenate256x256(saltDBits, secretKeyABits)
+	field[256] nullifierDBitsCheck = sha256of1024(preimage512[0..256], preimage512[256..512], padding512To1024[0..256], padding512To1024[256..512])
 
-	// Next, calculate Alice's public key from her private key: publicKeyA = H(secretKeyA) truncated to 216 bits.  This will be useful later
-	u = shaPad216To512(secretKeyABits[40..256])
-	field[256] publicKeyABits = sha256compression(u[0..256],u[256..512])
 
 
-	// Prove that commitmentC and commitmentD are in the Merkle tree
+	// H(valueC|publicKeyA|saltA) = commitmentC is in the Merkle Tree
 
-	// First calculate commitmentC = H(valueC|publicKeyA|saltC)
+	// Calculation of publicKeyA from H(secretKeyA)
+	field[256] publicKeyABits = sha256of512(secretKeyABits, padding256To512)
 
-	field[560] d = CONCAT128x216x216(valueCBits, publicKeyABits[40..256], saltCBits[40..256])
 
-	// This is too big to handle in a single sha round and our sha can't handle multiple rounds. As a work-around, we will split d, hash both parts and then hash the result - remember to do this in Node too!
+	// And calculation of commitmentC
+	field[640] preimage640 = concatenate128x256x256(valueCBits, publicKeyABits, saltCBits)
 
-	// First 432 bits (432 is 216*2 - a convenient number in our 216 bit scheme):
-	field[512] q = shaPad432To512(d[128..560])
-	field[256] s = sha256compression(q[0..256],q[256..512])
+	field[1024] preimage1024 = [...preimage640, ...padding640To1024]
 
-	// Remaining 128 bits
-	u = shaPad128To512(d[0..128])
-	field[256] v = sha256compression(u[0..256],u[256..512])
+	field[256] hash = sha256of1024(preimage1024[0..256], preimage1024[256..512], preimage1024[512..768], preimage1024[768..1024]) // commitmentC
 
-	// Then concat the results msb first
-	t = CONCAT216x216(v[40..256], s[40..256])
+	// concatenate siblings and hash all the way up to the root
+	for field i in 0..32 do
+		field j = 31-i
+		preimage512 = shaPad432To512(orderedConcatenate216x216(orderCBits[j], hash[40..256], unpackPath(pathC[j])))
+		hash = sha256of512(preimage512[0..256], preimage512[256..512])
+	endfor
+	// save the computed root:
+	field[256] rootCBitsCheck = hash
 
-	// And hash the result
-	q = shaPad432To512(t)
-	s = sha256compression(q[0..256],q[256..512]) // commitmentC
+	// H(valueD|publicKeyA|saltA) = commitmentD is in the Merkle Tree
 
+	// Calculation of the commitment
+	preimage640 = concatenate128x256x256(valueDBits, publicKeyABits, saltDBits)
 
-	// Concatenate 1st through 31st siblings
+	preimage1024 = [...preimage640, ...padding640To1024]
 
-	t = ORDEREDCONCAT216x216(orderCBits[31], s[40..256], pathC31Bits[40..256])
-	u = shaPad432To512(t)
-	s = sha256compression(u[0..256],u[256..512])
+	hash = sha256of1024(preimage1024[0..256], preimage1024[256..512], preimage1024[512..768], preimage1024[768..1024]) // commitmentD
 
-	t = ORDEREDCONCAT216x216(orderCBits[30], s[40..256], pathC30Bits[40..256])
-	u = shaPad432To512(t)
-	s = sha256compression(u[0..256],u[256..512])
-
-	t = ORDEREDCONCAT216x216(orderCBits[29], s[40..256], pathC29Bits[40..256])
-	u = shaPad432To512(t)
-	s = sha256compression(u[0..256],u[256..512])
-
-	t = ORDEREDCONCAT216x216(orderCBits[28], s[40..256], pathC28Bits[40..256])
-	u = shaPad432To512(t)
-	s = sha256compression(u[0..256],u[256..512])
-
-	t = ORDEREDCONCAT216x216(orderCBits[27], s[40..256], pathC27Bits[40..256])
-	u = shaPad432To512(t)
-	s = sha256compression(u[0..256],u[256..512])
-
-	t = ORDEREDCONCAT216x216(orderCBits[26], s[40..256], pathC26Bits[40..256])
-	u = shaPad432To512(t)
-	s = sha256compression(u[0..256],u[256..512])
-
-	t = ORDEREDCONCAT216x216(orderCBits[25], s[40..256], pathC25Bits[40..256])
-	u = shaPad432To512(t)
-	s = sha256compression(u[0..256],u[256..512])
-
-	t = ORDEREDCONCAT216x216(orderCBits[24], s[40..256], pathC24Bits[40..256])
-	u = shaPad432To512(t)
-	s = sha256compression(u[0..256],u[256..512])
-
-	t = ORDEREDCONCAT216x216(orderCBits[23], s[40..256], pathC23Bits[40..256])
-	u = shaPad432To512(t)
-	s = sha256compression(u[0..256],u[256..512])
-
-	t = ORDEREDCONCAT216x216(orderCBits[22], s[40..256], pathC22Bits[40..256])
-	u = shaPad432To512(t)
-	s = sha256compression(u[0..256],u[256..512])
-
-	t = ORDEREDCONCAT216x216(orderCBits[21], s[40..256], pathC21Bits[40..256])
-	u = shaPad432To512(t)
-	s = sha256compression(u[0..256],u[256..512])
-
-	t = ORDEREDCONCAT216x216(orderCBits[20], s[40..256], pathC20Bits[40..256])
-	u = shaPad432To512(t)
-	s = sha256compression(u[0..256],u[256..512])
-
-	t = ORDEREDCONCAT216x216(orderCBits[19], s[40..256], pathC19Bits[40..256])
-	u = shaPad432To512(t)
-	s = sha256compression(u[0..256],u[256..512])
-
-	t = ORDEREDCONCAT216x216(orderCBits[18], s[40..256], pathC18Bits[40..256])
-	u = shaPad432To512(t)
-	s = sha256compression(u[0..256],u[256..512])
-
-	t = ORDEREDCONCAT216x216(orderCBits[17], s[40..256], pathC17Bits[40..256])
-	u = shaPad432To512(t)
-	s = sha256compression(u[0..256],u[256..512])
-
-	t = ORDEREDCONCAT216x216(orderCBits[16], s[40..256], pathC16Bits[40..256])
-	u = shaPad432To512(t)
-	s = sha256compression(u[0..256],u[256..512])
-
-	t = ORDEREDCONCAT216x216(orderCBits[15], s[40..256], pathC15Bits[40..256])
-	u = shaPad432To512(t)
-	s = sha256compression(u[0..256],u[256..512])
-
-	t = ORDEREDCONCAT216x216(orderCBits[14], s[40..256], pathC14Bits[40..256])
-	u = shaPad432To512(t)
-	s = sha256compression(u[0..256],u[256..512])
-
-	t = ORDEREDCONCAT216x216(orderCBits[13], s[40..256], pathC13Bits[40..256])
-	u = shaPad432To512(t)
-	s = sha256compression(u[0..256],u[256..512])
-
-	t = ORDEREDCONCAT216x216(orderCBits[12], s[40..256], pathC12Bits[40..256])
-	u = shaPad432To512(t)
-	s = sha256compression(u[0..256],u[256..512])
-
-	t = ORDEREDCONCAT216x216(orderCBits[11], s[40..256], pathC11Bits[40..256])
-	u = shaPad432To512(t)
-	s = sha256compression(u[0..256],u[256..512])
-
-	t = ORDEREDCONCAT216x216(orderCBits[10], s[40..256], pathC10Bits[40..256])
-	u = shaPad432To512(t)
-	s = sha256compression(u[0..256],u[256..512])
-
-	t = ORDEREDCONCAT216x216(orderCBits[9], s[40..256], pathC9Bits[40..256])
-	u = shaPad432To512(t)
-	s = sha256compression(u[0..256],u[256..512])
-
-	t = ORDEREDCONCAT216x216(orderCBits[8], s[40..256], pathC8Bits[40..256])
-	u = shaPad432To512(t)
-	s = sha256compression(u[0..256],u[256..512])
-
-	t = ORDEREDCONCAT216x216(orderCBits[7], s[40..256], pathC7Bits[40..256])
-	u = shaPad432To512(t)
-	s = sha256compression(u[0..256],u[256..512])
-
-	t = ORDEREDCONCAT216x216(orderCBits[6], s[40..256], pathC6Bits[40..256])
-	u = shaPad432To512(t)
-	s = sha256compression(u[0..256],u[256..512])
-
-	t = ORDEREDCONCAT216x216(orderCBits[5], s[40..256], pathC5Bits[40..256])
-	u = shaPad432To512(t)
-	s = sha256compression(u[0..256],u[256..512])
-
-	t = ORDEREDCONCAT216x216(orderCBits[4], s[40..256], pathC4Bits[40..256])
-	u = shaPad432To512(t)
-	s = sha256compression(u[0..256],u[256..512])
-
-	t = ORDEREDCONCAT216x216(orderCBits[3], s[40..256], pathC3Bits[40..256])
-	u = shaPad432To512(t)
-	s = sha256compression(u[0..256],u[256..512])
-
-	t = ORDEREDCONCAT216x216(orderCBits[2], s[40..256], pathC2Bits[40..256])
-	u = shaPad432To512(t)
-	s = sha256compression(u[0..256],u[256..512])
-
-	t = ORDEREDCONCAT216x216(orderCBits[1], s[40..256], pathC1Bits[40..256])
-	u = shaPad432To512(t)
-	s = sha256compression(u[0..256],u[256..512])
-
-
-	// Concatenate with the 32nd sibling. This should equal the root.
-
-	t = ORDEREDCONCAT216x216(orderCBits[0], s[40..256], pathC0Bits[40..256])
-	u = shaPad432To512(t)
-	field[256] rootCBits = sha256compression(u[0..256],u[256..512])
-
-
-	// Next calculate commitmentD = H(valueD|publicKeyA|saltD)
-	d = CONCAT128x216x216(valueDBits, publicKeyABits[40..256], saltDBits[40..256])
-
-	// This is too big to handle in a single sha round and our sha can't handle multiple rounds. As a work-around, we will split d, hash both parts and then hash the result - remember to do this in Node too!
-
-	// First 432 bits (432 is 216*2 - a convenient number in our 216 bit scheme):
-	q = shaPad432To512(d[128..560])
-	s = sha256compression(q[0..256],q[256..512])
-
-	// Remaining 128 bits
-	u = shaPad128To512(d[0..128])
-	v = sha256compression(u[0..256],u[256..512])
-
-	// Then concat the results msb first
-	t = CONCAT216x216(v[40..256], s[40..256])
-
-	// And hash the result
-	q = shaPad432To512(t)
-	s = sha256compression(q[0..256],q[256..512]) // commitmentD
-
-
-	// Concatenate 1st through 31st siblings
-
-		t = ORDEREDCONCAT216x216(orderDBits[31], s[40..256], pathD31Bits[40..256])
-		u = shaPad432To512(t)
-		s = sha256compression(u[0..256],u[256..512])
-
-		t = ORDEREDCONCAT216x216(orderDBits[30], s[40..256], pathD30Bits[40..256])
-		u = shaPad432To512(t)
-		s = sha256compression(u[0..256],u[256..512])
-
-		t = ORDEREDCONCAT216x216(orderDBits[29], s[40..256], pathD29Bits[40..256])
-		u = shaPad432To512(t)
-		s = sha256compression(u[0..256],u[256..512])
-
-		t = ORDEREDCONCAT216x216(orderDBits[28], s[40..256], pathD28Bits[40..256])
-		u = shaPad432To512(t)
-		s = sha256compression(u[0..256],u[256..512])
-
-		t = ORDEREDCONCAT216x216(orderDBits[27], s[40..256], pathD27Bits[40..256])
-		u = shaPad432To512(t)
-		s = sha256compression(u[0..256],u[256..512])
-
-		t = ORDEREDCONCAT216x216(orderDBits[26], s[40..256], pathD26Bits[40..256])
-		u = shaPad432To512(t)
-		s = sha256compression(u[0..256],u[256..512])
-
-		t = ORDEREDCONCAT216x216(orderDBits[25], s[40..256], pathD25Bits[40..256])
-		u = shaPad432To512(t)
-		s = sha256compression(u[0..256],u[256..512])
-
-		t = ORDEREDCONCAT216x216(orderDBits[24], s[40..256], pathD24Bits[40..256])
-		u = shaPad432To512(t)
-		s = sha256compression(u[0..256],u[256..512])
-
-		t = ORDEREDCONCAT216x216(orderDBits[23], s[40..256], pathD23Bits[40..256])
-		u = shaPad432To512(t)
-		s = sha256compression(u[0..256],u[256..512])
-
-		t = ORDEREDCONCAT216x216(orderDBits[22], s[40..256], pathD22Bits[40..256])
-		u = shaPad432To512(t)
-		s = sha256compression(u[0..256],u[256..512])
-
-		t = ORDEREDCONCAT216x216(orderDBits[21], s[40..256], pathD21Bits[40..256])
-		u = shaPad432To512(t)
-		s = sha256compression(u[0..256],u[256..512])
-
-		t = ORDEREDCONCAT216x216(orderDBits[20], s[40..256], pathD20Bits[40..256])
-		u = shaPad432To512(t)
-		s = sha256compression(u[0..256],u[256..512])
-
-		t = ORDEREDCONCAT216x216(orderDBits[19], s[40..256], pathD19Bits[40..256])
-		u = shaPad432To512(t)
-		s = sha256compression(u[0..256],u[256..512])
-
-		t = ORDEREDCONCAT216x216(orderDBits[18], s[40..256], pathD18Bits[40..256])
-		u = shaPad432To512(t)
-		s = sha256compression(u[0..256],u[256..512])
-
-		t = ORDEREDCONCAT216x216(orderDBits[17], s[40..256], pathD17Bits[40..256])
-		u = shaPad432To512(t)
-		s = sha256compression(u[0..256],u[256..512])
-
-		t = ORDEREDCONCAT216x216(orderDBits[16], s[40..256], pathD16Bits[40..256])
-		u = shaPad432To512(t)
-		s = sha256compression(u[0..256],u[256..512])
-
-		t = ORDEREDCONCAT216x216(orderDBits[15], s[40..256], pathD15Bits[40..256])
-		u = shaPad432To512(t)
-		s = sha256compression(u[0..256],u[256..512])
-
-		t = ORDEREDCONCAT216x216(orderDBits[14], s[40..256], pathD14Bits[40..256])
-		u = shaPad432To512(t)
-		s = sha256compression(u[0..256],u[256..512])
-
-		t = ORDEREDCONCAT216x216(orderDBits[13], s[40..256], pathD13Bits[40..256])
-		u = shaPad432To512(t)
-		s = sha256compression(u[0..256],u[256..512])
-
-		t = ORDEREDCONCAT216x216(orderDBits[12], s[40..256], pathD12Bits[40..256])
-		u = shaPad432To512(t)
-		s = sha256compression(u[0..256],u[256..512])
-
-		t = ORDEREDCONCAT216x216(orderDBits[11], s[40..256], pathD11Bits[40..256])
-		u = shaPad432To512(t)
-		s = sha256compression(u[0..256],u[256..512])
-
-		t = ORDEREDCONCAT216x216(orderDBits[10], s[40..256], pathD10Bits[40..256])
-		u = shaPad432To512(t)
-		s = sha256compression(u[0..256],u[256..512])
-
-		t = ORDEREDCONCAT216x216(orderDBits[9], s[40..256], pathD9Bits[40..256])
-		u = shaPad432To512(t)
-		s = sha256compression(u[0..256],u[256..512])
-
-		t = ORDEREDCONCAT216x216(orderDBits[8], s[40..256], pathD8Bits[40..256])
-		u = shaPad432To512(t)
-		s = sha256compression(u[0..256],u[256..512])
-
-		t = ORDEREDCONCAT216x216(orderDBits[7], s[40..256], pathD7Bits[40..256])
-		u = shaPad432To512(t)
-		s = sha256compression(u[0..256],u[256..512])
-
-		t = ORDEREDCONCAT216x216(orderDBits[6], s[40..256], pathD6Bits[40..256])
-		u = shaPad432To512(t)
-		s = sha256compression(u[0..256],u[256..512])
-
-		t = ORDEREDCONCAT216x216(orderDBits[5], s[40..256], pathD5Bits[40..256])
-		u = shaPad432To512(t)
-		s = sha256compression(u[0..256],u[256..512])
-
-		t = ORDEREDCONCAT216x216(orderDBits[4], s[40..256], pathD4Bits[40..256])
-		u = shaPad432To512(t)
-		s = sha256compression(u[0..256],u[256..512])
-
-		t = ORDEREDCONCAT216x216(orderDBits[3], s[40..256], pathD3Bits[40..256])
-		u = shaPad432To512(t)
-		s = sha256compression(u[0..256],u[256..512])
-
-		t = ORDEREDCONCAT216x216(orderDBits[2], s[40..256], pathD2Bits[40..256])
-		u = shaPad432To512(t)
-		s = sha256compression(u[0..256],u[256..512])
-
-		t = ORDEREDCONCAT216x216(orderDBits[1], s[40..256], pathD1Bits[40..256])
-		u = shaPad432To512(t)
-		s = sha256compression(u[0..256],u[256..512])
-
-	// Concatenate with the 32nd sibling. This should equal the root.
-
-		t = ORDEREDCONCAT216x216(orderDBits[0], s[40..256], pathD0Bits[40..256])
-		u = shaPad432To512(t)
-		field[256] rootDBits = sha256compression(u[0..256],u[256..512])
+	// concatenate siblings and hash all the way up to the root
+	for field i in 0..32 do
+		field j = 31-i
+		preimage512 = shaPad432To512(orderedConcatenate216x216(orderDBits[j], hash[40..256], unpackPath(pathD[j])))
+		hash = sha256of512(preimage512[0..256], preimage512[256..512])
+  endfor
+	// save the computed root:
+	field[256] rootDBitsCheck = hash
 
 
 	// Next up - prove that valueE is in commitmentE and valueF is in commitmentF
 
 	// Work out commitmentE = H(valueE|publicKeyB|saltE)
-	d = CONCAT128x216x216(valueEBits, publicKeyBBits[40..256], saltEBits[40..256])
+	preimage640 = concatenate128x256x256(valueEBits, publicKeyBBits, saltEBits)
 
-	// This is too big to handle in a single sha round and our sha can't handle multiple rounds. As a work-around, we will split d, hash both parts and then hash the result - remember to do this in Node too!
+	preimage1024 = [...preimage640, ...padding640To1024]
 
-	// First 432 bits (432 is 216*2 - a convenient number in our 216 bit scheme):
-	q = shaPad432To512(d[128..560])
-	s = sha256compression(q[0..256],q[256..512])
-
-	// Remaining 128 bits:
-	u = shaPad128To512(d[0..128])
-	v = sha256compression(u[0..256],u[256..512])
-
-	// Then concat the results msb first:
-	t = CONCAT216x216(v[40..256], s[40..256])
-
-	// And hash the result:
-	q = shaPad432To512(t)
-	field[256] commitmentEBitsCheck = sha256compression(q[0..256],q[256..512]) // commitmentE
+	field[256] commitmentEBitsCheck = sha256of1024(preimage1024[0..256], preimage1024[256..512], preimage1024[512..768], preimage1024[768..1024]) // commitmentE
 
 
 	// And commitmentF
+	preimage640 = concatenate128x256x256(valueFBits, publicKeyABits, saltFBits)
 
-	d = CONCAT128x216x216(valueFBits, publicKeyABits[40..256], saltFBits[40..256])
+	preimage1024 = [...preimage640, ...padding640To1024]
 
-	// This is too big to handle in a single sha round and our sha can't handle multiple rounds. As a work-around, we will split d, hash both parts and then hash the result - remember to do this in Node too!
-
-	// First 432 bits (432 is 216*2 - a convenient number in our 216 bit scheme):
-	q = shaPad432To512(d[128..560])
-	s = sha256compression(q[0..256],q[256..512])
-
-	// Remaining 128 bits:
-	u = shaPad128To512(d[0..128])
-	v = sha256compression(u[0..256],u[256..512])
-
-	// Then concat the results msb first:
-	t = CONCAT216x216(v[40..256], s[40..256])
-
-	// And hash the result:
-	q = shaPad432To512(t)
-	field[256] commitmentFBitsCheck = sha256compression(q[0..256],q[256..512]) // commitmentF
+	field[256] commitmentFBitsCheck = sha256of1024(preimage1024[0..256], preimage1024[256..512], preimage1024[512..768], preimage1024[768..1024]) // commitmentF
 
 
 	// Sum check C+D = E+F - we don't want anyone to create money.
@@ -693,17 +229,27 @@ def main(private field valueC, private field  secretKeyAHigh, private field  sec
 
 	// Now check the proofs
 
-	nullifierCBits[40..256] == nullifierCBitsCheck[40..256]
-	nullifierDBits[40..256] == nullifierDBitsCheck[40..256]
-	rootBits[40..256] == rootCBits[40..256]
-	rootBits[40..256] == rootDBits[40..256]
-	commitmentEBits[40..256] == commitmentEBitsCheck[40..256]
-	commitmentFBits[40..256] == commitmentFBitsCheck[40..256]
+	nullifierCBits == nullifierCBitsCheck
+	nullifierDBits == nullifierDBitsCheck
+	rootBits == rootCBitsCheck
+	rootBits == rootDBitsCheck
+	commitmentEBits == commitmentEBitsCheck
+	commitmentFBits == commitmentFBitsCheck
 	sumIn == sumOut
-	valueCBits[0] == 0 //overflow prevention
+
+	// Overflow prevention:
+	valueCBits[0] == 0
 	valueDBits[0] == 0
 	valueEBits[0] == 0
 	valueFBits[0] == 0
 
 
-	return 1
+	// Check that the 'public inputs' hash to the publicInputHash:
+	field[1280] preimage1280 = concatenate256x256x256x256x256(rootBits, nullifierCBits, nullifierDBits, commitmentEBits, commitmentFBits)
+
+	field[256] publicInputHashBitsCheck = sha256of1536(preimage1280[0..256], preimage1280[256..512], preimage1280[512..768], preimage1280[768..1024], preimage1280[1024..1280], padding1280To1536[0..256])
+
+	publicInputHashBits[8..256] == publicInputHashBitsCheck[8..256]
+
+
+	return

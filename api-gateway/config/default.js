@@ -29,6 +29,7 @@ module.exports = {
       return `${this.zkp.host}:${this.zkp.port}`;
     }),
   },
-  HASHLENGTH: 8,
+  INPUTS_HASHLENGTH: 32,
+  MERKLE_HASHLENGTH: 27,
   isLoggerEnable: true,
 };

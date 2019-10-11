@@ -9,7 +9,7 @@ const router = Router();
 async function mint(req, res, next) {
   const { address } = req.headers;
   const { A, pk_A } = req.body;
-  const S_A = await utils.rndHex(27);
+  const S_A = await utils.rndHex(32);
 
   try {
     const [z_A, z_A_index] = await nfController.mint(A, pk_A, S_A, address);
@@ -27,7 +27,7 @@ async function mint(req, res, next) {
 
 async function transfer(req, res, next) {
   const { A, pk_B, S_A, sk_A, z_A, z_A_index } = req.body;
-  const S_B = await utils.rndHex(27);
+  const S_B = await utils.rndHex(32);
   const { address } = req.headers;
   try {
     const { z_B, z_B_index, txObj } = await nfController.transfer(

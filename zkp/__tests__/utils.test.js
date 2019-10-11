@@ -1,8 +1,4 @@
 import utils from 'zkp-utils';
-import { createHash } from 'crypto';
-import Config from '../src/config';
-
-const config = Config.getProps();
 
 const dec = '17408914224622445472';
 const hex = '0xf198e3403bdda3a0';
@@ -110,29 +106,29 @@ describe('utils.js tests', () => {
       );
     });
 
-    test('concatItems should correctly concatenate two hex strings', () => {
+    test('concatenateItems should correctly concatenate two hex strings', () => {
       expect(
         '0x56551cd11fffd4df21a9bdfc366d31bb8cdb4df7b155b9d97d66346c0982377643351cd11fefd4df21a9bdfc366d31bb8cdb4df7b155b9d97d66346c09818758',
       ).toEqual(
-        utils.concatItems(
+        utils.concatenateItems(
           '0x56551cd11fffd4df21a9bdfc366d31bb8cdb4df7b155b9d97d66346c09823776',
           '0x43351cd11fefd4df21a9bdfc366d31bb8cdb4df7b155b9d97d66346c09818758',
         ),
       );
     });
 
-    test('concatItems should correctly concatenate three hex strings', () => {
+    test('concatenateItems should correctly concatenate three hex strings', () => {
       expect('0x0000000000002710a48eb90d402c7d1fcd8d31e3cc9af568').toEqual(
-        utils.concatItems('0x0000000000002710', '0xa48eb90d402c7d1f', '0xcd8d31e3cc9af568'),
+        utils.concatenateItems('0x0000000000002710', '0xa48eb90d402c7d1f', '0xcd8d31e3cc9af568'),
       );
     });
 
-    test('concatItems should correctly concatenate three hex strings', () => {
-      expect('0xaabbcc').toEqual(utils.concatItems('0xaa', '0xbb', '0xcc'));
+    test('concatenateItems should correctly concatenate three hex strings', () => {
+      expect('0xaabbcc').toEqual(utils.concatenateItems('0xaa', '0xbb', '0xcc'));
     });
 
-    test('concatItems should correctly concatenate two hex strings', () => {
-      expect('0x10da').toEqual(utils.concatItems('0x10', '0xda'));
+    test('concatenateItems should correctly concatenate two hex strings', () => {
+      expect('0x10da').toEqual(utils.concatenateItems('0x10', '0xda'));
     });
 
     test('utils.hash should correctly create a truncated sha256 hash of a concatentation of numbers', () => {
@@ -146,8 +142,8 @@ describe('utils.js tests', () => {
       expect(calculatedHash).toEqual(testInputHash);
     });
 
-    test('utils.hashConcat should correctly create a truncated sha256 hash of a binary concatentation of 3 numbers', () => {
-      const testInputHash = utils.hashConcat(
+    test('utils.concatenateThenHash should correctly create a truncated sha256 hash of a binary concatentation of 3 numbers', () => {
+      const testInputHash = utils.concatenateThenHash(
         '0x0000000000002710',
         '0xa48eb90d402c7d1f',
         '0xcd8d31e3cc9af568',
@@ -228,37 +224,6 @@ describe('utils.js tests', () => {
 
     test('leftPadBits should split a bit string into chunks of size N bits (N=8 in this test), and pad the left-most chunk with zeros', () => {
       expect('00000000000000000001').toEqual(utils.leftPadBitsN('1', 20));
-    });
-
-    test('recursiveHashConcat should recursively hash something longer than 447 bits', () => {
-      const concatenatedHash =
-        'b5a95142b8fa2cd63d51e6e7f6584186ce955be1c6bebc20d03f9148b8886fea' +
-        'b5a95142b8fa2cd63d51e6e7f6584186ce955be1c6bebc20d03f9148b8886fea' +
-        'b5a95142b8fa2cd63d51e6e7f6584186ce955be1c6bebc20d03f9148b8886fea' +
-        'fe23'; // just to make it an awkward length
-      // c is 256*3+16 = 768+16 = 784 bits long<2*416
-      const truncated = 'b5a95142b8fa2cd63d51e6e7f6584186ce955be1c6bebc20d03f9148b8886fea'; // save for later
-      const concatenatedHash432 = concatenatedHash.slice(-config.HASHLENGTH * 4); // get the last 432 bits
-      const concatenatedHash432Rem = concatenatedHash.substring(
-        0,
-        concatenatedHash.length - config.HASHLENGTH * 4,
-      ); // get the remainder <432 bits
-      const hash0 = createHash('sha256') // hash c0 and grab 216 bits
-        .update(concatenatedHash432, 'hex')
-        .digest('hex')
-        .slice(-config.HASHLENGTH * 2);
-      const hash1 = createHash('sha256') // hash c1 and grab 216 bits
-        .update(concatenatedHash432Rem, 'hex')
-        .digest('hex')
-        .slice(-config.HASHLENGTH * 2);
-      const hash = createHash('sha256') // hash the hashes and grab 216 bits
-        .update(hash1 + hash0, 'hex')
-        .digest('hex')
-        .slice(-config.HASHLENGTH * 2);
-      expect(utils.ensure0x(hash)).toEqual(
-        utils.recursiveHashConcat(truncated, truncated, truncated, 'fe23'),
-      );
-      expect(utils.hashConcat(truncated, 'fe23'), utils.recursiveHashConcat(truncated, 'fe23')); // check short hashes give the right answer
     });
   });
 });

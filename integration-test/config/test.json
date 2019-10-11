@@ -1,4 +1,5 @@
 {
   "apiServerURL": "http://localhost:8001",
-  "HASHLENGTH": 27
+  "INPUTS_HASHLENGTH": 32,
+  "MERKLE_HASHLENGTH": 27
 }
