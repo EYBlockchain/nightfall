@@ -83,7 +83,7 @@ async function getInfo(req, res, next) {
 router.post('/mintNFToken', mint);
 router.post('/transferNFToken', transfer);
 router.post('/burnNFToken', burn);
-router.get('/getNFTokenShieldContractAddress', getAddress);
+router.get('/getNFTokenContractAddress', getAddress);
 router.get('/getNFTokenInfo', getInfo);
 
 export default router;

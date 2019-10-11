@@ -257,7 +257,7 @@ export class AccountsApiService {
    * Method to initiate a HTTP request to get the ERC-721 contract address
    */
   getNFTAddress() {
-    const url = config.zkp.root  + 'getNFTokenShieldContractAddress';
+    const url = config.zkp.root  + 'getNFTokenContractAddress';
     return this.http.get(url).pipe(
       tap(data => console.log(''))
     );
@@ -267,7 +267,7 @@ export class AccountsApiService {
    * Method to initiate a HTTP request to get the ERC-20 contract address
    */
   getFTAddress() {
-    const url = config.zkp.root + 'getFTokenShieldContractAddress';
+    const url = config.zkp.root + 'getFTokenContractAddress';
     return this.http.get(url).pipe(
       tap(data => console.log(''))
     );

@@ -143,7 +143,7 @@ export default {
   // get non-fungible token address
   getNFTokenAddress({ address }) {
     const options = {
-      url: `${url}/getNFTokenShieldContractAddress`,
+      url: `${url}/getNFTokenContractAddress`,
       method: 'GET',
       json: true,
       headers: { address },
@@ -201,7 +201,7 @@ export default {
   // get fungible token address
   getFTokenAddress({ address }) {
     const options = {
-      url: `${url}/getFTokenShieldContractAddress`,
+      url: `${url}/getFTokenContractAddress`,
       method: 'GET',
       json: true,
       headers: { address },
@@ -280,7 +280,7 @@ export default {
   // set new fungible commitment token shield for user address
   setCoinShield({ address }, body) {
     const options = {
-      url: `${url}/setFTCommitmentShieldContractAddress`,
+      url: `${url}/setFTokenShieldContractAddress`,
       method: 'POST',
       json: true,
       headers: { address },
@@ -292,7 +292,7 @@ export default {
   // get fungible commitment token shield contract address for user address
   getCoinShield({ address }) {
     const options = {
-      url: `${url}/getFTCommitmentShieldContractAddress`,
+      url: `${url}/getFTokenShieldContractAddress`,
       method: 'GET',
       json: true,
       headers: { address },

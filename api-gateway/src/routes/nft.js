@@ -227,7 +227,7 @@ router
 router.route('/transactions').get(getNFTTransactions);
 
 /**
- * @api {get} /getNFTokenShieldContractAddress Retrieve non-fungible token
+ * @api {get} /getNFTokenContractAddress Retrieve non-fungible token
  * address from the shield contract which is set by the user
  * @apiVersion 1.0.0
  * @apiName  List non-fungible tokens
@@ -255,7 +255,7 @@ router.route('/transactions').get(getNFTTransactions);
  *		]
  *	  }
  */
-router.route('/getNFTokenShieldContractAddress').get(getNFTokenAddress);
+router.route('/getNFTokenContractAddress').get(getNFTokenAddress);
 
 /**
  * @api {get} /getNFTokenInfo List ERC-721 tokens

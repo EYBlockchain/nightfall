@@ -145,8 +145,8 @@ router.post('/mintFTCommitment', mint);
 router.post('/transferFTCommitment', transfer);
 router.post('/burnFTCommitment', burn);
 router.post('/checkCorrectnessForFTCommitment', checkCorrectness);
-router.post('/setFTCommitmentShieldContractAddress', setCoinShieldAddress);
-router.get('/getFTCommitmentShieldContractAddress', getCoinShieldAddress);
+router.post('/setFTokenShieldContractAddress', setCoinShieldAddress);
+router.get('/getFTokenShieldContractAddress', getCoinShieldAddress);
 router.delete('/removeFTCommitmentshield', unsetCoinShieldAddress);
 
 export default router;

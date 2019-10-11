@@ -95,7 +95,7 @@ router.route('/transferFToken').post(transferFToken);
 router.route('/burnFToken').post(burnFToken);
 
 /**
- * @api {get} /getFTokenShieldContractAddress Retrieve fungible token
+ * @api {get} /getFTokenContractAddress Retrieve fungible token
  * address from the shield contract which is set by the user
  * @apiVersion 1.0.0
  * @apiName  Retrieve fungible token address
@@ -116,7 +116,7 @@ router.route('/burnFToken').post(burnFToken);
  *        }
  *	 }
  */
-router.route('/getFTokenShieldContractAddress').get(getFTokenAddress);
+router.route('/getFTokenContractAddress').get(getFTokenAddress);
 
 /**
  * @api {get} /getFTokenInfo Retrieve fungible token address
