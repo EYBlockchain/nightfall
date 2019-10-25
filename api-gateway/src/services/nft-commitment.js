@@ -111,8 +111,8 @@ export async function mintToken(req, res, next) {
   try {
     // mint a private 'token commitment' within the shield contract to represent the public NFToken with the specified tokenID
     const data = await zkp.mintToken(req.user, {
-      A: tokenID,
-      pk_A: req.user.pk_A,
+      tokenId: tokenID,
+      ownerPublicKey: req.user.pk_A,
     });
 
     // add the new token commitment (and details of its hash preimage) to the token db.
@@ -180,7 +180,17 @@ export async function transferToken(req, res, next) {
     // Transfer the token under zero-knowledge:
     // Nullify the sender's 'token commitment' within the shield contract.
     // Add a new token commitment to the shield contract to represent that the token is now owned by the receiver.
-    const data = await zkp.spendToken({ address }, req.body);
+    const data = await zkp.spendToken(
+      { address },
+      {
+        tokenId: req.body.A,
+        receiverPublicKey: req.body.pk_B,
+        originalCommitmentSalt: req.body.S_A,
+        senderSecretKey: req.body.sk_A,
+        commitment: req.body.z_A,
+        commitmentIndex: req.body.z_A_index,
+      },
+    );
 
     // Update the sender's token db.
     await db.updateNFTCommitmentByTokenId(req.user, req.body.A, {
@@ -245,12 +255,12 @@ export async function burnToken(req, res, next) {
     // Nullify the burnor's 'token commitment' within the shield contract.
     // Transfer the public token from the shield contract to the owner.
     await zkp.burnToken(req.user, {
-      A: req.body.A,
-      S_A: req.body.S_A,
-      Sk_A: user.secretkey,
-      z_A: req.body.z_A,
-      z_A_index: req.body.z_A_index,
-      payTo: payToAddress,
+      tokenId: req.body.A,
+      salt: req.body.S_A,
+      secretKey: user.secretkey,
+      commitment: req.body.z_A,
+      commitmentIndex: req.body.z_A_index,
+      tokenReceiver: payToAddress,
     });
 
     await db.updateNFTCommitmentByTokenId(req.user, req.body.A, {
