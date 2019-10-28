@@ -16,6 +16,7 @@ import zokrates from './zokrates';
 import cv from './compute-vectors';
 import Element from './Element';
 import Web3 from './web3';
+import { getContract } from './contractUtils';
 
 const NFTokenShield = contract(jsonfile.readFileSync('./build/contracts/NFTokenShield.json'));
 
@@ -234,7 +235,8 @@ async function computeProof(elements, hostDir) {
  * @returns {Number} commitmentIndex - the index of the token within the Merkle Tree.  This is required for later transfers/joins so that Alice knows which 'chunks' of the Merkle Tree she needs to 'get' from the NFTokenShield contract in order to calculate a path.
  */
 async function mint(tokenId, ownerPublicKey, salt, vkId, blockchainOptions) {
-  const { account, nfTokenShieldJson, nfTokenShieldAddress } = blockchainOptions;
+  const { nfTokenShieldJson, nfTokenShieldAddress } = blockchainOptions;
+  const account = utils.ensure0x(blockchainOptions.account);
 
   const nfTokenShield = contract(nfTokenShieldJson);
   nfTokenShield.setProvider(Web3.connect());
@@ -272,10 +274,6 @@ async function mint(tokenId, ownerPublicKey, salt, vkId, blockchainOptions) {
   const publicInputHash = utils.concatenateThenHash(tokenId, commitment);
   console.log('publicInputHash:', publicInputHash);
 
-  const inputs = cv.computeVectors([new Element(publicInputHash, 'field', 248, 1)]);
-  console.log('inputs:');
-  console.log(inputs);
-
   // get the pwd so we can talk to the container:
   const pwd = process.env.PWD.toString();
   console.log(pwd);
@@ -307,19 +305,34 @@ async function mint(tokenId, ownerPublicKey, salt, vkId, blockchainOptions) {
   const registry = await verifier.getRegistry();
   console.log('Check that a registry has actually been registered:', registry);
 
-  // make token shield contract an approver to transfer this token on behalf of the owner (to comply with the standard as msg.sender has to be owner or approver)
-  await addApproverNFToken(nfTokenShieldInstance.address, tokenId, account);
+  // Add nfTokenShield as an approver for the token transfer
+  const { contractInstance: nfToken } = await getContract('NFTokenMetadata');
+  await nfToken.approve(nfTokenShieldAddress, tokenId, {
+    from: account,
+    gas: 4000000,
+  });
 
-  // with the pre-compute done we can mint the token, which is now a reasonably light-weight calculation
-  const commitmentIndex = await zkp.mint(
-    proof,
-    inputs,
-    vkId,
-    tokenId,
-    commitment,
-    account,
-    nfTokenShieldInstance,
-  );
+  console.group('Minting within the Shield contract');
+
+  const inputs = cv.computeVectors([new Element(publicInputHash, 'field', 248, 1)]);
+
+  console.log('proof:');
+  console.log(proof);
+  console.log('inputs:');
+  console.log(inputs);
+  console.log(`vkId: ${vkId}`);
+
+  // Mint the commitment
+  const txReceipt = await nfTokenShieldInstance.mint(proof, inputs, vkId, tokenId, commitment, {
+    from: account,
+    gas: 6500000,
+    gasPrice: config.GASPRICE,
+  });
+  const commitmentIndex = txReceipt.logs[0].args.commitment_index;
+
+  const root = await nfTokenShieldInstance.latestRoot();
+  console.log(`Merkle Root after mint: ${root}`);
+  console.groupEnd();
 
   console.log('Mint output: [z_A, z_A_index]:', commitment, commitmentIndex.toString());
   console.log('MINT COMPLETE\n');
@@ -357,7 +370,8 @@ async function transfer(
   vkId,
   blockchainOptions,
 ) {
-  const { account, nfTokenShieldJson, nfTokenShieldAddress } = blockchainOptions;
+  const { nfTokenShieldJson, nfTokenShieldAddress } = blockchainOptions;
+  const account = utils.ensure0x(blockchainOptions.account);
 
   const nfTokenShield = contract(nfTokenShieldJson);
   nfTokenShield.setProvider(Web3.connect());
@@ -435,10 +449,6 @@ async function transfer(
   const publicInputHash = utils.concatenateThenHash(root, n, outputCommitment);
   console.log('publicInputHash:', publicInputHash);
 
-  const inputs = cv.computeVectors([new Element(publicInputHash, 'field', 248, 1)]);
-  console.log('inputs:');
-  console.log(inputs);
-
   // get the pwd so we can talk to the container:
   const pwd = process.env.PWD.toString();
   console.log(pwd);
@@ -472,17 +482,35 @@ async function transfer(
   proof = proof.map(el => utils.hexToDec(el));
   console.groupEnd();
 
-  // send the token to Bob by transforming the commitment
-  const [outputCommitmentIndex, txObj] = await zkp.transfer(
+  console.group('Transferring within the Shield contract');
+
+  const inputs = cv.computeVectors([new Element(publicInputHash, 'field', 248, 1)]);
+
+  console.log('proof:');
+  console.log(proof);
+  console.log('inputs:');
+  console.log(inputs);
+  console.log(`vkId: ${vkId}`);
+
+  const transferReceipt = await nfTokenShieldInstance.transfer(
     proof,
     inputs,
     vkId,
     root,
     n,
     outputCommitment,
-    account,
-    nfTokenShieldInstance,
+    {
+      from: account,
+      gas: 6500000,
+      gasPrice: config.GASPRICE,
+    },
   );
+
+  const outputCommitmentIndex = transferReceipt.logs[0].args.commitment_index;
+
+  const newRoot = await nfTokenShieldInstance.latestRoot(); // solidity getter for the public variable latestRoot
+  console.log(`Merkle Root after transfer: ${newRoot}`);
+  console.groupEnd();
 
   console.log('TRANSFER COMPLETE\n');
   console.groupEnd();
@@ -490,7 +518,7 @@ async function transfer(
   return {
     outputCommitment,
     outputCommitmentIndex,
-    txObj,
+    transferReceipt,
   };
 }
 
@@ -516,12 +544,9 @@ async function burn(
   vkId,
   blockchainOptions,
 ) {
-  const {
-    account,
-    nfTokenShieldJson,
-    nfTokenShieldAddress,
-    tokenReceiver: payTo,
-  } = blockchainOptions;
+  const { nfTokenShieldJson, nfTokenShieldAddress, tokenReceiver: payTo } = blockchainOptions;
+
+  const account = utils.ensure0x(blockchainOptions.account);
 
   const nfTokenShield = contract(nfTokenShieldJson);
   nfTokenShield.setProvider(Web3.connect());
@@ -588,10 +613,6 @@ async function burn(
   const publicInputHash = utils.concatenateThenHash(root, Na, tokenId, payToLeftPadded); // notice we're using the version of payTo which has been padded to 256-bits; to match our derivation of publicInputHash within our zokrates proof.
   console.log('publicInputHash:', publicInputHash);
 
-  const inputs = cv.computeVectors([new Element(publicInputHash, 'field', 248, 1)]);
-  console.log('inputs:');
-  console.log(inputs);
-
   // get the pwd so we can talk to the container:
   const pwd = process.env.PWD.toString();
   console.log(pwd);
@@ -623,13 +644,30 @@ async function burn(
   proof = proof.map(el => utils.hexToDec(el));
   console.groupEnd();
 
-  // with the pre-compute done we can burn the token, which is now a reasonably
-  // light-weight calculation
-  await zkp.burn(proof, inputs, vkId, root, Na, tokenId, payTo, account, nfTokenShieldInstance);
+  console.group('Burning within the Shield contract');
+
+  const inputs = cv.computeVectors([new Element(publicInputHash, 'field', 248, 1)]);
+
+  console.log('proof:');
+  console.log(proof);
+  console.log('inputs:');
+  console.log(inputs);
+  console.log(`vkId: ${vkId}`);
+
+  // Burns commitment and returns token to payTo
+  await nfTokenShieldInstance.burn(proof, inputs, vkId, root, Na, tokenId, payTo, {
+    from: account,
+    gas: 6500000,
+    gasPrice: config.GASPRICE,
+  });
+
+  const newRoot = await nfTokenShieldInstance.latestRoot();
+  console.log(`Merkle Root after burn: ${newRoot}`);
+  console.groupEnd();
 
   console.log('BURN COMPLETE\n');
   console.groupEnd();
-  return { commitment };
+  return commitment;
 }
 
 async function checkCorrectness(A, pk, S, z, zIndex, account) {
