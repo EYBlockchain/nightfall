@@ -1,27 +1,31 @@
 
 import { Routes } from '@angular/router';
-import { LoginComponent } from '../pages/login/login.component';
-import { MintTokensComponent } from '../pages/mint-token/mint-token.component';
-import { MintCoinsComponent } from '../pages/mint-coin/mint-coin.component';
-import { SpendTokenComponent } from '../pages/spend-token/spend-token.component';
-import { CreateAccountsComponent } from '../pages/create-accounts/create-accounts.component';
-import { SpendCoinComponent } from '../pages/spend-coin/spend-coin.component';
-import { BurnCoinComponent } from '../pages/burn-coin/burn-coin.component';
-import {TokenListComponent} from '../pages/token-list/token-list.component';
-import {CoinListComponent} from '../pages/coin-list/coin-list.component';
-import { OverviewComponent } from '../pages/overview/overview.component';
+import LoginComponent from '../pages/login';
+import CreateAccountsComponent from '../pages/create-accounts';
+import OverviewComponent from '../pages/overview';
 import { AuthService } from '../services/auth/auth.service';
-import { MintPublicTokenComponent } from '../pages/mint-public-token/mint-public-token.component';
-import { UserSettingsComponent } from '../pages/user-settings/user-settings.component';
-import { UserProfileComponent } from '../pages/user-profile/user-profile.component';
+import UserSettingsComponent from '../pages/user-settings';
+import UserProfileComponent from '../pages/user-profile';
 import { UserAccountsComponent } from '../pages/user-accounts/user-accounts.component';
-import { SpendPublicTokenComponent } from '../pages/spend-public-token/spend-public-token.component';
-import { BurnPublicTokenComponent } from '../pages/burn-public-token/burn-public-token.component';
-import { PublicTokenListComponent } from '../pages/public-token-list/public-token-list.component';
-import { BurnTokenComponent } from '../pages/burn-token/burn-token.component';
-import { MintPublicCoinComponent } from '../pages/mint-public-coin/mint-public-coin.component';
-import { BurnPublicCoinComponent } from '../pages/burn-public-coin/burn-public-coin.component';
-import { SpendPublicCoinComponent } from '../pages/spend-public-coin/spend-public-coin.component';
+
+import NftMintComponent from '../pages/nft-mint';
+import NftTransferComponent from '../pages/nft-transfer';
+import NftBurnComponent from '../pages/nft-burn';
+import NftListComponent from '../pages/nft-list';
+
+import NftCommitmentMintComponent from '../pages/nft-commitment-mint';
+import NftCommitmentTransferComponent from '../pages/nft-commitment-transfer';
+import NftCommitmentBurnComponent from '../pages/nft-commitment-burn';
+import NftCommitmentListComponent from '../pages/nft-commitment-list';
+
+import FtMintComponent from '../pages/ft-mint';
+import FtBurnComponent from '../pages/ft-burn';
+import FtTransferComponent from '../pages/ft-transfer';
+
+import FtCommitmentMintComponent from '../pages/ft-commitment-mint';
+import FtCommitmentTrasnferComponent from '../pages/ft-commitment-transfer';
+import FtCommitmentBurnComponent from '../pages/ft-commitment-burn';
+import FtCommitmentListComponent from '../pages/ft-commitment-list';
 
 export const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -36,21 +40,26 @@ export const appRoutes: Routes = [
     canActivate: [AuthService]
   },
   { path: 'overview', component: OverviewComponent, canActivate: [AuthService] },
-  { path: 'token/mint', component: MintTokensComponent , canActivate: [AuthService]},
-  { path: 'token/public/mint', component: MintPublicTokenComponent , canActivate: [AuthService]},
-  { path: 'token/public/transfer', component: SpendPublicTokenComponent , canActivate: [AuthService]},
-  { path: 'token/burn', component: BurnTokenComponent , canActivate: [AuthService]},
-  { path: 'token/public/burn', component: BurnPublicTokenComponent , canActivate: [AuthService]},
-  { path: 'token/public/list', component: PublicTokenListComponent , canActivate: [AuthService]},
-  { path: 'token/list', component: TokenListComponent , canActivate: [AuthService]},
-  { path: 'coin/list' , component: CoinListComponent, canActivate: [AuthService] },
-  { path: 'coin/mint' , component: MintCoinsComponent, canActivate: [AuthService] },
-  { path: 'token/transfer', component: SpendTokenComponent, canActivate: [AuthService] },
-  { path: 'coin/transfer', component: SpendCoinComponent, canActivate: [AuthService] },
-  { path: 'coin/burn', component: BurnCoinComponent, canActivate: [AuthService] },
-  { path: 'coin/public/mint', component: MintPublicCoinComponent, canActivate: [AuthService] },
-  { path: 'coin/public/transfer', component: SpendPublicCoinComponent, canActivate: [AuthService] },
-  { path: 'coin/public/burn', component: BurnPublicCoinComponent, canActivate: [AuthService] },
+
+  { path: 'nft-commitment/mint', component: NftCommitmentMintComponent , canActivate: [AuthService]},
+  { path: 'nft-commitment/transfer', component: NftCommitmentTransferComponent, canActivate: [AuthService] },
+  { path: 'nft-commitment/burn', component: NftCommitmentBurnComponent , canActivate: [AuthService]},
+  { path: 'nft-commitment/list', component: NftCommitmentListComponent , canActivate: [AuthService]},
+
+  { path: 'nft/mint', component: NftMintComponent , canActivate: [AuthService]},
+  { path: 'nft/transfer', component: NftTransferComponent , canActivate: [AuthService]},
+  { path: 'nft/burn', component: NftBurnComponent , canActivate: [AuthService]},
+  { path: 'nft/list', component: NftListComponent , canActivate: [AuthService]},
+  
+  { path: 'ft-commitment/mint' , component: FtCommitmentMintComponent, canActivate: [AuthService] },
+  { path: 'ft-commitment/transfer', component: FtCommitmentTrasnferComponent, canActivate: [AuthService] },
+  { path: 'ft-commitment/burn', component: FtCommitmentBurnComponent, canActivate: [AuthService] },
+  { path: 'ft-commitment/list' , component: FtCommitmentListComponent, canActivate: [AuthService] },
+
+  { path: 'ft/mint', component: FtMintComponent, canActivate: [AuthService] },
+  { path: 'ft/transfer', component: FtTransferComponent, canActivate: [AuthService] },
+  { path: 'ft/burn', component: FtBurnComponent, canActivate: [AuthService] },
+
   { path: '**', redirectTo: '/login', pathMatch: 'full' },
   { path: '', redirectTo: '/login', pathMatch: 'full' },
 ];

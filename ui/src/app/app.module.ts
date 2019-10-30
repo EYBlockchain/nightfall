@@ -12,33 +12,39 @@ import { ToastrModule } from 'ngx-toastr';
 import { CommonModule } from '@angular/common';
 import { appRoutes} from './routes/routes';
 import { AppComponent } from './app.component';
-import { LoginComponent } from './pages/login/login.component';
-import { MintTokensComponent } from './pages/mint-token/mint-token.component';
-import { MintCoinsComponent } from './pages/mint-coin/mint-coin.component';
-import { SpendTokenComponent } from './pages/spend-token/spend-token.component';
-import { CreateAccountsComponent } from './pages/create-accounts/create-accounts.component';
-import { SpendCoinComponent } from './pages/spend-coin/spend-coin.component';
-import { BurnCoinComponent } from './pages/burn-coin/burn-coin.component';
+import LoginComponent from './pages/login';
+import CreateAccountsComponent from './pages/create-accounts';
 import { SimpleGlobal } from 'ng2-simple-global';
 import { TokenInterceptor } from './shared/token.intercepter';
 import { AuthService } from './services/auth/auth.service';
-import { OverviewComponent } from './pages/overview/overview.component';
-import { TokenListComponent } from './pages/token-list/token-list.component';
-import { CoinListComponent } from './pages/coin-list/coin-list.component';
+import OverviewComponent from './pages/overview';
 import { NgSelectModule } from '@ng-select/ng-select';
-import { MintPublicTokenComponent } from './pages/mint-public-token/mint-public-token.component';
-import { UserSettingsComponent } from './pages/user-settings/user-settings.component';
+
+import UserSettingsComponent from './pages/user-settings';
+import UserProfileComponent from './pages/user-profile';
 import { UserAccountsComponent } from './pages/user-accounts/user-accounts.component';
-import { UserProfileComponent } from './pages/user-profile/user-profile.component';
 import { CustomSelectionComponent } from './pages/user-accounts/custom-selection-component';
 import { CustomTextComponent } from './pages/user-accounts/custom-text-component';
-import { SpendPublicTokenComponent } from './pages/spend-public-token/spend-public-token.component';
-import { BurnPublicTokenComponent } from './pages/burn-public-token/burn-public-token.component';
-import { PublicTokenListComponent } from './pages/public-token-list/public-token-list.component';
-import { BurnTokenComponent } from './pages/burn-token/burn-token.component';
-import { MintPublicCoinComponent } from './pages/mint-public-coin/mint-public-coin.component';
-import { BurnPublicCoinComponent } from './pages/burn-public-coin/burn-public-coin.component';
-import { SpendPublicCoinComponent } from './pages/spend-public-coin/spend-public-coin.component';
+
+import NftMintComponent from './pages/nft-mint';
+import NftTransferComponent from './pages/nft-transfer';
+import NftBurnComponent from './pages/nft-burn';
+import NftListComponent from './pages/nft-list';
+
+import NftCommitmentMintComponent from './pages/nft-commitment-mint';
+import NftCommitmentTransferComponent from './pages/nft-commitment-transfer';
+import NftCommitmentBurnComponent from './pages/nft-commitment-burn';
+import NftCommitmentListComponent from './pages/nft-commitment-list';
+
+import FtMintComponent from './pages/ft-mint';
+import FtBurnComponent from './pages/ft-burn';
+import FtTransferComponent from './pages/ft-transfer';
+
+import FtCommitmentMintComponent from './pages/ft-commitment-mint';
+import FtCommitmentTrasnferComponent from './pages/ft-commitment-transfer';
+import FtCommitmentBurnComponent from './pages/ft-commitment-burn';
+import FtCommitmentListComponent from './pages/ft-commitment-list';
+
 import { AppAutoFocusDirective } from './shared/autofocus.directive';
 
 
@@ -51,23 +57,23 @@ import { AppAutoFocusDirective } from './shared/autofocus.directive';
     SpinnerComponent,
     NavComponent,
     LoginComponent,
-    MintTokensComponent,
-    MintPublicTokenComponent,
-    MintCoinsComponent,
-    SpendTokenComponent,
-    SpendPublicTokenComponent,
-    BurnTokenComponent,
-    BurnPublicTokenComponent,
-    PublicTokenListComponent,
-    SpendCoinComponent,
-    BurnCoinComponent,
-    MintPublicCoinComponent,
-    SpendPublicCoinComponent,
-    BurnPublicCoinComponent,
+    NftCommitmentMintComponent,
+    NftMintComponent,
+    FtCommitmentMintComponent,
+    NftCommitmentTransferComponent,
+    NftTransferComponent,
+    NftCommitmentBurnComponent,
+    NftBurnComponent,
+    NftListComponent,
+    FtCommitmentTrasnferComponent,
+    FtCommitmentBurnComponent,
+    FtMintComponent,
+    FtTransferComponent,
+    FtBurnComponent,
     CreateAccountsComponent,
     OverviewComponent,
-    TokenListComponent,
-    CoinListComponent,
+    NftCommitmentListComponent,
+    FtCommitmentListComponent,
     UserSettingsComponent,
     UserAccountsComponent,
     CustomSelectionComponent,

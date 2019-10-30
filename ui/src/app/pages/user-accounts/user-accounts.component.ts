@@ -1,7 +1,6 @@
 import { Component, OnInit, EventEmitter } from '@angular/core';
 import { ToastrService } from 'ngx-toastr';
-import { AccountsApiService } from '../../services/accounts/accounts-api.service';
-import { CoinApiService } from '../../services/coins/coin-api.service';
+import UserService from '../../services/user.service';
 import {Config} from '../../config/config';
 import { Observable } from 'rxjs/Observable';
 import 'rxjs/add/observable/forkJoin';
@@ -16,7 +15,7 @@ import { LocalDataSource } from 'ng2-smart-table';
   selector: 'app-user-accounts',
   templateUrl: './user-accounts.component.html',
   styleUrls: ['./user-accounts.component.css'],
-  providers: [AccountsApiService, CoinApiService]
+  providers: [UserService]
 })
 export class UserAccountsComponent extends Config implements OnInit {
 
@@ -100,7 +99,7 @@ export class UserAccountsComponent extends Config implements OnInit {
 
   constructor(
     private toastr: ToastrService,
-    private accountService: AccountsApiService
+    private userService: UserService
   ) {
     super('');
     this.source = new LocalDataSource();
@@ -198,7 +197,7 @@ export class UserAccountsComponent extends Config implements OnInit {
       event.confirm.reject(event.newData);
       return;
     }
-    this.accountService.addContractAddress(event.newData).subscribe((data) => {
+    this.userService.addContractInfo(event.newData).subscribe((data) => {
       this.loadAccountDetails();
       event.confirm.resolve(event.newData);
     }, (error) => {
@@ -221,7 +220,7 @@ export class UserAccountsComponent extends Config implements OnInit {
       event.confirm.reject(event.newData);
       return;
     }
-    this.accountService.updateContractAccounts(event.newData).subscribe((data) => {
+    this.userService.updateContractInfo(event.newData).subscribe((data) => {
       this.loadAccountDetails();
       event.confirm.resolve(event.newData);
     }, (error) => {
@@ -243,7 +242,7 @@ export class UserAccountsComponent extends Config implements OnInit {
       event.confirm.reject(event.data);
       return;
     }
-    this.accountService.deleteContractAddress(event.data).subscribe((data) => {
+    this.userService.deleteContractInfo(event.data).subscribe((data) => {
       this.loadAccountDetails();
       event.confirm.resolve(event.data);
     }, (error) => {
@@ -257,10 +256,10 @@ export class UserAccountsComponent extends Config implements OnInit {
    * Method to populate existing shield contract addresses and its name in custom table.
    */
   loadAccountDetails() {
-    const shieldDetails  = this.accountService.getDefaultShieldAddress();
-    const userContracts = this.accountService.getUser();
-    const nftContract = this.accountService.getNFTAddress();
-    const ftContracts = this.accountService.getFTAddress();
+    const shieldDetails  = this.userService.getDefaultShieldAddress();
+    const userContracts = this.userService.getUserDetails();
+    const nftContract = this.userService.getNFTAddress();
+    const ftContracts = this.userService.getFTAddress();
     Observable.forkJoin([shieldDetails, userContracts, nftContract, ftContracts]).subscribe(
       (response) => {
         const defaultContractDetails = response[0]['data'];
@@ -287,7 +286,7 @@ export class UserAccountsComponent extends Config implements OnInit {
    * Method to get the default shield contract details.
    */
   getDefaultShieldContractDetails() {
-    this.accountService.getDefaultShieldAddress().subscribe(
+    this.userService.getDefaultShieldAddress().subscribe(
       (data: any) => {
         this.defaultContractDetails = data['data'];
     }, (error) => {

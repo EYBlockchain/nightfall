@@ -1,0 +1,58 @@
+<app-nav> </app-nav>
+
+<div class="container overview">
+  <div class="row">
+    <div class="col-sm-12">
+      <nav class="mt-4" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">
+            <a [routerLink]="['/overview']">Overview</a>
+          </li>
+          <li class="breadcrumb-item active" aria-current="page">ERC-721: {{ nftName }} List</li>
+        </ol>
+      </nav>
+      <div class="box">
+        <div class="box-header">
+          <div class="row">
+            <div class="col-sm-6">
+              <h3 class="">ERC-721: {{ nftName }} List</h3>
+            </div>
+            <div class="col-sm-6">
+              <a class="btn btn-primary btn-list pull-right" [routerLink]="['/token/public/mint']"
+                >Mint {{ nftName }}</a
+              >
+            </div>
+          </div>
+        </div>
+        <div class="box-body">
+          <div class="col-sm-12">
+            <div class="row">
+              <div
+                class="col-md-3 no-padding-left"
+                *ngFor="let transaction of transactions; let i = index"
+              >
+                <div *ngIf="transaction.token_id" class="token-card">
+                  <p class="list-token header">{{ transaction.uri }}</p>
+                  <p class="list-token">TokenId : {{ transaction.token_id.slice(0, 8) }}...</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <ngb-pagination
+            *ngIf="!noToken"
+            class="d-flex justify-content-end zkp-pagination"
+            (pageChange)="pageChanged($event)"
+            [collectionSize]="totalCollection | async"
+            [pageSize]="pageSize"
+            [(page)]="pageNo"
+            aria-label="Default pagination"
+          >
+          </ngb-pagination>
+          <div class="text-center" *ngIf="!transactions">
+            No non-fungible token Found
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

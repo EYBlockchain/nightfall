@@ -9,7 +9,6 @@ jobs:
   eslint-test:
     name: Run eslint check
     runs-on: ubuntu-18.04
-    
     steps:
     - uses: actions/checkout@v1
     - uses: actions/setup-node@v1
@@ -19,10 +18,43 @@ jobs:
     - name: Run check for ESLint errors
       run: npm run lint
 
+  zkp-unit-test:
+    name: ZKP microservice uint test
+    runs-on: ubuntu-18.04
+    steps:
+    - uses: actions/checkout@v1
+    - uses: actions/setup-node@v1
+      with:
+        node-version: '10.15.3'
+    - name: Pull docker image
+      run:  docker pull zokrates/zokrates:0.4.11
+    - name: Increase swap memory
+      run:  |
+        sudo usermod -a -G sudo runner
+        sudo swapoff -a
+        sudo fallocate -l 12G /swapfile
+        sudo mkswap /swapfile
+        sudo swapon /swapfile
+        swapon --show
+        grep SwapTotal /proc/meminfo
+    - name: Generate the keys and constraint files for Zero Knowledge Proofs
+      run:  |
+        chmod -R 777 zkp/code/
+        npm run setupAll
+    - name: Remove ZoKrates Containers
+      run:  |
+        docker stop $(docker ps -a -q)
+        docker rm $(docker ps -a -q)
+    - name: Build zkp image
+      run: docker-compose build zkp
+    - name: Setup ganache container and deploy zkp contracts
+      run: make truffle-compile truffle-migrate
+    - name: Run zkp unit tests
+      run: make zkp-test
+
   integration-test:
     name: Run integration test
     runs-on: ubuntu-18.04
-    
     steps:
     - uses: actions/checkout@v1
     - uses: actions/setup-node@v1

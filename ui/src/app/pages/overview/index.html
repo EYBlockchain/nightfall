@@ -1,0 +1,348 @@
+<app-nav> </app-nav>
+<div class="container overview">
+  <div class="col-md-12  pt-5">
+    <h3 class="mb-2">Account Balance</h3>
+    <div class="row">
+      <div class="col-md-12">
+        <div class="row">
+          <div class="col-md-3">
+            <a [routerLink]="['/nft/list']">
+              <div class="card">
+                <div class="card-body">
+                  <h3 *ngIf="count">{{ nftBalance }}</h3>
+                  <p class="card-text">
+                    ERC-721: {{ nftName || 'Public Tokens' }}
+                    <span *ngIf="nftSymbol">({{ nftSymbol }})</span>
+                  </p>
+                </div>
+              </div>
+            </a>
+          </div>
+
+          <div class="col-md-3">
+            <a [routerLink]="['/nft-commitment/list']">
+              <div class="card">
+                <div class="card-body">
+                  <h3 *ngIf="count">{{ count.nftCommitmentCount ? count.nftCommitmentCount : '0' }}</h3>
+                  <p class="card-text">{{ nftName }} Commitments</p>
+                </div>
+              </div>
+            </a>
+          </div>
+
+          <div class="col-md-3">
+            <div class="card">
+              <div class="card-body">
+                <h3>{{ coinCount }}</h3>
+                <p class="card-text">
+                  ERC-20: {{ ftName || '' }} <span *ngIf="ftSymbol">({{ ftSymbol }})</span>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-md-3">
+            <a [routerLink]="['/ft-commitment/list']">
+              <div class="card">
+                <div class="card-body">
+                  <h3 *ngIf="count">{{ count.ftCommitmentCount ? count.ftCommitmentCount : '0' }}</h3>
+                  <p class="card-text">{{ ftName }} Commitments</p>
+                </div>
+              </div>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row mt-4">
+      <div class="col-md-12">
+        <h3 class="mb-2">Actions</h3>
+        <div class="row mb-3">
+          <div class="col-md-3">
+            <a class="btn btn-primary btn-list" [routerLink]="['/nft/mint']"
+              >Mint {{ nftName || 'Public Token' }}</a
+            >
+            <a class="btn btn-primary btn-list" [routerLink]="['/nft/transfer']"
+              >Transfer {{ nftName || 'Public Token' }}</a
+            >
+            <a class="btn btn-primary btn-list" [routerLink]="['/nft/burn']"
+              >Burn {{ nftName || 'Public Token' }}</a
+            >
+          </div>
+
+          <div class="col-md-3">
+            <a class="btn btn-primary btn-list" [routerLink]="['/nft-commitment/mint']"
+              >Mint {{ nftName }} Commitment</a
+            >
+            <a class="btn btn-primary btn-list" [routerLink]="['/nft-commitment/transfer']"
+              >Transfer {{ nftName }} Commitment</a
+            >
+            <a class="btn btn-primary btn-list" [routerLink]="['/nft-commitment/burn']"
+              >Burn {{ nftName }} Commitment</a
+            >
+          </div>
+
+          <div class="col-md-3">
+            <a class="btn btn-primary btn-list" [routerLink]="['/ft/mint']"
+              >Mint {{ ftName || '' }}</a
+            >
+            <a class="btn btn-primary btn-list" [routerLink]="['/ft/transfer']"
+              >Transfer {{ ftName || '' }}</a
+            >
+            <a class="btn btn-primary btn-list" [routerLink]="['/ft/burn']"
+              >Burn {{ ftName || '' }}</a
+            >
+          </div>
+
+          <div class="col-md-3">
+            <a class="btn btn-primary btn-list" [routerLink]="['/ft-commitment/mint']"
+              >Mint {{ ftName }} Commitment</a
+            >
+            <a class="btn btn-primary btn-list" [routerLink]="['/ft-commitment/transfer']"
+              >Transfer {{ ftName }} Commitment</a
+            >
+            <a class="btn btn-primary btn-list" [routerLink]="['/ft-commitment/burn']"
+              >Burn {{ ftName }} Commitment</a
+            >
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="row   mb-3">
+      <div class="col-sm-12">
+        <h3 class="mb-2">Transactions History</h3>
+        <ngb-tabset activeId="{{ selectedTab }}">
+          <ngb-tab id="nft">
+            <ng-template ngbTabTitle>
+              <div (click)="getTransactions('nft')">
+                <strong>{{ nftName }}</strong>
+              </div>
+            </ng-template>
+            <ng-template ngbTabContent>
+              <table class="table  table-hover">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Token ID</th>
+                    <th>URI</th>
+                    <th>Date</th>
+                    <th>Send To</th>
+                    <th>Received from</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let transaction of publicTokenTransactions">
+                    <td>{{ transaction.type.toUpperCase() }}</td>
+                    <td [title]="transaction.token_id">
+                      {{ transaction.token_id.slice(0, 20) }}....
+                    </td>
+                    <td>{{ transaction.uri }}</td>
+                    <td>{{ transaction.created_at | date: 'dd/MM/yyyy hh:mm:ss a' }}</td>
+                    <td>
+                      {{
+                        transaction.type !== 'received' && transaction.receiver
+                          ? transaction.receiver
+                          : ''
+                      }}
+                    </td>
+                    <td>
+                      {{
+                        transaction.type === 'received' && transaction.sender
+                          ? transaction.sender
+                          : ''
+                      }}
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+              <ngb-pagination
+                *ngIf="isPagination"
+                class="d-flex justify-content-end zkp-pagination"
+                (pageChange)="pageChanged($event)"
+                [collectionSize]="totalCollection | async"
+                [pageSize]="pageSize"
+                [(page)]="pageNo"
+                aria-label="Default pagination"
+              ></ngb-pagination>
+            </ng-template>
+          </ngb-tab>
+
+          <ngb-tab id="nft-commitment">
+            <ng-template ngbTabTitle>
+              <div (click)="getTransactions('nft-commitment')">
+                <strong>{{ nftName }} Commitment</strong>
+              </div>
+            </ng-template>
+            <ng-template ngbTabContent>
+              <table class="table  table-hover">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Token ID</th>
+                    <th>URI</th>
+                    <th>Date</th>
+                    <th>Send To</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let transaction of tokenTransactions">
+                    <td>{{ transaction.type.toUpperCase() }}</td>
+                    <td [title]="transaction.token_id">
+                      {{ transaction.token_id.slice(0, 20) }}....
+                    </td>
+                    <td>{{ transaction.token_uri }}</td>
+                    <td>{{ transaction.created_at | date: 'dd/MM/yyyy hh:mm:ss a' }}</td>
+                    <td>{{ transaction.receiver || transaction.receiver_name ? (transaction.receiver || transaction.receiver_name) : '' }}</td>
+                  </tr>
+                </tbody>
+              </table>
+              <ngb-pagination
+                *ngIf="isPagination"
+                class="d-flex justify-content-end zkp-pagination"
+                (pageChange)="pageChanged($event)"
+                [collectionSize]="totalCollection | async"
+                [pageSize]="pageSize"
+                [(page)]="pageNo"
+                aria-label="Default pagination"
+              ></ngb-pagination>
+            </ng-template>
+          </ngb-tab>
+
+          <ngb-tab id="ft">
+            <ng-template ngbTabTitle>
+              <div (click)="getTransactions('ft')">
+                <strong>{{ ftName }}</strong>
+              </div>
+            </ng-template>
+            <ng-template ngbTabContent>
+              <table class="table  table-hover">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Coin Value</th>
+                    <th>Date</th>
+                    <th>Send To</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let transaction of publicCoinTransactions">
+                    <td>{{ transaction.type.toUpperCase() }}</td>
+                    <td>{{ ftSymbol + ' ' + transaction.amount }}</td>
+                    <td>{{ transaction.created_at | date: 'dd/MM/yyyy hh:mm:ss a' }}</td>
+                    <td *ngIf="transaction.type === 'transferred'">
+                      {{ transaction.receiver ? transaction.receiver : '' }}
+                    </td>
+                    <td *ngIf="transaction.type !== 'transferred'"></td>
+                  </tr>
+                </tbody>
+              </table>
+              <ngb-pagination
+                *ngIf="isPagination"
+                class="d-flex justify-content-end zkp-pagination"
+                (pageChange)="pageChanged($event)"
+                [collectionSize]="totalCollection | async"
+                [pageSize]="pageSize"
+                [(page)]="pageNo"
+                aria-label="Default pagination"
+              ></ngb-pagination>
+            </ng-template>
+          </ngb-tab>
+
+          <ngb-tab id="ft-commitment">
+            <ng-template ngbTabTitle>
+              <div (click)="getTransactions('ft-commitment')">
+                <strong>{{ ftName }} Commitment</strong>
+              </div>
+            </ng-template>
+            <ng-template ngbTabContent>
+              <table class="table  table-hover">
+                <thead>
+                  <tr>
+                    <th>Type</th>
+                    <th>Coin Value</th>
+                    <th>Coin Commitment</th>
+                    <th>Coin 1 Value</th>
+                    <th>Coin 1 Commitment</th>
+                    <th>Coin 2 Value</th>
+                    <th>Coin 2 Commitment</th>
+                    <th>Date</th>
+                    <th>Send To</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let transaction of coinTransactions">
+                    <td>{{ transaction.type.toUpperCase() }}</td>
+                    <td>
+                      {{ ftSymbol + ' ' + utilService.convertToNumber(transaction.coin_value) }}
+                    </td>
+                    <td [title]="transaction.coin_commitment">
+                      {{ transaction.coin_commitment.slice(0, 20) }}...
+                    </td>
+
+                    <td *ngIf="transaction.type === 'transferred'">
+                      {{
+                        transaction.used_coin_commitments.length
+                          ? ftSymbol +
+                            ' ' +
+                            utilService.convertToNumber(
+                              transaction.used_coin_commitments[0].coin_value
+                            )
+                          : ''
+                      }}
+                    </td>
+                    <td *ngIf="transaction.type === 'transferred'">
+                      {{
+                        transaction.used_coin_commitments.length
+                          ? transaction.used_coin_commitments[0].coin_commitment.slice(0, 20)
+                          : ''
+                      }}...
+                    </td>
+                    <td *ngIf="transaction.type === 'transferred'">
+                      {{
+                        transaction.used_coin_commitments.length
+                          ? ftSymbol +
+                            ' ' +
+                            utilService.convertToNumber(
+                              transaction.used_coin_commitments[1].coin_value
+                            )
+                          : ''
+                      }}
+                    </td>
+                    <td *ngIf="transaction.type === 'transferred'">
+                      {{
+                        transaction.used_coin_commitments.length
+                          ? transaction.used_coin_commitments[1].coin_commitment.slice(0, 20)
+                          : ''
+                      }}...
+                    </td>
+
+                    <td *ngIf="transaction.type !== 'transferred'"></td>
+                    <td *ngIf="transaction.type !== 'transferred'"></td>
+                    <td *ngIf="transaction.type !== 'transferred'"></td>
+                    <td *ngIf="transaction.type !== 'transferred'"></td>
+
+                    <td>{{ transaction.created_at | date: 'dd/MM/yyyy hh:mm:ss a' }}</td>
+                    <td *ngIf="transaction.type === 'transferred' || transaction.type === 'burned'">
+                      {{ transaction.receiver ? transaction.receiver : '' }}
+                    </td>
+                    <td *ngIf="transaction.type !== 'transferred'"></td>
+                  </tr>
+                </tbody>
+              </table>
+              <ngb-pagination
+                *ngIf="isPagination"
+                class="d-flex justify-content-end zkp-pagination"
+                (pageChange)="pageChanged($event)"
+                [collectionSize]="totalCollection | async"
+                [pageSize]="pageSize"
+                [(page)]="pageNo"
+                aria-label="Default pagination"
+              ></ngb-pagination>
+            </ng-template>
+          </ngb-tab>
+        </ngb-tabset>
+      </div>
+    </div>
+  </div>
+</div>
