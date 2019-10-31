@@ -61,6 +61,9 @@
             <div class="col-md-6">
               <input
                 type="number"
+                min="0"
+                (keypress)="utilService.noNegtiveNumber($event)"
+                (paste)="utilService.noNegtiveNumber($event)"
                 class="form-control"
                 [(ngModel)]="transferValue"
                 name="E"
