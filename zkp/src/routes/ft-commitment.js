@@ -87,7 +87,10 @@ async function transfer(req, res, next) {
   ];
 
   try {
-    const { outputCommitments: returnedOutputCommitments, txObj } = await fTokenController.transfer(
+    const {
+      outputCommitments: returnedOutputCommitments,
+      transferReceipt,
+    } = await fTokenController.transfer(
       inputCommitments,
       outputCommitments,
       receiverPublicKey,
@@ -106,7 +109,7 @@ async function transfer(req, res, next) {
       z_F_index: returnedOutputCommitments[1].index,
       S_E: returnedOutputCommitments[0].salt,
       S_F: returnedOutputCommitments[1].salt,
-      txObj,
+      txObj: transferReceipt,
     };
     next();
   } catch (err) {

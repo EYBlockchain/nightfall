@@ -57,7 +57,11 @@ async function transfer(req, res, next) {
   );
 
   try {
-    const { outputCommitment, outputCommitmentIndex, txObj } = await nfController.transfer(
+    const {
+      outputCommitment,
+      outputCommitmentIndex,
+      transferReceipt,
+    } = await nfController.transfer(
       tokenId,
       receiverPublicKey,
       originalCommitmentSalt,
@@ -75,7 +79,7 @@ async function transfer(req, res, next) {
     res.data = {
       z_B: outputCommitment,
       z_B_index: outputCommitmentIndex,
-      txObj,
+      txObj: transferReceipt,
       S_B: newCommitmentSalt,
     };
     next();
