@@ -29,8 +29,8 @@ async function mint(req, res, next) {
       },
     );
     res.data = {
-      coin: commitment,
-      coin_index: commitmentIndex,
+      ft: commitment,
+      ft_index: commitmentIndex,
       S_A: salt,
     };
     next();
