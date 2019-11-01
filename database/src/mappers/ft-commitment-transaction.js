@@ -16,14 +16,14 @@ export default function({
   changeCommitmentIndex,
 
   receiver,
-  usedCoins,
+  usedFTCommitments,
 }) {
   let parsedUsedCoin;
 
-  if (Array.isArray(usedCoins))
-    parsedUsedCoin = usedCoins.map(coin => ({
-      ft_commitment_value: coin.amount,
-      ft_commitment: coin.commitment,
+  if (Array.isArray(usedFTCommitments))
+    parsedUsedCoin = usedFTCommitments.map(ft => ({
+      ft_commitment_value: ft.amount,
+      ft_commitment: ft.commitment,
     }));
 
   return {
@@ -32,12 +32,12 @@ export default function({
     ft_commitment: commitment,
     ft_commitment_index: commitmentIndex,
 
-    [changeAmount ? 'change_coin_value' : undefined]: changeAmount,
+    [changeAmount ? 'change_ft_commitment_value' : undefined]: changeAmount,
     [changeSalt ? 'change_salt' : undefined]: changeSalt,
     [changeCommitment ? 'change_coin_commitment' : undefined]: changeCommitment,
-    [changeCommitmentIndex ? 'change_coin_commitment_index' : undefined]: changeCommitmentIndex,
+    [changeCommitmentIndex ? 'change_ft_commitment_index' : undefined]: changeCommitmentIndex,
 
     [receiver ? 'receiver' : undefined]: receiver,
-    [usedCoins ? 'used_coin_commitments' : undefined]: parsedUsedCoin,
+    [usedFTCommitments ? 'used_ft_commitments' : undefined]: parsedUsedCoin,
   };
 }

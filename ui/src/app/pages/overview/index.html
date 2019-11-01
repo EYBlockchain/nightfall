@@ -282,37 +282,37 @@
 
                     <td *ngIf="transaction.type === 'transferred'">
                       {{
-                        transaction.used_coin_commitments.length
+                        transaction.used_ft_commitments.length
                           ? ftSymbol +
                             ' ' +
                             utilService.convertToNumber(
-                              transaction.used_coin_commitments[0].ft_commitment_value
+                              transaction.used_ft_commitments[0].ft_commitment_value
                             )
                           : ''
                       }}
                     </td>
                     <td *ngIf="transaction.type === 'transferred'">
                       {{
-                        transaction.used_coin_commitments.length
-                          ? transaction.used_coin_commitments[0].ft_commitment.slice(0, 20)
+                        transaction.used_ft_commitments.length
+                          ? transaction.used_ft_commitments[0].ft_commitment.slice(0, 20)
                           : ''
                       }}...
                     </td>
                     <td *ngIf="transaction.type === 'transferred'">
                       {{
-                        transaction.used_coin_commitments.length
+                        transaction.used_ft_commitments.length
                           ? ftSymbol +
                             ' ' +
                             utilService.convertToNumber(
-                              transaction.used_coin_commitments[1].ft_commitment_value
+                              transaction.used_ft_commitments[1].ft_commitment_value
                             )
                           : ''
                       }}
                     </td>
                     <td *ngIf="transaction.type === 'transferred'">
                       {{
-                        transaction.used_coin_commitments.length
-                          ? transaction.used_coin_commitments[1].ft_commitment.slice(0, 20)
+                        transaction.used_ft_commitments.length
+                          ? transaction.used_ft_commitments[1].ft_commitment.slice(0, 20)
                           : ''
                       }}...
                     </td>

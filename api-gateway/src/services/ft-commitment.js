@@ -221,7 +221,7 @@ export async function transferCoin(req, res, next) {
       changeCommitmentIndex: data.z_F_index,
       receiver: req.body.receiver_name,
       isTransferred: true,
-      usedCoins: [
+      usedFTCommitments: [
         {
           amount: req.body.C,
           commitment: req.body.z_C,
