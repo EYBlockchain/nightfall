@@ -70,23 +70,13 @@ npm run test || {
 printf "${GREEN}*** List all containers with their Ips ***${NC}\n"
 docker inspect -f '{{.Name}} {{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $(docker-compose ps -q)
 
-
 printf "${GREEN}*** Cleaning up all containers ***${NC}\n"
 docker-compose down -v || {
   # delay need as waiting time so all container are properly done
-  # nightfall_test_net network have no dependency left.
+  # nightfall_default network have no dependency left.
   sleep 3
-
-  printf "${GREEN}*** Remove network ***${NC}\n"
-  docker network rm nightfall_default
-
-  printf "${GREEN}*** Remove mongo volume ***${NC}\n"
-  docker volume rm nightfall_mongo-volume
-
-  printf "${GREEN}*** Remove zkp-code volume ***${NC}\n"
-  docker volume rm nightfall_zkp-code
+  make network-volume-remove
 }
-
 
 # Stop child terminal if all testcases passed.
 if [ "${machine}" == "Mac" ] && [ "${isTestPassed}" == "true" ]; then
