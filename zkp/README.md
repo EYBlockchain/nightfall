@@ -65,7 +65,6 @@ Build and run service (on port 80)
 cd zkp
 mkdir -p node_modules
 cp -r ../zkp-utils node_modules
-cp -r ../account-utils src
 cp -r ../config .
 npm start
 ```
