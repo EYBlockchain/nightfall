@@ -5,7 +5,6 @@
   "main": "index.js",
   "scripts": {
     "test": "NODE_CONFIG_DIR=./integration-test/config ./node_modules/mocha/bin/_mocha --require @babel/register -b ./integration-test/ --reporter mochawesome --timeout 1000000",
-    "setupAll": "./install.sh",
     "fix": "npm run format && npm run lint -- --fix",
     "format": "prettier --write \"**/*.{json,css,scss,md,html}\"",
     "lint": "eslint .",
