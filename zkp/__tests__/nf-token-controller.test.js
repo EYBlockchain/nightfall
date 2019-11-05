@@ -157,7 +157,7 @@ describe('nf-token-controller.js tests', () => {
   });
 
   test('Should burn the ERC 721 commitment for Bob for asset Z_B_A to return A ERC-721 Token', async () => {
-    const { commitment } = await controller.burn(
+    const commitment = await controller.burn(
       A,
       skB,
       sAToBA,

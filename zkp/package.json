@@ -8,7 +8,7 @@
     "setup": "NODE_ENV=setup npx babel-node code/index.js",
     "setup-all": "yes | NODE_ENV=setup npx babel-node code/index.js",
     "start": "nodemon --ignore src/vkIds.json --ignore stats-config/ --ignore code/ --exec babel-node ./src/index.js",
-    "test": "jest --runInBand --forceExit ./__tests__/*.test.js",
+    "test": "NODE_ENV=default jest --runInBand --forceExit ./__tests__/*.test.js",
     "generate-keys": "./install.sh"
   },
   "contributors": [
