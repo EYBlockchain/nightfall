@@ -9,7 +9,7 @@
 You will need to have completed the trusted setup. This is done simply by running (from the Nightfall root):
 
 ```sh
-npm run setupAll
+./nightfall-generate-trusted-setup
 ```
 If you have previously run the Nightfall application, you will already have completed this step and there is no need to repeat it (it takes about and hour so it's worth avoiding where possible!).
 
