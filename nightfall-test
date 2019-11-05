@@ -75,7 +75,15 @@ docker-compose down -v || {
   # delay need as waiting time so all container are properly done
   # nightfall_default network have no dependency left.
   sleep 3
-  make network-volume-remove
+
+  printf "${GREEN}*** Remove network ***${NC}\n"
+  docker network rm nightfall_default
+
+  printf "${GREEN}*** Remove mongo volume ***${NC}\n"
+  docker volume rm nightfall_mongo-volume
+
+  printf "${GREEN}*** Remove zkp-code volume ***${NC}\n"
+  docker volume rm nightfall_zkp-code
 }
 
 # Stop child terminal if all testcases passed.

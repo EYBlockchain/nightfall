@@ -11,8 +11,3 @@ zkp-start:
 
 zkp-test:
 	docker-compose run --rm zkp npm test
-
-network-volume-remove:
-	docker network rm nightfall_default || echo
-	docker volume rm nightfall_mongo-volume || echo
-	docker volume rm nightfall_zkp-code || echo
