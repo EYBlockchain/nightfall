@@ -32,7 +32,8 @@ docker-compose build zkp
 After your trusted setup is complete run:
 
 ```sh
-make truffle-compile truffle-migrate
+docker-compose run --rm truffle-zkp compile --all
+docker-compose run --rm truffle-zkp migrate --reset --network=default
 ```
 
 This will run up ganache in a container and load all of the nightfall contracts.
@@ -40,7 +41,7 @@ This will run up ganache in a container and load all of the nightfall contracts.
 To run the zkp unit tests:
 
 ```sh
-make zkp-test
+docker-compose run --rm zkp npm test
 ```
 
 The relevant files for these tests can be found under `zkp/__tests__`.

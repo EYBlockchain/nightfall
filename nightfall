@@ -32,7 +32,8 @@ printf "${GREEN}*** Launching containerized ganache ***${NC}\n"
 docker-compose up -d ganache
 
 printf "${GREEN}*** Deploying all contracts ***${NC}\n"
-make truffle-migrate
+docker-compose run --rm truffle-offchain migrate --reset --network=default
+docker-compose run --rm truffle-zkp migrate --reset --network=default
 
 printf "${GREEN}*** Launching containerized microservices ***${NC}\n"
 docker-compose up
