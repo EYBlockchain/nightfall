@@ -37,7 +37,6 @@ beforeAll(async () => {
   const { contractJson, contractInstance } = await getContract('NFTokenShield');
   nfTokenShieldAddress = contractInstance.address;
   nfTokenShieldJson = contractJson;
-  await vk.runController;
   A = await utils.rndHex(32);
   B = await utils.rndHex(32);
   G = await utils.rndHex(32);
