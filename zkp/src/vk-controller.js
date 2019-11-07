@@ -14,8 +14,6 @@ import nfZkp from './nf-token-zkp';
 import fZkp from './f-token-zkp';
 import Web3 from './web3';
 
-const web3 = Web3.connection();
-
 const NFtokenShield = contract(jsonfile.readFileSync('./build/contracts/NFTokenShield.json'));
 NFtokenShield.setProvider(Web3.connect());
 
@@ -31,6 +29,8 @@ const Verifier = contract(jsonfile.readFileSync('./build/contracts/GM17_v0.json'
 Verifier.setProvider(Web3.connect());
 
 let vkIds = {};
+
+const web3 = Web3.connection();
 
 /**
 Loads a verification key to the Verifier Registry
@@ -143,7 +143,7 @@ async function runController() {
   await vkController();
 }
 
-runController();
+if (process.env.NODE_ENV !== 'test') runController();
 
 export default {
   runController,
