@@ -102,11 +102,11 @@ function setShieldContract(user, contractAddress) {
   return new Promise(function setShieldDetails(resolve) {
     zkp
       .setTokenShield(user, { nftCommitmentShield: contractAddress })
-      .then(() => resolve('token'))
+      .then(() => resolve('nft'))
       .catch(() => zkp.unSetTokenShield(user));
     zkp
       .setCoinShield(user, { ftCommitmentShield: contractAddress })
-      .then(() => resolve('coin'))
+      .then(() => resolve('ft'))
       .catch(() => zkp.unSetCoinShield(user));
   });
 }
@@ -125,13 +125,13 @@ export async function addContractInfo(req, res, next) {
 
   try {
     const type = await setShieldContract(req.user, contractAddress);
-    if (type === 'coin')
+    if (type === 'ft')
       await db.addFTShieldContractInfo(req.user, {
         contractAddress,
         contractName,
         isSelected,
       });
-    if (type === 'token')
+    if (type === 'nft')
       await db.addNFTShieldContractInfo(req.user, {
         contractAddress,
         contractName,
