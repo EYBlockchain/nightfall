@@ -4,7 +4,6 @@ import utils from 'zkp-utils';
 import bc from '../src/web3';
 
 import controller from '../src/f-token-controller';
-import vk from '../src/vk-controller';
 import { getVkId, getContract } from '../src/contractUtils';
 
 jest.setTimeout(7200000);
@@ -49,7 +48,6 @@ beforeAll(async () => {
   fTokenShieldAddress = contractInstance.address;
   fTokenShieldJson = contractJson;
   // blockchainOptions = { account, fTokenShieldJson, fTokenShieldAddress };
-  await vk.runController;
   S_A_C = await utils.rndHex(32);
   S_A_D = await utils.rndHex(32);
   sAToBE = await utils.rndHex(32);

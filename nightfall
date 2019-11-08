@@ -11,13 +11,13 @@ docker-compose down -v || {
 	sleep 3
 
 	printf "${GREEN}*** Remove network ***${NC}\n"
-	docker network rm nightfall_default
+  docker network rm nightfall_default
 
-	printf "${GREEN}*** Remove mongo volume ***${NC}\n"
-	docker volume rm nightfall_mongo-volume
+  printf "${GREEN}*** Remove mongo volume ***${NC}\n"
+  docker volume rm nightfall_mongo-volume
 
-	printf "${GREEN}*** Remove zkp-code volume ***${NC}\n"
-	docker volume rm nightfall_zkp-code
+  printf "${GREEN}*** Remove zkp-code volume ***${NC}\n"
+  docker volume rm nightfall_zkp-code
 }
 
 printf "${GREEN}*** Pull zokrates docker image ***${NC}\n"
@@ -32,7 +32,8 @@ printf "${GREEN}*** Launching containerized ganache ***${NC}\n"
 docker-compose up -d ganache
 
 printf "${GREEN}*** Deploying all contracts ***${NC}\n"
-make truffle-migrate
+docker-compose run --rm truffle-offchain migrate --reset --network=default
+docker-compose run --rm truffle-zkp migrate --reset --network=default
 
 printf "${GREEN}*** Launching containerized microservices ***${NC}\n"
 docker-compose up

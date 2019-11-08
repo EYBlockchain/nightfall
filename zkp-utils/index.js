@@ -120,8 +120,10 @@ function multiplyByNumber(num, x, base) {
 
   let result = [];
   let power = x;
-  while (true) { // eslint-disable-line
-    if (num & 1) { // eslint-disable-line
+  // eslint-disable-next-line no-constant-condition
+  while (true) {
+    // eslint-disable-next-line no-bitwise
+    if (num & 1) {
       result = add(result, power, base);
     }
     num >>= 1; // eslint-disable-line
@@ -307,51 +309,13 @@ function hexToFieldPreserve(hexStr, packingSize, packets, silenceWarnings) {
   return decArr;
 }
 
-/**
-checks whether a hex string is smaller than a finite field size.
-@param {string} hexStr A hex string.
-@param {integer} fieldSize The number of elements in the finite field.
-@return {bool} True if less than the field size.
-*/
-function hexLessThan(hexStr, fieldSize) {
-  const decStr = hexToDec(hexStr);
-  const q = new BI(fieldSize);
-  return new BI(decStr.toString()).lesserOrEquals(q);
-}
-
-/**
-@param {string} hexStr A hex string.
-@return {integer} The number of bits of information which are encoded by the hex value.
-*/
-function getBitLengthHex(hexStr) {
-  const decStr = hexToDec(hexStr);
-  return new BI(decStr).bitLength().toString();
-}
-
 // Converts binary value strings to hex values
 function binToHex(binStr) {
   const hex = convertBase(binStr, 2, 16);
   return hex ? `0x${hex}` : null;
 }
 
-/**
-@param {string} hexStr A hex string.
-@param {integer} n The number of bits to slice (from the right)
-@return {string} The right n bits of the hexStr.
-*/
-function sliceRightBitsHex(hexStr, n) {
-  let binStr = hexToBinSimple(hexStr);
-  binStr = binStr.slice(-n);
-  return binToHex(binStr);
-}
-
 // FUNCTIONS ON DECIMAL VALUES
-
-// Convert bits to decimal values between 0...255
-function decToBytes(decimal) {
-  const digit = parseInt(decimal, 2);
-  return digit;
-}
 
 // Converts decimal value strings to hex values
 function decToHex(decStr) {
@@ -364,14 +328,6 @@ function decToBin(decStr) {
   return convertBase(decStr, 10, 2);
 }
 
-/**
-@param {string} decStr A decimal value string.
-@return {integer} The number of bits of information which are encoded by the decimal value.
-*/
-function getBitLengthDec(decStr) {
-  return new BI(decStr).bitLength().toString();
-}
-
 /** Checks whether a decimal integer is larger than N bits, and splits its binary representation into chunks of size = N bits. The left-most (big endian) chunk will be the only chunk of size <= N bits. If the inequality is strict, it left-pads this left-most chunk with zeros.
 @param {string} decStr A decimal number/string.
 @param {integer} N The 'chunk size'.
@@ -382,16 +338,6 @@ function splitDecToBitsN(decStr, N) {
   let a = [];
   a = splitAndPadBitsN(bitStr, N);
   return a;
-}
-
-/** Preserves the magnitude of a decimal number in a finite field, even if the order of the field is smaller than decStr. decStr split into chunks of size packingSize. Relies on a sensible packing size being provided (ZoKrates uses packingSize = 128).
- */
-function decToFieldPreserve(decStr, packingSize) {
-  let bitsArr = [];
-  bitsArr = splitDecToBitsN(decStr.toString(), packingSize.toString());
-  let decArr = []; // decimal array
-  decArr = bitsArr.map(item => binToDec(item.toString()));
-  return decArr;
 }
 
 function isProbablyBinary(arr) {
@@ -426,18 +372,6 @@ function fieldsToDec(fieldsArr, packingSize) {
   return decStr;
 }
 
-/**
-Converts an array of Field Elements (decimal numbers which are smaller in magnitude than the field size q), where the array represents a number of magnitude larger than q, into the hex value which the array represents.
-@param {[string]} fieldsArr is an array of (decimal represented) field elements. Each element represents a number which is 2**128 times larger than the next in the array. So the 0th element of fieldsArr requires the largest left-shift (by a multiple of 2**128), and the last element is not shifted (shift = 1). The shifted elements should combine (sum) to the underlying decimal number which they represent.
-@param {integer} packingSize Each field element of fieldsArr is a 'packing' of exactly 'packingSize' bits. I.e. packingSize is the size (in bits) of each chunk (element) of fieldsArr. We use this to reconstruct the underlying decimal value which was, at some point previously, packed into a fieldsArr format.
-@returns {string} A hex value
-*/
-function fieldsToHex(fieldsArr, packingSize) {
-  const decStr = fieldsToDec(fieldsArr, packingSize).toString();
-  const hexStr = decToHex(decStr);
-  return ensure0x(hexStr);
-}
-
 // UTILITY FUNCTIONS:
 
 /**
@@ -457,16 +391,6 @@ function xor(a, b) {
 }
 
 /**
-Utility function to xor to multiple hex strings and return as string
-*/
-function xorItems(...items) {
-  const xorvalue = items
-    .map(item => Buffer.from(strip0x(item), 'hex'))
-    .reduce((acc, item) => xor(acc, item));
-  return `0x${xorvalue.toString('hex')}`;
-}
-
-/**
 Utility function to concatenate two hex strings and return as buffer
 Looks like the inputs are somehow being changed to decimal!
 */
@@ -480,16 +404,6 @@ function concatenate(a, b) {
     buffer[a.length + j] = b[j];
   }
   return buffer;
-}
-
-/**
-Utility function to concatenate multiple hex strings and return as string
-*/
-function concatenateItems(...items) {
-  const concatvalue = items
-    .map(item => Buffer.from(strip0x(item), 'hex'))
-    .reduce((acc, item) => concatenate(acc, item));
-  return `0x${concatvalue.toString('hex')}`;
 }
 
 /**
@@ -533,15 +447,6 @@ function concatenateThenHash(...items) {
     .update(concatvalue, 'hex')
     .digest('hex')}`;
   return h;
-}
-
-// CONVERSION TO FINITE FIELD ELEMENTS:
-
-function splitBinToBitsN(binStr, N) {
-  const bitStr = binStr.toString();
-  let a = [];
-  a = splitAndPadBitsN(bitStr, N);
-  return a;
 }
 
 /**
@@ -615,14 +520,6 @@ function padHex(A, l) {
   return ensure0x(strip0x(A).padStart(l / 4, '0'));
 }
 
-function String2Hex(tmp) {
-  let str = '';
-  for (let i = 0; i < tmp.length; i += 1) {
-    str += tmp[i].charCodeAt(0).toString(16);
-  }
-  return str;
-}
-
 module.exports = {
   isHex,
   utf8StringToHex,
@@ -635,29 +532,19 @@ module.exports = {
   hexToDec,
   hexToField,
   hexToFieldPreserve,
-  hexLessThan,
-  getBitLengthHex,
-  sliceRightBitsHex,
-  decToBytes,
   decToHex,
   decToBin,
-  getBitLengthDec,
-  decToFieldPreserve,
   binToDec,
   binToHex,
   isProbablyBinary,
   fieldsToDec,
-  fieldsToHex,
   xor,
-  xorItems,
   concatenate,
-  concatenateItems,
   hash,
   concatenateThenHash,
   add,
   parseToDigitsArray,
   convertBase,
-  splitBinToBitsN,
   splitDecToBitsN,
   splitHexToBitsN,
   splitAndPadBitsN,
@@ -667,5 +554,4 @@ module.exports = {
   flattenDeep,
   padHex,
   leftPadHex,
-  String2Hex,
 };

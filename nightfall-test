@@ -5,18 +5,6 @@ GREEN='\033[0;32m'
 RED='\033[0;31m'
 NC='\033[0m'
 
-dir="$(pwd)"
-declare isTestPassed=true
-
-systemInfo="$(uname -s)"
-case "${systemInfo}" in
-  Linux*)     machine=Linux;;
-  Darwin*)    machine=Mac;;
-  CYGWIN*)    machine=Cygwin;;
-  MINGW*)     machine=MinGw;;
-  *)          machine="UNKNOWN:${systemInfo}"
-esac
-
 printf "${GREEN}*** Cleaning up all test containers ***${NC}\n"
 docker-compose down -v || true
 
@@ -38,7 +26,8 @@ printf "${GREEN}*** Launching containerized ganache ***${NC}\n"
 docker-compose up -d ganache
 
 printf "${GREEN}*** Deploying all contracts ***${NC}\n"
-make truffle-migrate
+docker-compose run --rm truffle-offchain migrate --reset --network=default
+docker-compose run --rm truffle-zkp migrate --reset --network=default
 
 printf "${GREEN}*** Launching containerized microservices ***${NC}\n"
 docker-compose up -d mongo accounts offchain zkp database api-gateway
@@ -47,34 +36,20 @@ docker-compose up -d mongo accounts offchain zkp database api-gateway
 printf "${GREEN}*** Saving the test logs to nightfall_test.log file ***${NC}\n"
 docker-compose logs -f &> nightfall_test.log &disown
 
-# Create a child Terminal to see docker log, while running testcases.
-if [ "${machine}" == "Mac" ]; then
-	childTab=$(osascript -e "
-	  tell application \"Terminal\"
-	    set currentTab to do script \"cd $dir\"
-	    delay 2
-	    do script \"docker-compose logs -f\" in currentTab
-	  end tell")
-fi
-
 # delay needed to ensure all container are in running state.
 sleep 20
 
 # RUN test suits and remove test containers
 printf "${GREEN}*** Run Integration test ***${NC}\n"
-npm run test || {
-	isTestPassed=false
-	printf "${RED}*** Integration test failed ***${NC}\n"
-}
+npm run test || printf "${RED}*** Integration test failed ***${NC}\n"
 
 printf "${GREEN}*** List all containers with their Ips ***${NC}\n"
 docker inspect -f '{{.Name}} {{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $(docker-compose ps -q)
 
-
 printf "${GREEN}*** Cleaning up all containers ***${NC}\n"
 docker-compose down -v || {
   # delay need as waiting time so all container are properly done
-  # nightfall_test_net network have no dependency left.
+  # nightfall_default network have no dependency left.
   sleep 3
 
   printf "${GREEN}*** Remove network ***${NC}\n"
@@ -86,16 +61,3 @@ docker-compose down -v || {
   printf "${GREEN}*** Remove zkp-code volume ***${NC}\n"
   docker volume rm nightfall_zkp-code
 }
-
-
-# Stop child terminal if all testcases passed.
-if [ "${machine}" == "Mac" ] && [ "${isTestPassed}" == "true" ]; then
-	osascript -e "
-	  tell application \"Terminal\"
-	    do script \"exit\" in $childTab
-	  end tell"
-fi
-
-if [ "${isTestPassed}" == "false" ]; then
-  exit 1
-fi

@@ -9,7 +9,7 @@ const router = Router();
 
 async function mint(req, res, next) {
   const { address } = req.headers;
-  const { A: amount, pk_A: ownerPublicKey } = req.body;
+  const { amount, ownerPublicKey } = req.body;
   const salt = await utils.rndHex(32);
   const vkId = await getVkId('MintFToken');
   const { contractJson: fTokenShieldJson, contractInstance: fTokenShield } = await getContract(
@@ -118,14 +118,7 @@ async function transfer(req, res, next) {
 }
 
 async function burn(req, res, next) {
-  const {
-    A: amount,
-    sk_A: receiverSecretKey,
-    S_A: salt,
-    z_A: commitment,
-    z_A_index: commitmentIndex,
-    payTo: tokenReceiver,
-  } = req.body;
+  const { amount, receiverSecretKey, salt, commitment, commitmentIndex, tokenReceiver } = req.body;
   const { address } = req.headers;
   const vkId = await getVkId('BurnFToken');
   const { contractJson: fTokenShieldJson, contractInstance: fTokenShield } = await getContract(
