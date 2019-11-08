@@ -1,0 +1,18 @@
+#!/bin/bash
+set -e
+
+GREEN='\033[0;32m'
+RED='\033[0;31m'
+NC='\033[0m'
+
+printf "${GREEN}*** Installing zkp-util dependencies ***${NC}\n"
+pushd zkp-utils 
+npm ci
+popd
+
+printf "${GREEN}*** Installing zkp dependencies ***${NC}\n"
+pushd zkp
+npm ci
+
+printf "${GREEN}*** Generate trusted setup ***${NC}"
+npm run setup-all

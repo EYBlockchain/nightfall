@@ -40,7 +40,7 @@ jobs:
       - name: Generate the keys and constraint files for Zero Knowledge Proofs
         run: |
           chmod -R 777 zkp/code/
-          npm run setupAll
+          ./nightfall-generate-trusted-setup
       - name: Remove ZoKrates Containers
         run: |
           docker stop $(docker ps -a -q)
@@ -48,9 +48,11 @@ jobs:
       - name: Build zkp image
         run: docker-compose build zkp
       - name: Setup ganache container and deploy zkp contracts
-        run: make truffle-compile truffle-migrate
+        run: |
+          docker-compose run --rm truffle-zkp compile --all
+          docker-compose run --rm truffle-zkp migrate --reset --network=default
       - name: Run zkp unit tests
-        run: make zkp-test
+        run: docker-compose run --rm zkp npm test
 
   integration-test:
     name: Run integration test
@@ -74,7 +76,7 @@ jobs:
       - name: Generate the keys and constraint files for Zero Knowledge Proofs
         run: |
           chmod -R 777 zkp/code/
-          npm run setupAll
+          ./nightfall-generate-trusted-setup
       - name: Remove ZoKrates Containers
         run: |
           docker stop $(docker ps -a -q)
