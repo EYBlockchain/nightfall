@@ -27,6 +27,11 @@ async function mint(req, res, next) {
         fTokenShieldAddress: fTokenShield.address,
         account: address,
       },
+      {
+        codePath: `${process.cwd()}/code/gm17/ft-mint/out`,
+        outputDirectory: `${process.cwd()}/code/gm17/ft-mint`,
+        pkPath: `${process.cwd()}/code/gm17/ft-mint/proving.key`,
+      },
     );
     res.data = {
       ft_commitment: commitment,
@@ -101,6 +106,11 @@ async function transfer(req, res, next) {
         fTokenShieldAddress: fTokenShield.address,
         account: address,
       },
+      {
+        codePath: `${process.cwd()}/code/gm17/ft-transfer/out`,
+        outputDirectory: `${process.cwd()}/code/gm17/ft-transfer`,
+        pkPath: `${process.cwd()}/code/gm17/ft-transfer/proving.key`,
+      },
     );
     res.data = {
       z_E: returnedOutputCommitments[0].commitment,
@@ -138,6 +148,11 @@ async function burn(req, res, next) {
         fTokenShieldAddress: fTokenShield.address,
         account: address,
         tokenReceiver,
+      },
+      {
+        codePath: `${process.cwd()}/code/gm17/ft-burn/out`,
+        outputDirectory: `${process.cwd()}/code/gm17/ft-burn`,
+        pkPath: `${process.cwd()}/code/gm17/ft-burn/proving.key`,
       },
     );
     res.data = {

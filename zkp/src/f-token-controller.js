@@ -10,8 +10,10 @@ arbitrary amounts of currency in zero knowlege.
 import contract from 'truffle-contract';
 import jsonfile from 'jsonfile';
 import config from 'config';
+// eslint-disable-next-line import/extensions
+import zokrates from '@eyblockchain/zokrates.js';
+import fs from 'fs';
 import zkp from './f-token-zkp';
-import zokrates from './zokrates';
 import cv from './compute-vectors';
 import Element from './Element';
 import Web3 from './web3';
@@ -32,7 +34,6 @@ Verifier.setProvider(Web3.connect());
 const FToken = contract(jsonfile.readFileSync('./build/contracts/FToken.json'));
 FToken.setProvider(Web3.connect());
 
-let container;
 const shield = {}; // this field holds the current Shield contract instance.
 
 async function unlockAccount(address, password) {
@@ -152,45 +153,6 @@ async function getTokenInfo(address) {
 }
 
 /**
-This function needs to be run *before* computing any proofs in order to deploy
-the necessary code to the docker container, after instantiating the same. It
-will be called automatically by computeProof if it detects tha there is no container
-being instantiated.
-@param {string} hostDir - the directory on the host to mount into the runContainerMounted
-*/
-async function setupComputeProof(hostDir) {
-  container = await zokrates.runContainerMounted(hostDir);
-}
-
-/**
-This function computes a proof that you own a coin, using as few parameters
-as possible.  If you haven't yet deployed the code to the docker container to
-enable this computation, this routine will call setupComputeProof to do that for
-you.
-@param {array} elements - array containing all of the public and private parameters the proof needs
-@param {string} hostDir - the directory on the host to mount into the runContainerMounted
-@returns the proof object
-*/
-async function computeProof(elements, hostDir) {
-  if (container === undefined || container === null) await setupComputeProof(hostDir);
-
-  console.log(`Container id: ${container.id}`);
-  console.log(`To connect to the container manually: 'docker exec -ti ${container.id} bash'`);
-
-  await zokrates.computeWitness(container, cv.computeVectors(elements), hostDir);
-
-  const proof = await zokrates.generateProof(container, undefined, hostDir);
-
-  console.group(`Proof: ${JSON.stringify(proof, undefined, 2)}`);
-  console.groupEnd();
-
-  zokrates.killContainer(container);
-  container = null; // clear out the container for the next run
-
-  return proof;
-}
-
-/**
  * Mint a coin
  * @param {String} amount - the value of the coin
  * @param {String} ownerPublicKey - Alice's public key
@@ -203,9 +165,19 @@ async function computeProof(elements, hostDir) {
  * @returns {String} commitment - Commitment of the minted coins
  * @returns {Number} commitmentIndex
  */
-async function mint(amount, ownerPublicKey, salt, vkId, blockchainOptions) {
+async function mint(amount, ownerPublicKey, salt, vkId, blockchainOptions, zokratesOptions) {
   const { fTokenShieldJson, fTokenShieldAddress } = blockchainOptions;
   const account = utils.ensure0x(blockchainOptions.account);
+
+  const {
+    codePath,
+    outputDirectory,
+    witnessName = 'witness',
+    pkPath,
+    provingScheme = 'gm17',
+    createProofJson = true,
+    proofName = 'proof.json',
+  } = zokratesOptions;
 
   const fTokenShield = contract(fTokenShieldJson);
   fTokenShield.setProvider(Web3.connect());
@@ -238,25 +210,23 @@ async function mint(amount, ownerPublicKey, salt, vkId, blockchainOptions) {
   const publicInputHash = utils.concatenateThenHash(amount, commitment);
   console.log('publicInputHash:', publicInputHash);
 
-  // get the pwd so we can talk to the container:
-  const pwd = process.env.PWD.toString();
-  console.log(pwd);
+  const vectors = cv.computeVectors([
+    new Element(publicInputHash, 'field', 248, 1),
+    new Element(amount, 'field', 128, 1),
+    new Element(ownerPublicKey, 'field'),
+    new Element(salt, 'field'),
+    new Element(commitment, 'field'),
+  ]);
 
-  const hostDir = config.FT_MINT_DIR;
-  console.log(hostDir);
+  await zokrates.computeWitness(codePath, outputDirectory, witnessName, vectors);
 
-  // compute the proof
-  console.group('Computing proof with w=[pkA,S_A] x=[A,Z,1]');
-  let proof = await computeProof(
-    [
-      new Element(publicInputHash, 'field', 248, 1),
-      new Element(amount, 'field', 128, 1),
-      new Element(ownerPublicKey, 'field'),
-      new Element(salt, 'field'),
-      new Element(commitment, 'field'),
-    ],
-    hostDir,
-  );
+  await zokrates.generateProof(pkPath, codePath, `${outputDirectory}/witness`, provingScheme, {
+    createFile: createProofJson,
+    directory: outputDirectory,
+    fileName: proofName,
+  });
+
+  let { proof } = JSON.parse(fs.readFileSync(`${outputDirectory}/${proofName}`));
 
   proof = Object.values(proof);
   // convert to flattened array:
@@ -327,9 +297,20 @@ async function transfer(
   senderSecretKey,
   vkId,
   blockchainOptions,
+  zokratesOptions,
 ) {
   const { fTokenShieldJson, fTokenShieldAddress } = blockchainOptions;
   const account = utils.ensure0x(blockchainOptions.account);
+
+  const {
+    codePath,
+    outputDirectory,
+    witnessName = 'witness',
+    pkPath,
+    provingScheme = 'gm17',
+    createProofJson = true,
+    proofName = 'proof.json',
+  } = zokratesOptions;
 
   const fTokenShield = contract(fTokenShieldJson);
   fTokenShield.setProvider(Web3.connect());
@@ -453,13 +434,6 @@ async function transfer(
   const publicInputHash = utils.concatenateThenHash(root, nC, nD, zE, zF);
   console.log('publicInputHash:', publicInputHash);
 
-  // get the pwd so we can talk to the container:
-  const pwd = process.env.PWD.toString();
-  console.log(pwd);
-
-  const hostDir = config.FT_TRANSFER_DIR;
-  console.log(hostDir);
-
   // compute the proof
   console.log(
     'Computing proof with w=[C,D,E,F,S_C,S_D,S_E,S_F,pathC[], orderC,pathD[], orderD,skA,pkB]  x=[nC,nD,zE,zF,root,1]',
@@ -467,31 +441,39 @@ async function transfer(
   console.log(
     'vector order: [C,skA,S_C,pathC[0...31],orderC,D,S_D,pathD[0...31], orderD,nC,nD,E,pkB,S_E,zE,F,S_F,zF,root]',
   );
-  let proof = await computeProof(
-    [
-      new Element(publicInputHash, 'field', 248, 1),
-      new Element(inputCommitments[0].value, 'field', 128, 1),
-      new Element(senderSecretKey, 'field'),
-      new Element(inputCommitments[0].salt, 'field'),
-      ...pathCElements.elements.slice(1),
-      pathCElements.positions,
-      new Element(inputCommitments[1].value, 'field', 128, 1),
-      new Element(inputCommitments[1].salt, 'field'),
-      ...pathDElements.elements.slice(1),
-      pathDElements.positions,
-      new Element(nC, 'field'),
-      new Element(nD, 'field'),
-      new Element(outputCommitments[0].value, 'field', 128, 1),
-      new Element(receiverPublicKey, 'field'),
-      new Element(outputCommitments[0].salt, 'field'),
-      new Element(zE, 'field'),
-      new Element(outputCommitments[1].value, 'field', 128, 1),
-      new Element(outputCommitments[1].salt, 'field'),
-      new Element(zF, 'field'),
-      new Element(root, 'field'),
-    ],
-    hostDir,
-  );
+
+  const vectors = cv.computeVectors([
+    new Element(publicInputHash, 'field', 248, 1),
+    new Element(inputCommitments[0].value, 'field', 128, 1),
+    new Element(senderSecretKey, 'field'),
+    new Element(inputCommitments[0].salt, 'field'),
+    ...pathCElements.elements.slice(1),
+    pathCElements.positions,
+    new Element(inputCommitments[1].value, 'field', 128, 1),
+    new Element(inputCommitments[1].salt, 'field'),
+    ...pathDElements.elements.slice(1),
+    pathDElements.positions,
+    new Element(nC, 'field'),
+    new Element(nD, 'field'),
+    new Element(outputCommitments[0].value, 'field', 128, 1),
+    new Element(receiverPublicKey, 'field'),
+    new Element(outputCommitments[0].salt, 'field'),
+    new Element(zE, 'field'),
+    new Element(outputCommitments[1].value, 'field', 128, 1),
+    new Element(outputCommitments[1].salt, 'field'),
+    new Element(zF, 'field'),
+    new Element(root, 'field'),
+  ]);
+
+  await zokrates.computeWitness(codePath, outputDirectory, witnessName, vectors);
+
+  await zokrates.generateProof(pkPath, codePath, `${outputDirectory}/witness`, provingScheme, {
+    createFile: createProofJson,
+    directory: outputDirectory,
+    fileName: proofName,
+  });
+
+  let { proof } = JSON.parse(fs.readFileSync(`${outputDirectory}/${proofName}`));
 
   proof = Object.values(proof);
   // convert to flattened array:
@@ -576,10 +558,21 @@ async function burn(
   commitmentIndex,
   vkId,
   blockchainOptions,
+  zokratesOptions,
 ) {
   const { fTokenShieldJson, fTokenShieldAddress, tokenReceiver: _payTo } = blockchainOptions;
 
   const account = utils.ensure0x(blockchainOptions.account);
+
+  const {
+    codePath,
+    outputDirectory,
+    witnessName = 'witness',
+    pkPath,
+    provingScheme = 'gm17',
+    createProofJson = true,
+    proofName = 'proof.json',
+  } = zokratesOptions;
 
   const fTokenShield = contract(fTokenShieldJson);
   fTokenShield.setProvider(Web3.connect());
@@ -637,29 +630,30 @@ async function burn(
   const publicInputHash = utils.concatenateThenHash(root, Nc, amount, payToLeftPadded); // notice we're using the version of payTo which has been padded to 256-bits; to match our derivation of publicInputHash within our zokrates proof.
   console.log('publicInputHash:', publicInputHash);
 
-  // get the pwd so we can talk to the container:
-  const pwd = process.env.PWD.toString();
-  console.log(pwd);
-
-  const hostDir = config.FT_BURN_DIR;
-  console.log(hostDir);
-
   // compute the proof
   console.group('Computing proof with w=[skA,S_C,path[],order] x=[C,Nc,root,1]');
-  let proof = await computeProof(
-    [
-      new Element(publicInputHash, 'field', 248, 1),
-      new Element(payTo, 'field'),
-      new Element(amount, 'field', 128, 1),
-      new Element(receiverSecretKey, 'field'),
-      new Element(salt, 'field'),
-      ...pathElements.elements.slice(1),
-      pathElements.positions,
-      new Element(Nc, 'field'),
-      new Element(root, 'field'),
-    ],
-    hostDir,
-  );
+
+  const vectors = cv.computeVectors([
+    new Element(publicInputHash, 'field', 248, 1),
+    new Element(payTo, 'field'),
+    new Element(amount, 'field', 128, 1),
+    new Element(receiverSecretKey, 'field'),
+    new Element(salt, 'field'),
+    ...pathElements.elements.slice(1),
+    pathElements.positions,
+    new Element(Nc, 'field'),
+    new Element(root, 'field'),
+  ]);
+
+  await zokrates.computeWitness(codePath, outputDirectory, witnessName, vectors);
+
+  await zokrates.generateProof(pkPath, codePath, `${outputDirectory}/witness`, provingScheme, {
+    createFile: createProofJson,
+    directory: outputDirectory,
+    fileName: proofName,
+  });
+
+  let { proof } = JSON.parse(fs.readFileSync(`${outputDirectory}/${proofName}`));
 
   proof = Object.values(proof);
   // convert to flattened array:
@@ -707,8 +701,6 @@ export default {
   burn,
   transfer,
   mint,
-  computeProof,
-  setupComputeProof,
   getBalance,
   getFTAddress,
   buyFToken,
