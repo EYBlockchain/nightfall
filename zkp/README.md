@@ -9,7 +9,7 @@
 You will need to have completed the trusted setup. This is done simply by running (from the Nightfall root):
 
 ```sh
-npm run setupAll
+./nightfall-generate-trusted-setup
 ```
 If you have previously run the Nightfall application, you will already have completed this step and there is no need to repeat it (it takes about and hour so it's worth avoiding where possible!).
 
@@ -32,7 +32,8 @@ docker-compose build zkp
 After your trusted setup is complete run:
 
 ```sh
-make truffle-compile truffle-migrate
+docker-compose run --rm truffle-zkp compile --all
+docker-compose run --rm truffle-zkp migrate --reset --network=default
 ```
 
 This will run up ganache in a container and load all of the nightfall contracts.
@@ -40,7 +41,7 @@ This will run up ganache in a container and load all of the nightfall contracts.
 To run the zkp unit tests:
 
 ```sh
-make zkp-test
+docker-compose run --rm zkp npm test
 ```
 
 The relevant files for these tests can be found under `zkp/__tests__`.
@@ -65,7 +66,6 @@ Build and run service (on port 80)
 cd zkp
 mkdir -p node_modules
 cp -r ../zkp-utils node_modules
-cp -r ../account-utils src
 cp -r ../config .
 npm start
 ```
