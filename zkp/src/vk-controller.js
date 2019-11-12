@@ -117,9 +117,9 @@ async function setVkIds(account) {
 
   console.log('Setting vkIds within NFTokenShield');
   await nfTokenShield.setVkIds(
-    vkIds.MintToken.vkId,
-    vkIds.TransferToken.vkId,
-    vkIds.BurnToken.vkId,
+    vkIds.MintNFToken.vkId,
+    vkIds.TransferNFToken.vkId,
+    vkIds.BurnNFToken.vkId,
     {
       from: account,
       gas: 6500000,
@@ -128,11 +128,16 @@ async function setVkIds(account) {
   );
 
   console.log('Setting vkIds within fTokenShield');
-  await fTokenShield.setVkIds(vkIds.MintCoin.vkId, vkIds.TransferCoin.vkId, vkIds.BurnCoin.vkId, {
-    from: account,
-    gas: 6500000,
-    gasPrice: config.GASPRICE,
-  });
+  await fTokenShield.setVkIds(
+    vkIds.MintFToken.vkId,
+    vkIds.TransferFToken.vkId,
+    vkIds.BurnFToken.vkId,
+    {
+      from: account,
+      gas: 6500000,
+      gasPrice: config.GASPRICE,
+    },
+  );
 }
 
 /**
