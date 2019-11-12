@@ -9,8 +9,8 @@ rest api calls, and the heavy-lifitng token-zkp.js and zokrates.js.  It exists s
 
 import contract from 'truffle-contract';
 import jsonfile from 'jsonfile';
-import utils from 'zkp-utils';
 import config from 'config';
+import utils from './zkpUtils';
 import zkp from './nf-token-zkp';
 import zokrates from './zokrates';
 import cv from './compute-vectors';

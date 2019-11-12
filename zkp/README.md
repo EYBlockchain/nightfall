@@ -1,29 +1,32 @@
 # Nightfall Zero-Knowledge Proof Service
 
-*This module is part of Nightfall. Most users will only be interested in using the application as a whole, we direct those readers to [the main README](../../README.md). This file provides additional information on how this module works so you can learn about, tinker and improve it.*
+_This module is part of Nightfall. Most users will only be interested in using the application as a
+whole, we direct those readers to [the main README](../../README.md). This file provides additional
+information on how this module works so you can learn about, tinker and improve it._
 
 ## Tasks you can perform
 
 ### Run zkp service unit tests
 
-You will need to have completed the trusted setup. This is done simply by running (from the Nightfall root):
+You will need to have completed the trusted setup. This is done simply by running (from the
+Nightfall root):
 
 ```sh
-./nightfall-generate-trusted-setup
+npm run setupAll
 ```
-If you have previously run the Nightfall application, you will already have completed this step and there is no need to repeat it (it takes about and hour so it's worth avoiding where possible!).
+
+If you have previously run the Nightfall application, you will already have completed this step and
+there is no need to repeat it (it takes about and hour so it's worth avoiding where possible!).
 
 _Alternatively_, if you change one of the proofs in the Nightfall suite, then you can perform the
-trusted setup for just that proof, which is a lot faster. You need to change to the zkp sub directory
-to do that:
+trusted setup for just that proof, which is a lot faster by running
 
 ```sh
-cd zkp
 npm run setup -- -i gm17/<dir containing your proof>
-cd ..
 ```
 
-Also, before running these tests, don't forget to make sure you have a current version of the zkp container.  If in doubt, run:
+Also, before running these tests, don't forget to make sure you have a current version of the zkp
+container. If in doubt, run:
 
 ```sh
 docker-compose build zkp
@@ -54,10 +57,11 @@ The relevant files for these tests can be found under `zkp/__tests__`.
 
 Note that the zkp service tests take a while to run (approx. 1 hour)
 
-
 ### Development
 
-Running the zkp module as part of the fully application is handled by Docker Compose. But you will be running this directly on your machine. Prerequesites for development of Nightfall are documented in [the main project README](../README.md). Satisfy those first before proceeding.
+Running the zkp module as part of the fully application is handled by Docker Compose. But you will
+be running this directly on your machine. Prerequesites for development of Nightfall are documented
+in [the main project README](../README.md). Satisfy those first before proceeding.
 
 Build and run service (on port 80)
 
@@ -92,6 +96,9 @@ rm -rf node_modules
 
 ## Further reading
 
-* [README-tools-trusted-setup.md](code/README-tools-trusted-setup.md) explains the steps that npm will run in the "setup" and "setupAll" tasks.
-* [README-manual-trusted-setup.md](code/README-manual-trusted-setup.md) is a deeper walkthrough of the "generating key pairs" task above.
-* [README-tools-code-preprop.md](code/README-tools-code-preprop.md) explains "pcode", an abbreviated language Nightfall uses that transpiles down to the ZoKrates "code" language.
+- [README-tools-trusted-setup.md](code/README-tools-trusted-setup.md) explains the steps that npm
+  will run in the "setup" and "setupAll" tasks.
+- [README-manual-trusted-setup.md](code/README-manual-trusted-setup.md) is a deeper walkthrough of
+  the "generating key pairs" task above.
+- [README-tools-code-preprop.md](code/README-tools-code-preprop.md) explains "pcode", an abbreviated
+  language Nightfall uses that transpiles down to the ZoKrates "code" language.
