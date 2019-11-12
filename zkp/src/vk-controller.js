@@ -8,8 +8,8 @@ rest api calls, and the heavy-lifitng token-zkp.js and zokrates.js.  It exists s
 import contract from 'truffle-contract';
 import jsonfile from 'jsonfile';
 import fs from 'fs';
-import utils from 'zkp-utils';
 import config from 'config';
+import utils from './zkpUtils';
 import Web3 from './web3';
 
 const NFtokenShield = contract(jsonfile.readFileSync('./build/contracts/NFTokenShield.json'));

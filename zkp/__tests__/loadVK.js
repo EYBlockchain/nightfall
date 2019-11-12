@@ -1,7 +1,7 @@
 import bc from '../src/web3';
 import vk from '../src/vk-controller';
 
-(async function loadVkIds() {
+global.loadVkIds = async function loadVkIds() {
   if (!(await bc.isConnected())) return;
   await vk.runController();
-})();
+};
