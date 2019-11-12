@@ -5,6 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "NODE_CONFIG_DIR=./integration-test/config mocha --require @babel/register -b ./integration-test/ --reporter mochawesome --timeout 1000000",
+    "setup": "docker-compose run zkp npm run setup --",
+    "setupAll": "docker-compose run zkp npm run setup-all",
     "fix": "npm run format && npm run lint -- --fix",
     "format": "prettier --write \"**/*.{json,css,scss,md,html}\"",
     "lint": "eslint .",

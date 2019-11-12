@@ -11,7 +11,7 @@ import os from 'os';
 @param {string} solFilePath
 @param {argv} s OPTIONAL argv which suppresses lengthy console outputs
 */
-async function keyExtractor(solFilePath, s) {
+export default async function keyExtractor(solFilePath, s) {
   const solData = fs
     .readFileSync(solFilePath)
     .toString('UTF8')
@@ -52,7 +52,3 @@ async function keyExtractor(solFilePath, s) {
   if (!s) console.log(jsonTxt.join('\n'));
   return jsonTxt.join('\n');
 }
-
-export default {
-  keyExtractor,
-};

@@ -21,11 +21,11 @@ can be gigabytes in size.
 
 ### ZoKrates
 
-Note: `npm run setupAll` pulls an image of zokrates from dockerhub (see src/config.js for the current
-zokrates image being used). Since ZoKrates is still a fast-changing project (with many breaking
-changes being pushed to its repo), it is likely that this opensource Nightfall repo will lag behind
-the latest zokrates images and DSL syntax. This tool will need to updated alongside any new versions
-of zokrates.
+Note: `npm run setupAll` pulls an image of zokrates from dockerhub (see src/config.js for the
+current zokrates image being used). Since ZoKrates is still a fast-changing project (with many
+breaking changes being pushed to its repo), it is likely that this opensource Nightfall repo will
+lag behind the latest zokrates images and DSL syntax. This tool will need to updated alongside any
+new versions of zokrates.
 
 ## Requirements
 
@@ -54,26 +54,18 @@ index.js is written to interpret .code syntax.
 
 ## Quick start
 
-Always run from within nightfall/zkp/:
+From the root directory, you can run the trusted setup on all folders under `zkp/code/gm17` by
+running:
 
-```sh
-npm install
-cd path/to/nightfall/zkp/
-```
+`npm run setupAll`
 
-Then run the tool:
+### Running Trusted Setup On One Code File
 
-`npm run setup -- -i gm17/parent-dir-of-pcode/`
+Alternatively, you can run the trusted setup on a specific code file by running:
 
-## Arguments: `-i` `-a` `-s`
+`npm run setup -- -i gm17/<Code File Directory≥/`
 
-### `-i`
-
-Alternatively you can process _all_ of the folders under `/gm17` in one go by using:
-
-`npm run setup-all`
-
-Note that this will take about 1hr to complete.
+For example: `npm run setup -- -i gm17/ft-mint`
 
 Recommended initial filing structure:
 
@@ -147,42 +139,7 @@ zkp
       |
 ```
 
-If `-i` is not specified, the code will loop through every single folder within `gm17` and perform a
-trusted setup but will ask you before doing each one (unlike `npm run setupAll`, which won't ask).
-This is done sequentially, because each setup requires a significant amount of computing resources.
-
-### `-a`
-
-`-a "<argument list>"` OPTIONAL
-
-Provide arguments and this tool will compute-witness using those arguments.
-
-e.g.  
-`node src/index.js -i gm17/parent-dir-of-pcode/ -a "1 0 0 1 1 1 1 0 0"` <--- **notice
-the "quotes"!!** The above `-a` will run, within the zokrates container, the following:
-`./zokrates compute-witness -a 1 0 0 1 1 1 1 0 0`
-
-**Important Note:** _Multiple arguments must be specified "within quotes" with spaces in between._
-
-#### console output of `-a` - useful for testing .code file variables
-
-If -a is specified, 'compute-witness' is run.
-
-E.g. the example output below is the 256bit output of the sha256() hash, as computed within a .code
-file.
-
-```sh
-Output from compute-witness:
-
- bin:  1100110011100001100001110100010001011010111101111001001010011011000100000110010101001010110011101111101001001110010100101111001110011011101111001000101000100001000100111011000010001110000010011010111010001011010111010010110000100000000110110001111111001111
- dec:  92670295279174621537561163145043938646856290957242631959181838212798520958927
- hex:  0xcce187445af7929b10654acefa4e52f39bbc8a2113b08e09ae8b5d2c201b1fcf
-```
-
-This tool tries to interpret the output as either binary or decimal, and then does a conversion
-based on this interpretation, to output equivalent bin, dec, and hex values.
-
-### `-s`
+### Suppress Console Logs
 
 `-s` OPTIONAL `-s` is for **suppression** of lengthy console outputs from the zokrates container. If
 `-s` is included, then lengthy console outputs will be suppressed. If `-s` is not included, all of

@@ -1,4 +1,4 @@
-import utils from 'zkp-utils';
+import utils from '../src/zkpUtils';
 
 const dec = '17408914224622445472';
 const hex = '0xf198e3403bdda3a0';

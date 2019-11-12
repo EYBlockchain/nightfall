@@ -16,8 +16,7 @@ import cv from './compute-vectors';
 import Element from './Element';
 import Web3 from './web3';
 import { getContract } from './contractUtils';
-
-const utils = require('zkp-utils');
+import utils from './zkpUtils';
 
 const FTokenShield = contract(jsonfile.readFileSync('./build/contracts/FTokenShield.json'));
 FTokenShield.setProvider(Web3.connect());

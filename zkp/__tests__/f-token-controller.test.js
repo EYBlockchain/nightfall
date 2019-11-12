@@ -1,8 +1,8 @@
 /* eslint-disable import/no-unresolved */
 
-import utils from 'zkp-utils';
 import bc from '../src/web3';
 
+import utils from '../src/zkpUtils';
 import controller from '../src/f-token-controller';
 import { getVkId, getContract } from '../src/contractUtils';
 
