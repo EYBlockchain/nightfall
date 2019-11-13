@@ -5,6 +5,8 @@ GREEN='\033[0;32m'
 RED='\033[0;31m'
 NC='\033[0m'
 
+declare isTestFailed=false
+
 printf "${GREEN}*** Cleaning up all test containers ***${NC}\n"
 docker-compose down -v || true
 
@@ -41,7 +43,7 @@ sleep 20
 
 # RUN test suits and remove test containers
 printf "${GREEN}*** Run Integration test ***${NC}\n"
-npm run test || printf "${RED}*** Integration test failed ***${NC}\n"
+npm run test || isTestFailed=true
 
 printf "${GREEN}*** List all containers with their Ips ***${NC}\n"
 docker inspect -f '{{.Name}} {{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $(docker-compose ps -q)
@@ -61,3 +63,9 @@ docker-compose down -v || {
   printf "${GREEN}*** Remove zkp-code volume ***${NC}\n"
   docker volume rm nightfall_zkp-code
 }
+
+if $isTestFailed
+then
+  printf "${RED}*** Integration test failed ***${NC}\n"
+  exit 1
+fi
