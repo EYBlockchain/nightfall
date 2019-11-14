@@ -1,4 +1,4 @@
-{
+ {
   "name": "zkp",
   "version": "1.0.0",
   "description": "code for generating zero-knowledge proofs for transacting",
@@ -8,7 +8,7 @@
     "setup": "NODE_ENV=setup npx babel-node code/index.js",
     "setup-all": "yes | NODE_ENV=setup npx babel-node code/index.js",
     "start": "nodemon --ignore src/vkIds.json --ignore stats-config/ --ignore code/ --exec babel-node ./src/index.js",
-    "test": "NODE_ENV=default jest --runInBand --forceExit ./__tests__/*.test.js"
+    "test": "jest --verbose --runInBand --forceExit ./__tests__/*.test.js"
   },
   "contributors": [
     "Chaitanya Konda <CKonda@uk.ey.com>",
@@ -50,12 +50,9 @@
     "nodemon": "^1.19.0"
   },
   "jest": {
-    "testEnvironment": "/app/__tests__/test-environment.js",
+    "globalSetup": "/app/__tests__/loadVkIds.js",
     "setupFilesAfterEnv": [
       "jest-expect-message"
-    ],
-    "setupFiles": [
-      "/app/__tests__/loadVK.js"
     ]
   }
 }

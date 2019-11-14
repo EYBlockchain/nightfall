@@ -27,6 +27,11 @@ async function mint(req, res, next) {
         nfTokenShieldAddress: nfTokenShield.address,
         account: address,
       },
+      {
+        codePath: `${process.cwd()}/code/gm17/nft-mint/out`,
+        outputDirectory: `${process.cwd()}/code/gm17/nft-mint`,
+        pkPath: `${process.cwd()}/code/gm17/nft-mint/proving.key`,
+      },
     );
 
     res.data = {
@@ -75,6 +80,11 @@ async function transfer(req, res, next) {
         nfTokenShieldAddress: nfTokenShield.address,
         account: address,
       },
+      {
+        codePath: `${process.cwd()}/code/gm17/nft-transfer/out`,
+        outputDirectory: `${process.cwd()}/code/gm17/nft-transfer`,
+        pkPath: `${process.cwd()}/code/gm17/nft-transfer/proving.key`,
+      },
     );
     res.data = {
       z_B: outputCommitment,
@@ -97,12 +107,25 @@ async function burn(req, res, next) {
   );
 
   try {
-    await nfController.burn(tokenId, secretKey, salt, commitment, commitmentIndex, vkId, {
-      nfTokenShieldJson,
-      nfTokenShieldAddress: nfTokenShield.address,
-      account: address,
-      tokenReceiver,
-    });
+    await nfController.burn(
+      tokenId,
+      secretKey,
+      salt,
+      commitment,
+      commitmentIndex,
+      vkId,
+      {
+        nfTokenShieldJson,
+        nfTokenShieldAddress: nfTokenShield.address,
+        account: address,
+        tokenReceiver,
+      },
+      {
+        codePath: `${process.cwd()}/code/gm17/nft-burn/out`,
+        outputDirectory: `${process.cwd()}/code/gm17/nft-burn`,
+        pkPath: `${process.cwd()}/code/gm17/nft-burn/proving.key`,
+      },
+    );
     res.data = {
       z_A: commitment,
     };

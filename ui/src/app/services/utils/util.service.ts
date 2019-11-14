@@ -65,5 +65,12 @@ export class UtilService {
     }
   }
 
-
+  noNegtiveNumber(evt) {
+    let value;
+    if (evt.type !== 'paste') {
+      value = evt.key;
+    }  
+    if(isNaN(value)) return evt.returnValue = false;
+    if(Number(value) < 0) return evt.returnValue = false;
+  }
 }

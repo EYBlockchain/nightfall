@@ -326,13 +326,15 @@ describe('****** Integration Test ******\n', function() {
           .end((err, res) => {
             if (err) return done(err);
             expect(res).to.have.nested.property('body.data.S_A');
-            expect(res).to.have.nested.property('body.data.coin');
-            expect(res).to.have.nested.property('body.data.coin_index');
+            expect(res).to.have.nested.property('body.data.ft_commitment');
+            expect(res).to.have.nested.property('body.data.ft_commitment_index');
 
             erc20Commitments.mint[0].S_A = res.body.data.S_A; // set Salt from response to calculate and verify commitment.
 
-            expect(res.body.data.coin).to.be.equal(erc20Commitments.mint[0].commitment);
-            expect(res.body.data.coin_index).to.be.equal(erc20Commitments.mint[0].commitmentIndex);
+            expect(res.body.data.ft_commitment).to.be.equal(erc20Commitments.mint[0].commitment);
+            expect(res.body.data.ft_commitment_index).to.be.equal(
+              erc20Commitments.mint[0].commitmentIndex,
+            );
             return done();
           });
       });
@@ -350,13 +352,15 @@ describe('****** Integration Test ******\n', function() {
           .end((err, res) => {
             if (err) return done(err);
             expect(res).to.have.nested.property('body.data.S_A');
-            expect(res).to.have.nested.property('body.data.coin');
-            expect(res).to.have.nested.property('body.data.coin_index');
+            expect(res).to.have.nested.property('body.data.ft_commitment');
+            expect(res).to.have.nested.property('body.data.ft_commitment_index');
 
             erc20Commitments.mint[1].S_A = res.body.data.S_A; // set Salt from response to calculate and verify commitment.
 
-            expect(res.body.data.coin).to.be.equal(erc20Commitments.mint[1].commitment);
-            expect(res.body.data.coin_index).to.be.equal(erc20Commitments.mint[1].commitmentIndex);
+            expect(res.body.data.ft_commitment).to.be.equal(erc20Commitments.mint[1].commitment);
+            expect(res.body.data.ft_commitment_index).to.be.equal(
+              erc20Commitments.mint[1].commitmentIndex,
+            );
             return done();
           });
       });

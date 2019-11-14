@@ -122,7 +122,7 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD=admin
       - MONGO_INITDB_DATABASE=nightfall
     volumes:
-      - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+      - ./database/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
       - mongo-volume:/data/db
 
   truffle-offchain:
