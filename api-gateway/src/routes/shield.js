@@ -21,11 +21,11 @@ const router = express.Router();
  * @apiSuccessExample {json} Success response:
  *     HTTPS 200 OK
  *     {
- *        "coinShield": {
+ *        "ftCommitmentShield": {
  *            "contract_address": "0x3880537A8D6E3c76ecF0e3dAe30D8bFfc72dde7d",
  *            "contract_name": "EY OpsCoin"
  *        },
- *        "tokenShield": {
+ *        "nftCommitmentShield": {
  *            "contract_address": "0xa44bb5cb4fAED858D7C8B90536831D9bc20f97F7",
  *            "contract_name": "EYToken"
  *        }

@@ -44,17 +44,17 @@ router.post('/addContractInfo', addContractInfo);
  * @apiName  update AND/OR set shield contract
  * @apiGroup Sheild Contract
  *
- * @apiParam (Request body) {Object} tokenShield information to update (optional).
- * @apiParam (Request body) {Object} coinShield information to update (optional).
+ * @apiParam (Request body) {Object} nftCommitmentShield information to update (optional).
+ * @apiParam (Request body) {Object} ftCommitmentShield information to update (optional).
  *
  * @apiExample {js} Example usage:
  * const data = {
- *		"tokenShield": {
+ *		"nftCommitmentShield": {
  *			"contractAddress": "0x88B8d386BA803423482f325Be664607AE1Db6E1F",
  *			"contractName": "tokenShield1",
  *			"isSelected": true
  *		},
- *		"coinShield": {
+ *		"ftCommitmentShield": {
  *			"contractAddress": "0x3BBa2cdBb2376F07017421878540c424aAB61294",
  *			"contractName": "coinShield0",
  *			"isSelected": false

@@ -101,11 +101,11 @@ export async function loadVks(req, res, next) {
 function setShieldContract(user, contractAddress) {
   return new Promise(function setShieldDetails(resolve) {
     zkp
-      .setTokenShield(user, { tokenShield: contractAddress })
+      .setTokenShield(user, { nftCommitmentShield: contractAddress })
       .then(() => resolve('token'))
       .catch(() => zkp.unSetTokenShield(user));
     zkp
-      .setCoinShield(user, { coinShield: contractAddress })
+      .setCoinShield(user, { ftCommitmentShield: contractAddress })
       .then(() => resolve('coin'))
       .catch(() => zkp.unSetCoinShield(user));
   });
@@ -149,14 +149,14 @@ export async function addContractInfo(req, res, next) {
  * This function will update sheild contract information
    will change primary selected contract for user of both
    ERC-20 and ERC-721.
- * in body "tokenShield" and "coinShield" object are optional.
+ * in body "nftCommitmentShield" and "ftCommitmentShield" object are optional.
  * req.body {
-    "tokenShield": {
+    "nftCommitmentShield": {
       "contractAddress": "0x88B8d386BA803423482f325Be664607AE1Db6E1F",
       "contractName": "tokenShield1",
       "isSelected": true
     },
-    "coinShield": {
+    "ftCommitmentShield": {
       "contractAddress": "0x3BBa2cdBb2376F07017421878540c424aAB61294",
       "contractName": "coinShield0",
       "isSelected": false
@@ -166,17 +166,17 @@ export async function addContractInfo(req, res, next) {
  * @param {*} res
 */
 export async function updateContractInfo(req, res, next) {
-  const { tokenShield, coinShield } = req.body;
+  const { nftCommitmentShield, ftCommitmentShield } = req.body;
 
   try {
     const user = await db.fetchUser(req.user);
 
-    // if update coinShield data
-    if (coinShield) {
-      const { contractName, contractAddress, isSelected } = coinShield;
+    // if update ftCommitmentShield data
+    if (ftCommitmentShield) {
+      const { contractName, contractAddress, isSelected } = ftCommitmentShield;
 
       const isFTShieldPreviousSelected =
-        user.selected_coin_shield_contract === coinShield.contractAddress;
+        user.selected_coin_shield_contract === ftCommitmentShield.contractAddress;
 
       await db.updateFTShieldContractInfoByContractAddress(req.user, contractAddress, {
         contractName,
@@ -184,16 +184,16 @@ export async function updateContractInfo(req, res, next) {
         isFTShieldPreviousSelected,
       });
 
-      if (isSelected) await zkp.setCoinShield(req.user, { coinShield: contractAddress });
+      if (isSelected) await zkp.setCoinShield(req.user, { ftCommitmentShield: contractAddress });
       else if (isFTShieldPreviousSelected) await zkp.unSetCoinShield(req.user);
     }
 
-    // if update tokenShield data
-    if (tokenShield) {
-      const { contractName, contractAddress, isSelected } = tokenShield;
+    // if update nftCommitmentShield data
+    if (nftCommitmentShield) {
+      const { contractName, contractAddress, isSelected } = nftCommitmentShield;
 
       const isNFTShieldPreviousSelected =
-        user.selected_token_shield_contract === tokenShield.contractAddress;
+        user.selected_token_shield_contract === nftCommitmentShield.contractAddress;
 
       await db.updateNFTShieldContractInfoByContractAddress(req.user, contractAddress, {
         contractName,
@@ -201,7 +201,7 @@ export async function updateContractInfo(req, res, next) {
         isNFTShieldPreviousSelected,
       });
 
-      if (isSelected) await zkp.setTokenShield(req.user, { tokenShield: contractAddress });
+      if (isSelected) await zkp.setTokenShield(req.user, { nftCommitmentShield: contractAddress });
       else if (isNFTShieldPreviousSelected) await zkp.unSetTokenShield(req.user);
     }
 

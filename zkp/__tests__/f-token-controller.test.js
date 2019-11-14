@@ -118,6 +118,11 @@ describe('f-token-controller.js tests', () => {
         fTokenShieldJson,
         fTokenShieldAddress,
       },
+      {
+        codePath: `${process.cwd()}/code/gm17/ft-mint/out`,
+        outputDirectory: `${process.cwd()}/code/gm17/ft-mint`,
+        pkPath: `${process.cwd()}/code/gm17/ft-mint/proving.key`,
+      },
     );
     zInd1 = parseInt(zIndex, 10);
     expect(Z_A_C).toEqual(zTest);
@@ -134,6 +139,11 @@ describe('f-token-controller.js tests', () => {
         account: accounts[0],
         fTokenShieldJson,
         fTokenShieldAddress,
+      },
+      {
+        codePath: `${process.cwd()}/code/gm17/ft-mint/out`,
+        outputDirectory: `${process.cwd()}/code/gm17/ft-mint`,
+        pkPath: `${process.cwd()}/code/gm17/ft-mint/proving.key`,
       },
     );
     zInd2 = parseInt(zIndex, 10);
@@ -159,6 +169,11 @@ describe('f-token-controller.js tests', () => {
         fTokenShieldJson,
         fTokenShieldAddress,
       },
+      {
+        codePath: `${process.cwd()}/code/gm17/ft-transfer/out`,
+        outputDirectory: `${process.cwd()}/code/gm17/ft-transfer`,
+        pkPath: `${process.cwd()}/code/gm17/ft-transfer/proving.key`,
+      },
     );
     // now Bob should have 40 (E) ETH
   });
@@ -173,6 +188,11 @@ describe('f-token-controller.js tests', () => {
         account: accounts[1],
         fTokenShieldJson,
         fTokenShieldAddress,
+      },
+      {
+        codePath: `${process.cwd()}/code/gm17/ft-mint/out`,
+        outputDirectory: `${process.cwd()}/code/gm17/ft-mint`,
+        pkPath: `${process.cwd()}/code/gm17/ft-mint/proving.key`,
       },
     );
     zInd3 = parseInt(zIndex, 10);
@@ -198,6 +218,11 @@ describe('f-token-controller.js tests', () => {
         fTokenShieldJson,
         fTokenShieldAddress,
       },
+      {
+        codePath: `${process.cwd()}/code/gm17/ft-transfer/out`,
+        outputDirectory: `${process.cwd()}/code/gm17/ft-transfer`,
+        pkPath: `${process.cwd()}/code/gm17/ft-transfer/proving.key`,
+      },
     );
   });
 
@@ -206,12 +231,25 @@ describe('f-token-controller.js tests', () => {
     const bal = await controller.getBalance(accounts[0]);
     console.log('accounts[3]', bal1.toNumber());
     console.log('accounts[0]', bal.toNumber());
-    await controller.burn(F, skA, sAToAF, Z_A_F, zInd2 + 2, await getVkId('BurnFToken'), {
-      account: accounts[0],
-      tokenReceiver: accounts[3],
-      fTokenShieldJson,
-      fTokenShieldAddress,
-    });
+    await controller.burn(
+      F,
+      skA,
+      sAToAF,
+      Z_A_F,
+      zInd2 + 2,
+      await getVkId('BurnFToken'),
+      {
+        account: accounts[0],
+        tokenReceiver: accounts[3],
+        fTokenShieldJson,
+        fTokenShieldAddress,
+      },
+      {
+        codePath: `${process.cwd()}/code/gm17/ft-burn/out`,
+        outputDirectory: `${process.cwd()}/code/gm17/ft-burn`,
+        pkPath: `${process.cwd()}/code/gm17/ft-burn/proving.key`,
+      },
+    );
     const bal2 = await controller.getBalance(accounts[3]);
     console.log('accounts[3]', bal2.toNumber());
     expect(parseInt(F, 16)).toEqual(bal2 - bal1);

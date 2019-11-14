@@ -95,6 +95,11 @@ describe('nf-token-controller.js tests', () => {
         nfTokenShieldJson,
         nfTokenShieldAddress,
       },
+      {
+        codePath: `${process.cwd()}/code/gm17/nft-mint/out`,
+        outputDirectory: `${process.cwd()}/code/gm17/nft-mint`,
+        pkPath: `${process.cwd()}/code/gm17/nft-mint/proving.key`,
+      },
     );
     zIndA = parseInt(zIndex, 10);
     expect(Z_A_A).toEqual(zTest);
@@ -110,6 +115,11 @@ describe('nf-token-controller.js tests', () => {
         account: accounts[0],
         nfTokenShieldJson,
         nfTokenShieldAddress,
+      },
+      {
+        codePath: `${process.cwd()}/code/gm17/nft-mint/out`,
+        outputDirectory: `${process.cwd()}/code/gm17/nft-mint`,
+        pkPath: `${process.cwd()}/code/gm17/nft-mint/proving.key`,
       },
     );
     zIndG = parseInt(zIndex, 10);
@@ -131,6 +141,11 @@ describe('nf-token-controller.js tests', () => {
         nfTokenShieldJson,
         nfTokenShieldAddress,
       },
+      {
+        codePath: `${process.cwd()}/code/gm17/nft-transfer/out`,
+        outputDirectory: `${process.cwd()}/code/gm17/nft-transfer`,
+        pkPath: `${process.cwd()}/code/gm17/nft-transfer/proving.key`,
+      },
     );
     expect(outputCommitment).toEqual(Z_B_A);
   });
@@ -150,6 +165,11 @@ describe('nf-token-controller.js tests', () => {
         nfTokenShieldJson,
         nfTokenShieldAddress,
       },
+      {
+        codePath: `${process.cwd()}/code/gm17/nft-transfer/out`,
+        outputDirectory: `${process.cwd()}/code/gm17/nft-transfer`,
+        pkPath: `${process.cwd()}/code/gm17/nft-transfer/proving.key`,
+      },
     );
     expect(outputCommitment).toEqual(Z_B_G);
   });
@@ -167,6 +187,11 @@ describe('nf-token-controller.js tests', () => {
         tokenReceiver: accounts[2],
         nfTokenShieldJson,
         nfTokenShieldAddress,
+      },
+      {
+        codePath: `${process.cwd()}/code/gm17/nft-burn/out`,
+        outputDirectory: `${process.cwd()}/code/gm17/nft-burn`,
+        pkPath: `${process.cwd()}/code/gm17/nft-burn/proving.key`,
       },
     );
     expect(Z_B_A).toEqual(commitment);
