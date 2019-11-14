@@ -109,13 +109,13 @@ export async function mintCoin(req, res, next) {
       ownerPublicKey: req.user.pk_A,
     });
 
-    data.coin_index = parseInt(data.coin_index, 16);
+    data.ft_commitment_index = parseInt(data.ft_commitment_index, 16);
 
     await db.insertFTCommitment(req.user, {
       amount: req.body.A,
       salt: data.S_A,
-      commitment: data.coin,
-      commitmentIndex: data.coin_index,
+      commitment: data.ft_commitment,
+      commitmentIndex: data.ft_commitment_index,
       isMinted: true,
     });
 

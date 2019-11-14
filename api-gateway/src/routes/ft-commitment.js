@@ -40,8 +40,8 @@ router.route('/checkCorrectnessForFTCommitment').post(checkCorrectnessForFTCommi
  * @apiSuccessExample {json} Success response:
  *     HTTPS 200 OK
  *	  {
- *		"coin":"0x3915e408fd5cff354fd73549d31a4bc66f7335db59bc4e84001473",
- *		"coin_index":"0"
+ *		"ft_commitment":"0x3915e408fd5cff354fd73549d31a4bc66f7335db59bc4e84001473",
+ *		"ft_commitment_index":"0"
  *	  }
  */
 router.route('/mintFTCommitment').post(mintCoin);
