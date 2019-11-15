@@ -35,7 +35,7 @@ export default {
   // mint non-fungible token commitment
   mintToken({ address }, body) {
     const options = {
-      url: `${url}/2`,
+      url: `${url}/mintNFTCommitment`,
       method: 'POST',
       json: true,
       headers: { address },
