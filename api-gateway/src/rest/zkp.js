@@ -35,7 +35,7 @@ export default {
   // mint non-fungible token commitment
   mintToken({ address }, body) {
     const options = {
-      url: `${url}/mintNFTCommitment`,
+      url: `${url}/2`,
       method: 'POST',
       json: true,
       headers: { address },
@@ -257,7 +257,7 @@ export default {
   },
 
   // get non-fungible commitment token shield address for user address
-  getNFTokenCommitmentShield({ address }) {
+  getNFTCommitmentShield({ address }) {
     const options = {
       url: `${url}/getNFTCommitmentShieldContractAddress`,
       method: 'GET',
@@ -290,7 +290,7 @@ export default {
   },
 
   // get fungible commitment token shield contract address for user address
-  getFTokenCommitmentShield({ address }) {
+  getFTCommitmentShield({ address }) {
     const options = {
       url: `${url}/getFTokenShieldContractAddress`,
       method: 'GET',
