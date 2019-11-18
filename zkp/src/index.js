@@ -5,9 +5,11 @@
 //
 import express from 'express';
 import bodyParser from 'body-parser';
+import config from 'config';
 import { ftCommitmentRoutes, ftRoutes, nftCommitmentRoutes, nftRoutes } from './routes';
 import vkController from './vk-controller';
 import { formatResponse, formatError, errorHandler } from './middlewares';
+import { setProvider } from './sdkProvider';
 
 const app = express();
 
@@ -66,6 +68,9 @@ app.use(function logError(err, req, res, next) {
 
 app.use(formatError);
 app.use(errorHandler);
+
+// Set provider for library functions.
+setProvider(config.get('web3ProviderURL'));
 
 const server = app.listen(80, '0.0.0.0', () =>
   console.log('Zero-Knowledge-Proof RESTful API server started on ::: 80'),

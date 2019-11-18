@@ -18,7 +18,8 @@ import zkp from './nf-token-zkp';
 import { computeVectors, computePath } from './compute-vectors';
 import Element from './Element';
 import Web3 from './web3';
-import { getContract } from './contractUtils';
+import { instantiateContract } from './sdkProvider';
+import ERC721Interface from '../build/contracts/ERC721Interface';
 
 const NFTokenShield = contract(jsonfile.readFileSync('./build/contracts/NFTokenShield.json'));
 
@@ -210,16 +211,14 @@ async function mint(tokenId, ownerPublicKey, salt, vkId, blockchainOptions, zokr
     proofName = 'proof.json',
   } = zokratesOptions;
 
-  const nfTokenShield = contract(nfTokenShieldJson);
-  nfTokenShield.setProvider(Web3.connect());
-  const nfTokenShieldInstance = await nfTokenShield.at(nfTokenShieldAddress);
+  const nfTokenShield = await instantiateContract(nfTokenShieldJson, nfTokenShieldAddress);
 
   console.group('\nIN MINT...');
 
   console.info('Finding the relevant Shield and Verifier contracts...');
   const verifier = await Verifier.deployed();
   const verifier_registry = await Verifier_Registry.deployed();
-  console.log('NFTokenShield contract address:', nfTokenShieldInstance.address);
+  console.log('NFTokenShield contract address:', nfTokenShield.address);
   console.log('Verifier contract address:', verifier.address);
   console.log('Verifier_Registry contract address:', verifier_registry.address);
 
@@ -276,7 +275,8 @@ async function mint(tokenId, ownerPublicKey, salt, vkId, blockchainOptions, zokr
   console.log('Check that a registry has actually been registered:', registry);
 
   // Add nfTokenShield as an approver for the token transfer
-  const { contractInstance: nfToken } = await getContract('NFTokenMetadata');
+  const nfTokenAddress = await nfTokenShield.getNFToken.call();
+  const nfToken = await instantiateContract(ERC721Interface, nfTokenAddress);
   await nfToken.approve(nfTokenShieldAddress, tokenId, {
     from: account,
     gas: 4000000,
@@ -293,14 +293,14 @@ async function mint(tokenId, ownerPublicKey, salt, vkId, blockchainOptions, zokr
   console.log(`vkId: ${vkId}`);
 
   // Mint the commitment
-  const txReceipt = await nfTokenShieldInstance.mint(proof, inputs, vkId, tokenId, commitment, {
+  const txReceipt = await nfTokenShield.mint(proof, inputs, vkId, tokenId, commitment, {
     from: account,
     gas: 6500000,
     gasPrice: config.GASPRICE,
   });
   const commitmentIndex = txReceipt.logs[0].args.commitment_index;
 
-  const root = await nfTokenShieldInstance.latestRoot();
+  const root = await nfTokenShield.latestRoot();
   console.log(`Merkle Root after mint: ${root}`);
   console.groupEnd();
 
@@ -354,19 +354,17 @@ async function transfer(
     proofName = 'proof.json',
   } = zokratesOptions;
 
-  const nfTokenShield = contract(nfTokenShieldJson);
-  nfTokenShield.setProvider(Web3.connect());
-  const nfTokenShieldInstance = await nfTokenShield.at(nfTokenShieldAddress);
+  const nfTokenShield = await instantiateContract(nfTokenShieldJson, nfTokenShieldAddress);
 
   console.log('Finding the relevant Shield and Verifier contracts');
-  const verifier = await Verifier.at(await nfTokenShieldInstance.getVerifier.call());
+  const verifier = await Verifier.at(await nfTokenShield.getVerifier.call());
   const verifier_registry = await Verifier_Registry.at(await verifier.getRegistry.call());
-  console.log('NFTokenShield contract address:', nfTokenShieldInstance.address);
+  console.log('NFTokenShield contract address:', nfTokenShield.address);
   console.log('Verifier contract address:', verifier.address);
   console.log('Verifier_Registry contract address:', verifier_registry.address);
 
   // Get token data from the Shield contract:
-  const root = await nfTokenShieldInstance.latestRoot(); // solidity getter for the public variable latestRoot
+  const root = await nfTokenShield.latestRoot(); // solidity getter for the public variable latestRoot
   console.log(`Merkle Root: ${root}`);
 
   // Calculate new arguments for the proof:
@@ -378,7 +376,7 @@ async function transfer(
   );
 
   // we need the Merkle path from the token commitment to the root, expressed as Elements
-  const path = await computePath(account, nfTokenShieldInstance, commitment, commitmentIndex).then(
+  const path = await computePath(account, nfTokenShield, commitment, commitmentIndex).then(
     result => {
       return {
         elements: result.path.map(
@@ -471,7 +469,7 @@ async function transfer(
   console.log(inputs);
   console.log(`vkId: ${vkId}`);
 
-  const transferReceipt = await nfTokenShieldInstance.transfer(
+  const transferReceipt = await nfTokenShield.transfer(
     proof,
     inputs,
     vkId,
@@ -487,7 +485,7 @@ async function transfer(
 
   const outputCommitmentIndex = transferReceipt.logs[0].args.commitment_index;
 
-  const newRoot = await nfTokenShieldInstance.latestRoot(); // solidity getter for the public variable latestRoot
+  const newRoot = await nfTokenShield.latestRoot(); // solidity getter for the public variable latestRoot
   console.log(`Merkle Root after transfer: ${newRoot}`);
   console.groupEnd();
 
@@ -538,9 +536,7 @@ async function burn(
     proofName = 'proof.json',
   } = zokratesOptions;
 
-  const nfTokenShield = contract(nfTokenShieldJson);
-  nfTokenShield.setProvider(Web3.connect());
-  const nfTokenShieldInstance = await nfTokenShield.at(nfTokenShieldAddress);
+  const nfTokenShieldInstance = await instantiateContract(nfTokenShieldJson, nfTokenShieldAddress);
 
   const payToOrDefault = payTo || account; // have the option to pay out to another address
   console.group('\nIN BURN...');

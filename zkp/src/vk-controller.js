@@ -12,6 +12,7 @@ import config from 'config';
 import utils from './zkpUtils';
 import Web3 from './web3';
 import { getContract } from './contractUtils';
+import { instantiateContract } from './sdkProvider';
 
 const web3 = Web3.connection();
 
@@ -36,13 +37,9 @@ async function loadVk(vkJsonFile, blockchainOptions) {
 
   console.log(`Loading VK for ${vkJsonFile}`);
 
-  const verifier = contract(verifierJson);
-  verifier.setProvider(Web3.connect());
-  const verifierInstance = await verifier.at(verifierAddress);
+  const verifier = await instantiateContract(verifierJson, verifierAddress);
 
-  const verifierRegistry = contract(verifierRegistryJson);
-  verifierRegistry.setProvider(Web3.connect());
-  const verifierRegistryInstance = await verifierRegistry.at(verifierRegistryAddress);
+  const verifierRegistry = await instantiateContract(verifierRegistryJson, verifierRegistryAddress);
 
   // Get VKs from the /code/gm17 directory and convert them into Solidity uints.
   let vk = await new Promise((resolve, reject) => {
@@ -57,7 +54,7 @@ async function loadVk(vkJsonFile, blockchainOptions) {
 
   // upload the vk to the smart contract
   console.log('Registering verifying key');
-  const txReceipt = await verifierRegistryInstance.registerVk(vk, [verifierInstance.address], {
+  const txReceipt = await verifierRegistry.registerVk(vk, [verifier.address], {
     from: account,
     gas: 6500000,
     gasPrice: config.GASPRICE,
