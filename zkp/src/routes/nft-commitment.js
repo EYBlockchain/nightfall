@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 
 import { Router } from 'express';
-import utils from 'zkp-utils';
+import utils from '../zkpUtils';
 import nfController from '../nf-token-controller';
 import { getVkId, getContract } from '../contractUtils';
 

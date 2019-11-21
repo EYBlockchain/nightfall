@@ -68,9 +68,7 @@ Build and run service (on port 80)
 ```sh
 # These instructions are interpreted from docker-compose.yml, zkp section, and the zkp Dockerfile
 cd zkp
-mkdir -p node_modules
-cp -r ../zkp-utils node_modules
-cp -r ../config .
+npm ci
 npm start
 ```
 

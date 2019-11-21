@@ -529,7 +529,7 @@ function zeroMSBs(_b, bits = 27 * 8) {
   return ensure0x(b.slice(-bits / 4).padStart(b.length, '0'));
 }
 
-module.exports = {
+export default {
   isHex,
   utf8StringToHex,
   hexToUtf8String,
