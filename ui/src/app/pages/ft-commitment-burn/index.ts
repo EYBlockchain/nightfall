@@ -116,15 +116,15 @@ export default class FtCommitmentBurnComponent implements OnInit , AfterContentI
     } = this;
     this.isRequesting = true;
     this.ftCommitmentService.burnFTCommitment(
-      coin['coin_value'],
+      coin['ft_commitment_value'],
       coin['salt'],
-      coin['coin_commitment_index'],
-      coin['coin_commitment'],
+      coin['ft_commitment_index'],
+      coin['ft_commitment'],
       localStorage.getItem('publickey'),
       this.receiverName
     ).subscribe( data => {
         this.isRequesting = false;
-        this.toastr.success('Burned Coin ' + coin['coin_commitment']);
+        this.toastr.success('Burned Coin ' + coin['ft_commitment']);
         transactions.splice(Number(index), 1);
         this.selectedCommitment = undefined;
         this.router.navigate(['/overview'], { queryParams: { selectedTab: 'ft-commitment' } });
@@ -158,7 +158,7 @@ export default class FtCommitmentBurnComponent implements OnInit , AfterContentI
       return;
     }
     term = term.toLocaleLowerCase();
-    const itemToSearch = this.utilService.convertToNumber(item.coin_value).toString().toLocaleLowerCase();
+    const itemToSearch = this.utilService.convertToNumber(item.ft_commitment_value).toString().toLocaleLowerCase();
     return itemToSearch.indexOf(term) > -1;
   }
 

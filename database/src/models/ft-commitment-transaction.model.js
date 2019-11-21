@@ -7,7 +7,7 @@ export default new Schema(
       enum: ['minted', 'transferred', 'received', 'burned', 'change'],
       required: true,
     },
-    coin_value: {
+    ft_commitment_value: {
       type: String,
       required: true,
     },
@@ -15,21 +15,21 @@ export default new Schema(
       type: String,
       required: true,
     },
-    coin_commitment: {
+    ft_commitment: {
       type: String,
       index: true,
       required: true,
     },
-    coin_commitment_index: {
+    ft_commitment_index: {
       type: Number,
       required: true,
     },
 
     // incase transfer log only
-    used_coin_commitments: [
+    used_ft_commitments: [
       {
-        coin_value: String,
-        coin_commitment: String,
+        ft_commitment_value: String,
+        ft_commitment: String,
       },
     ],
 
@@ -37,16 +37,16 @@ export default new Schema(
     receiver: String,
 
     // coin info transferred to receiver
-    transferred_coin_value: String,
+    transferred_ft_commitment_value: String,
     transferred_salt: String,
-    transferred_coin_commitment: String,
-    transferred_coin_commitment_index: String,
+    transferred_ft_commitment: String,
+    transferred_ft_commitment_index: String,
 
     // coin info of change got from transfer
-    change_coin_value: String,
+    change_ft_commitment_value: String,
     change_salt: String,
-    change_coin_ommitment: String,
-    change_coin_commitment_index: Number,
+    change_ft_ommitment: String,
+    change_ft_commitment_index: Number,
   },
   {
     timestamps: {

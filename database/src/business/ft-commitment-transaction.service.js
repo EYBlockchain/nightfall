@@ -10,10 +10,10 @@ export default class FtCommitmentTransactionService {
    * @param {Object} data
    * data = {
    *  type,
-   *  coin_value,
+   *  ft_commitment_value,
    *  salt,
-   *  coin_commitment,
-   *  coin_commitment_index,
+   *  ft_commitment,
+   *  ft_commitment_index,
    *  transferred_amount,
    *  transferred_salt,
    *  transferred_commitment,
@@ -23,8 +23,8 @@ export default class FtCommitmentTransactionService {
    *  change_commitment,
    *  change_commitment_index,
    *  receiver,
-   *  used_coin_commitments: [{
-   *   coin_value: String,
+   *  used_ft_commitments: [{
+   *   ft_commitment_value: String,
    *   salt: String,
    *  }],
    * }

@@ -40,8 +40,8 @@ router.route('/checkCorrectnessForFTCommitment').post(checkCorrectnessForFTCommi
  * @apiSuccessExample {json} Success response:
  *     HTTPS 200 OK
  *	  {
- *		"coin":"0x3915e408fd5cff354fd73549d31a4bc66f7335db59bc4e84001473",
- *		"coin_index":"0"
+ *		"ft_commitment":"0x3915e408fd5cff354fd73549d31a4bc66f7335db59bc4e84001473",
+ *		"ft_commitment_index":"0"
  *	  }
  */
 router.route('/mintFTCommitment').post(mintCoin);
@@ -212,10 +212,10 @@ router.post('/insertFTCommitmentToDb', insertFTCommitmentToDb);
  *      "data":[
  *        {
  *          "_id":"5d9583cff359c40039add240",
- *          "coin_value":"0x00000000000000000000000000000002",
+ *          "ft_commitment_value":"0x00000000000000000000000000000002",
  *          "salt":"0xdba2b9fd61a7a5ff60cc6d025777b736aa1bf74e1fdcb90ee34b33",
- *          "coin_commitment":"0x33894fa46908748639356cad7e69a2962316f07a9fb711fc2a2997",
- *          "coin_commitment_index":0,
+ *          "ft_commitment":"0x33894fa46908748639356cad7e69a2962316f07a9fb711fc2a2997",
+ *          "ft_commitment_index":0,
  *          "is_minted":true,
  *          "created_at":"2019-10-03T05:14:55.570Z",
  *          "updated_at":"2019-10-03T05:14:55.570Z",
@@ -256,12 +256,12 @@ router.get('/getFTCommitments', getFTCommitments);
  *      "data":[
  *        {
  *         "_id":"5d9583cff359c40039add241",
- *         "coin_value":"0x00000000000000000000000000000002",
+ *         "ft_commitment_value":"0x00000000000000000000000000000002",
  *         "salt":"0xdba2b9fd61a7a5ff60cc6d025777b736aa1bf74e1fdcb90ee34b33",
- *         "coin_commitment":"0x33894fa46908748639356cad7e69a2962316f07a9fb711fc2a2997",
- *         "coin_commitment_index":0,
+ *         "ft_commitment":"0x33894fa46908748639356cad7e69a2962316f07a9fb711fc2a2997",
+ *         "ft_commitment_index":0,
  *         "type":"minted",
- *         "used_coin_commitments":[],
+ *         "used_ft_commitments":[],
  *         "created_at":"2019-10-03T05:14:55.574Z",
  *         "updated_at":"2019-10-03T05:14:55.574Z",
  *        }

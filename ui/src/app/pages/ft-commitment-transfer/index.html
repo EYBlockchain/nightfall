@@ -44,11 +44,11 @@
                 <span aria-hidden="true" class="ng-value-icon left" (click)="onRemove(item)"
                   >×</span
                 >
-                <b>{{ utilService.convertToNumber(item.coin_value) }} </b>Coin &nbsp;
+                <b>{{ utilService.convertToNumber(item.ft_commitment_value) }} </b>Coin &nbsp;
               </ng-template>
               <ng-template ng-option-tmp let-item="item" let-index="index">
-                <b>{{ utilService.convertToNumber(item.coin_value) }} </b>Coin ({{
-                  item.coin_commitment.slice(0, 20)
+                <b>{{ utilService.convertToNumber(item.ft_commitment_value) }} </b>Coin ({{
+                  item.ft_commitment.slice(0, 20)
                 }})...
               </ng-template>
             </ng-select>
@@ -61,6 +61,9 @@
             <div class="col-md-6">
               <input
                 type="number"
+                min="0"
+                (keypress)="utilService.noNegtiveNumber($event)"
+                (paste)="utilService.noNegtiveNumber($event)"
                 class="form-control"
                 [(ngModel)]="transferValue"
                 name="E"

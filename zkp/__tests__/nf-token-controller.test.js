@@ -89,11 +89,16 @@ describe('nf-token-controller.js tests', () => {
       A,
       pkA,
       S_A_A,
-      await getVkId('MintToken'),
+      await getVkId('MintNFToken'),
       {
         account: accounts[0],
         nfTokenShieldJson,
         nfTokenShieldAddress,
+      },
+      {
+        codePath: `${process.cwd()}/code/gm17/nft-mint/out`,
+        outputDirectory: `${process.cwd()}/code/gm17/nft-mint`,
+        pkPath: `${process.cwd()}/code/gm17/nft-mint/proving.key`,
       },
     );
     zIndA = parseInt(zIndex, 10);
@@ -105,11 +110,16 @@ describe('nf-token-controller.js tests', () => {
       G,
       pkA,
       S_A_G,
-      await getVkId('MintToken'),
+      await getVkId('MintNFToken'),
       {
         account: accounts[0],
         nfTokenShieldJson,
         nfTokenShieldAddress,
+      },
+      {
+        codePath: `${process.cwd()}/code/gm17/nft-mint/out`,
+        outputDirectory: `${process.cwd()}/code/gm17/nft-mint`,
+        pkPath: `${process.cwd()}/code/gm17/nft-mint/proving.key`,
       },
     );
     zIndG = parseInt(zIndex, 10);
@@ -125,11 +135,16 @@ describe('nf-token-controller.js tests', () => {
       skA,
       Z_A_A,
       zIndA,
-      await getVkId('TransferToken'),
+      await getVkId('TransferNFToken'),
       {
         account: accounts[0],
         nfTokenShieldJson,
         nfTokenShieldAddress,
+      },
+      {
+        codePath: `${process.cwd()}/code/gm17/nft-transfer/out`,
+        outputDirectory: `${process.cwd()}/code/gm17/nft-transfer`,
+        pkPath: `${process.cwd()}/code/gm17/nft-transfer/proving.key`,
       },
     );
     expect(outputCommitment).toEqual(Z_B_A);
@@ -144,11 +159,16 @@ describe('nf-token-controller.js tests', () => {
       skA,
       Z_A_G,
       zIndG,
-      await getVkId('TransferToken'),
+      await getVkId('TransferNFToken'),
       {
         account: accounts[0],
         nfTokenShieldJson,
         nfTokenShieldAddress,
+      },
+      {
+        codePath: `${process.cwd()}/code/gm17/nft-transfer/out`,
+        outputDirectory: `${process.cwd()}/code/gm17/nft-transfer`,
+        pkPath: `${process.cwd()}/code/gm17/nft-transfer/proving.key`,
       },
     );
     expect(outputCommitment).toEqual(Z_B_G);
@@ -161,12 +181,17 @@ describe('nf-token-controller.js tests', () => {
       sAToBA,
       Z_B_A,
       zIndA + 2,
-      await getVkId('BurnToken'),
+      await getVkId('BurnNFToken'),
       {
         account: accounts[0],
         tokenReceiver: accounts[2],
         nfTokenShieldJson,
         nfTokenShieldAddress,
+      },
+      {
+        codePath: `${process.cwd()}/code/gm17/nft-burn/out`,
+        outputDirectory: `${process.cwd()}/code/gm17/nft-burn`,
+        pkPath: `${process.cwd()}/code/gm17/nft-burn/proving.key`,
       },
     );
     expect(Z_B_A).toEqual(commitment);

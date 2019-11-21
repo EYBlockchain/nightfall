@@ -68,7 +68,7 @@ export default class FtCommitmentService {
     await this.db.updateData(
       COLLECTIONS.FT_COMMITMENT,
       {
-        coin_commitment: commitmentHash,
+        ft_commitment: commitmentHash,
         is_transferred: { $exists: false },
       },
       { $set: mappedData },

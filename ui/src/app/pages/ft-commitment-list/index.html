@@ -32,14 +32,14 @@
                 *ngFor="let transaction of transactions; let i = index"
               >
                 <div
-                  *ngIf="transaction.coin_commitment"
+                  *ngIf="transaction.ft_commitment"
                   class="token-card"
                   [ngClass]="{ active: transaction.selected }"
                 >
                   <p class="list-token header">
-                    {{ utilService.convertToNumber(transaction.coin_value) }} Private {{ ftName }}
+                    {{ utilService.convertToNumber(transaction.ft_commitment_value) }} Private {{ ftName }}
                   </p>
-                  <p class="list-token">{{ transaction.coin_commitment.slice(0, 30) }}...</p>
+                  <p class="list-token">{{ transaction.ft_commitment.slice(0, 30) }}...</p>
                 </div>
               </div>
             </div>

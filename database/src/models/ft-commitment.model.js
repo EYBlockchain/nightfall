@@ -2,7 +2,7 @@ import { Schema } from 'mongoose';
 
 export default new Schema(
   {
-    coin_value: {
+    ft_commitment_value: {
       type: String,
       required: true,
     },
@@ -10,12 +10,12 @@ export default new Schema(
       type: String,
       required: true,
     },
-    coin_commitment: {
+    ft_commitment: {
       type: String,
       unique: true,
       required: true,
     },
-    coin_commitment_index: {
+    ft_commitment_index: {
       type: Number,
       required: true,
     },
@@ -24,16 +24,16 @@ export default new Schema(
     receiver: String,
 
     // coin info transferred to receiver
-    transferred_coin_value: String,
+    transferred_ft_commitment_value: String,
     transferred_salt: String,
-    transferred_coin_commitment: String,
-    transferred_coin_commitment_index: String,
+    transferred_ft_commitment: String,
+    transferred_ft_commitment_index: String,
 
     // coin info of change got from transfer
-    change_coin_value: String,
+    change_ft_commitment_value: String,
     change_salt: String,
-    change_coin_ommitment: String,
-    change_coin_commitment_index: Number,
+    change_ft_ommitment: String,
+    change_ft_commitment_index: Number,
 
     // boolean stats
     is_minted: Boolean,

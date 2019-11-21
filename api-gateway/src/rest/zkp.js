@@ -257,7 +257,7 @@ export default {
   },
 
   // get non-fungible commitment token shield address for user address
-  getTokenShield({ address }) {
+  getNFTCommitmentShield({ address }) {
     const options = {
       url: `${url}/getNFTCommitmentShieldContractAddress`,
       method: 'GET',
@@ -290,7 +290,7 @@ export default {
   },
 
   // get fungible commitment token shield contract address for user address
-  getCoinShield({ address }) {
+  getFTCommitmentShield({ address }) {
     const options = {
       url: `${url}/getFTokenShieldContractAddress`,
       method: 'GET',

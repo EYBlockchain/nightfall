@@ -103,7 +103,7 @@ async function getFTCommitmentTransactions(req, res, next) {
  *  changeCommitmentIndex: 3,
  *  receiver: bob,
  *  isTransferred: true,
- *  usedCoins: [
+ *  usedFTCommitments: [
  *    {
  *      amount: '0x00000000000000000000000000000002',
  *      commitment: '0xc89cb4c18e4533e164e01d63b2bb3f115485aa52d8c5b220e88e31',

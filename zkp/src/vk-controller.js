@@ -113,9 +113,9 @@ async function setVkIds(account) {
 
   console.log('Setting vkIds within NFTokenShield');
   await nfTokenShield.setVkIds(
-    vkIds.MintToken.vkId,
-    vkIds.TransferToken.vkId,
-    vkIds.BurnToken.vkId,
+    vkIds.MintNFToken.vkId,
+    vkIds.TransferNFToken.vkId,
+    vkIds.BurnNFToken.vkId,
     {
       from: account,
       gas: 6500000,
@@ -125,10 +125,10 @@ async function setVkIds(account) {
 
   console.log('Setting vkIds within fTokenShield');
   await fTokenShield.setVkIds(
-    vkIds.MintCoin.vkId,
-    vkIds.TransferCoin.vkId,
-    vkIds.SimpleBatchTransferCoin.vkId,
-    vkIds.BurnCoin.vkId,
+    vkIds.MintFToken.vkId,
+    vkIds.TransferFToken.vkId,
+    vkIds.SimpleBatchTransferFToken.vkId,
+    vkIds.BurnFToken.vkId,
     {
       from: account,
       gas: 6500000,
@@ -150,14 +150,14 @@ async function vkController() {
   const account = accounts[0];
 
   // load each vk to the Verifier Registry
-  await loadVk(config.NFT_MINT_VK, 'MintToken', account);
-  await loadVk(config.NFT_TRANSFER_VK, 'TransferToken', account);
-  await loadVk(config.NFT_BURN_VK, 'BurnToken', account);
+  await loadVk(config.NFT_MINT_VK, 'MintNFToken', account);
+  await loadVk(config.NFT_TRANSFER_VK, 'TransferNFToken', account);
+  await loadVk(config.NFT_BURN_VK, 'BurnNFToken', account);
 
-  await loadVk(config.FT_MINT_VK, 'MintCoin', account);
-  await loadVk(config.FT_TRANSFER_VK, 'TransferCoin', account);
-  await loadVk(config.FT_SIMPLE_BATCH_TRANSFER_VK, 'SimpleBatchTransferCoin', account);
-  await loadVk(config.FT_BURN_VK, 'BurnCoin', account);
+  await loadVk(config.FT_MINT_VK, 'MintFToken', account);
+  await loadVk(config.FT_TRANSFER_VK, 'TransferFToken', account);
+  await loadVk(config.FT_SIMPLE_BATCH_TRANSFER_VK, 'SimpleBatchTransferFToken', account);
+  await loadVk(config.FT_BURN_VK, 'BurnFToken', account);
 
   await setVkIds(account);
 

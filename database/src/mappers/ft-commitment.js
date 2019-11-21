@@ -26,22 +26,22 @@ export default function({
   zOnchainCorrect,
 }) {
   return {
-    coin_value: amount,
+    ft_commitment_value: amount,
     salt,
-    coin_commitment: commitment,
-    coin_commitment_index: commitmentIndex,
+    ft_commitment: commitment,
+    ft_commitment_index: commitmentIndex,
 
-    [transferredAmount ? 'transferred_coin_value' : undefined]: transferredAmount,
+    [transferredAmount ? 'transferred_ft_commitment_value' : undefined]: transferredAmount,
     [transferredSalt ? 'transferred_salt' : undefined]: transferredSalt,
-    [transferredCommitment ? 'transferred_coin_commitment' : undefined]: transferredCommitment,
+    [transferredCommitment ? 'transferred_ft_commitment' : undefined]: transferredCommitment,
     [transferredCommitmentIndex
-      ? 'transferred_coin_commitment_index'
+      ? 'transferred_ft_commitment_index'
       : undefined]: transferredCommitmentIndex,
 
-    [changeAmount ? 'change_coin_value' : undefined]: changeAmount,
+    [changeAmount ? 'change_ft_commitment_value' : undefined]: changeAmount,
     [changeSalt ? 'change_salt' : undefined]: changeSalt,
     [changeCommitment ? 'change_coin_commitment' : undefined]: changeCommitment,
-    [changeCommitmentIndex ? 'change_coin_commitment_index' : undefined]: changeCommitmentIndex,
+    [changeCommitmentIndex ? 'change_ft_commitment_index' : undefined]: changeCommitmentIndex,
 
     [receiver ? 'receiver' : undefined]: receiver,
 

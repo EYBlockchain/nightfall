@@ -142,21 +142,21 @@ export default class FtCommitmentTrasnferComponent implements OnInit , AfterCont
     }
 
     this.isRequesting = true;
-    let returnValue = Number(coin1['coin_value']) + Number(coin2['coin_value']);
+    let returnValue = Number(coin1['ft_commitment_value']) + Number(coin2['ft_commitment_value']);
     returnValue -= transferValue;
     console.log('RETURNVALUE', returnValue, transferValue, this.toHex(returnValue), this.toHex(transferValue));
 
     this.ftCommitmentService.transferFTCommitment(
-      coin1['coin_value'],
-      coin2['coin_value'],
+      coin1['ft_commitment_value'],
+      coin2['ft_commitment_value'],
       this.toHex(transferValue),
       this.toHex(returnValue),
       coin1['salt'],
       coin2['salt'],
-      coin1['coin_commitment_index'],
-      coin2['coin_commitment_index'],
-      coin1['coin_commitment'],
-      coin2['coin_commitment'],
+      coin1['ft_commitment_index'],
+      coin2['ft_commitment_index'],
+      coin1['ft_commitment'],
+      coin2['ft_commitment'],
       localStorage.getItem('publickey'),
       this.receiverName
     ).subscribe( data => {
@@ -196,7 +196,7 @@ export default class FtCommitmentTrasnferComponent implements OnInit , AfterCont
       return;
     }
     term = term.toLocaleLowerCase();
-    const itemToSearch = this.utilService.convertToNumber(item.coin_value).toString().toLocaleLowerCase();
+    const itemToSearch = this.utilService.convertToNumber(item.ft_commitment_value).toString().toLocaleLowerCase();
     return itemToSearch.indexOf(term) > -1;
   }
 
