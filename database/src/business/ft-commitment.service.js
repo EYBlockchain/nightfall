@@ -14,11 +14,12 @@ export default class FtCommitmentService {
    * @param {object} data
    */
   insertFTCommitmentTransaction(data) {
-    const { isTransferred, isReceived, isChange, isBurned } = data;
+    const { isTransferred, isReceived, isChange, isBurned, isBulkTransferred } = data;
 
     let mappedData;
 
     if (isTransferred) mappedData = ftCommitmentTransferTransactionMapper(data);
+    else if (isBulkTransferred) mappedData = ftCommitmentTransferTransactionMapper(data);
     else mappedData = ftCommitmentMapper(data);
 
     if (isReceived)
@@ -42,6 +43,12 @@ export default class FtCommitmentService {
         type: 'change',
       });
 
+    if (isBulkTransferred)
+      return this.ftCommitmentTransactionService.insertTransaction({
+        ...mappedData,
+        type: 'bulkTransfer',
+      });
+
     return this.ftCommitmentTransactionService.insertTransaction({
       ...mappedData,
       type: 'minted',
@@ -62,7 +69,7 @@ export default class FtCommitmentService {
    * @param {object} data - contains all the atributes required while transfer and burn of a coin
    */
   async updateFTCommitmentByCommitmentHash(commitmentHash, data) {
-    const { isBurned } = data;
+    const { isBurned, isBulkTransferred } = data;
     const mappedData = ftCommitmentMapper(data);
 
     await this.db.updateData(
@@ -70,11 +77,12 @@ export default class FtCommitmentService {
       {
         ft_commitment: commitmentHash,
         is_transferred: { $exists: false },
+        is_bulk_transferred: { $exists: false },
       },
       { $set: mappedData },
     );
 
-    if (isBurned) await this.insertFTCommitmentTransaction(data);
+    if (isBurned || isBulkTransferred) await this.insertFTCommitmentTransaction(data);
   }
 
   /**
@@ -87,6 +95,7 @@ export default class FtCommitmentService {
     if (!pageination || !pageination.pageNo || !pageination.limit) {
       return this.db.getData(COLLECTIONS.FT_COMMITMENT, {
         is_transferred: { $exists: false },
+        is_bulk_transferred: { $exists: false },
         is_burned: { $exists: false },
       });
     }

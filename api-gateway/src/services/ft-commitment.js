@@ -330,3 +330,110 @@ export async function burnCoin(req, res, next) {
     next(err);
   }
 }
+
+/**
+ * This function will do bulk fungible commitment transfer
+ * req.user {
+     address: '0x3bd5ae4b9ae233843d9ccd30b16d3dbc0acc5b7f',
+    name: 'alice',
+    pk_A: '0x70dd53411043c9ff4711ba6b6c779cec028bd43e6f525a25af36b8',
+    password: 'alicesPassword'
+  }
+ * req.body {
+    "C": "0x00000000000000000000000000000028",
+    "S_C": "0x75f9ceee5b886382c4fe81958da985cd812303b875210b9ca2d75378bb9bd801",
+    "z_C": "0x00000000008ec724591fde260927e3fcf85f039de689f4198ee841fcb63b16ed",
+    "z_C_index": 21,
+    "transferData": [
+      {
+        "value": "0x00000000000000000000000000000002",
+        "receiver_name": "b"
+      },
+      {
+        "value": "0x00000000000000000000000000000002",
+        "receiver_name": "a"
+      }
+    ]
+  }
+ * @param {*} req
+ * @param {*} res
+ */
+export async function simpleFTCommitmentBatchTransfer(req, res, next) {
+  let changeIndex, changeData = [{}];
+
+  try {
+    // Generate a new one-time-use Ethereum address for the sender to use
+    const password = (req.user.address + Date.now()).toString();
+    const address = (await accounts.createAccount(password)).data;
+    await db.updateUserWithPrivateAccount(req.user, { address, password });
+    await accounts.unlockAccount({ address, password });
+
+    // get logged in user's secretkey.
+    const user = await db.fetchUser(req.user);
+    req.body.sk_A = user.secretkey;
+
+    const { transferData } = req.body;
+    let selectedCommitmentValue = Number(req.body.C);  // amount of selected commitment 
+
+    for (let data of transferData) {
+      data.pkB = await offchain.getZkpPublicKeyFromName(data.receiver_name); // fetch pk from PKD by passing username
+      selectedCommitmentValue -= Number(data.value);
+    };
+
+    for (let i = transferData.length; i < 20; i++) {
+      if (selectedCommitmentValue) changeIndex = i; // array index where change amount is added
+      transferData[i] = {
+        value: '0x' + selectedCommitmentValue.toString(16).padStart(32, 0),
+        pkB: req.user.pk_A,
+        receiver_name: req.user.name,
+      }
+      selectedCommitmentValue = 0;
+    }
+
+    const conmitments = await zkp.simpleFTCommitmentBatchTransfer({ address }, req.body);
+    if(changeIndex) changeData = conmitments.splice(changeIndex, 19);
+
+    // update slected coin1 with tansferred data
+    await db.updateFTCommitmentByCommitmentHash(req.user, req.body.z_C, {
+      amount: req.body.C,
+      salt: req.body.S_C,
+      commitment: req.body.z_C,
+      commitmentIndex: req.body.z_C_index,
+      bulkTransfer: conmitments,
+      changeAmount: changeData[0].value,
+      changeSalt: changeData[0].salt,
+      changeCommitment: changeData[0].z_E,
+      changeCommitmentIndex: changeData[0].z_E_index,
+      isBulkTransferred: true,
+    });
+
+    // add change to user database
+    if (changeIndex) {
+      await db.insertFTCommitment(req.user, {
+        amount: changeData[0].value,
+        salt: changeData[0].salt,
+        commitment: changeData[0].z_E,
+        commitmentIndex: changeData[0].z_E_index,
+        isChange: true,
+      });
+    }
+
+    for (let data of conmitments) {
+      if (!Number(data.value)) return;
+      await whisperTransaction(req, {
+        amount: data.value,
+        salt: data.salt,
+        pk: data.pkB,
+        commitment: data.z_E,
+        commitmentIndex: data.z_E_index,
+        receiver: data.receiver_name,
+        for: 'FTCommitment',
+      })
+    };
+
+    res.data = conmitments;
+    next();
+  } catch (err) {
+    next(err);
+  }
+}

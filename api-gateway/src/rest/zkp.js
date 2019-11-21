@@ -310,4 +310,16 @@ export default {
     };
     return requestWrapper(options);
   },
+
+  // bulk transfer fungible token commitment
+  simpleFTCommitmentBatchTransfer({ address }, body) {
+    const options = {
+      url: `${url}/simpleFTCommitmentBatchTransfer`,
+      method: 'POST',
+      json: true,
+      headers: { address },
+      body,
+    };
+    return requestWrapper(options);
+  },
 };
