@@ -359,7 +359,8 @@ export async function burnCoin(req, res, next) {
  * @param {*} res
  */
 export async function simpleFTCommitmentBatchTransfer(req, res, next) {
-  let changeIndex, changeData = [{}];
+  let changeIndex;
+  let changeData = [{}];
 
   try {
     // Generate a new one-time-use Ethereum address for the sender to use
@@ -373,25 +374,26 @@ export async function simpleFTCommitmentBatchTransfer(req, res, next) {
     req.body.sk_A = user.secretkey;
 
     const { transferData } = req.body;
-    let selectedCommitmentValue = Number(req.body.C);  // amount of selected commitment 
+    let selectedCommitmentValue = Number(req.body.C); // amount of selected commitment
 
-    for (let data of transferData) {
+    for (const data of transferData) {
+      /* eslint-disable no-await-in-loop */
       data.pkB = await offchain.getZkpPublicKeyFromName(data.receiver_name); // fetch pk from PKD by passing username
       selectedCommitmentValue -= Number(data.value);
-    };
+    }
 
     for (let i = transferData.length; i < 20; i++) {
       if (selectedCommitmentValue) changeIndex = i; // array index where change amount is added
       transferData[i] = {
-        value: '0x' + selectedCommitmentValue.toString(16).padStart(32, 0),
+        value: `0x${selectedCommitmentValue.toString(16).padStart(32, 0)}`,
         pkB: req.user.pk_A,
         receiver_name: req.user.name,
-      }
+      };
       selectedCommitmentValue = 0;
     }
 
     const conmitments = await zkp.simpleFTCommitmentBatchTransfer({ address }, req.body);
-    if(changeIndex) changeData = conmitments.splice(changeIndex, 19);
+    if (changeIndex) changeData = conmitments.splice(changeIndex, 19);
 
     // update slected coin1 with tansferred data
     await db.updateFTCommitmentByCommitmentHash(req.user, req.body.z_C, {
@@ -418,7 +420,7 @@ export async function simpleFTCommitmentBatchTransfer(req, res, next) {
       });
     }
 
-    for (let data of conmitments) {
+    for (const data of conmitments) {
       if (!Number(data.value)) return;
       await whisperTransaction(req, {
         amount: data.value,
@@ -428,8 +430,8 @@ export async function simpleFTCommitmentBatchTransfer(req, res, next) {
         commitmentIndex: data.z_E_index,
         receiver: data.receiver_name,
         for: 'FTCommitment',
-      })
-    };
+      });
+    }
 
     res.data = conmitments;
     next();

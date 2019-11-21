@@ -20,7 +20,8 @@ export default function({
   receiver,
   usedFTCommitments,
 }) {
-  let parsedUsedCoin, parsedBulkTranferData;
+  let parsedUsedCoin;
+  let parsedBulkTranferData;
 
   if (Array.isArray(usedFTCommitments))
     parsedUsedCoin = usedFTCommitments.map(ft => ({

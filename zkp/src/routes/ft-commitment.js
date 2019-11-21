@@ -258,13 +258,14 @@ async function simpleFTCommitmentBatchTransfer(req, res, next) {
 
   if (!transferData || transferData.length !== 20) throw new Error('Invalid data input');
 
-  for (let data of transferData) {
+  for (const data of transferData) {
+    /* eslint-disable no-await-in-loop */
     data.salt = await utils.rndHex(32);
     receiversPublicKeys.push(data.pkB);
   }
 
   try {
-    let {z_E, z_E_index } = await fTokenController.simpleFungibleBatchTransfer(
+    const { z_E, z_E_index } = await fTokenController.simpleFungibleBatchTransfer(
       { value: C, salt: S_C, commitment: z_C, index: z_C_index },
       transferData,
       receiversPublicKeys,
@@ -282,12 +283,12 @@ async function simpleFTCommitmentBatchTransfer(req, res, next) {
       },
     );
 
-    z_E_index = parseInt(z_E_index, 10);
-    for (let indx in z_E) {
-      transferData[indx].z_E = z_E[indx];
-      transferData[indx].z_E_index = z_E_index - (z_E.length - 1);
-      z_E_index += 1;
-    }
+    let lastCommitmentIndex = parseInt(z_E_index, 10);
+    z_E.forEach((commitment, indx) => {
+      transferData[indx].z_E = commitment;
+      transferData[indx].z_E_index = lastCommitmentIndex - (z_E.length - 1);
+      lastCommitmentIndex += 1;
+    });
 
     res.data = transferData;
     next();
