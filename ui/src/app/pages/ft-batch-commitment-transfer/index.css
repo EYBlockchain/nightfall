@@ -34,3 +34,8 @@
     font-size: 25px;
     padding-left: 10px;
 }
+
+.disabled {
+    pointer-events: none; 
+    color: #cacaca;
+  }

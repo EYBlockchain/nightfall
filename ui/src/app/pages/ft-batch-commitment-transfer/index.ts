@@ -59,8 +59,6 @@ export default class FtBatchCommitmentTrasnferComponent implements OnInit , Afte
    */
   transferDetails: FormArray;
 
-  addRowExceed: boolean = false;
-
   addForm: FormGroup;
   /**
    * Reference of combo box
@@ -235,9 +233,6 @@ export default class FtBatchCommitmentTrasnferComponent implements OnInit , Afte
    */
   addTransferInfo(event){
     this.transferDetails.push(this.createItemFormGroup());
-    if(this.transferDetails.value && this.transferDetails.value.length >= 20){
-      this.addRowExceed = true;
-    }
   }
 
   /**
@@ -256,9 +251,6 @@ export default class FtBatchCommitmentTrasnferComponent implements OnInit , Afte
    */
   removeTransferInfo(index: number){
     this.transferDetails.removeAt(index);
-    if(this.transferDetails.value && this.transferDetails.value.length >= 20){
-      this.addRowExceed = true;
-    }
   }
 
   createItemFormGroup(): FormGroup {

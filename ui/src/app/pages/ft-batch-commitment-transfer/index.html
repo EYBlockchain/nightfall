@@ -102,7 +102,7 @@
                 </tr>
                 <tr>
                   <td class="batch-transfer-table-content">
-                    <i class="fa fa-plus-square" aria-hidden="true" (click) = "addTransferInfo($event)" title="Add new row" disabled="addRowExceed"></i>
+                    <i class="fa fa-plus-square" aria-hidden="true" (click) = "addTransferInfo($event)" title="Add new row" [class.disabled]="transferDetails.value.length >= 20"></i>
                   </td>
                   <td class="batch-transfer-table-content"></td>
                   <td class="batch-transfer-table-content"></td>
