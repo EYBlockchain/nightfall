@@ -7,6 +7,7 @@ import {
   insertFTCommitmentToDb,
   getFTCommitments,
   getFTCommitmentTransactions,
+  simpleFTCommitmentBatchTransfer,
 } from '../services/ft-commitment';
 
 const router = express.Router();
@@ -271,5 +272,7 @@ router.get('/getFTCommitments', getFTCommitments);
  *    }
  */
 router.route('/getFTCommitmentTransactions').get(getFTCommitmentTransactions);
+
+router.post('/simpleFTCommitmentBatchTransfer', simpleFTCommitmentBatchTransfer);
 
 export default router;

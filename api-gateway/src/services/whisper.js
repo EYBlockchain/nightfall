@@ -9,7 +9,7 @@ const topicForCoinToken = '0xeca7945f';
  */
 export async function whisperTransaction(req, dataToSend) {
   // getIdentity from local db
-  const receiverName = req.body.receiver_name || req.body.payTo;
+  const receiverName = req.body.receiver_name || req.body.payTo || dataToSend.receiver;
 
   const user = await db.fetchUser(req.user);
   // PKD to get the whisperPK using name "eg: bob"

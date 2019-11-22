@@ -4,7 +4,7 @@ export default new Schema(
   {
     type: {
       type: String,
-      enum: ['minted', 'transferred', 'received', 'burned', 'change'],
+      enum: ['minted', 'transferred', 'received', 'burned', 'change', 'batchTransfer'],
       required: true,
     },
     ft_commitment_value: {
@@ -24,6 +24,16 @@ export default new Schema(
       type: Number,
       required: true,
     },
+
+    batch_transfer: [
+      {
+        ft_commitment_value: String,
+        salt: String,
+        ft_commitment: String,
+        ft_commitment_index: String,
+        receiver: String,
+      },
+    ],
 
     // incase transfer log only
     used_ft_commitments: [

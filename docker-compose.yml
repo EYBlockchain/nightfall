@@ -74,7 +74,6 @@ services:
       - ./zkp/build:/app/build
       - ./zkp/code:/app/code
       - ./zkp/.babelrc:/app/.babelrc
-      - ./zkp-utils:/app/node_modules/zkp-utils
       - ./zkp/__tests__:/app/__tests__
       - ./zkp/config:/app/config
       - /var/run/docker.sock:/var/run/docker.sock

@@ -241,6 +241,62 @@ async function unsetFTCommitmentShieldAddress(req, res, next) {
   }
 }
 
+async function simpleFTCommitmentBatchTransfer(req, res, next) {
+  const { address } = req.headers;
+  const {
+    amount,
+    salt,
+    commitment,
+    commitmentIndex,
+    transferData, // [{value: "0x00000000000000000000000000000002", pkB: "0x70dd53411043c9ff4711ba6b6c779cec028bd43e6f525a25af36b8"}]
+    senderSecretKey,
+  } = req.body;
+  const { contractJson: fTokenShieldJson, contractInstance: fTokenShield } = await getContract(
+    'FTokenShield',
+  );
+  const receiversPublicKeys = [];
+
+  if (!transferData || transferData.length !== 20) throw new Error('Invalid data input');
+
+  for (const data of transferData) {
+    /* eslint-disable no-await-in-loop */
+    data.salt = await utils.rndHex(32);
+    receiversPublicKeys.push(data.pkB);
+  }
+
+  try {
+    const { z_E, z_E_index } = await fTokenController.simpleFungibleBatchTransfer(
+      { value: amount, salt, commitment, index: commitmentIndex },
+      transferData,
+      receiversPublicKeys,
+      senderSecretKey,
+      await getVkId('SimpleBatchTransferFToken'),
+      {
+        account: address,
+        fTokenShieldJson,
+        fTokenShieldAddress: fTokenShield.address,
+      },
+      {
+        codePath: `${process.cwd()}/code/gm17/ft-batch-transfer/out`,
+        outputDirectory: `${process.cwd()}/code/gm17/ft-batch-transfer`,
+        pkPath: `${process.cwd()}/code/gm17/ft-batch-transfer/proving.key`,
+      },
+    );
+
+    let lastCommitmentIndex = parseInt(z_E_index, 10);
+    z_E.forEach((transferCommitment, indx) => {
+      transferData[indx].commitment = transferCommitment;
+      transferData[indx].commitmentIndex = lastCommitmentIndex - (z_E.length - 1);
+      lastCommitmentIndex += 1;
+    });
+
+    res.data = transferData;
+    next();
+  } catch (err) {
+    next(err);
+  }
+}
+
 router.post('/mintFTCommitment', mint);
 router.post('/transferFTCommitment', transfer);
 router.post('/burnFTCommitment', burn);
@@ -248,5 +304,6 @@ router.post('/checkCorrectnessForFTCommitment', checkCorrectness);
 router.post('/setFTokenShieldContractAddress', setFTCommitmentShieldAddress);
 router.get('/getFTokenShieldContractAddress', getFTCommitmentShieldAddress);
 router.delete('/removeFTCommitmentshield', unsetFTCommitmentShieldAddress);
+router.post('/simpleFTCommitmentBatchTransfer', simpleFTCommitmentBatchTransfer);
 
 export default router;
