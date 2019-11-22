@@ -37,7 +37,7 @@ export default class FtBatchCommitmentTrasnferComponent implements OnInit , Afte
   /**
    * Amount to transfer
    */
-  transferValue: number;
+  batchTransactions: any;
 
   /**
    * To store all users
@@ -134,32 +134,45 @@ export default class FtBatchCommitmentTrasnferComponent implements OnInit , Afte
   }
 
   /**
+   * Method to generate batch transaction object.
+   */
+  batchTransactionGenerator () {
+    if(this.selectedCommitmentList[0]){
+      const data = this.selectedCommitmentList[0];
+      this.batchTransactions = {
+        "amount": data.ft_commitment_value,
+        "salt": data.salt,
+        "commitment": data.ft_commitment,
+        "commitmentIndex": data.ft_commitment_index,
+        "transferData": this.transferDetails.value
+      }
+    }
+  }
+
+  /**
    * Method to transfer two ERC-20 token commitement to selected user.
    */
   initiateTransfer () {
+    let emptyInputFlag: boolean;
     const count = this.selectedCommitmentList.length;
-    console.log('count', count, this.selectedCommitmentList);
-    if (!count || count !== 2) {
+    if (!count || count !== 1) {
       this.toastr.error('Invalid commitment Selection.');
       return;
     }
-    const [coin1, coin2] = this.selectedCommitmentList;
-    const {
-      transferValue,
-      transactions
-    } = this;
-
-    if (!transferValue || !this.receiverName) {
+    this.transferDetails.value.forEach(element => {
+      if(element.value == null || element.receiverName == null){
+        emptyInputFlag = true;
+      }
+    });
+    if(emptyInputFlag == true){
       this.toastr.error('All fields are mandatory');
       return;
     }
-
     this.isRequesting = true;
-    let returnValue = Number(coin1['ft_commitment_value']) + Number(coin2['ft_commitment_value']);
-    returnValue -= transferValue;
-    console.log('RETURNVALUE', returnValue, transferValue, this.toHex(returnValue), this.toHex(transferValue));
-
-    this.ftCommitmentService.transferFTCommitment(
+    this.batchTransactionGenerator();
+    console.log(this.batchTransactions);
+    this.isRequesting = false;
+    /* this.ftCommitmentService.transferFTCommitment(
       coin1['ft_commitment_value'],
       coin2['ft_commitment_value'],
       this.toHex(transferValue),
@@ -182,7 +195,7 @@ export default class FtBatchCommitmentTrasnferComponent implements OnInit , Afte
       }, error => {
         this.isRequesting = false;
         this.toastr.error('Please try again', 'Error');
-    });
+    }); */
   }
 
   /**
@@ -225,6 +238,16 @@ export default class FtBatchCommitmentTrasnferComponent implements OnInit , Afte
     const hexValue = (num).toString(16);
     return '0x' + hexValue.padStart(32, '0');
   }
+  /**
+   * Method to return the value to and reveiver name updated in form 
+   *
+   */
+  createItemFormGroup(): FormGroup {
+    return this.formBuilder.group({
+      value: null,
+      receiverName: null
+    });
+  }
 
   /**
    * Method to show inputs to add new ft commitment trnasfer information
@@ -236,15 +259,6 @@ export default class FtBatchCommitmentTrasnferComponent implements OnInit , Afte
   }
 
   /**
-   * Method to add a row with ft commitment trnasfer information
-   *
-   * @param event {Event} Event
-   */
-  addTransferInfoComplete(event){
-    console.log(this.transferDetails.value);
-  }
-
-  /**
    * Method to remove a row with ft commitment trnasfer information
    *
    * @param index {Number} Number
@@ -252,12 +266,4 @@ export default class FtBatchCommitmentTrasnferComponent implements OnInit , Afte
   removeTransferInfo(index: number){
     this.transferDetails.removeAt(index);
   }
-
-  createItemFormGroup(): FormGroup {
-    return this.formBuilder.group({
-      transferValue: null,
-      receiverName: null
-    });
-  }
-
 }

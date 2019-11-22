@@ -55,42 +55,6 @@
           </div>
         </div>
 
-        <!-- <div class="" *ngIf="!noCoin">
-          <label for="name">Value Of {{ this.ftName }} Commitment To Transfer</label>
-          <div class="row form-group">
-            <div class="col-md-6">
-              <input
-                type="number"
-                min="0"
-                (keypress)="utilService.noNegtiveNumber($event)"
-                (paste)="utilService.noNegtiveNumber($event)"
-                class="form-control"
-                [(ngModel)]="transferValue"
-                name="E"
-                placeholder="Value to transfer"
-              />
-            </div>
-          </div>
-        </div> -->
-
-        <!-- <div class="form-group">
-          <label for="publickey">Select Receiver</label>
-          <div class="row">
-            <div class="col-sm-6">
-              <select
-                class="form-control"
-                id="publickey"
-                name="sellist1"
-                [(ngModel)]="receiverName"
-                required
-              >
-                <option [ngValue]="undefined" selected>Select </option>
-                <option *ngFor="let user of users" value="{{ user }}">{{ user }}</option>
-              </select>
-            </div>
-          </div>
-        </div> -->
-
         <div class="form-group" [formGroup]="addForm">
           <div class="row" *ngIf="!noCoin">
             <div class="col-sm-6">
@@ -109,7 +73,6 @@
                 </tr>
                 <tr class="batch-transfer-table-row" *ngFor="let row of addForm.get('rows')?.controls; let i = index">
                     <td class="batch-transfer-table-content">
-                        <i class="fa fa-plus-square" aria-hidden="true" (click) = "addTransferInfoComplete($event)"></i>
                         <i class="fa fa-minus-square" aria-hidden="true" (click) = "removeTransferInfo(i)" title="Delete row"></i>
                     </td>
                     <td class="batch-transfer-table-content">
@@ -119,7 +82,7 @@
                           (keypress)="utilService.noNegtiveNumber($event)"
                           (paste)="utilService.noNegtiveNumber($event)"
                           class="form-control"
-                          [formControl]="row.get('transferValue')"
+                          [formControl]="row.get('value')"
                           name="E"
                           placeholder="Value to transfer"
                         />
@@ -146,11 +109,9 @@
             <button
               type="button"
               [disabled]="
-                !transactions ||
-                !transactions.length ||
-                !(selectedCommitmentList.length == 2) ||
-                !transferValue ||
-                !receiverName
+                !transferDetails ||
+                !transferDetails.length ||
+                !(selectedCommitmentList.length == 1)
               "
               class="btn btn-md btn-primary"
               (click)="initiateTransfer()"
