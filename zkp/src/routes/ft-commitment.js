@@ -244,12 +244,12 @@ async function unsetFTCommitmentShieldAddress(req, res, next) {
 async function simpleFTCommitmentBatchTransfer(req, res, next) {
   const { address } = req.headers;
   const {
-    C,
-    S_C,
-    z_C,
-    z_C_index,
+    amount,
+    salt,
+    commitment,
+    commitmentIndex,
     transferData, // [{value: "0x00000000000000000000000000000002", pkB: "0x70dd53411043c9ff4711ba6b6c779cec028bd43e6f525a25af36b8"}]
-    sk_A: senderSecretKey,
+    senderSecretKey,
   } = req.body;
   const { contractJson: fTokenShieldJson, contractInstance: fTokenShield } = await getContract(
     'FTokenShield',
@@ -266,7 +266,7 @@ async function simpleFTCommitmentBatchTransfer(req, res, next) {
 
   try {
     const { z_E, z_E_index } = await fTokenController.simpleFungibleBatchTransfer(
-      { value: C, salt: S_C, commitment: z_C, index: z_C_index },
+      { value: amount, salt, commitment, index: commitmentIndex },
       transferData,
       receiversPublicKeys,
       senderSecretKey,
@@ -284,9 +284,9 @@ async function simpleFTCommitmentBatchTransfer(req, res, next) {
     );
 
     let lastCommitmentIndex = parseInt(z_E_index, 10);
-    z_E.forEach((commitment, indx) => {
-      transferData[indx].z_E = commitment;
-      transferData[indx].z_E_index = lastCommitmentIndex - (z_E.length - 1);
+    z_E.forEach((transferCommitment, indx) => {
+      transferData[indx].commitment = transferCommitment;
+      transferData[indx].commitmentIndex = lastCommitmentIndex - (z_E.length - 1);
       lastCommitmentIndex += 1;
     });
 

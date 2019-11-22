@@ -23,7 +23,7 @@ export default new Schema(
     // receiver info
     receiver: String,
 
-    bulk_transfer: [
+    batch_transfer: [
       {
         ft_commitment_value: String,
         salt: String,
@@ -51,7 +51,7 @@ export default new Schema(
     is_burned: Boolean,
     is_received: Boolean,
     is_change: Boolean,
-    is_bulk_transferred: Boolean,
+    is_batch_transferred: Boolean,
 
     // boolean stats - correctness checks
     coin_commitment_reconciles: Boolean, // for a given A, pk, S and z, do we have that h(A,pk,S)=z?

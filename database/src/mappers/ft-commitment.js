@@ -9,7 +9,7 @@ export default function({
   transferredCommitment,
   transferredCommitmentIndex,
 
-  bulkTransfer,
+  batchTransfer,
 
   changeAmount,
   changeSalt,
@@ -23,20 +23,20 @@ export default function({
   isBurned,
   isReceived,
   isChange,
-  isBulkTransferred,
+  isBatchTransferred,
 
   zCorrect,
   zOnchainCorrect,
 }) {
-  let parsedBulkTranferData;
+  let parsedBatchTranferData;
 
-  if (Array.isArray(bulkTransfer))
-    parsedBulkTranferData = bulkTransfer.map(ft => ({
+  if (Array.isArray(batchTransfer))
+    parsedBatchTranferData = batchTransfer.map(ft => ({
       ft_commitment_value: ft.value,
       salt: ft.salt,
-      ft_commitment: ft.z_E,
-      ft_commitment_index: ft.z_E_index,
-      receiver: ft.receiver_name,
+      ft_commitment: ft.commitment,
+      ft_commitment_index: ft.commitmentIndex,
+      receiver: ft.receiverName,
     }));
 
   return {
@@ -52,7 +52,7 @@ export default function({
       ? 'transferred_ft_commitment_index'
       : undefined]: transferredCommitmentIndex,
 
-    [bulkTransfer ? 'bulk_transfer' : undefined]: parsedBulkTranferData,
+    [batchTransfer ? 'batch_transfer' : undefined]: parsedBatchTranferData,
 
     [changeAmount ? 'change_ft_commitment_value' : undefined]: changeAmount,
     [changeSalt ? 'change_salt' : undefined]: changeSalt,
@@ -66,7 +66,7 @@ export default function({
     [isBurned ? 'is_burned' : undefined]: isBurned,
     [isReceived ? 'is_received' : undefined]: isReceived,
     [isChange ? 'is_change' : undefined]: isChange,
-    [isBulkTransferred ? 'is_bulk_transferred' : undefined]: isBulkTransferred,
+    [isBatchTransferred ? 'is_batch_transferred' : undefined]: isBatchTransferred,
 
     [zCorrect || zCorrect === false ? 'coin_commitment_reconciles' : undefined]: zCorrect,
     [zOnchainCorrect || zOnchainCorrect === false

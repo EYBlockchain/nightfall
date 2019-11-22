@@ -10,7 +10,7 @@ export default function({
   commitment,
   commitmentIndex,
 
-  bulkTransfer,
+  batchTransfer,
 
   changeAmount,
   changeSalt,
@@ -21,7 +21,7 @@ export default function({
   usedFTCommitments,
 }) {
   let parsedUsedCoin;
-  let parsedBulkTranferData;
+  let parsedBatchTranferData;
 
   if (Array.isArray(usedFTCommitments))
     parsedUsedCoin = usedFTCommitments.map(ft => ({
@@ -29,13 +29,13 @@ export default function({
       ft_commitment: ft.commitment,
     }));
 
-  if (Array.isArray(bulkTransfer))
-    parsedBulkTranferData = bulkTransfer.map(ft => ({
+  if (Array.isArray(batchTransfer))
+    parsedBatchTranferData = batchTransfer.map(ft => ({
       ft_commitment_value: ft.value,
       salt: ft.salt,
-      ft_commitment: ft.z_E,
-      ft_commitment_index: ft.z_E_index,
-      receiver: ft.receiver_name,
+      ft_commitment: ft.commitment,
+      ft_commitment_index: ft.commitmentIndex,
+      receiver: ft.receiverName,
     }));
 
   return {
@@ -44,7 +44,7 @@ export default function({
     ft_commitment: commitment,
     ft_commitment_index: commitmentIndex,
 
-    [bulkTransfer ? 'bulk_transfer' : undefined]: parsedBulkTranferData,
+    [batchTransfer ? 'batch_transfer' : undefined]: parsedBatchTranferData,
 
     [changeAmount ? 'change_ft_commitment_value' : undefined]: changeAmount,
     [changeSalt ? 'change_salt' : undefined]: changeSalt,
