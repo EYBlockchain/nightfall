@@ -96,13 +96,16 @@
           </div>
 
           <div class="col-md-3">
-            <a class="btn btn-primary btn-list" [routerLink]="['/ft-commitment/mint']"
+            <a class="btn btn-primary btn-list ft-commitment" [routerLink]="['/ft-commitment/mint']"
               >Mint {{ ftName }} Commitment</a
             >
-            <a class="btn btn-primary btn-list" [routerLink]="['/ft-commitment/transfer']"
+            <a class="btn btn-primary btn-list ft-commitment" [routerLink]="['/ft-commitment/transfer']"
               >Transfer {{ ftName }} Commitment</a
             >
-            <a class="btn btn-primary btn-list" [routerLink]="['/ft-commitment/burn']"
+            <a class="btn btn-primary btn-list ft-commitment" [routerLink]="['/ft-batch-commitment/transfer']"
+              >Transfer {{ ftName }} Batch Commitment</a
+            >
+            <a class="btn btn-primary btn-list ft-commitment" [routerLink]="['/ft-commitment/burn']"
               >Burn {{ ftName }} Commitment</a
             >
           </div>

@@ -26,6 +26,7 @@ import FtCommitmentMintComponent from '../pages/ft-commitment-mint';
 import FtCommitmentTrasnferComponent from '../pages/ft-commitment-transfer';
 import FtCommitmentBurnComponent from '../pages/ft-commitment-burn';
 import FtCommitmentListComponent from '../pages/ft-commitment-list';
+import FtBatchCommitmentTrasnferComponent from '../pages/ft-batch-commitment-transfer';
 
 export const appRoutes: Routes = [
   { path: 'login', component: LoginComponent },
@@ -53,6 +54,7 @@ export const appRoutes: Routes = [
   
   { path: 'ft-commitment/mint' , component: FtCommitmentMintComponent, canActivate: [AuthService] },
   { path: 'ft-commitment/transfer', component: FtCommitmentTrasnferComponent, canActivate: [AuthService] },
+  { path: 'ft-batch-commitment/transfer', component: FtBatchCommitmentTrasnferComponent, canActivate: [AuthService] },
   { path: 'ft-commitment/burn', component: FtCommitmentBurnComponent, canActivate: [AuthService] },
   { path: 'ft-commitment/list' , component: FtCommitmentListComponent, canActivate: [AuthService] },
 

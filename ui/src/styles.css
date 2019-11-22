@@ -164,8 +164,8 @@ input {
 }
 .btn {
   min-width: initial !important;
-  padding-top: 0.7rem;
-  padding-bottom: 0.7rem;
+  padding-top: 1rem;
+  padding-bottom: 1rem;
   font-size: 0.81rem;
   transition: all 0.2s ease-in-out;
   margin: 0;
@@ -176,6 +176,10 @@ input {
   white-space: normal;
   word-wrap: break-word;
   color: #fff;
+}
+.ft-commitment{
+  padding-top: 0.5rem;
+  padding-bottom: 0.5rem;
 }
 .btn-primary {
   background-color: #13252b !important;
