@@ -11,7 +11,6 @@ import crypto from 'crypto';
 import { Buffer } from 'safe-buffer';
 
 const inputsHashLength = 32;
-const merkleDepth = 33;
 
 // FUNCTIONS ON HEX VALUES
 
@@ -460,15 +459,6 @@ function rndHex(bytes) {
   });
 }
 
-function getLeafIndexFromZCount(zCount) {
-  // force it to be a number:
-  const zCountInt = parseInt(zCount, 10);
-  const MERKLE_DEPTH = parseInt(merkleDepth, 10);
-  const MERKLE_WIDTH = parseInt(2 ** (MERKLE_DEPTH - 1), 10);
-  const leafIndex = parseInt(MERKLE_WIDTH - 1 + zCountInt, 10);
-  return leafIndex;
-}
-
 /* flattenDeep converts a nested array into a flattened array. We use this to pass our proofs and vks into the verifier contract.
 Example:
 A vk of the form:
@@ -558,7 +548,6 @@ module.exports = {
   splitHexToBitsN,
   splitAndPadBitsN,
   leftPadBitsN,
-  getLeafIndexFromZCount,
   rndHex,
   flattenDeep,
   padHex,

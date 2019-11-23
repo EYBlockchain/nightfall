@@ -1,0 +1,52 @@
+version: '3.5'
+
+services:
+  # The main microservice for reconstructing a merkle tree
+  merkle-tree:
+    build:
+      context: ./merkle-tree/merkle-tree
+      dockerfile: Dockerfile
+    restart: on-failure
+    depends_on:
+      - mongo-merkle-tree
+    volumes:
+      - ./merkle-tree/merkle-tree/src:/app/src
+      - ./config/merkle-tree:/app/config # mount point might be different if configuring from another application
+      - ./merkle-tree/merkle-tree/test:/app/test
+      - ./merkle-tree/merkle-tree/.babelrc:/app/.babelrc
+      - ./merkle-tree/merkle-tree/setup-mongo-acl-for-new-users.js:/app/setup-mongo-acl-for-new-users.js
+      - /var/run/docker.sock:/var/run/docker.sock
+      - ./zkp/contracts/:/app/contracts:consistent # required if deploying contracts from within this service (if CONTRACT_LOCATION = 'default')
+      - ./zkp/build/:/app/build:consistent # required if CONTRACT_LOCATION = 'default'
+    ports:
+      - "9000:80"
+    environment:
+      BLOCKCHAIN_HOST: ws://ganache
+      BLOCKCHAIN_PORT: 8545
+      CONTRACT_LOCATION: 'default' # Where to find the contractInstances?
+      # Specify one of:
+      # - 'remote' (to GET them from a remote microservice); or
+      # - 'mongodb' (to get them from mongodb); or
+      # - 'default' (to get them from the app/build/ folder)
+    networks:
+      - merkle_tree_network
+
+  # The database storing the merkle tree
+  mongo-merkle-tree:
+    image: mongo
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=admin
+      - MONGO_INITDB_ROOT_PASSWORD=admin
+      - MONGO_INITDB_DATABASE=merkle_tree
+    volumes:
+      - ./merkle-tree/merkle-tree/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+      - mongo-merkle-tree-volume:/data/db
+    networks:
+      - merkle_tree_network
+
+volumes:
+  mongo-merkle-tree-volume: {}
+
+networks:
+  merkle_tree_network:
+    name: merkle_tree_network

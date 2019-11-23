@@ -2,14 +2,8 @@ import config from 'config';
 import utils from './zkpUtils';
 
 /**
-This class defines a 'proof element'.  That's basically an object that will be fed
-to token-compute-vectors.js so that it can generate the witness string for a proof.
-We are now potentially using different encoding for each of the elements and computeVectors
-needs to know which encoding we have applied.  For example we may take the hex
-representation of an element and encode it as a string of uint bits or bytes. Hence
-this becomes an object, rather than a simple number, so that it can carry the encoding.
-Sometimes the encoding will split the element across multiple witness fields and we will
-want to define how many fields.  This is what the packets property is used for.
+This class defines a 'proof element'.  That's basically an object that will be fed to token-format-inputs.js so that it can generate the witness string for a proof.
+We are now potentially using different encoding for each of the elements and formatInputsForZkSnark() needs to know which encoding we have applied.  For example we may take the hex representation of an element and encode it as a string of uint bits or bytes. Hence, this becomes an object, rather than a simple number, so that it can carry the encoding. Sometimes the encoding will split the element across multiple witness fields and we will want to define how many fields.  This is what the packets property is used for.
 @module Element.js
 @author Westlad, iAmMichaelConnor
 */

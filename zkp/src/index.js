@@ -1,12 +1,14 @@
 /**
  * @module restapi.js
  * @author Liju, AsishAP
- * @desc This restapi.js file gives api endpoints to access the functions of Asset, Auth, TokenHolder, TokenHolderList smart contracts */
-//
+ * @desc
+ */
+
 import express from 'express';
 import bodyParser from 'body-parser';
 import { ftCommitmentRoutes, ftRoutes, nftCommitmentRoutes, nftRoutes } from './routes';
-import vkController from './vk-controller';
+import mtController from './merkle-tree-controller';
+import vkController from './vk-controller'; // this import TRIGGERS the runController() script within.
 import { formatResponse, formatError, errorHandler } from './middlewares';
 
 const app = express();
@@ -66,6 +68,12 @@ app.use(function logError(err, req, res, next) {
 
 app.use(formatError);
 app.use(errorHandler);
+
+/**
+We TRIGGER the merkle-tree microservice's event filter from here.
+TODO: consider whether there is a better way to do this when the application starts-up.
+*/
+if (process.env.NODE_ENV !== 'test') mtController.startEventFilter();
 
 const server = app.listen(80, '0.0.0.0', () =>
   console.log('Zero-Knowledge-Proof RESTful API server started on ::: 80'),

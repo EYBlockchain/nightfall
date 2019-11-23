@@ -3,7 +3,7 @@
 import { Router } from 'express';
 import utils from '../zkpUtils';
 import fTokenController from '../f-token-controller';
-import { getVkId, getContract } from '../contractUtils';
+import { getVkId, getTruffleContractInstance } from '../contractUtils';
 
 const router = Router();
 
@@ -12,9 +12,10 @@ async function mint(req, res, next) {
   const { amount, ownerPublicKey } = req.body;
   const salt = await utils.rndHex(32);
   const vkId = await getVkId('MintFToken');
-  const { contractJson: fTokenShieldJson, contractInstance: fTokenShield } = await getContract(
-    'FTokenShield',
-  );
+  const {
+    contractJson: fTokenShieldJson,
+    contractInstance: fTokenShield,
+  } = await getTruffleContractInstance('FTokenShield');
 
   try {
     const { commitment, commitmentIndex } = await fTokenController.mint(
@@ -61,9 +62,10 @@ async function transfer(req, res, next) {
     z_D_index,
   } = req.body;
   const vkId = await getVkId('TransferFToken');
-  const { contractJson: fTokenShieldJson, contractInstance: fTokenShield } = await getContract(
-    'FTokenShield',
-  );
+  const {
+    contractJson: fTokenShieldJson,
+    contractInstance: fTokenShield,
+  } = await getTruffleContractInstance('FTokenShield');
 
   const inputCommitments = [
     {
@@ -131,9 +133,10 @@ async function burn(req, res, next) {
   const { amount, receiverSecretKey, salt, commitment, commitmentIndex, tokenReceiver } = req.body;
   const { address } = req.headers;
   const vkId = await getVkId('BurnFToken');
-  const { contractJson: fTokenShieldJson, contractInstance: fTokenShield } = await getContract(
-    'FTokenShield',
-  );
+  const {
+    contractJson: fTokenShieldJson,
+    contractInstance: fTokenShield,
+  } = await getTruffleContractInstance('FTokenShield');
 
   try {
     await fTokenController.burn(

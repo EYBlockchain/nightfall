@@ -1,5 +1,5 @@
 {
   "apiServerURL": "http://localhost:8001",
-  "INPUTS_HASHLENGTH": 32,
-  "MERKLE_HASHLENGTH": 27
+  "LEAF_HASHLENGTH": 32,
+  "NODE_HASHLENGTH": 27
 }

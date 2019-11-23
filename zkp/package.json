@@ -1,4 +1,4 @@
- {
+{
   "name": "zkp",
   "version": "1.0.0",
   "description": "code for generating zero-knowledge proofs for transacting",
@@ -23,23 +23,21 @@
   "license": "CC0-1.0",
   "dependencies": {
     "@eyblockchain/zokrates.js": "^1.2.0",
-    "beepbeep": "1.2.2",
-    "big-integer": "^1.6.47",
-    "bignumber.js": "^8.0.2",
     "body-parser": "^1.19.0",
     "config": "^3.2.2",
-    "ethereumjs-abi": "^0.6.6",
-    "express": "^4.16.4",
+    "express": "^4.17.1",
+    "request": "^2.88.0",
     "fs": "0.0.1-security",
-    "hex-to-binary": "^1.0.1",
-    "inquirer": "^6.2.2",
-    "jsonfile": "^4.0.0",
+    "jsonfile": "^5.0.0",
     "left-pad": "^1.3.0",
     "node-docker-api": "^1.1.22",
     "safe-buffer": "^5.2.0",
     "truffle-contract": "4.0.15",
     "web3": "1.0.0-beta.36",
-    "yargs": "^12.0.1"
+    "yargs": "^12.0.1",
+    "inquirer": "^6.2.2",
+    "big-integer": "^1.6.47",
+    "hex-to-binary": "^1.0.1"
   },
   "devDependencies": {
     "@babel/core": "^7.4.4",
@@ -50,7 +48,7 @@
     "nodemon": "^1.19.0"
   },
   "jest": {
-    "globalSetup": "/app/__tests__/loadVkIds.js",
+    "globalSetup": "/app/__tests__/globalSetup.js",
     "setupFilesAfterEnv": [
       "jest-expect-message"
     ]

@@ -1,4 +1,4 @@
-import { computeVectors } from './compute-vectors';
+import { formatInputsForZkSnark } from './format-inputs';
 import zok from './zokrates';
 
 let container; // used to hold a reference to the Zokrates container
@@ -28,8 +28,8 @@ export async function computeProof(elements, hostDir) {
 
   console.log(`Container id: ${container.id}`);
   console.log(`To connect to the container manually: 'docker exec -ti ${container.id} bash'`);
-  // console.log('output vectors', computeVectors(elements));
-  await zok.computeWitness(container, computeVectors(elements), hostDir);
+  // console.log('output vectors', formatInputsForZkSnark(elements));
+  await zok.computeWitness(container, formatInputsForZkSnark(elements), hostDir);
 
   const proof = await zok.generateProof(container, undefined, hostDir);
 

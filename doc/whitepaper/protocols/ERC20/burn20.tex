@@ -322,7 +322,7 @@ We denote the corresponding Merkle Tree which holds tokens $\bm{Z}_{n+m+k+l}$ by
 \noindent
 Bob retrieves the value of the current Merkle root, $\roott_{n+m+k+l}$, from the Shield contract.\\
 \\
-Since Bob knows that $Z_e$ is at leaf-index $n+m+k$ of $M_{n+m+k+l}$, Bob can also retrieve the path from the leaf $Z_{n+m+k}=Z_e$ to the root $\roott_{n+m+k+l}$. Path computations are done in \texttt{zkp/src/compute-vectors.js}.\\
+Since Bob knows that $Z_e$ is at leaf-index $n+m+k$ of $M_{n+m+k+l}$, Bob can also retrieve the path from the leaf $Z_{n+m+k}=Z_e$ to the root $\roott_{n+m+k+l}$. Path computations are done in \texttt{zkp/src/format-inputs.js}.\\
 \\
 We denote this path
 \begin{align*}

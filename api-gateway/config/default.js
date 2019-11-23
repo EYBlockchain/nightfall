@@ -29,7 +29,14 @@ module.exports = {
       return `${this.zkp.host}:${this.zkp.port}`;
     }),
   },
-  INPUTS_HASHLENGTH: 32,
-  MERKLE_HASHLENGTH: 27,
+  // merkleTree: {
+  //   host: process.env.MERKLE_TREE_HOST,
+  //   port: process.env.MERKLE_TREE_PORT,
+  //   url: defer(function getAccountURL() {
+  //     return `${this.merkleTree.host}:${this.merkleTree.port}`;
+  //   }),
+  // },
+  LEAF_HASHLENGTH: 32,
+  NODE_HASHLENGTH: 27,
   isLoggerEnable: true,
 };

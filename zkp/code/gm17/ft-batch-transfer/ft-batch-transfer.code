@@ -35,9 +35,9 @@ def concatenate256x256x256x256x256(field[256] a, field[256] b, field[256] c, fie
 	return [...a, ...b, ...c, ...d, ...e]
 
 
-def orderedConcatenate216x216(field order, field[216] a, field[216] b)->(field[432]):
-	field[216] left = if order==0 then b else a fi
-	field[216] right = if order==0 then a else b fi
+def orderedConcatenate216x216(field order, field[216] pathNode, field[216] siblingNode)->(field[432]):
+	field[216] left = if order == 0 then pathNode else siblingNode fi
+	field[216] right = if order == 0 then siblingNode else pathNode fi
 	return [...left, ...right]
 
 def shaPad432To512(field[432] a)->(field[512]):
@@ -63,22 +63,17 @@ def shaPad640To1024()->(field[384]):
 def shaPad1280To1536()->(field[256]):
 	return [1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	1,	0,	1,	0,	0,	0,	0,	0,	0,	0,	0]
 
-// unpacks the bits in a 216 bit path field ready for sha-ing in a 216 bit scheme (only the Merkle path calc uses this)
-def unpackPath(field p)->(field[216]):
-	field[256] sister = unpack256(p)
-	return sister[40..256]
+// unpacks a siblingPath's node to bits, ready for sha-ing:
+def unpackSiblingNode(field siblingNode)->(field[216]):
+	field[256] siblingNodeBits = unpack256(siblingNode)
+	return siblingNodeBits[40..256]
 
-//unpack a 216 bit field and pad it to 256 bits (should we ever use a Fp>256 bit this will
-//make the change to a 256 bit scheme easier because we'll just remove the zero padding)
+// unpack a 216 bit field and pad it to 256 bits (should we ever use a Fp>256 bit this will make the change to a 256 bit scheme easier because we'll just remove the zero padding)
 def unpackHash(field p)->(field[256]):
 	field[256] hash = unpack256(p)
 	return hash
 
-//'truncate' a 256 bit hash down to 216 bits, returning as 256 bits padded with zeros
-//obviously this is easy to adjust to accommodate other bit lengths than 216.
-//This approach lets us use a 256 padding scheme for the sha hashing, rather than a 216 bit
-//scheme, which is more flexible should we wish to change the 216 bits to something else -
-// we won't need to recalculate all the padding values!
+// 'Truncate' a 256 bit hash down to 216 bits, returning as 256 bits padded with zeros. Obviously this is easy to adjust to accommodate other bit lengths than 216. This approach lets us use a 256 padding scheme for the sha hashing, rather than a 216 bit scheme, which is more flexible should we wish to change the 216 bits to something else - we won't need to recalculate all the padding values!
 def zeroMSBs(field[256] sha)->(field[256]):
 	return [...[0;40], ...sha[40..256]]
 
@@ -171,7 +166,8 @@ def main(field publicInputHash, private field inputValue, private field secretKe
 	field[128] orderBits = unpack128(order) // need to access an array of bits
 	for field i in 0..32 do
 		field j = 31-i
-		preimage512 = shaPad432To512(orderedConcatenate216x216(orderBits[j], hash[40..256], unpackPath(path[j])))
+    field k = 127-i
+		preimage512 = shaPad432To512(orderedConcatenate216x216(orderBits[k], hash[40..256], unpackSiblingNode(path[j])))
 		hash = sha256of512(preimage512[0..256], preimage512[256..512])
 	endfor
 	// check we have indeed recovered the root:

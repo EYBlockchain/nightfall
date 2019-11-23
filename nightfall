@@ -6,18 +6,24 @@ RED='\033[0;31m'
 NC='\033[0m'
 
 printf "${GREEN}*** Cleaning up all containers ***${NC}\n"
-docker-compose down -v || {
+docker-compose -f docker-compose.merkle-tree.yml -f docker-compose.yml down -v || {
 	# this block will run if ```docker-compose down -v``` fails.
 	sleep 3
 
-	printf "${GREEN}*** Remove network ***${NC}\n"
-  docker network rm nightfall_default
+	printf "${GREEN}*** Remove nightfall network ***${NC}\n"
+  docker network rm nightfall_network
 
-  printf "${GREEN}*** Remove mongo volume ***${NC}\n"
-  docker volume rm nightfall_mongo-volume
+  printf "${GREEN}*** Remove nightfall's mongo volume ***${NC}\n"
+  docker volume rm nightfall_mongo-nightfall-volume
 
   printf "${GREEN}*** Remove zkp-code volume ***${NC}\n"
-  docker volume rm nightfall_zkp-code
+  docker volume rm nightfall_zkp-code-volume
+
+	printf "${GREEN}*** Remove merkle_tree network ***${NC}\n"
+  docker network rm merkle_tree_network
+
+	printf "${GREEN}*** Remove the merkle tree's mongo volume ***${NC}\n"
+  docker volume rm nightfall_mongo-merkle-tree-volume
 }
 
 printf "${GREEN}*** Pull zokrates docker image ***${NC}\n"
@@ -36,4 +42,4 @@ docker-compose run --rm truffle-offchain migrate --reset --network=default
 docker-compose run --rm truffle-zkp migrate --reset --network=default
 
 printf "${GREEN}*** Launching containerized microservices ***${NC}\n"
-docker-compose up
+docker-compose -f docker-compose.merkle-tree.yml -f docker-compose.yml up --build

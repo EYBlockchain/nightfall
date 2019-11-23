@@ -2,7 +2,7 @@ import config from 'config';
 import utils from '../zkp-utils';
 
 const { rndHex, leftPadHex } = utils;
-const INPUTS_HASHLENGTH = config.get('INPUTS_HASHLENGTH');
+const LEAF_HASHLENGTH = config.get('LEAF_HASHLENGTH');
 
 const generateTokenID = async () => rndHex(32);
 
@@ -52,7 +52,7 @@ export default {
       // commitment while mint
       get mintCommitment() {
         return utils.concatenateThenHash(
-          utils.strip0x(this.tokenID).slice(-(INPUTS_HASHLENGTH * 2)),
+          utils.strip0x(this.tokenID).slice(-(LEAF_HASHLENGTH * 2)),
           alice.pk,
           this.S_A, // S_A - set at erc-721 commitment mint (step 4)
         );
@@ -61,7 +61,7 @@ export default {
       // commitment while transfer
       get transferCommitment() {
         return utils.concatenateThenHash(
-          utils.strip0x(this.tokenID).slice(-(INPUTS_HASHLENGTH * 2)),
+          utils.strip0x(this.tokenID).slice(-(LEAF_HASHLENGTH * 2)),
           bob.pk,
           this.S_B, // S_B - set at erc-721 commitment transfer to bob (step 5)
         );

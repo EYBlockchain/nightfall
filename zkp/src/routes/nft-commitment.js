@@ -3,7 +3,7 @@
 import { Router } from 'express';
 import utils from 'zkp-utils';
 import nfController from '../nf-token-controller';
-import { getVkId, getContract } from '../contractUtils';
+import { getVkId, getTruffleContractInstance } from '../contractUtils';
 
 const router = Router();
 
@@ -12,9 +12,10 @@ async function mint(req, res, next) {
   const { tokenId, ownerPublicKey } = req.body;
   const salt = await utils.rndHex(32);
   const vkId = await getVkId('MintNFToken');
-  const { contractJson: nfTokenShieldJson, contractInstance: nfTokenShield } = await getContract(
-    'NFTokenShield',
-  );
+  const {
+    contractJson: nfTokenShieldJson,
+    contractInstance: nfTokenShield,
+  } = await getTruffleContractInstance('NFTokenShield');
 
   try {
     const { commitment, commitmentIndex } = await nfController.mint(
@@ -57,9 +58,10 @@ async function transfer(req, res, next) {
   const newCommitmentSalt = await utils.rndHex(32);
   const { address } = req.headers;
   const vkId = await getVkId('TransferNFToken');
-  const { contractJson: nfTokenShieldJson, contractInstance: nfTokenShield } = await getContract(
-    'NFTokenShield',
-  );
+  const {
+    contractJson: nfTokenShieldJson,
+    contractInstance: nfTokenShield,
+  } = await getTruffleContractInstance('NFTokenShield');
 
   try {
     const {
@@ -102,9 +104,10 @@ async function burn(req, res, next) {
   const { tokenId, salt, secretKey, commitment, commitmentIndex, tokenReceiver } = req.body;
   const { address } = req.headers;
   const vkId = await getVkId('BurnNFToken');
-  const { contractJson: nfTokenShieldJson, contractInstance: nfTokenShield } = await getContract(
-    'NFTokenShield',
-  );
+  const {
+    contractJson: nfTokenShieldJson,
+    contractInstance: nfTokenShield,
+  } = await getTruffleContractInstance('NFTokenShield');
 
   try {
     await nfController.burn(

@@ -1,0 +1,3 @@
+[submodule "merkle-tree"]
+	path = merkle-tree
+	url = git@github.com:EYBlockchain/timber.git

@@ -11,54 +11,12 @@ import config from 'config';
 import utils from './zkpUtils';
 
 /**
-@notice gets a node from the merkle tree data from the nfTokenShield contract.
-@param {string} account - the account that is paying for the transactions
-@param {contract} nfTokenShield - an instance of the nfTokenShield smart contract
-@param {integer} index - the index of the token in the merkle tree, which we want to get from the nfTokenShield contract.
-@returns {string} a hex node of the merkleTree
-*/
-async function getMerkleNode(account, shieldContract, index) {
-  const node = await shieldContract.merkleTree.call(index, { from: account });
-  return node;
-}
-
-/**
-@notice gets the latestRoot public variable from the nfTokenShield contract.
-@param {string} account - the account that is paying for the transactions
-@param {contract} nfTokenShield - an instance of the nfTokenShield smart contract
-@returns {string} latestRoot
-*/
-async function getLatestRoot(shieldContract) {
-  const latestRoot = await shieldContract.latestRoot();
-  return latestRoot;
-}
-
-/**
-@notice gets the latestRoot public variable from the nfTokenShield contract.
-@param {string} account - the account that is paying for the transactions
-@param {contract} nfTokenShield - an instance of the nfTokenShield smart contract
-@returns {string} latestRoot
-*/
-async function getCommitment(account, shieldContract, commitment) {
-  const commitmentCheck = await shieldContract.commitments.call(commitment, { from: account });
-  return commitmentCheck;
-}
-
-/**
-This function loads the verifying key data into the verifier registry smart contract
-@param {array} vk - array containing the data to load.
-@param {string} account - the account that is paying for the transactions
-@param {contract} verifier - an instance of the verifier smart contract
-@param {contract} verifierRegistry - an instance of the verifierRegistry smart contract
-*/
-
-/**
 checks the details of an incoming (newly transferred token), to ensure the data we have received is correct and legitimate!!
 */
 async function checkCorrectness(A, pk, S, z, zIndex, nfTokenShield) {
   console.log('Checking h(A|pk|S) = z...');
   const zCheck = utils.concatenateThenHash(
-    utils.strip0x(A).slice(-(config.INPUTS_HASHLENGTH * 2)),
+    utils.strip0x(A).slice(-(config.LEAF_HASHLENGTH * 2)),
     pk,
     S,
   );
@@ -79,8 +37,5 @@ async function checkCorrectness(A, pk, S, z, zIndex, nfTokenShield) {
 }
 
 export default {
-  getMerkleNode,
-  getLatestRoot,
-  getCommitment,
   checkCorrectness,
 };

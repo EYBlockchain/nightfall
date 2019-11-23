@@ -122,7 +122,7 @@ contract NFToken is
   )
   {
     address tokenOwner = idToOwner[_tokenId];
-    require(tokenOwner == msg.sender || ownerToOperators[tokenOwner][msg.sender]);
+    require(tokenOwner == msg.sender || ownerToOperators[tokenOwner][msg.sender], "msg.sender is neither an owner nor an operator of the NFT.");
     _;
   }
 
@@ -138,7 +138,8 @@ contract NFToken is
     require(
       tokenOwner == msg.sender
       || idToApproval[_tokenId] == msg.sender
-      || ownerToOperators[tokenOwner][msg.sender]
+      || ownerToOperators[tokenOwner][msg.sender],
+      "msg.sender is not allowed to transfer this NFT."
     );
     _;
   }
@@ -151,7 +152,7 @@ contract NFToken is
     uint256 _tokenId
   )
   {
-    require(idToOwner[_tokenId] != address(0));
+    require(idToOwner[_tokenId] != address(0), "The tokenId does not represent a valid token.");
     _;
   }
 
@@ -242,8 +243,8 @@ contract NFToken is
     validNFToken(_tokenId)
   {
     address tokenOwner = idToOwner[_tokenId];
-    require(tokenOwner == _from);
-    require(_to != address(0));
+    require(tokenOwner == _from, "Sender is not the owner of the token.");
+    require(_to != address(0), "Sending to address 0x0 disabled.");
 
     _transfer(_to, _tokenId);
   }
@@ -264,7 +265,7 @@ contract NFToken is
     validNFToken(_tokenId)
   {
     address tokenOwner = idToOwner[_tokenId];
-    require(_approved != tokenOwner);
+    require(_approved != tokenOwner, "The token owners address cannot be an approved address.");
 
     idToApproval[_tokenId] = _approved;
     emit Approval(tokenOwner, _approved, _tokenId);
@@ -300,7 +301,7 @@ contract NFToken is
     view
     returns (uint256)
   {
-    require(_owner != address(0));
+    require(_owner != address(0), "Queries relating to address 0x0 disabled.");
     return _getOwnerNFTCount(_owner);
   }
 
@@ -318,7 +319,7 @@ contract NFToken is
     returns (address _owner)
   {
     _owner = idToOwner[_tokenId];
-    require(_owner != address(0));
+    require(_owner != address(0), "Queries relating to address 0x0 disabled.");
   }
 
   /**
@@ -390,8 +391,8 @@ contract NFToken is
   )
     internal
   {
-    require(_to != address(0));
-    require(idToOwner[_tokenId] == address(0));
+    require(_to != address(0), "Sending to address 0x0 disabled.");
+    require(idToOwner[_tokenId] == address(0), "A token with this tokenId is already owned.");
 
     _addNFToken(_to, _tokenId);
 
@@ -447,7 +448,7 @@ contract NFToken is
   )
     internal
   {
-    require(idToOwner[_tokenId] == address(0));
+    require(idToOwner[_tokenId] == address(0), "A token with this tokenId already exists.");
 
     idToOwner[_tokenId] = _to;
     ownerToNFTokenCount[_to] = ownerToNFTokenCount[_to].add(1);
@@ -487,15 +488,15 @@ contract NFToken is
     validNFToken(_tokenId)
   {
     address tokenOwner = idToOwner[_tokenId];
-    require(tokenOwner == _from);
-    require(_to != address(0));
+    require(tokenOwner == _from, "Sender is not the owner of the token.");
+    require(_to != address(0), "Sending to address 0x0 disabled.");
 
     _transfer(_to, _tokenId);
 
     if (_to.isContract())
     {
       bytes4 retval = ERC721TokenReceiver(_to).onERC721Received(msg.sender, _from, _tokenId, _data);
-      require(retval == MAGIC_ON_ERC721_RECEIVED);
+      require(retval == MAGIC_ON_ERC721_RECEIVED, "retval != MAGIC_ON_ERC721_RECEIVED");
     }
   }
 

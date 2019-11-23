@@ -3,7 +3,7 @@
 import utils from '../src/zkpUtils';
 import bc from '../src/web3';
 import controller from '../src/nf-token-controller';
-import { getVkId, getContract } from '../src/contractUtils';
+import { getVkId, getTruffleContractInstance } from '../src/contractUtils';
 
 jest.setTimeout(7200000);
 
@@ -33,7 +33,7 @@ let nfTokenShieldAddress;
 beforeAll(async () => {
   if (!(await bc.isConnected())) await bc.connect();
   accounts = await (await bc.connection()).eth.getAccounts();
-  const { contractJson, contractInstance } = await getContract('NFTokenShield');
+  const { contractJson, contractInstance } = await getTruffleContractInstance('NFTokenShield');
   nfTokenShieldAddress = contractInstance.address;
   nfTokenShieldJson = contractJson;
   A = await utils.rndHex(32);

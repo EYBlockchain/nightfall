@@ -27,15 +27,20 @@ i.e. DIRNAME_DIRPATH_REL: "/dirName/" is a relative path which (on the host mach
 ABS - absolute path
 */
 export default {
-  INPUTS_HASHLENGTH: 32, // expected length of an input to a hash in bytes
-  MERKLE_HASHLENGTH: 27, // expected length of inputs to hashes up the merkle tree, in bytes
-  BATCH_PROOF_SIZE: 20, // the number of proofs in a batch (you will need to redo the proofs if oyu change this)
-  //* ****
+  // Tree parameters. You also need to set these in the MerkleTree.sol contract, and in Nightfall's ./config/merkle-tree/default.js config file.
+  LEAF_HASHLENGTH: 32, // expected length of an input to a hash in bytes
+  NODE_HASHLENGTH: 27, // expected length of inputs to hashes up the merkle tree, in bytes
+  TREE_HEIGHT: 32, // the height of the Merkle tree
+
+  // *****
+
+  BATCH_PROOF_SIZE: 20, // the number of proofs in a batch (you will need to redo the proofs if you change this)
+
+  // *****
+
   ZOKRATES_PRIME: '21888242871839275222246405745257275088548364400416034343698204186575808495617', // decimal representation of the prime p of GaloisField(p)
   // NOTE: 2^253 < ZOKRATES_PRIME < 2^254 - so we must use 253bit numbers to be safe (and lazy) - let's use 248bit numbers (because hex numbers ought to be an even length, and 8 divides 248 (248 is 31 bytes is 62 hex numbers))
   ZOKRATES_PACKING_SIZE: '128', // ZOKRATES_PRIME is approx 253-254bits (just shy of 256), so we pack field elements into blocks of 128 bits.
-  MERKLE_DEPTH: 33, // the depth of the coin Merkle tree
-  MERKLE_CHUNK_SIZE: 512, // the number of tokens contained in a chunk of the merkle tree.
 
   NFT_MINT_VK: './code/gm17/nft-mint/nft-mint-vk.json',
   NFT_TRANSFER_VK: './code/gm17/nft-transfer/nft-transfer-vk.json',
@@ -49,8 +54,6 @@ export default {
   AGREE_CONTRACT_VK: './code/gm17/agree-contract/agree-contract-vk.json',
 
   VK_IDS: './src/vkIds.json',
-  VERIFYING_KEY_CHUNK_SIZE: 10,
-  INPUT_CHUNK_SIZE: 128,
 
   GASPRICE: 20000000000,
 };

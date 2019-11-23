@@ -23,14 +23,14 @@
   ],
   "license": "CC0-1.0",
   "dependencies": {
-    "body-parser": "^1.18.2",
+    "body-parser": "^1.19.0",
     "config": "^3.2.2",
     "cors": "^2.8.5",
-    "express": "^4.16.2",
+    "express": "^4.17.1",
+    "request": "^2.88.0",
     "jsonwebtoken": "^8.4.0",
     "nyc": "^14.1.1",
-    "request": "^2.88.0",
-    "safe-buffer": "^5.1.2",
+    "safe-buffer": "^5.2.0",
     "underscore": "^1.9.1",
     "winston": "^3.1.0",
     "winston-daily-rotate-file": "^3.5.1"

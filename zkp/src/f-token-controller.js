@@ -13,13 +13,13 @@ import jsonfile from 'jsonfile';
 // eslint-disable-next-line import/extensions
 import zokrates from '@eyblockchain/zokrates.js';
 import fs from 'fs';
-import zkp from './f-token-zkp';
-import { computeVectors, computePath, checkRoot } from './compute-vectors';
-import Element from './Element';
-
-import Web3 from './web3';
-import { getContract } from './contractUtils';
 import utils from './zkpUtils';
+import zkp from './f-token-zkp';
+import { getSiblingPath, checkRoot } from './merkle-tree-controller';
+import formatInputsForZkSnark from './format-inputs';
+import Element from './Element';
+import Web3 from './web3';
+import { getTruffleContractInstance } from './contractUtils';
 
 const FTokenShield = contract(jsonfile.readFileSync('./build/contracts/FTokenShield.json'));
 FTokenShield.setProvider(Web3.connect());
@@ -200,12 +200,11 @@ async function mint(amount, _ownerPublicKey, _salt, vkId, blockchainOptions, zok
   console.log('VerifierRegistry contract address:', verifierRegistry.address);
 
   // Calculate new arguments for the proof:
-  console.log('AMOUNT', amount);
   const commitment = utils.zeroMSBs(utils.concatenateThenHash(amount, ownerPublicKey, salt));
 
   console.group('Existing Proof Variables:');
   const p = config.ZOKRATES_PACKING_SIZE;
-  const pt = Math.ceil((config.INPUTS_HASHLENGTH * 8) / config.ZOKRATES_PACKING_SIZE); // packets in bits
+  const pt = Math.ceil((config.LEAF_HASHLENGTH * 8) / config.ZOKRATES_PACKING_SIZE); // packets in bits
   console.log('A: ', `${amount} : `, utils.hexToFieldPreserve(amount, p, 1));
   console.log('pkA: ', ownerPublicKey, ' : ', utils.hexToFieldPreserve(ownerPublicKey, p, pt));
   console.log('S_A: ', salt, ' : ', utils.hexToFieldPreserve(salt, p, pt));
@@ -218,7 +217,7 @@ async function mint(amount, _ownerPublicKey, _salt, vkId, blockchainOptions, zok
   const publicInputHash = utils.zeroMSBs(utils.concatenateThenHash(amount, commitment));
   console.log('publicInputHash:', publicInputHash);
 
-  const vectors = computeVectors([
+  const allInputs = formatInputsForZkSnark([
     new Element(publicInputHash, 'field', 248, 1),
     new Element(amount, 'field', 128, 1),
     new Element(ownerPublicKey, 'field'),
@@ -226,7 +225,7 @@ async function mint(amount, _ownerPublicKey, _salt, vkId, blockchainOptions, zok
     new Element(commitment, 'field'),
   ]);
 
-  await zokrates.computeWitness(codePath, outputDirectory, witnessName, vectors);
+  await zokrates.computeWitness(codePath, outputDirectory, witnessName, allInputs);
 
   await zokrates.generateProof(pkPath, codePath, `${outputDirectory}/witness`, provingScheme, {
     createFile: createProofJson,
@@ -244,8 +243,8 @@ async function mint(amount, _ownerPublicKey, _salt, vkId, blockchainOptions, zok
   console.groupEnd();
 
   // Approve fTokenShieldInstance to take tokens from minter's account.
-  // TODO: Make this more generic, getContract will not be part of nightfall-sdk.
-  const { contractInstance: fToken } = await getContract('FToken');
+  // TODO: Make this more generic, getTruffleContractInstance will not be part of nightfall-sdk.
+  const { contractInstance: fToken } = await getTruffleContractInstance('FToken');
   await fToken.approve(fTokenShieldInstance.address, parseInt(amount, 16), {
     from: account,
     gas: 4000000,
@@ -254,29 +253,29 @@ async function mint(amount, _ownerPublicKey, _salt, vkId, blockchainOptions, zok
 
   console.group('Minting within the Shield contract');
 
-  const inputs = computeVectors([new Element(publicInputHash, 'field', 248, 1)]);
+  const publicInputs = formatInputsForZkSnark([new Element(publicInputHash, 'field', 248, 1)]);
 
   console.log('proof:');
   console.log(proof);
-  console.log('inputs:');
-  console.log(inputs);
+  console.log('publicInputs:');
+  console.log(publicInputs);
   console.log(`vkId: ${vkId}`);
 
   // Mint the commitment
   console.log('Approving ERC-20 spend from: ', fTokenShieldInstance.address);
-  const txReceipt = await fTokenShieldInstance.mint(proof, inputs, vkId, amount, commitment, {
+  const txReceipt = await fTokenShieldInstance.mint(proof, publicInputs, vkId, amount, commitment, {
     from: account,
     gas: 6500000,
     gasPrice: config.GASPRICE,
   });
+
+  const newLeafLog = txReceipt.logs.filter(log => {
+    return log.event === 'NewLeaf';
+  });
+  const commitmentIndex = newLeafLog[0].args.leafIndex;
+
   console.log('ERC-20 spend approved!', parseInt(amount, 16));
   console.log('Balance of account', account, (await getBalance(account)).toNumber());
-
-  const commitmentIndex = txReceipt.logs[0].args.commitment_index;
-
-  const root = await fTokenShieldInstance.latestRoot();
-  console.log(`Merkle Root after mint: ${root}`);
-  console.groupEnd();
 
   console.log('Mint output: [zA, zAIndex]:', commitment, commitmentIndex.toString());
   console.log('MINT COMPLETE\n');
@@ -299,8 +298,8 @@ async function mint(amount, _ownerPublicKey, _salt, vkId, blockchainOptions, zok
  * @returns {Object} Transaction object
  */
 async function transfer(
-  inputCommitments,
-  outputCommitments,
+  _inputCommitments,
+  _outputCommitments,
   _receiverPublicKey,
   _senderSecretKey,
   vkId,
@@ -320,13 +319,21 @@ async function transfer(
     proofName = 'proof.json',
   } = zokratesOptions;
 
+  console.group('\nIN TRANSFER...');
+
+  console.log('Finding the relevant Shield and Verifier contracts');
   const fTokenShield = contract(fTokenShieldJson);
   fTokenShield.setProvider(Web3.connect());
   const fTokenShieldInstance = await fTokenShield.at(fTokenShieldAddress);
-
-  console.group('\nIN TRANSFER...');
+  const verifier = await Verifier.deployed();
+  const verifierRegistry = await VerifierRegistry.deployed();
+  console.log('FTokenShield contract address:', fTokenShieldInstance.address);
+  console.log('Verifier contract address:', verifier.address);
+  console.log('VerifierRegistry contract address:', verifierRegistry.address);
 
   // zero the most significant bits, just in case variables weren't supplied like that
+  const inputCommitments = _inputCommitments;
+  const outputCommitments = _outputCommitments;
   for (const inputCommitment of inputCommitments) {
     inputCommitment.salt = utils.zeroMSBs(inputCommitment.salt);
     inputCommitment.commitment = utils.zeroMSBs(inputCommitment.commitment);
@@ -337,72 +344,80 @@ async function transfer(
   const senderSecretKey = utils.zeroMSBs(_senderSecretKey);
   const receiverPublicKey = utils.zeroMSBs(_receiverPublicKey);
 
-  // due to limitations in the size of the adder implemented in the proof dsl,
-  // we need C+D and E+F to easily fit in <128 bits (16 bytes). They could of course
-  // be bigger than we allow here.
-  const c = parseInt(inputCommitments[0].value, 16) + parseInt(inputCommitments[1].value, 16);
-  const e = parseInt(outputCommitments[0].value, 16) + parseInt(outputCommitments[1].value, 16);
-  if (c > 0xffffffff || e > 0xffffffff) throw new Error('Coin values are too large');
-
-  console.log('Finding the relevant Shield and Verifier contracts');
-  const verifier = await Verifier.deployed();
-  const verifierRegistry = await VerifierRegistry.deployed();
-  console.log('FTokenShield contract address:', fTokenShieldInstance.address);
-  console.log('Verifier contract address:', verifier.address);
-  console.log('VerifierRegistry contract address:', verifierRegistry.address);
-
-  const root = await fTokenShieldInstance.latestRoot();
-  console.log(`Merkle Root: ${root}`);
+  // due to limitations in the size of the adder implemented in the proof dsl, we need C+D and E+F to easily fit in <128 bits (16 bytes). They could of course be bigger than we allow here.
+  const inputSum =
+    parseInt(inputCommitments[0].value, 16) + parseInt(inputCommitments[1].value, 16);
+  const outputSum =
+    parseInt(outputCommitments[0].value, 16) + parseInt(outputCommitments[1].value, 16);
+  if (inputSum > 0xffffffff || outputSum > 0xffffffff)
+    throw new Error(`Input commitments' values are too large`);
 
   // Calculate new arguments for the proof:
-  const pkA = utils.zeroMSBs(utils.hash(senderSecretKey));
-  const nC = utils.zeroMSBs(utils.concatenateThenHash(inputCommitments[0].salt, senderSecretKey));
-  const nD = utils.zeroMSBs(utils.concatenateThenHash(inputCommitments[1].salt, senderSecretKey));
-  const zE = utils.zeroMSBs(
+  const senderPublicKey = utils.zeroMSBs(utils.hash(senderSecretKey));
+  inputCommitments[0].nullifier = utils.zeroMSBs(
+    utils.concatenateThenHash(inputCommitments[0].salt, senderSecretKey),
+  );
+  inputCommitments[1].nullifier = utils.zeroMSBs(
+    utils.concatenateThenHash(inputCommitments[1].salt, senderSecretKey),
+  );
+
+  outputCommitments[0].commitment = utils.zeroMSBs(
     utils.concatenateThenHash(
       outputCommitments[0].value,
       receiverPublicKey,
       outputCommitments[0].salt,
     ),
   );
-  const zF = utils.zeroMSBs(
-    utils.concatenateThenHash(outputCommitments[1].value, pkA, outputCommitments[1].salt),
+  outputCommitments[1].commitment = utils.zeroMSBs(
+    utils.concatenateThenHash(
+      outputCommitments[1].value,
+      senderPublicKey,
+      outputCommitments[1].salt,
+    ),
   );
 
-  // we need the Merkle path from the token commitment to the root, expressed as Elements
-  const pathC = await computePath(
+  // Get the sibling-path from the token commitments (leaves) to the root. Express each node as an Element class.
+  inputCommitments[0].siblingPath = await getSiblingPath(
     account,
     fTokenShieldInstance,
     inputCommitments[0].commitment,
     inputCommitments[0].index,
   );
-  const pathD = await computePath(
+  inputCommitments[1].siblingPath = await getSiblingPath(
     account,
     fTokenShieldInstance,
     inputCommitments[1].commitment,
     inputCommitments[1].index,
   );
 
-  const pathCElements = {
-    elements: pathC.path.map(
-      element => new Element(element, 'field', config.MERKLE_HASHLENGTH * 8, 1),
-    ), // we truncate to 216 bits - sending the whole 256 bits will overflow the prime field
-    positions: new Element(pathC.positions, 'field', 128, 1),
-  };
+  // TODO: edit merkle-tree microservice API to accept 2 path requests at once, to avoid the possibility of the merkle-tree DB's root being updated between the 2 GET requests. Until then, we need to check that both paths share the same root with the below check:
+  if (inputCommitments[0].siblingPath[0] !== inputCommitments[1].siblingPath[0])
+    throw new Error("The sibling paths don't share a common root.");
 
-  const pathDElements = {
-    elements: pathD.path.map(
-      element => new Element(element, 'field', config.MERKLE_HASHLENGTH * 8, 1),
-    ), // we truncate to 216 bits - sending the whole 256 bits will overflow the prime field
-    positions: new Element(pathD.positions, 'field', 128, 1),
-  };
-  // console.log(`pathDlements.path:`, pathDElements.elements);
-  // console.log(`pathDlements.positions:`, pathDElements.positions);
+  const root = inputCommitments[0].siblingPath[0];
+  // TODO: checkRoot() is not essential. It's only useful for debugging as we make iterative improvements to nightfall's zokrates files. Possibly delete in future.
+  checkRoot(
+    inputCommitments[0].commitment,
+    inputCommitments[0].index,
+    inputCommitments[0].siblingPath,
+    root,
+  );
+  checkRoot(
+    inputCommitments[1].commitment,
+    inputCommitments[1].index,
+    inputCommitments[1].siblingPath,
+    root,
+  );
 
-  // Although we only strictly need the root to be reconciled within zokrates, it's easier to check and intercept any errors in js; so we'll first try to reconcole here:
-  checkRoot(inputCommitments[0].commitment, pathC, root);
-  checkRoot(inputCommitments[1].commitment, pathD, root);
+  inputCommitments[0].siblingPathElements = inputCommitments[0].siblingPath.map(
+    nodeValue => new Element(nodeValue, 'field', config.NODE_HASHLENGTH * 8, 1),
+  ); // we truncate to 216 bits - sending the whole 256 bits will overflow the prime field
 
+  inputCommitments[1].siblingPathElements = inputCommitments[1].siblingPath.map(
+    element => new Element(element, 'field', config.NODE_HASHLENGTH * 8, 1),
+  ); // we truncate to 216 bits - sending the whole 256 bits will overflow the prime field
+
+  // console logging:
   console.group('Existing Proof Variables:');
   const p = config.ZOKRATES_PACKING_SIZE;
   console.log(
@@ -417,7 +432,9 @@ async function transfer(
   console.log(
     `F: ${outputCommitments[1].value} : ${utils.hexToFieldPreserve(outputCommitments[1].value, p)}`,
   );
-  console.log(`pkB: ${receiverPublicKey} : ${utils.hexToFieldPreserve(receiverPublicKey, p)}`);
+  console.log(
+    `receiverPublicKey: ${receiverPublicKey} : ${utils.hexToFieldPreserve(receiverPublicKey, p)}`,
+  );
   console.log(
     `S_C: ${inputCommitments[0].salt} : ${utils.hexToFieldPreserve(inputCommitments[0].salt, p)}`,
   );
@@ -430,7 +447,9 @@ async function transfer(
   console.log(
     `S_F: ${outputCommitments[1].salt} : ${utils.hexToFieldPreserve(outputCommitments[1].salt, p)}`,
   );
-  console.log(`skA: ${senderSecretKey} : ${utils.hexToFieldPreserve(senderSecretKey, p)}`);
+  console.log(
+    `senderSecretKey: ${senderSecretKey} : ${utils.hexToFieldPreserve(senderSecretKey, p)}`,
+  );
   console.log(
     `zC: ${inputCommitments[0].commitment} : ${utils.hexToFieldPreserve(
       inputCommitments[0].commitment,
@@ -446,15 +465,47 @@ async function transfer(
   console.groupEnd();
 
   console.group('New Proof Variables:');
-  console.log(`pkA: ${pkA} : ${utils.hexToFieldPreserve(pkA, p)}`);
-  console.log(`nC: ${nC} : ${utils.hexToFieldPreserve(nC, p)}`);
-  console.log(`nD: ${nD} : ${utils.hexToFieldPreserve(nD, p)}`);
-  console.log(`zE: ${zE} : ${utils.hexToFieldPreserve(zE, p)}`);
-  console.log(`zF: ${zF} : ${utils.hexToFieldPreserve(zF, p)}`);
+  console.log(`pkA: ${senderPublicKey} : ${utils.hexToFieldPreserve(senderPublicKey, p)}`);
+  console.log(
+    `inputCommitments[0].nullifier: ${inputCommitments[0].nullifier} : ${utils.hexToFieldPreserve(
+      inputCommitments[0].nullifier,
+      p,
+    )}`,
+  );
+  console.log(
+    `inputCommitments[1].nullifier: ${inputCommitments[1].nullifier} : ${utils.hexToFieldPreserve(
+      inputCommitments[1].nullifier,
+      p,
+    )}`,
+  );
+  console.log(
+    `zE: ${outputCommitments[0].commitment} : ${utils.hexToFieldPreserve(
+      outputCommitments[0].commitment,
+      p,
+    )}`,
+  );
+  console.log(
+    `zF: ${outputCommitments[1].commitment} : ${utils.hexToFieldPreserve(
+      outputCommitments[1].commitment,
+      p,
+    )}`,
+  );
   console.log(`root: ${root} : ${utils.hexToFieldPreserve(root, p)}`);
+  console.log(`inputCommitments[0].siblingPath:`, inputCommitments[0].siblingPath);
+  console.log(`inputCommitments[1].siblingPath:`, inputCommitments[1].siblingPath);
+  console.log(`inputCommitments[0].index:`, inputCommitments[0].index);
+  console.log(`inputCommitments[1].index:`, inputCommitments[1].index);
   console.groupEnd();
 
-  const publicInputHash = utils.zeroMSBs(utils.concatenateThenHash(root, nC, nD, zE, zF));
+  const publicInputHash = utils.zeroMSBs(
+    utils.concatenateThenHash(
+      root,
+      inputCommitments[0].nullifier,
+      inputCommitments[1].nullifier,
+      outputCommitments[0].commitment,
+      outputCommitments[1].commitment,
+    ),
+  );
   console.log('publicInputHash:', publicInputHash);
 
   // compute the proof
@@ -465,30 +516,30 @@ async function transfer(
     'vector order: [C,skA,S_C,pathC[0...31],orderC,D,S_D,pathD[0...31], orderD,nC,nD,E,pkB,S_E,zE,F,S_F,zF,root]',
   );
 
-  const vectors = computeVectors([
+  const allInputs = formatInputsForZkSnark([
     new Element(publicInputHash, 'field', 216, 1),
     new Element(inputCommitments[0].value, 'field', 128, 1),
     new Element(senderSecretKey, 'field'),
     new Element(inputCommitments[0].salt, 'field'),
-    ...pathCElements.elements.slice(1),
-    pathCElements.positions,
+    ...inputCommitments[0].siblingPathElements.slice(1),
+    new Element(inputCommitments[0].index, 'field', 128, 1), // the binary decomposition of a leafIndex gives its path's 'left-right' positions up the tree. The decomposition is done inside the circuit.,
     new Element(inputCommitments[1].value, 'field', 128, 1),
     new Element(inputCommitments[1].salt, 'field'),
-    ...pathDElements.elements.slice(1),
-    pathDElements.positions,
-    new Element(nC, 'field'),
-    new Element(nD, 'field'),
+    ...inputCommitments[1].siblingPathElements.slice(1),
+    new Element(inputCommitments[1].index, 'field', 128, 1), // the binary decomposition of a leafIndex gives its path's 'left-right' positions up the tree. The decomposition is done inside the circuit.,
+    new Element(inputCommitments[0].nullifier, 'field'),
+    new Element(inputCommitments[1].nullifier, 'field'),
     new Element(outputCommitments[0].value, 'field', 128, 1),
     new Element(receiverPublicKey, 'field'),
     new Element(outputCommitments[0].salt, 'field'),
-    new Element(zE, 'field'),
+    new Element(outputCommitments[0].commitment, 'field'),
     new Element(outputCommitments[1].value, 'field', 128, 1),
     new Element(outputCommitments[1].salt, 'field'),
-    new Element(zF, 'field'),
+    new Element(outputCommitments[1].commitment, 'field'),
     new Element(root, 'field'),
   ]);
 
-  await zokrates.computeWitness(codePath, outputDirectory, witnessName, vectors);
+  await zokrates.computeWitness(codePath, outputDirectory, witnessName, allInputs);
 
   await zokrates.generateProof(pkPath, codePath, `${outputDirectory}/witness`, provingScheme, {
     createFile: createProofJson,
@@ -507,25 +558,25 @@ async function transfer(
 
   console.group('Transferring within the Shield contract');
 
-  const inputs = computeVectors([new Element(publicInputHash, 'field', 216, 1)]);
+  const publicInputs = formatInputsForZkSnark([new Element(publicInputHash, 'field', 216, 1)]);
 
   console.log('proof:');
   console.log(proof);
-  console.log('inputs:');
-  console.log(inputs);
+  console.log('publicInputs:');
+  console.log(publicInputs);
 
   console.log(`vkId: ${vkId}`);
 
   // Transfers commitment
-  const transferReceipt = await fTokenShieldInstance.transfer(
+  const txReceipt = await fTokenShieldInstance.transfer(
     proof,
-    inputs,
+    publicInputs,
     vkId,
     root,
-    nC,
-    nD,
-    zE,
-    zF,
+    inputCommitments[0].nullifier,
+    inputCommitments[1].nullifier,
+    outputCommitments[0].commitment,
+    outputCommitments[1].commitment,
     {
       from: account,
       gas: 6500000,
@@ -533,29 +584,20 @@ async function transfer(
     },
   );
 
-  const newRoot = await fTokenShieldInstance.latestRoot();
-  console.log(`Merkle Root after transfer: ${newRoot}`);
+  const newLeavesLog = txReceipt.logs.filter(log => {
+    return log.event === 'NewLeaves';
+  });
+  // eslint-disable-next-line no-param-reassign
+  outputCommitments[0].index = parseInt(newLeavesLog[0].args.minLeafIndex, 10);
+  // eslint-disable-next-line no-param-reassign
+  outputCommitments[1].index = outputCommitments[0].index + 1;
   console.groupEnd();
-
-  const zEIndex = transferReceipt.logs[0].args.commitment1_index;
-  const zFIndex = transferReceipt.logs[0].args.commitment2_index;
 
   console.log('TRANSFER COMPLETE\n');
   console.groupEnd();
   return {
-    outputCommitments: [
-      {
-        commitment: zE,
-        index: zEIndex,
-        salt: outputCommitments[0].salt,
-      },
-      {
-        commitment: zF,
-        index: zFIndex,
-        salt: outputCommitments[1].salt,
-      },
-    ],
-    transferReceipt,
+    outputCommitments,
+    txReceipt,
   };
 }
 
@@ -578,10 +620,10 @@ there's no concept of joining and splitting (yet).
 @returns {object} txObj - a promise of a blockchain transaction
 */
 async function simpleFungibleBatchTransfer(
-  inputCommitment,
-  outputCommitments,
-  receiversPublicKeys,
-  senderSecretKey,
+  _inputCommitment,
+  _outputCommitments,
+  _receiversPublicKeys,
+  _senderSecretKey,
   vkId,
   blockchainOptions,
   zokratesOptions,
@@ -599,77 +641,85 @@ async function simpleFungibleBatchTransfer(
     proofName = 'proof.json',
   } = zokratesOptions;
 
+  console.group('\nIN TRANSFER...');
+
+  console.log('Finding the relevant Shield and Verifier contracts');
   const fTokenShield = contract(fTokenShieldJson);
   fTokenShield.setProvider(Web3.connect());
   const fTokenShieldInstance = await fTokenShield.at(fTokenShieldAddress);
-
-  console.group('\nIN TRANSFER...');
-  // firstly, we may have been passed hex strings longer than 216 bits.  That won't work
-  // for our scheme so we need to zero out any leading zeros. (Ignore coins because they are 128 bits)
-  const pkB = receiversPublicKeys.map(k => utils.zeroMSBs(k));
-  const S_C = utils.zeroMSBs(inputCommitment.salt);
-  const S_E = outputCommitments.map(k => utils.zeroMSBs(k.salt));
-  const E = outputCommitments.map(k => k.value);
-  const skA = utils.zeroMSBs(senderSecretKey);
-  const zC = utils.zeroMSBs(inputCommitment.commitment);
-
-  // check we have arrays of the correct length
-  if (outputCommitments.length !== config.BATCH_PROOF_SIZE)
-    throw new Error('Array E was the wrong length');
-  if (pkB.length !== config.BATCH_PROOF_SIZE) throw new Error('Array pkB was the wrong length');
-  if (S_E.length !== config.BATCH_PROOF_SIZE) throw new Error('Array S_E was the wrong length');
-
-  // as BigInt is a better representation (up until now we've preferred hex strings),
-  // we may get inputs passed as hex strings so let's do a conversion just in case
-
-  // addition check
-  const c = BigInt(inputCommitment.value);
-  const T = E.reduce((acc, e) => acc + BigInt(e), BigInt(0));
-  if (c !== T)
-    throw new Error(
-      `Input commitment value was ${inputCommitment.value} but output total was ${T}`,
-    );
-
-  console.log('Finding the relevant Shield and Verifier contracts');
   const verifier = await Verifier.deployed();
   const verifierRegistry = await VerifierRegistry.deployed();
   console.log('FTokenShield contract address:', fTokenShieldInstance.address);
   console.log('Verifier contract address:', verifier.address);
   console.log('VerifierRegistry contract address:', verifierRegistry.address);
 
-  const root = await fTokenShieldInstance.latestRoot();
-  console.log(`Merkle Root: ${root}`);
+  // firstly, we may have been passed hex strings longer than 216 bits.  That won't work
+  // for our scheme so we need to zero out any leading zeros. (Ignore coins because they are 128 bits)
+  const inputCommitment = _inputCommitment;
+  let outputCommitments = _outputCommitments;
+  inputCommitment.commitment = utils.zeroMSBs(inputCommitment.commitment);
+  inputCommitment.salt = utils.zeroMSBs(_inputCommitment.salt);
+  outputCommitments = _outputCommitments.map(_item => {
+    const item = _item;
+    item.salt = utils.zeroMSBs(item.salt);
+    return item;
+  });
+  const senderSecretKey = utils.zeroMSBs(_senderSecretKey);
+  const receiversPublicKeys = _receiversPublicKeys.map(key => utils.zeroMSBs(key));
+
+  // check we have arrays of the correct length
+  if (outputCommitments.length !== config.BATCH_PROOF_SIZE)
+    throw new Error('outputCommitments array is the wrong length');
+  if (receiversPublicKeys.length !== config.BATCH_PROOF_SIZE)
+    throw new Error('receiversPublicKeys array is the wrong length');
+
+  // as BigInt is a better representation (up until now we've preferred hex strings), we may get inputs passed as hex strings so let's do a conversion just in case
+
+  // addition check
+  const inputSum = BigInt(inputCommitment.value);
+  const outputSum = outputCommitments.reduce((acc, item) => acc + BigInt(item.value), BigInt(0));
+  if (inputSum !== outputSum)
+    throw new Error(`Input commitment value was ${inputSum} but output total was ${outputSum}`);
 
   // Calculate new arguments for the proof:
-  const nC = utils.zeroMSBs(utils.concatenateThenHash(S_C, skA));
-  const zE = [];
-  for (let i = 0; i < E.length; i++) {
-    zE[i] = utils.zeroMSBs(utils.concatenateThenHash(E[i], pkB[i], S_E[i]));
+  inputCommitment.nullifier = utils.zeroMSBs(
+    utils.concatenateThenHash(inputCommitment.salt, senderSecretKey),
+  );
+
+  for (let i = 0; i < outputCommitments.length; i++) {
+    outputCommitments[i].commitment = utils.zeroMSBs(
+      utils.concatenateThenHash(
+        outputCommitments[i].value,
+        receiversPublicKeys[i],
+        outputCommitments[i].salt,
+      ),
+    );
   }
-  // we need the Merkle path from the token commitment to the root, expressed as Elements
-  const pathC = await computePath(account, fTokenShieldInstance, zC, inputCommitment.index);
-  const pathCElements = {
-    elements: pathC.path.map(
-      element => new Element(element, 'field', config.MERKLE_HASHLENGTH * 8, 1),
-    ), // we truncate to 216 bits - sending the whole 256 bits will overflow the prime field
-    positions: new Element(pathC.positions, 'field', 128, 1),
-  };
 
-  // Although we only strictly need the root to be reconciled within zokrates, it's easier to check and intercept any errors in js; so we'll first try to reconcole here:
-  checkRoot(zC, pathC, root); // this function currently needs hex rather than BigInt
-  const publicInputHash = utils.zeroMSBs(utils.concatenateThenHash(root, nC, ...zE));
+  // Get the sibling-path from the token commitments (leaves) to the root. Express each node as an Element class.
+  inputCommitment.siblingPath = await getSiblingPath(
+    account,
+    fTokenShieldInstance,
+    inputCommitment.commitment,
+    inputCommitment.index,
+  );
+
+  const root = inputCommitment.siblingPath[0];
+  // TODO: checkRoot() is not essential. It's only useful for debugging as we make iterative improvements to nightfall's zokrates files.  Although we only strictly need the root to be reconciled within zokrates, it's easier to check and intercept any errors in js; so we'll first try to reconcole here. Possibly delete in future.
+  checkRoot(inputCommitment.commitment, inputCommitment.index, inputCommitment.siblingPath, root);
+
+  inputCommitment.siblingPathElements = inputCommitment.siblingPath.map(
+    nodeValue => new Element(nodeValue, 'field', config.NODE_HASHLENGTH * 8, 1),
+  ); // we truncate to 216 bits - sending the whole 256 bits will overflow the prime field
+
+  const publicInputHash = utils.zeroMSBs(
+    utils.concatenateThenHash(
+      root,
+      inputCommitment.nullifier,
+      ...outputCommitments.map(item => item.commitment),
+    ),
+  );
   console.log('publicInputHash:', publicInputHash);
-
-  const inputs = computeVectors([new Element(publicInputHash, 'field', 216, 1)]);
-  console.log('inputs:');
-  console.log(inputs);
-
-  // get the pwd so we can talk to the container:
-  const pwd = process.env.PWD.toString();
-  console.log(pwd);
-
-  const hostDir = config.FT_SIMPLE_BATCH_TRANSFER_DIR;
-  console.log(hostDir);
 
   // compute the proof
   console.log(
@@ -678,22 +728,22 @@ async function simpleFungibleBatchTransfer(
   console.log(
     'vector order: [C,skA,S_C,pathC[0...31],orderC,D,S_D,pathD[0...31], orderD,nC,nD,E,pkB,S_E,zE,F,S_F,zF,root]',
   );
-  const vectors = computeVectors([
+  const allInputs = formatInputsForZkSnark([
     new Element(publicInputHash, 'field', 216, 1),
     new Element(inputCommitment.value, 'field', 128, 1),
-    new Element(skA, 'field', 216, 1),
-    new Element(S_C, 'field', 216, 1),
-    ...pathCElements.elements.slice(1),
-    pathCElements.positions,
-    new Element(nC, 'field', 216, 1),
-    ...E.map(e => new Element(e, 'field', 128, 1)),
-    ...pkB.map(pkb => new Element(pkb, 'field', 216, 1)),
-    ...S_E.map(se => new Element(se, 'field', 216, 1)),
-    ...zE.map(ze => new Element(ze, 'field', 216, 1)),
+    new Element(senderSecretKey, 'field', 216, 1),
+    new Element(inputCommitment.salt, 'field', 216, 1),
+    ...inputCommitment.siblingPathElements.slice(1),
+    new Element(inputCommitment.index, 'field', 128, 1), // the binary decomposition of a leafIndex gives its path's 'left-right' positions up the tree. The decomposition is done inside the circuit.,,
+    new Element(inputCommitment.nullifier, 'field', 216, 1),
+    ...outputCommitments.map(item => new Element(item.value, 'field', 128, 1)),
+    ...receiversPublicKeys.map(item => new Element(item, 'field', 216, 1)),
+    ...outputCommitments.map(item => new Element(item.salt, 'field', 216, 1)),
+    ...outputCommitments.map(item => new Element(item.commitment, 'field', 216, 1)),
     new Element(root, 'field', 216, 1),
   ]);
 
-  await zokrates.computeWitness(codePath, outputDirectory, witnessName, vectors);
+  await zokrates.computeWitness(codePath, outputDirectory, witnessName, allInputs);
 
   await zokrates.generateProof(pkPath, codePath, `${outputDirectory}/witness`, provingScheme, {
     createFile: createProofJson,
@@ -710,14 +760,25 @@ async function simpleFungibleBatchTransfer(
   proof = proof.map(el => utils.hexToDec(el));
   console.groupEnd();
 
+  console.group('Transferring within the Shield contract');
+
+  const publicInputs = formatInputsForZkSnark([new Element(publicInputHash, 'field', 216, 1)]);
+
+  console.log('proof:');
+  console.log(proof);
+  console.log('publicInputs:');
+  console.log(publicInputs);
+
+  console.log(`vkId: ${vkId}`);
+
   // send the token to Bob by transforming the commitment
-  const transferReceipt = await fTokenShieldInstance.simpleBatchTransfer(
+  const txReceipt = await fTokenShieldInstance.simpleBatchTransfer(
     proof,
-    inputs,
+    publicInputs,
     vkId,
     root,
-    nC,
-    zE,
+    inputCommitment.nullifier,
+    outputCommitments.map(item => item.commitment),
     {
       from: account,
       gas: 6500000,
@@ -725,18 +786,19 @@ async function simpleFungibleBatchTransfer(
     },
   );
 
-  const newRoot = await fTokenShieldInstance.latestRoot();
-  console.log(`Merkle Root after transfer: ${newRoot}`);
+  const newLeavesLog = txReceipt.logs.filter(log => {
+    return log.event === 'NewLeaves';
+  });
+  const minOutputCommitmentIndex = parseInt(newLeavesLog[0].args.minLeafIndex, 10);
+  const maxOutputCommitmentIndex = minOutputCommitmentIndex + outputCommitments.length - 1;
   console.groupEnd();
-
-  const zEIndex = transferReceipt.logs[0].args.commitment_index;
 
   console.log('TRANSFER COMPLETE\n');
   console.groupEnd();
   return {
-    z_E: zE,
-    z_E_index: zEIndex,
-    transferReceipt,
+    z_E: outputCommitments.map(item => item.commitment),
+    z_E_index: maxOutputCommitmentIndex,
+    txReceipt,
   };
 }
 
@@ -783,77 +845,80 @@ async function burn(
     proofName = 'proof.json',
   } = zokratesOptions;
 
-  const fTokenShield = contract(fTokenShieldJson);
-  fTokenShield.setProvider(Web3.connect());
-  const fTokenShieldInstance = await fTokenShield.at(fTokenShieldAddress);
-
   let payTo = _payTo;
   if (payTo === undefined) payTo = account; // have the option to pay out to another address
   // before we can burn, we need to deploy a verifying key to mintVerifier (reusing mint for this)
   console.group('\nIN BURN...');
 
   console.log('Finding the relevant Shield and Verifier contracts');
+  const fTokenShield = contract(fTokenShieldJson);
+  fTokenShield.setProvider(Web3.connect());
+  const fTokenShieldInstance = await fTokenShield.at(fTokenShieldAddress);
   const verifier = await Verifier.deployed();
   const verifierRegistry = await VerifierRegistry.deployed();
   console.log('FTokenShield contract address:', fTokenShieldInstance.address);
   console.log('Verifier contract address:', verifier.address);
   console.log('VerifierRegistry contract address:', verifierRegistry.address);
 
-  const root = await fTokenShieldInstance.latestRoot(); // solidity getter for the public variable latestRoot
-  console.log(`Merkle Root: ${root}`);
-
   // Calculate new arguments for the proof:
-  const Nc = utils.zeroMSBs(utils.concatenateThenHash(salt, receiverSecretKey));
-  // We need the Merkle path from the commitment to the root, expressed as Elements
-  const path = await computePath(account, fTokenShieldInstance, commitment, commitmentIndex);
-  const pathElements = {
-    elements: path.path.map(
-      element => new Element(element, 'field', config.MERKLE_HASHLENGTH * 8, 1),
-    ), // We can fit the 216 bit hash into a single field - more compact
-    positions: new Element(path.positions, 'field', 128, 1),
-  };
-  // console.log(`pathElements.path:`, pathElements.elements);
-  // console.log(`pathElements.positions:`, pathElements.positions);
+  const nullifier = utils.zeroMSBs(utils.concatenateThenHash(salt, receiverSecretKey));
 
-  // Although we only strictly need the root to be reconciled within zokrates, it's easier to check and intercept any errors in js; so we'll first try to reconcole here:
-  checkRoot(commitment, path, root);
+  // Get the sibling-path from the token commitments (leaves) to the root. Express each node as an Element class.
+  const siblingPath = await getSiblingPath(
+    account,
+    fTokenShieldInstance,
+    commitment,
+    commitmentIndex,
+  );
+
+  const root = siblingPath[0];
+  // TODO: checkRoot() is not essential. It's only useful for debugging as we make iterative improvements to nightfall's zokrates files. Possibly delete in future.
+  checkRoot(commitment, commitmentIndex, siblingPath, root);
+
+  const siblingPathElements = siblingPath.map(
+    nodeValue => new Element(nodeValue, 'field', config.NODE_HASHLENGTH * 8, 1),
+  ); // we truncate to 216 bits - sending the whole 256 bits will overflow the prime field
 
   // Summarise values in the console:
   console.group('Existing Proof Variables:');
   const p = config.ZOKRATES_PACKING_SIZE;
-  console.log(`C: ${amount} : ${utils.hexToFieldPreserve(amount, p)}`);
-  console.log(`skA: ${receiverSecretKey} : ${utils.hexToFieldPreserve(receiverSecretKey, p)}`);
-  console.log(`S_C: ${salt} : ${utils.hexToFieldPreserve(salt, p)}`);
+  console.log(`amount: ${amount} : ${utils.hexToFieldPreserve(amount, p)}`);
+  console.log(
+    `receiverSecretKey: ${receiverSecretKey} : ${utils.hexToFieldPreserve(receiverSecretKey, p)}`,
+  );
+  console.log(`salt: ${salt} : ${utils.hexToFieldPreserve(salt, p)}`);
   console.log(`payTo: ${payTo} : ${utils.hexToFieldPreserve(payTo, p)}`);
-  const payToLeftPadded = utils.leftPadHex(payTo, config.INPUTS_HASHLENGTH * 2); // left-pad the payToAddress with 0's to fill all 256 bits (64 octets) (so the sha256 function is hashing the same thing as inside the zokrates proof)
+  const payToLeftPadded = utils.leftPadHex(payTo, config.LEAF_HASHLENGTH * 2); // left-pad the payToAddress with 0's to fill all 256 bits (64 octets) (so the sha256 function is hashing the same thing as inside the zokrates proof)
   console.log(`payToLeftPadded: ${payToLeftPadded}`);
   console.groupEnd();
 
   console.group('New Proof Variables:');
-  console.log(`Nc: ${Nc} : ${utils.hexToFieldPreserve(Nc, p)}`);
-  console.log(`zC: ${commitment} : ${utils.hexToFieldPreserve(commitment, p)}`);
+  console.log(`nullifier: ${nullifier} : ${utils.hexToFieldPreserve(nullifier, p)}`);
+  console.log(`commitment: ${commitment} : ${utils.hexToFieldPreserve(commitment, p)}`);
   console.log(`root: ${root} : ${utils.hexToFieldPreserve(root, p)}`);
+  console.log(`siblingPath:`, siblingPath);
+  console.log(`commitmentIndex:`, commitmentIndex);
   console.groupEnd();
 
-  const publicInputHash = utils.concatenateThenHash(root, Nc, amount, payToLeftPadded); // notice we're using the version of payTo which has been padded to 256-bits; to match our derivation of publicInputHash within our zokrates proof.
+  const publicInputHash = utils.concatenateThenHash(root, nullifier, amount, payToLeftPadded); // notice we're using the version of payTo which has been padded to 256-bits; to match our derivation of publicInputHash within our zokrates proof.
   console.log('publicInputHash:', publicInputHash);
 
   // compute the proof
   console.group('Computing proof with w=[skA,S_C,path[],order] x=[C,Nc,root,1]');
 
-  const vectors = computeVectors([
+  const allInputs = formatInputsForZkSnark([
     new Element(publicInputHash, 'field', 216, 1),
     new Element(payTo, 'field'),
     new Element(amount, 'field', 128, 1),
     new Element(receiverSecretKey, 'field'),
     new Element(salt, 'field'),
-    ...pathElements.elements.slice(1),
-    pathElements.positions,
-    new Element(Nc, 'field'),
+    ...siblingPathElements.slice(1),
+    new Element(commitmentIndex, 'field', 128, 1), // the binary decomposition of a leafIndex gives its path's 'left-right' positions up the tree. The decomposition is done inside the circuit.,
+    new Element(nullifier, 'field'),
     new Element(root, 'field'),
   ]);
 
-  await zokrates.computeWitness(codePath, outputDirectory, witnessName, vectors);
+  await zokrates.computeWitness(codePath, outputDirectory, witnessName, allInputs);
 
   await zokrates.generateProof(pkPath, codePath, `${outputDirectory}/witness`, provingScheme, {
     createFile: createProofJson,
@@ -872,16 +937,16 @@ async function burn(
 
   console.group('Burning within the Shield contract');
 
-  const inputs = computeVectors([new Element(publicInputHash, 'field', 216, 1)]);
+  const publicInputs = formatInputsForZkSnark([new Element(publicInputHash, 'field', 216, 1)]);
 
   console.log('proof:');
   console.log(proof);
-  console.log('inputs:');
-  console.log(inputs);
+  console.log('publicInputs:');
+  console.log(publicInputs);
   console.log(`vkId: ${vkId}`);
 
   // Burn the commitment and return tokens to the payTo account.
-  await fTokenShieldInstance.burn(proof, inputs, vkId, root, Nc, amount, payTo, {
+  await fTokenShieldInstance.burn(proof, publicInputs, vkId, root, nullifier, amount, payTo, {
     from: account,
     gas: 6500000,
     gasPrice: config.GASPRICE,
