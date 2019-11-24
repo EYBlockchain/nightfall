@@ -1,7 +1,6 @@
 # Nightfall Zero-Knowledge Proof Service
 
-_This module is part of Nightfall. Most users will only be interested in using the application as a whole, we direct those readers to [the main README](../README.md). This file provides additional
-information on how this module works so you can learn about, tinker and improve it._
+_This module is part of Nightfall. Most users will only be interested in using the application as a whole, we direct those readers to [the main README](../README.md). This file provides additional information on how this module works so you can learn about, tinker and improve it._
 
 ## Tasks you can perform
 
@@ -92,9 +91,6 @@ rm -rf node_modules
 
 ## Further reading
 
--   [README-tools-trusted-setup.md](code/README-tools-trusted-setup.md) explains the steps that npm
-  will run in the "setup" and "setupAll" tasks.
--   [README-manual-trusted-setup.md](code/README-manual-trusted-setup.md) is a deeper walkthrough of
-  the "generating key pairs" task above.
--   [README-tools-code-preprop.md](code/README-tools-code-preprop.md) explains "pcode", an abbreviated
-  language Nightfall uses that transpiles down to the ZoKrates "code" language.
+-   [README-tools-trusted-setup.md](code/README-tools-trusted-setup.md) explains the steps that npm will run in the "setup" and "setupAll" tasks.
+-   [README-manual-trusted-setup.md](code/README-manual-trusted-setup.md) is a deeper walkthrough of the "generating key pairs" task above.
+-   [README-tools-code-preprop.md](code/README-tools-code-preprop.md) explains "pcode", an abbreviated language Nightfall uses that transpiles down to the ZoKrates "code" language.
