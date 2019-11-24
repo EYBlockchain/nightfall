@@ -743,6 +743,11 @@ async function simpleFungibleBatchTransfer(
     new Element(root, 'field', 216, 1),
   ]);
 
+  console.log(
+    'To debug witness computation, use ./zok to run up a zokrates container then paste these arguments into the terminal:',
+  );
+  console.log(`./zokrates compute-witness -a ${allInputs.join(' ')} -i gm17/ft-batch-transfer/out`);
+
   await zokrates.computeWitness(codePath, outputDirectory, witnessName, allInputs);
 
   await zokrates.generateProof(pkPath, codePath, `${outputDirectory}/witness`, provingScheme, {
