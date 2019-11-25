@@ -147,6 +147,41 @@ export default class FtCommitmentService {
   }
 
   /**
+   *
+   * Method to initiate a HTTP request to transfer ERC-20 token batch commitments.
+   *
+   * @param amount {String} Amount of selected fungible token
+   * @param commitmentIndex {String} Fungible Token commitment index
+   * @param commitment {String} fungible token commitment
+   * @param salt {String} Public key of Alice
+   * @param transferData {Array} Array of value to transfer and receiver name
+   */
+  transferFTBatchCommitment (
+    amount: string,
+    salt: string,
+    commitment: string,
+    commitmentIndex: Number,
+    transferData: Object
+    ) {
+    const httpOptions = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+    };
+
+    const body = {
+      amount,
+      salt,
+      commitment,
+      commitmentIndex,
+      transferData
+    };
+
+    const url = config.apiGateway.root + 'simpleFTCommitmentBatchTransfer';
+    return this.http
+      .post(url, body, httpOptions)
+      .pipe(tap(data => console.log(data)), catchError(this.handleError('spendCoinCommitment', [])));
+  }
+
+  /**
    * Method for HTTP error handler
    *
    * @param operation {String}

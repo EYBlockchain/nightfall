@@ -144,7 +144,8 @@ export default class FtBatchCommitmentTrasnferComponent implements OnInit , Afte
         "salt": data.salt,
         "commitment": data.ft_commitment,
         "commitmentIndex": data.ft_commitment_index,
-        "transferData": this.transferDetails.value
+        "id": data.id,
+        "transferData": this.transferDetails.value,
       }
     }
   }
@@ -164,6 +165,7 @@ export default class FtBatchCommitmentTrasnferComponent implements OnInit , Afte
         emptyInputFlag = true;
       }
     });
+    const { transactions } = this;
     if(emptyInputFlag == true){
       this.toastr.error('All fields are mandatory');
       return;
@@ -171,31 +173,22 @@ export default class FtBatchCommitmentTrasnferComponent implements OnInit , Afte
     this.isRequesting = true;
     this.batchTransactionGenerator();
     console.log(this.batchTransactions);
-    this.isRequesting = false;
-    /* this.ftCommitmentService.transferFTCommitment(
-      coin1['ft_commitment_value'],
-      coin2['ft_commitment_value'],
-      this.toHex(transferValue),
-      this.toHex(returnValue),
-      coin1['salt'],
-      coin2['salt'],
-      coin1['ft_commitment_index'],
-      coin2['ft_commitment_index'],
-      coin1['ft_commitment'],
-      coin2['ft_commitment'],
-      localStorage.getItem('publickey'),
-      this.receiverName
+    this.ftCommitmentService.transferFTBatchCommitment(
+      this.batchTransactions.amount,
+      this.batchTransactions.salt,
+      this.batchTransactions.commitment,
+      this.batchTransactions.commitmentIndex,
+      this.batchTransactions.transferData
     ).subscribe( data => {
         this.isRequesting = false;
-        this.toastr.success('Transfer to Receiver ' + this.receiverName);
-        transactions.splice(Number(coin1['id']), 1);
-        transactions.splice(Number(coin2['id']) - 1, 1);
+        this.toastr.success('Transferred to selected receivers');
+        transactions.splice(this.batchTransactions['id'], 1);
         this.getFTCommitments();
-        this.router.navigate(['/overview'], { queryParams: { selectedTab: 'ft-commitment' } });
+        this.router.navigate(['/overview'], { queryParams: { selectedTab: 'ft-batch-commitment' } });
       }, error => {
         this.isRequesting = false;
         this.toastr.error('Please try again', 'Error');
-    }); */
+    }); 
   }
 
   /**
