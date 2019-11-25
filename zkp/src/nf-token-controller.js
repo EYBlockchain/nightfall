@@ -311,6 +311,8 @@ async function mint(tokenId, ownerPublicKey, salt, vkId, blockchainOptions, zokr
       gasPrice: config.GASPRICE,
     },
   );
+  console.log('\nGas used in mint:');
+  console.log(txReceipt.receipt.gasUsed);
 
   const newLeafLog = txReceipt.logs.filter(log => {
     return log.event === 'NewLeaf';
@@ -493,7 +495,7 @@ async function transfer(
   console.log(publicInputs);
   console.log(`vkId: ${vkId}`);
 
-  const transferReceipt = await nfTokenShieldInstance.transfer(
+  const txReceipt = await nfTokenShieldInstance.transfer(
     proof,
     publicInputs,
     vkId,
@@ -506,8 +508,10 @@ async function transfer(
       gasPrice: config.GASPRICE,
     },
   );
+  console.log('\nGas used in transfer:');
+  console.log(txReceipt.receipt.gasUsed);
 
-  const newLeafLog = transferReceipt.logs.filter(log => {
+  const newLeafLog = txReceipt.logs.filter(log => {
     return log.event === 'NewLeaf';
   });
   const outputCommitmentIndex = newLeafLog[0].args.leafIndex;
@@ -519,7 +523,7 @@ async function transfer(
   return {
     outputCommitment,
     outputCommitmentIndex,
-    transferReceipt,
+    txReceipt,
   };
 }
 
@@ -663,11 +667,22 @@ async function burn(
   console.log(`vkId: ${vkId}`);
 
   // Burns commitment and returns token to payTo
-  await nfTokenShieldInstance.burn(proof, publicInputs, vkId, root, nullifier, tokenId, payTo, {
-    from: account,
-    gas: 6500000,
-    gasPrice: config.GASPRICE,
-  });
+  const txReceipt = await nfTokenShieldInstance.burn(
+    proof,
+    publicInputs,
+    vkId,
+    root,
+    nullifier,
+    tokenId,
+    payTo,
+    {
+      from: account,
+      gas: 6500000,
+      gasPrice: config.GASPRICE,
+    },
+  );
+  console.log('\nGas used in burn:');
+  console.log(txReceipt.receipt.gasUsed);
 
   console.log('BURN COMPLETE\n');
   console.groupEnd();

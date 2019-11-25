@@ -268,6 +268,8 @@ async function mint(amount, _ownerPublicKey, _salt, vkId, blockchainOptions, zok
     gas: 6500000,
     gasPrice: config.GASPRICE,
   });
+  console.log('\nGas used in mint:');
+  console.log(txReceipt.receipt.gasUsed);
 
   const newLeafLog = txReceipt.logs.filter(log => {
     return log.event === 'NewLeaf';
@@ -583,6 +585,8 @@ async function transfer(
       gasPrice: config.GASPRICE,
     },
   );
+  console.log('\nGas used in transfer:');
+  console.log(txReceipt.receipt.gasUsed);
 
   const newLeavesLog = txReceipt.logs.filter(log => {
     return log.event === 'NewLeaves';
@@ -790,6 +794,8 @@ async function simpleFungibleBatchTransfer(
       gasPrice: config.GASPRICE,
     },
   );
+  console.log('\nGas used in batch transfer:');
+  console.log(txReceipt.receipt.gasUsed);
 
   const newLeavesLog = txReceipt.logs.filter(log => {
     return log.event === 'NewLeaves';
@@ -951,11 +957,22 @@ async function burn(
   console.log(`vkId: ${vkId}`);
 
   // Burn the commitment and return tokens to the payTo account.
-  await fTokenShieldInstance.burn(proof, publicInputs, vkId, root, nullifier, amount, payTo, {
-    from: account,
-    gas: 6500000,
-    gasPrice: config.GASPRICE,
-  });
+  const txReceipt = await fTokenShieldInstance.burn(
+    proof,
+    publicInputs,
+    vkId,
+    root,
+    nullifier,
+    amount,
+    payTo,
+    {
+      from: account,
+      gas: 6500000,
+      gasPrice: config.GASPRICE,
+    },
+  );
+  console.log('\nGas used in burn:');
+  console.log(txReceipt.receipt.gasUsed);
 
   const newRoot = await fTokenShieldInstance.latestRoot();
   console.log(`Merkle Root after burn: ${newRoot}`);
