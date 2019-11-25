@@ -21,6 +21,9 @@ contract FTokenShield is Ownable, MerkleTree {
   event VerifierChanged(address newVerifierContract);
   event VkIdsChanged(bytes32 mintVkId, bytes32 transferVkId, bytes32 simpleBatchTransferVkId, bytes32 burnVkId);
 
+  // For testing only. This SHOULD be deleted before mainnet deployment:
+  event GasUsed(uint256 byShieldContract, uint256 byVerifierContract);
+
   uint constant bitLength = 216; // the number of LSB that we use in a hash
   uint constant batchProofSize = 20; // the number of output commitments in the batch transfer proof
 
@@ -99,6 +102,9 @@ contract FTokenShield is Ownable, MerkleTree {
   */
   function mint(uint256[] calldata _proof, uint256[] calldata _inputs, bytes32 _vkId, uint128 _value, bytes32 _commitment) external {
 
+      // gas measurement:
+      uint256 gasCheckpoint = gasleft();
+
       require(_vkId == mintVkId, "Incorrect vkId");
 
       // Check that the publicInputHash equals the hash of the 'public inputs':
@@ -106,9 +112,17 @@ contract FTokenShield is Ownable, MerkleTree {
       bytes32 publicInputHashCheck = zeroMSBs(bytes32(sha256(abi.encodePacked(uint128(_value), _commitment)))); // Note that we force the _value to be left-padded with zeros to fill 128-bits, so as to match the padding in the hash calculation performed within the zokrates proof.
       require(publicInputHashCheck == publicInputHash, "publicInputHash cannot be reconciled");
 
+      // gas measurement:
+      uint256 gasUsedByShieldContract = gasCheckpoint - gasleft();
+      gasCheckpoint = gasleft();
+
       // verify the proof
       bool result = verifier.verify(_proof, _inputs, _vkId);
       require(result, "The proof has not been verified by the contract");
+
+      // gas measurement:
+      uint256 gasUsedByVerifierContract = gasCheckpoint - gasleft();
+      gasCheckpoint = gasleft();
 
       // update contract states
       latestRoot = insertLeaf(_commitment); // recalculate the root of the merkleTree as it's now different
@@ -116,12 +130,20 @@ contract FTokenShield is Ownable, MerkleTree {
 
       // Finally, transfer the fTokens from the sender to this contract
       fToken.transferFrom(msg.sender, address(this), _value);
+
+      // gas measurement:
+      gasUsedByShieldContract = gasUsedByShieldContract + gasCheckpoint - gasleft();
+      emit GasUsed(gasUsedByShieldContract, gasUsedByVerifierContract);
   }
 
   /**
   The transfer function transfers a commitment to a new owner
   */
   function transfer(uint256[] calldata _proof, uint256[] calldata _inputs, bytes32 _vkId, bytes32 _root, bytes32 _nullifierC, bytes32 _nullifierD, bytes32 _commitmentE, bytes32 _commitmentF) external {
+
+      // gas measurement:
+      uint256[3] memory gasUsed; // array needed to stay below local stack limit
+      gasUsed[0] = gasleft();
 
       require(_vkId == transferVkId, "Incorrect vkId");
 
@@ -130,9 +152,17 @@ contract FTokenShield is Ownable, MerkleTree {
       bytes32 publicInputHashCheck = zeroMSBs(bytes32(sha256(abi.encodePacked(_root, _nullifierC, _nullifierD, _commitmentE, _commitmentF))));
       require(publicInputHashCheck == publicInputHash, "publicInputHash cannot be reconciled");
 
+      // gas measurement:
+      gasUsed[1] = gasUsed[0] - gasleft();
+      gasUsed[0] = gasleft();
+
       // verify the proof
       bool result = verifier.verify(_proof, _inputs, _vkId);
       require(result, "The proof has not been verified by the contract");
+
+      // gas measurement:
+      gasUsed[2] = gasUsed[0] - gasleft();
+      gasUsed[0] = gasleft();
 
       // check inputs vs on-chain states
       require(roots[_root] == _root, "The input root has never been the root of the Merkle Tree");
@@ -153,12 +183,19 @@ contract FTokenShield is Ownable, MerkleTree {
       roots[latestRoot] = latestRoot; // and save the new root to the list of roots
 
       emit Transfer(_nullifierC, _nullifierD);
+
+      // gas measurement:
+      gasUsed[1] = gasUsed[1] + gasUsed[0] - gasleft();
+      emit GasUsed(gasUsed[1], gasUsed[2]);
   }
 
   /**
   The transfer function transfers 20 commitments to new owners
   */
   function simpleBatchTransfer(uint256[] calldata _proof, uint256[] calldata _inputs, bytes32 _vkId, bytes32 _root, bytes32 _nullifier, bytes32[] calldata _commitments) external {
+
+      // gas measurement:
+      uint256 gasCheckpoint = gasleft();
 
       require(_vkId == simpleBatchTransferVkId, "Incorrect vkId");
 
@@ -167,9 +204,17 @@ contract FTokenShield is Ownable, MerkleTree {
       bytes32 publicInputHashCheck = zeroMSBs(sha256(abi.encodePacked(_root, _nullifier, _commitments)));
       require(publicInputHashCheck == publicInputHash, "publicInputHash cannot be reconciled");
 
+      // gas measurement:
+      uint256 gasUsedByShieldContract = gasCheckpoint - gasleft();
+      gasCheckpoint = gasleft();
+
       // verify the proof
       bool result = verifier.verify(_proof, _inputs, _vkId);
       require(result, "The proof has not been verified by the contract");
+
+      // gas measurement:
+      uint256 gasUsedByVerifierContract = gasCheckpoint - gasleft();
+      gasCheckpoint = gasleft();
 
       // check inputs vs on-chain states
       require(roots[_root] == _root, "The input root has never been the root of the Merkle Tree");
@@ -182,10 +227,17 @@ contract FTokenShield is Ownable, MerkleTree {
       roots[latestRoot] = latestRoot; //and save the new root to the list of roots
 
       emit SimpleBatchTransfer(_nullifier);
+
+      // gas measurement:
+      gasUsedByShieldContract = gasUsedByShieldContract + gasCheckpoint - gasleft();
+      emit GasUsed(gasUsedByShieldContract, gasUsedByVerifierContract);
   }
 
 
   function burn(uint256[] calldata _proof, uint256[] calldata _inputs, bytes32 _vkId, bytes32 _root, bytes32 _nullifier, uint128 _value, uint256 _payTo) external {
+
+      // gas measurement:
+      uint256 gasCheckpoint = gasleft();
 
       require(_vkId == burnVkId, "Incorrect vkId");
 
@@ -194,9 +246,17 @@ contract FTokenShield is Ownable, MerkleTree {
       bytes32 publicInputHashCheck = zeroMSBs(bytes32(sha256(abi.encodePacked(_root, _nullifier, uint128(_value), _payTo)))); // Note that although _payTo represents an address, we have declared it as a uint256. This is because we want it to be abi-encoded as a bytes32 (left-padded with zeros) so as to match the padding in the hash calculation performed within the zokrates proof. Similarly, we force the _value to be left-padded with zeros to fill 128-bits.
       require(publicInputHashCheck == publicInputHash, "publicInputHash cannot be reconciled");
 
+      // gas measurement:
+      uint256 gasUsedByShieldContract = gasCheckpoint - gasleft();
+      gasCheckpoint = gasleft();
+
       // verify the proof
       bool result = verifier.verify(_proof, _inputs, _vkId);
       require(result, "The proof has not been verified by the contract");
+
+      // gas measurement:
+      uint256 gasUsedByVerifierContract = gasCheckpoint - gasleft();
+      gasCheckpoint = gasleft();
 
       // check inputs vs on-chain states
       require(roots[_root] == _root, "The input root has never been the root of the Merkle Tree");
@@ -209,14 +269,10 @@ contract FTokenShield is Ownable, MerkleTree {
       fToken.transfer(payToAddress, _value);
 
       emit Burn(_nullifier);
-  }
 
-  function packToBytes32(uint256 low, uint256 high) private pure returns (bytes32) {
-      return (bytes32(high)<<128) | bytes32(low);
-  }
-
-  function packToUint256(uint256 low, uint256 high) private pure returns (uint256) {
-      return uint256((bytes32(high)<<128) | bytes32(low));
+      // gas measurement:
+      gasUsedByShieldContract = gasUsedByShieldContract + gasCheckpoint - gasleft();
+      emit GasUsed(gasUsedByShieldContract, gasUsedByVerifierContract);
   }
 
   // function to zero out the 'bitLength'-most siginficant bits

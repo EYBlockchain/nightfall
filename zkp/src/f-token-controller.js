@@ -155,6 +155,24 @@ async function getTokenInfo(address) {
   return { symbol, name };
 }
 
+function gasUsedStats(txReceipt, functionName) {
+  console.group(`\nGas used in ${functionName}:`);
+  const { gasUsed } = txReceipt.receipt;
+  const gasUsedLog = txReceipt.logs.filter(log => {
+    return log.event === 'GasUsed';
+  });
+  const gasUsedByShieldContract = Number(gasUsedLog[0].args.byShieldContract.toString());
+  const gasUsedByVerifierContract = Number(gasUsedLog[0].args.byVerifierContract.toString());
+  const refund = gasUsedByVerifierContract + gasUsedByShieldContract - gasUsed;
+  console.log('Total:', gasUsed);
+  console.log('By shield contract:', gasUsedByShieldContract);
+  console.log('By verifier contract (pre refund):', gasUsedByVerifierContract);
+  console.log('Refund:', refund);
+  console.log('Attributing all of refund to the verifier contract...');
+  console.log('By verifier contract (post refund):', gasUsedByVerifierContract - refund);
+  console.groupEnd();
+}
+
 /**
  * Mint a coin
  * @param {String} amount - the value of the coin
@@ -268,8 +286,7 @@ async function mint(amount, _ownerPublicKey, _salt, vkId, blockchainOptions, zok
     gas: 6500000,
     gasPrice: config.GASPRICE,
   });
-  console.log('\nGas used in mint:');
-  console.log(txReceipt.receipt.gasUsed);
+  gasUsedStats(txReceipt, 'mint');
 
   const newLeafLog = txReceipt.logs.filter(log => {
     return log.event === 'NewLeaf';
@@ -585,8 +602,7 @@ async function transfer(
       gasPrice: config.GASPRICE,
     },
   );
-  console.log('\nGas used in transfer:');
-  console.log(txReceipt.receipt.gasUsed);
+  gasUsedStats(txReceipt, 'transfer');
 
   const newLeavesLog = txReceipt.logs.filter(log => {
     return log.event === 'NewLeaves';
@@ -794,8 +810,7 @@ async function simpleFungibleBatchTransfer(
       gasPrice: config.GASPRICE,
     },
   );
-  console.log('\nGas used in batch transfer:');
-  console.log(txReceipt.receipt.gasUsed);
+  gasUsedStats(txReceipt, 'batch transfer');
 
   const newLeavesLog = txReceipt.logs.filter(log => {
     return log.event === 'NewLeaves';
@@ -971,8 +986,7 @@ async function burn(
       gasPrice: config.GASPRICE,
     },
   );
-  console.log('\nGas used in burn:');
-  console.log(txReceipt.receipt.gasUsed);
+  gasUsedStats(txReceipt, 'burn');
 
   const newRoot = await fTokenShieldInstance.latestRoot();
   console.log(`Merkle Root after burn: ${newRoot}`);

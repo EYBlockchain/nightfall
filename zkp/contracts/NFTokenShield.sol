@@ -19,6 +19,9 @@ contract NFTokenShield is Ownable, MerkleTree {
     event VerifierChanged(address newVerifierContract);
     event VkIdsChanged(bytes32 mintVkId, bytes32 transferVkId, bytes32 burnVkId);
 
+    // For testing only. This SHOULD be deleted before mainnet deployment:
+    event GasUsed(uint256 byShieldContract, uint256 byVerifierContract);
+
     mapping(bytes32 => bytes32) public nullifiers; // store nullifiers of spent commitments
     mapping(bytes32 => bytes32) public roots; // holds each root we've calculated so that we can pull the one relevant to the prover
 
@@ -101,6 +104,9 @@ contract NFTokenShield is Ownable, MerkleTree {
     */
     function mint(uint256[] calldata _proof, uint256[] calldata _inputs, bytes32 _vkId, uint256 _tokenId, bytes32 _commitment) external {
 
+        // gas measurement:
+        uint256 gasCheckpoint = gasleft();
+
         require(_vkId == mintVkId, "Incorrect vkId");
 
         // Check that the publicInputHash equals the hash of the 'public inputs':
@@ -108,21 +114,37 @@ contract NFTokenShield is Ownable, MerkleTree {
         bytes31 publicInputHashCheck = bytes31(sha256(abi.encodePacked(_tokenId, _commitment))<<8);
         require(publicInputHashCheck == publicInputHash, "publicInputHash cannot be reconciled");
 
+        // gas measurement:
+        uint256 gasUsedByShieldContract = gasCheckpoint - gasleft();
+        gasCheckpoint = gasleft();
+
         // verify the proof
         bool result = verifier.verify(_proof, _inputs, _vkId);
         require(result, "The proof has not been verified by the contract");
 
+        // gas measurement:
+        uint256 gasUsedByVerifierContract = gasCheckpoint - gasleft();
+        gasCheckpoint = gasleft();
+
+        // update contract states
         latestRoot = insertLeaf(_commitment); // recalculate the root of the merkleTree as it's now different
         roots[latestRoot] = latestRoot; // and save the new root to the list of roots
 
         // Finally, transfer token from the sender to this contract address
         nfToken.safeTransferFrom(msg.sender, address(this), _tokenId);
+
+        // gas measurement:
+        gasUsedByShieldContract = gasUsedByShieldContract + gasCheckpoint - gasleft();
+        emit GasUsed(gasUsedByShieldContract, gasUsedByVerifierContract);
     }
 
     /**
     The transfer function transfers a commitment to a new owner
     */
     function transfer(uint256[] calldata _proof, uint256[] calldata _inputs, bytes32 _vkId, bytes32 _root, bytes32 _nullifier, bytes32 _commitment) external {
+
+        // gas measurement:
+        uint256 gasCheckpoint = gasleft();
 
         require(_vkId == transferVkId, "Incorrect vkId");
 
@@ -131,9 +153,17 @@ contract NFTokenShield is Ownable, MerkleTree {
         bytes31 publicInputHashCheck = bytes31(sha256(abi.encodePacked(_root, _nullifier, _commitment))<<8);
         require(publicInputHashCheck == publicInputHash, "publicInputHash cannot be reconciled");
 
+        // gas measurement:
+        uint256 gasUsedByShieldContract = gasCheckpoint - gasleft();
+        gasCheckpoint = gasleft();
+
         // verify the proof
         bool result = verifier.verify(_proof, _inputs, _vkId);
         require(result, "The proof has not been verified by the contract");
+
+        // gas measurement:
+        uint256 gasUsedByVerifierContract = gasCheckpoint - gasleft();
+        gasCheckpoint = gasleft();
 
         // check inputs vs on-chain states
         require(nullifiers[_nullifier] == 0, "The commitment being spent has already been nullified!");
@@ -146,12 +176,19 @@ contract NFTokenShield is Ownable, MerkleTree {
         roots[latestRoot] = latestRoot; // and save the new root to the list of roots
 
         emit Transfer(_nullifier);
+
+        // gas measurement:
+        gasUsedByShieldContract = gasUsedByShieldContract + gasCheckpoint - gasleft();
+        emit GasUsed(gasUsedByShieldContract, gasUsedByVerifierContract);
     }
 
     /**
     The burn function burns a commitment and transfers the asset held within the commiment to the address payTo
     */
     function burn(uint256[] memory _proof, uint256[] memory _inputs, bytes32 _vkId, bytes32 _root, bytes32 _nullifier, uint256 _tokenId, uint256 _payTo) public {
+
+        // gas measurement:
+        uint256 gasCheckpoint = gasleft();
 
         require(_vkId == burnVkId, "Incorrect vkId");
 
@@ -160,9 +197,17 @@ contract NFTokenShield is Ownable, MerkleTree {
         bytes31 publicInputHashCheck = bytes31(sha256(abi.encodePacked(_root, _nullifier, _tokenId, _payTo))<<8); // Note that although _payTo represents an address, we have declared it as a uint256. This is because we want it to be abi-encoded as a bytes32 (left-padded with zeros) so as to match the padding in the hash calculation performed within the zokrates proof.
         require(publicInputHashCheck == publicInputHash, "publicInputHash cannot be reconciled");
 
+        // gas measurement:
+        uint256 gasUsedByShieldContract = gasCheckpoint - gasleft();
+        gasCheckpoint = gasleft();
+
         // verify the proof
         bool result = verifier.verify(_proof, _inputs, _vkId);
         require(result, "The proof has not been verified by the contract");
+
+        // gas measurement:
+        uint256 gasUsedByVerifierContract = gasCheckpoint - gasleft();
+        gasCheckpoint = gasleft();
 
         // check inputs vs on-chain states
         require(roots[_root] == _root, "The input root has never been the root of the Merkle Tree");
@@ -176,14 +221,9 @@ contract NFTokenShield is Ownable, MerkleTree {
         nfToken.safeTransferFrom(address(this), payToAddress, _tokenId);
 
         emit Burn(_nullifier);
-    }
 
-    function packToBytes32(uint256 low, uint256 high) private pure returns (bytes32) {
-        return (bytes32(high)<<128) | bytes32(low);
+        // gas measurement:
+        gasUsedByShieldContract = gasUsedByShieldContract + gasCheckpoint - gasleft();
+        emit GasUsed(gasUsedByShieldContract, gasUsedByVerifierContract);
     }
-
-    function packToUint256(uint256 low, uint256 high) private pure returns (uint256) {
-        return uint256((bytes32(high)<<128) | bytes32(low));
-    }
-
 }
