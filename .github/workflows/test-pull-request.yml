@@ -3,7 +3,7 @@ name: Run Nightfall test suite
 on:
   pull_request:
     branches:
-      - master
+      - michaelconnor/merkle-tree-submodule
 
 jobs:
   eslint-test:
@@ -37,6 +37,8 @@ jobs:
           sudo swapon /swapfile
           swapon --show
           grep SwapTotal /proc/meminfo
+      - name: Update all submodules
+        run: git submodule update --init
       - name: Generate the keys and constraint files for Zero Knowledge Proofs
         run: |
           chmod -R 777 zkp/code/
