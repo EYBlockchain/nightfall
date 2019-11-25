@@ -23,6 +23,9 @@ jobs:
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v1
+        with:
+          submodules: true
+          token: ${{ secrets.PAT }}
       - uses: actions/setup-node@v1
         with:
           node-version: '10.15.3'
@@ -37,8 +40,6 @@ jobs:
           sudo swapon /swapfile
           swapon --show
           grep SwapTotal /proc/meminfo
-      - name: Update all submodules
-        run: git submodule update --init
       - name: Generate the keys and constraint files for Zero Knowledge Proofs
         run: |
           chmod -R 777 zkp/code/
