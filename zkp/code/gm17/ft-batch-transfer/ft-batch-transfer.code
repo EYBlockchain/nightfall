@@ -63,6 +63,10 @@ def shaPad640To1024()->(field[384]):
 def shaPad1280To1536()->(field[256]):
 	return [1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	1,	0,	1,	0,	0,	0,	0,	0,	0,	0,	0]
 
+def shaPad5632To6144()->(field[512]):
+  return [1,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,  0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	0,	1,	0,	1,	1,	0,	0,	0,	0,	0,	0,	0,	0,	0]
+
+
 // unpacks the bits in a 216 bit path field ready for sha-ing in a 216 bit scheme (only the Merkle path calc uses this)
 def unpackPath(field p)->(field[216]):
 	field[256] sister = unpack256(p)
@@ -137,13 +141,14 @@ def concatenateFields256xx22(field[22] a)->(field[5632]):
 
 def main(field publicInputHash, private field inputValue, private field secretKeyA, private field inputSalt, private field[32] path, private field order, private field nullifier, private field[20] values, private field[20] publicKeys, private field[20] salts, private field[20] commitments, private field root)->():
 
-	field[256] publicInputHashBits = unpack256(publicInputHash)
+  field[256] publicInputHashBits = unpack256(publicInputHash)
 
 	field[256] padding256To512 = shaPad256To512()
 	field[512] padding512To1024 = shaPad512To1024()
 	field[256] padding768To1024 = shaPad768To1024()
 	field[384] padding640To1024 = shaPad640To1024()
 	field[256] padding1280To1536 = shaPad1280To1536()
+  field[512] padding5632To6144 = shaPad5632To6144()
 
 
 	// First we construct a proof that the nullifier of the input coin is correct:
@@ -162,7 +167,7 @@ def main(field publicInputHash, private field inputValue, private field secretKe
 
 	// And calculation of input commitment
 	field[128] inputValueBits = unpack128(inputValue)
-//!	inputValueBits[0] == 0 // overflow check
+  inputValueBits[0] == 0 // overflow check
 	field[640] preimage640 = concatenate128x256x256(inputValueBits, publicKeyABits, inputSaltBits)
 	field[1024] preimage1024 = [...preimage640, ...padding640To1024]
 	field[256] hash = sha256of1024(preimage1024[0..256], preimage1024[256..512], preimage1024[512..768], preimage1024[768..1024]) // commitmentC
@@ -175,7 +180,7 @@ def main(field publicInputHash, private field inputValue, private field secretKe
 		hash = sha256of512(preimage512[0..256], preimage512[256..512])
 	endfor
 	// check we have indeed recovered the root:
-//!	unpackHash(root) == zeroMSBs(hash)
+  unpackHash(root) == zeroMSBs(hash) // @
 
 	// Next up - prove that value is in commitment for all output commitments
 
@@ -189,20 +194,20 @@ def main(field publicInputHash, private field inputValue, private field secretKe
 		preimage640 = concatenate128x256x256(unpack128(values[i]), unpackHash(publicKeys[i]), unpackHash(salts[i]))
 		preimage1024 = [...preimage640, ...padding640To1024]
 		field[256] commitmentBitsCheck = zeroMSBs(sha256of1024(preimage1024[0..256], preimage1024[256..512], preimage1024[512..768], preimage1024[768..1024])) // commitmentE
-//!		commitmentBitsCheck == unpackHash(commitments[i]) // valid commitment check
+		commitmentBitsCheck == unpackHash(commitments[i]) // valid commitment check
 		total = total + values[i]
 		field[128] valueBits = unpack128(values[i])
-//!		valueBits[0] == 0 // overflow check
+		valueBits[0] == 0 // overflow check
 	endfor
 
 	// Sum check - we don't want anyone to create money.
-//!	total == inputValue
+	total == inputValue
 
 	// Check that the 'public inputs' hash to the publicInputHash: - TODO
 
 	field[5632] preimage5632 = concatenateFields256xx22([root, nullifier, ...commitments])
-	field[256] publicInputHashBitsCheck = zeroMSBs(sha256of6144(preimage5632[0..256], preimage5632[256..512], preimage5632[512..768], preimage5632[768..1024], preimage5632[1024..1280], preimage5632[1280..1536], preimage5632[1536..1792], preimage5632[1792..2048], preimage5632[2048..2304], preimage5632[2304..2560], preimage5632[2560..2816], preimage5632[2816..3072], preimage5632[3072..3328], preimage5632[3328..3584], preimage5632[3584..3840], preimage5632[3840..4096], preimage5632[4096..4352], preimage5632[4352..4608], preimage5632[4608..4864], preimage5632[4864..5120], preimage5632[5120..5376], preimage5632[5376..5632], padding512To1024[0..256], padding512To1024[256..512]))
+	field[256] publicInputHashBitsCheck = zeroMSBs(sha256of6144(preimage5632[0..256], preimage5632[256..512], preimage5632[512..768], preimage5632[768..1024], preimage5632[1024..1280], preimage5632[1280..1536], preimage5632[1536..1792], preimage5632[1792..2048], preimage5632[2048..2304], preimage5632[2304..2560], preimage5632[2560..2816], preimage5632[2816..3072], preimage5632[3072..3328], preimage5632[3328..3584], preimage5632[3584..3840], preimage5632[3840..4096], preimage5632[4096..4352], preimage5632[4352..4608], preimage5632[4608..4864], preimage5632[4864..5120], preimage5632[5120..5376], preimage5632[5376..5632], padding5632To6144[0..256], padding5632To6144[256..512]))
 
-//!	publicInputHashBits == publicInputHashBitsCheck
+  publicInputHashBits == publicInputHashBitsCheck // *
 
 	return

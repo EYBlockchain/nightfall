@@ -219,11 +219,9 @@ export function checkRoot(commitment, path, root) {
     // console.log(`hash at row ${r - 1}:`, hash216);
   }
 
-  const rootCheck = hash256;
-
-  if (root !== rootCheck) {
+  if (root !== hash256 && root !== utils.zeroMSBs(hash256)) {
     throw new Error(
-      `Root ${root} cannot be recalculated from the path and commitment ${commitment}. An attempt to recalculate gives ${rootCheck} as the root.`,
+      `Root ${root} cannot be recalculated from the path and commitment ${commitment}. An attempt to recalculate gives ${hash256} or ${hash216} as the root.`,
     );
   } else {
     console.log(

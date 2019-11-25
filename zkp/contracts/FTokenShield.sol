@@ -300,7 +300,7 @@ depth row  width  st#     end#
           }
           p = t; //move to the path node on the next highest row of the tree
       }
-      return h; //the (265-bit) root of the merkleTree
+      return zeroMSBs(h); //the (265-bit) root of the merkleTree
   }
   // This function update the Merkle tree when you are adding more than one commitment
   // in one go.  This is much more efficient than calling a function to add a single leaf
@@ -342,7 +342,7 @@ depth row  width  st#     end#
         currentNode += 2;
       }
     } while(parentNode > 0); // stop when we get to the root and return the root hash
-    return h;
+    return zeroMSBs(h);
   }
 
   function packToBytes32(uint256 low, uint256 high) private pure returns (bytes32) {

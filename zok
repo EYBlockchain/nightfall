@@ -1,0 +1,3 @@
+#!/bin/bash
+#simple file to run up a zokrates container for debug
+docker run -ti --rm -v ~/git/nightfall/zkp/code/gm17:/home/zokrates/gm17 zokrates/zokrates:0.4.11

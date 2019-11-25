@@ -189,7 +189,7 @@ def main(field publicInputHash, private field valueC, private field secretKeyAHi
 		hash = sha256of512(preimage512[0..256], preimage512[256..512])
 	endfor
 	// save the computed root:
-	field[256] rootCBitsCheck = hash
+	field[256] rootCBitsCheck = zeroMSBs(hash)
 
 	// H(valueD|publicKeyA|saltA) = commitmentD is in the Merkle Tree
 
@@ -207,7 +207,7 @@ def main(field publicInputHash, private field valueC, private field secretKeyAHi
 		hash = sha256of512(preimage512[0..256], preimage512[256..512])
   endfor
 	// save the computed root:
-	field[256] rootDBitsCheck = hash
+	field[256] rootDBitsCheck = zeroMSBs(hash)
 
 
 	// Next up - prove that valueE is in commitmentE and valueF is in commitmentF

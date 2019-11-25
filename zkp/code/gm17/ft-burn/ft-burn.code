@@ -141,7 +141,7 @@ def main(field publicInputHash, private field payToHigh, private field payToLow,
 		hash = sha256of512(preimage512[0..256], preimage512[256..512])
   endfor
 	// save the computed root:
-	field[256] rootBitsCheck = hash
+	field[256] rootBitsCheck = zeroMSBs(hash)
 
 
  	// Now test the proofs
