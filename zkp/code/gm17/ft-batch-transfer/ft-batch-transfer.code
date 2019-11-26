@@ -176,7 +176,7 @@ def main(field publicInputHash, private field inputValue, private field secretKe
 		hash = sha256of512(preimage512[0..256], preimage512[256..512])
 	endfor
 	// check we have indeed recovered the root:
-  unpackHash(root) == zeroMSBs(hash) // @
+  unpackHash(root) == zeroMSBs(hash)
 
 	// Next up - prove that value is in commitment for all output commitments
 
