@@ -108,7 +108,7 @@ You just created all the files needed to generate zk-SNARKs. The proving keys, v
 
 #### Re-installation
 
-If this isn't your first time running Nightfall, but you have just pulled new changes from the repo, then you might need to 're-install' certain features due to code changes. First run:  
+If this isn't your first time running Nightfall, but you have just [pulled](./submodules.md) new changes from the repo, then you might need to 're-install' certain features due to code changes. First run:  
 
 ```sh
 docker-compose -f docker-compose.merkle-tree.yml -f docker-compose.yml build
