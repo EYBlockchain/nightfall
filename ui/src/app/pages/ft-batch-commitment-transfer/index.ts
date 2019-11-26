@@ -163,6 +163,10 @@ export default class FtBatchCommitmentTrasnferComponent implements OnInit , Afte
     this.transferDetails.value.forEach(element => {
       if(element.value == null || element.receiverName == null){
         emptyInputFlag = true;
+      }else{
+        if(element.value != null){
+          element.value = this.toHex(element.value);
+        }
       }
     });
     const { transactions } = this;
@@ -172,7 +176,7 @@ export default class FtBatchCommitmentTrasnferComponent implements OnInit , Afte
     }
     this.isRequesting = true;
     this.batchTransactionGenerator();
-    console.log(this.batchTransactions);
+    const transactionId = this.batchTransactions['id'];
     this.ftCommitmentService.transferFTBatchCommitment(
       this.batchTransactions.amount,
       this.batchTransactions.salt,
@@ -182,7 +186,7 @@ export default class FtBatchCommitmentTrasnferComponent implements OnInit , Afte
     ).subscribe( data => {
         this.isRequesting = false;
         this.toastr.success('Transferred to selected receivers');
-        transactions.splice(this.batchTransactions['id'], 1);
+        transactions.splice(transactionId, 1);
         this.getFTCommitments();
         this.router.navigate(['/overview'], { queryParams: { selectedTab: 'ft-batch-commitment' } });
       }, error => {
