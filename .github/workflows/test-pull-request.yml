@@ -49,10 +49,11 @@ jobs:
           docker rm $(docker ps -a -q)
       - name: Build zkp image
         run: docker-compose build zkp
-      - name: Setup ganache container and deploy zkp contracts
+      - name: Setup ganache container, deploy zkp contracts and start the merkle-tree microservice
         run: |
           docker-compose run --rm truffle-zkp compile --all
           docker-compose run --rm truffle-zkp migrate --reset --network=default
+          docker-compose -f docker-compose.merkle-tree.yml up --build
       - name: Run zkp unit tests
         run: docker-compose run --rm zkp npm test
 
