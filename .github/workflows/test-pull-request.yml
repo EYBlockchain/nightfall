@@ -23,6 +23,8 @@ jobs:
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v1
+        with:
+          submodules: true
       - uses: actions/setup-node@v1
         with:
           node-version: '10.15.3'
@@ -59,6 +61,8 @@ jobs:
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v1
+        with:
+          submodules: true
       - uses: actions/setup-node@v1
         with:
           node-version: '10.15.3'
