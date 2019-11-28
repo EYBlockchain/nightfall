@@ -16,11 +16,12 @@ const { alice, bob, erc20 } = testData;
 let erc721;
 let erc721Commitment;
 let erc20Commitments;
+let erc20CommitmentBatchTransfer;
 
 describe('****** Integration Test ******\n', function() {
   before(async function() {
     await testData.configureDependentTestData();
-    ({ erc721, erc721Commitment, erc20Commitments } = testData);
+    ({ erc721, erc721Commitment, erc20Commitments, erc20CommitmentBatchTransfer } = testData);
   });
   /*
    *  Step 1.
@@ -514,6 +515,94 @@ describe('****** Integration Test ******\n', function() {
             return done();
           });
       });
+    });
+  });
+
+  describe('*** Batch ERC 20 commitment transfer ***', function() {
+    /*
+     * Step 17.
+     * Mint ERC-20 token,
+     */
+    it(`Mint ERC-20 tokens`, function(done) {
+      request
+        .post('/mintFToken')
+        .use(prefix(apiServerURL))
+        .send({
+          amount: erc20CommitmentBatchTransfer.mint,
+        })
+        .set('Accept', 'application/json')
+        .set('Authorization', alice.token)
+        .end((err, res) => {
+          if (err) return done(err);
+          expect(res).to.have.nested.property('body.data.message');
+          expect(res.body.data.message).to.be.equal('Mint Successful');
+          return done();
+        });
+    });
+    /*
+     * Step 18.
+     * Mint ERC-20 token commitment.
+     */
+    it(`Mint ERC-20 token commitment`, function(done) {
+      request
+        .post('/mintFTCommitment')
+        .use(prefix(apiServerURL))
+        .send({
+          A: erc20CommitmentBatchTransfer.mintCommitmentValue,
+        })
+        .set('Accept', 'application/json')
+        .set('Authorization', alice.token)
+        .end((err, res) => {
+          if (err) return done(err);
+          expect(res).to.have.nested.property('body.data.S_A');
+          expect(res).to.have.nested.property('body.data.ft_commitment');
+          expect(res).to.have.nested.property('body.data.ft_commitment_index');
+
+          erc20CommitmentBatchTransfer.S_A = utils.zeroMSBs(res.body.data.S_A); // set Salt from response to calculate and verify commitment.
+          expect(res.body.data.ft_commitment).to.be.equal(erc20CommitmentBatchTransfer.commitment);
+          expect(res.body.data.ft_commitment_index).to.be.equal(
+            erc20CommitmentBatchTransfer.commitmentIndex,
+          );
+          return done();
+        });
+    });
+    /*
+     * Step 19.
+     * Transfer ERC-20 Commitment.
+     */
+    it(`ERC-20 Commitment Batch transfer ERC-20 Commitment to users`, function(done) {
+      const {
+        mintCommitmentValue: amount,
+        S_A: salt,
+        commitment,
+        commitmentIndex,
+        transferData,
+      } = erc20CommitmentBatchTransfer;
+      request
+        .post('/simpleFTCommitmentBatchTransfer')
+        .use(prefix(apiServerURL))
+        .send({
+          amount,
+          salt,
+          commitment,
+          commitmentIndex,
+          transferData,
+        })
+        .set('Accept', 'application/json')
+        .set('Authorization', alice.token)
+        .end((err, res) => {
+          if (err) return done(err);
+          expect(res.body.data.length).to.be.equal(2);
+          erc20CommitmentBatchTransfer.transferData[0].salt = utils.zeroMSBs(res.body.data[0].salt); // set Salt from response to calculate and verify commitment.
+
+          expect(res.body.data[0].commitment).to.be.equal(
+            erc20CommitmentBatchTransfer.transferData[0].commitment,
+          );
+          expect(res.body.data[0].commitmentIndex).to.be.equal(
+            erc20CommitmentBatchTransfer.transferData[0].commitmentIndex,
+          );
+          return done();
+        });
     });
   });
 });

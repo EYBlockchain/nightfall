@@ -14,7 +14,9 @@ checks the details of an incoming (newly transferred token), to ensure the data 
 */
 async function checkCorrectness(C, pk, S, z, zIndex, fTokenShield) {
   console.log('Checking h(A|pk|S) = z...');
-  const zCheck = utils.zeroMSB(utils.concatenateThenHash(C, utils.zeroMSB(pk), utils.zeroMSB(S)));
+  const zCheck = utils.zeroMSBs(
+    utils.concatenateThenHash(C, utils.zeroMSBs(pk), utils.zeroMSBs(S)),
+  );
   const zCorrect = zCheck === z;
   console.log('z:', z);
   console.log('zCheck:', zCheck);
