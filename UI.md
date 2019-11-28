@@ -104,3 +104,18 @@ OPS commitment as change:
 
 User b can change these commitments back into ERC&#x2011;20 tokens if they wish by conducting a burn
 transaction.
+
+## Addendum: Batch transfer
+
+It is now possible to transfer fungible commitments for up to twenty recipients at once.  This means that the cost per recipient is much reduced (by a factor of approximately 20 to about 0.003 ETH, assuming you pay 20GWei for your gas).  To use this feature, another button has been added to the OpsCoin Commitments column:
+
+![batch transfer button](doc/images/home-batch.jpg)
+
+This opens a transfer screen that can be used to enter up to twenty recipients. There are a few rules to follow:
+- Only one input commitment is used, unlike a conventional fungible transfer;
+- If you transfer to exactly twenty recipients then the total output value must equal the total input value;
+- You can enter _less_ than twenty recipients.  If you do this then:
+ - You can spend less than the input commitment value; any change will automatically be returned to you;
+ - You will still pay the same gas cost as for twenty recipients so your per-recipient cost will be higher. It's best therefore to wait until you have twenty recipients (or nineteen if you require change).
+
+There is no requirement that all the recipients are different.
