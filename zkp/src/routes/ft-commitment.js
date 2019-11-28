@@ -254,9 +254,10 @@ async function simpleFTCommitmentBatchTransfer(req, res, next) {
     transferData, // [{value: "0x00000000000000000000000000000002", pkB: "0x70dd53411043c9ff4711ba6b6c779cec028bd43e6f525a25af36b8"}]
     senderSecretKey,
   } = req.body;
-  const { contractJson: fTokenShieldJson, contractInstance: fTokenShield } = await getContract(
-    'FTokenShield',
-  );
+  const {
+    contractJson: fTokenShieldJson,
+    contractInstance: fTokenShield,
+  } = await getTruffleContractInstance('FTokenShield');
   const receiversPublicKeys = [];
 
   if (!transferData || transferData.length !== 20) throw new Error('Invalid data input');
