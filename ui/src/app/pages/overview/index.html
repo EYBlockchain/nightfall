@@ -259,78 +259,59 @@
               </div>
             </ng-template>
             <ng-template ngbTabContent>
-              <table class="table  table-hover">
+              <table class="table  table-hover ft-commitment-table">
                 <thead>
                   <tr>
                     <th>Type</th>
                     <th>Coin Value</th>
                     <th>Coin Commitment</th>
-                    <th>Coin 1 Value</th>
-                    <th>Coin 1 Commitment</th>
-                    <th>Coin 2 Value</th>
-                    <th>Coin 2 Commitment</th>
                     <th>Date</th>
                     <th>Send To</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let transaction of coinTransactions">
-                    <td>{{ transaction.type.toUpperCase() }}</td>
-                    <td>
-                      {{ ftSymbol + ' ' + utilService.convertToNumber(transaction.ft_commitment_value) }}
-                    </td>
-                    <td [title]="transaction.ft_commitment">
-                      {{ transaction.ft_commitment.slice(0, 20) }}...
-                    </td>
-
-                    <td *ngIf="transaction.type === 'transferred'">
-                      {{
-                        transaction.used_ft_commitments.length
-                          ? ftSymbol +
-                            ' ' +
-                            utilService.convertToNumber(
-                              transaction.used_ft_commitments[0].ft_commitment_value
-                            )
-                          : ''
-                      }}
-                    </td>
-                    <td *ngIf="transaction.type === 'transferred'">
-                      {{
-                        transaction.used_ft_commitments.length
-                          ? transaction.used_ft_commitments[0].ft_commitment.slice(0, 20)
-                          : ''
-                      }}...
-                    </td>
-                    <td *ngIf="transaction.type === 'transferred'">
-                      {{
-                        transaction.used_ft_commitments.length
-                          ? ftSymbol +
-                            ' ' +
-                            utilService.convertToNumber(
-                              transaction.used_ft_commitments[1].ft_commitment_value
-                            )
-                          : ''
-                      }}
-                    </td>
-                    <td *ngIf="transaction.type === 'transferred'">
-                      {{
-                        transaction.used_ft_commitments.length
-                          ? transaction.used_ft_commitments[1].ft_commitment.slice(0, 20)
-                          : ''
-                      }}...
-                    </td>
-
-                    <td *ngIf="transaction.type !== 'transferred'"></td>
-                    <td *ngIf="transaction.type !== 'transferred'"></td>
-                    <td *ngIf="transaction.type !== 'transferred'"></td>
-                    <td *ngIf="transaction.type !== 'transferred'"></td>
-
-                    <td>{{ transaction.created_at | date: 'dd/MM/yyyy hh:mm:ss a' }}</td>
-                    <td *ngIf="transaction.type === 'transferred' || transaction.type === 'burned'">
-                      {{ transaction.receiver ? transaction.receiver : '' }}
-                    </td>
-                    <td *ngIf="transaction.type !== 'transferred'"></td>
-                  </tr>
+                  <ng-container *ngFor="let transaction of coinTransactions; index as i">
+                    <tr>
+                        <td [ngClass]="{'active': (transaction.type === 'transferred' || transaction.type === 'batchTransfer' )}" data-toggle="collapse" [attr.data-target]="'#collapse-' + i" [attr.aria-expanded]="false" [attr.aria-controls] = "'collapse-' + i">
+                          {{ transaction.type.toUpperCase() }}
+                        </td>
+                        <td>{{ ftSymbol + ' ' + utilService.convertToNumber(transaction.ft_commitment_value) }}</td>
+                        <td [title]="transaction.ft_commitment">{{ transaction.ft_commitment }}</td>
+                          <td>{{ transaction.created_at | date: 'dd/MM/yyyy hh:mm:ss a' }}</td>
+                          <td *ngIf="transaction.type === 'transferred' || transaction.type === 'burned'">
+                            {{ transaction.receiver ? transaction.receiver : '' }}
+                          </td>
+                          <td *ngIf="transaction.type !== 'transferred'"></td>
+                        </tr>
+                        <tr>
+                          <td class="collapse-row details-pane" colspan="5">
+                            <div [attr.id]="'collapse-' + i" class="collapse out">
+                              <table class="details-table table table-striped" *ngIf="transaction.type === 'transferred'">
+                                <tr>
+                                  <th>Used Coin Value</th>
+                                  <th>Used Coin Commitment</th>
+                                </tr>
+                                <tr *ngFor="let used_commitments of transaction.used_ft_commitments; index as i">
+                                    <td>{{ ftSymbol +' ' +utilService.convertToNumber(used_commitments.ft_commitment_value) }}</td>
+                                    <td>{{used_commitments.ft_commitment}}</td>
+                                </tr>                               
+                              </table>
+                              <table class="details-table table table-striped" *ngIf="transaction.type === 'batchTransfer'">
+                                  <tr>
+                                    <th>Transferred Coin Value</th>
+                                    <th>Transferred Coin Commitment</th>
+                                    <th>Receiver Name</th>
+                                  </tr>
+                                  <tr *ngFor="let commitments of transaction.batch_transfer; index as i">
+                                      <td>{{ ftSymbol +' ' +utilService.convertToNumber(commitments.ft_commitment_value) }}</td>
+                                      <td>{{ commitments.ft_commitment }}</td>
+                                      <td>{{ commitments.receiver }}</td>
+                                  </tr>                               
+                                </table>
+                            </div>
+                          </td>
+                      </tr>
+                  </ng-container>
                 </tbody>
               </table>
               <ngb-pagination

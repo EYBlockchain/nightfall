@@ -113,3 +113,29 @@ a {
   border-color: #172b2f;
   color: #fff;
 }
+
+.ft-commitment-table td.collapse-row {
+  border-style: none;
+  padding: 0;
+}
+
+tbody{
+  font-weight: lighter;
+}
+
+.active{
+  cursor: pointer;
+  pointer-events: visible;
+  text-decoration: underline;
+  color: blue;
+}
+
+.details-table{
+  font-size: smaller;
+  margin: 1em 0 1em 1em;
+  width: 98%;
+}
+
+.details-pane{
+  background-color: #f9f9fa;
+}

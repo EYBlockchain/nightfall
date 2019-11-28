@@ -143,7 +143,7 @@ export default class FtCommitmentService {
     const url = config.apiGateway.root + 'transferFTCommitment';
     return this.http
       .post(url, body, httpOptions)
-      .pipe(tap(data => console.log(data)), catchError(this.handleError('spendCoin', [])));
+      .pipe(tap(data => console.log(data)));
   }
 
   /**
@@ -178,7 +178,7 @@ export default class FtCommitmentService {
     const url = config.apiGateway.root + 'simpleFTCommitmentBatchTransfer';
     return this.http
       .post(url, body, httpOptions)
-      .pipe(tap(data => console.log(data)), catchError(this.handleError('spendCoinCommitment', [])));
+      .pipe(tap(data => console.log(data)));
   }
 
   /**
