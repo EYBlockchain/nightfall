@@ -382,8 +382,11 @@ export async function simpleFTCommitmentBatchTransfer(req, res, next) {
       selectedCommitmentValue -= Number(data.value);
     }
 
+    if (selectedCommitmentValue < 0) throw new Error("Transfer value exceeds selected commitment amount");
+
     for (let i = transferData.length; i < 20; i++) {
       if (selectedCommitmentValue) changeIndex = i; // array index where change amount is added
+
       transferData[i] = {
         value: `0x${selectedCommitmentValue.toString(16).padStart(32, 0)}`,
         pkB: req.user.pk_A,
