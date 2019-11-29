@@ -425,7 +425,7 @@ export async function simpleFTCommitmentBatchTransfer(req, res, next) {
     }
 
     for (const data of conmitments) {
-      if (!Number(data.value)) return;
+      if (!Number(data.value)) continue;
       await whisperTransaction(req, {
         amount: data.value,
         salt: data.salt,
