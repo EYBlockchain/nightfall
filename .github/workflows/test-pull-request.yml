@@ -53,7 +53,7 @@ jobs:
         run: |
           docker-compose run --rm truffle-zkp compile --all
           docker-compose run --rm truffle-zkp migrate --reset --network=default
-          docker-compose -f docker-compose.merkle-tree.yml up --build
+          docker-compose -f docker-compose.merkle-tree.yml up -d --build
       - name: Run zkp unit tests
         run: docker-compose run --rm zkp npm test
 
