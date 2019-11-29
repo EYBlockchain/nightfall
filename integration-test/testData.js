@@ -131,11 +131,62 @@ export default {
     };
   },
 
+  async erc20CommitmentBatchTransfer() {
+    const { alice, bob } = this;
+    return {
+      mint: 40,
+      get mintCommitmentValue() {
+        return leftPadHex(parseInt(this.mint, 7), 32);
+      },
+      get commitment() {
+        return utils.zeroMSBs(
+          utils.concatenateThenHash(
+            this.mintCommitmentValue,
+            utils.zeroMSBs(alice.pk),
+            utils.zeroMSBs(this.S_A === undefined ? '0x0' : this.S_A), // S_A - set at erc-20 commitment mint (step 18)
+          ),
+        );
+      },
+      commitmentIndex: 4,
+      transferData: [
+        {
+          value: '0x00000000000000000000000000000002',
+          receiverName: bob.name,
+          commitmentIndex: 5,
+          get commitment() {
+            return utils.zeroMSBs(
+              utils.concatenateThenHash(
+                this.value,
+                utils.zeroMSBs(bob.pk),
+                utils.zeroMSBs(this.salt === undefined ? '0x0' : this.salt), // S_A - set at erc-20 commitment mint (step 18)
+              ),
+            );
+          },
+        },
+        {
+          value: '0x00000000000000000000000000000002',
+          receiverName: alice.name,
+          commitmentIndex: 6,
+          get commitment() {
+            return utils.zeroMSBs(
+              utils.concatenateThenHash(
+                this.value,
+                utils.zeroMSBs(alice.pk),
+                utils.zeroMSBs(this.salt === undefined ? '0x0' : this.salt), // S_A - set at erc-20 commitment mint (step 18)
+              ),
+            );
+          },
+        },
+      ],
+    };
+  },
+
   /*
    *  This function will configure dependent test data.
    */
   async configureDependentTestData() {
     this.erc721Commitment = await this.erc721Commitment();
     this.erc20Commitments = await this.erc20Commitments();
+    this.erc20CommitmentBatchTransfer = await this.erc20CommitmentBatchTransfer();
   },
 };

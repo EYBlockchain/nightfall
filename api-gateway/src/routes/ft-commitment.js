@@ -27,8 +27,6 @@ router.route('/checkCorrectnessForFTCommitment').post(checkCorrectnessForFTCommi
  * @apiExample {js} Example usage:
  * const data = {
  *    A: '0x00000000000000000000000000002710',
- *    pk_A: '0x70dd53411043c9ff4711ba6b6c779cec028bd43e6f525a25af36b8',
- *    S_A: '0x14DE022C9B4A437B346F04646BD7809DEB81C38288E9614478351D'
  * }
  *
  * $http.post(url, data)
