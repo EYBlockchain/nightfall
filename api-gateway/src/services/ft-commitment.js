@@ -425,6 +425,7 @@ export async function simpleFTCommitmentBatchTransfer(req, res, next) {
     }
 
     for (const data of conmitments) {
+      /* eslint-disable no-continue */
       if (!Number(data.value)) continue;
       await whisperTransaction(req, {
         amount: data.value,
