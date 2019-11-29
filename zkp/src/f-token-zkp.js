@@ -8,24 +8,36 @@ new one, which enables sending of arbritrary amounts. The code also talks direct
 */
 
 import utils from './zkpUtils';
+import merkleTree from './rest/merkle-tree';
 
 /**
 checks the details of an incoming (newly transferred token), to ensure the data we have received is correct and legitimate!!
 */
-async function checkCorrectness(C, pk, S, z, zIndex, fTokenShield) {
+async function checkCorrectness(value, publicKey, salt, commitment, commitmentIndex, fTokenShield) {
   console.log('Checking h(A|pk|S) = z...');
-  const zCheck = utils.zeroMSBs(
-    utils.concatenateThenHash(C, utils.zeroMSBs(pk), utils.zeroMSBs(S)),
+  const commitmentCheck = utils.zeroMSBs(
+    utils.concatenateThenHash(value, utils.zeroMSBs(publicKey), utils.zeroMSBs(salt)),
   );
-  const zCorrect = zCheck === z;
-  console.log('z:', z);
-  console.log('zCheck:', zCheck);
+  const zCorrect = commitmentCheck === commitment;
+  console.log('commitment:', commitment);
+  console.log('commitmentCheck:', commitmentCheck);
 
-  console.log('Checking z exists on-chain...');
-  const zOnchain = await fTokenShield.commitments.call(z, {}); // lookup the nfTokenShield commitment mapping - we hope to find our new z here!
-  const zOnchainCorrect = zOnchain === z;
-  console.log('z:', z);
-  console.log('zOnchain:', zOnchain);
+  console.log(
+    'Checking the commitment exists in the merkle-tree db (and therefore was emitted as an event on-chain)...',
+  );
+  console.log('commitment:', commitment);
+  console.log('commitmentIndex:', commitmentIndex);
+  const { contractName } = fTokenShield.constructor._json; // eslint-disable-line no-underscore-dangle
+  const leaf = await merkleTree.getLeafByLeafIndex(contractName, commitmentIndex);
+  console.log('leaf found:', leaf);
+  if (leaf.value !== commitment)
+    throw new Error(
+      `Could not find commitment ${commitment} at the given commitmentIndex ${commitmentIndex} in  the merkle-tree microservice. Found ${leaf.value} instead.`,
+    );
+
+  const zOnchainCorrect = leaf.value === commitment;
+  console.log('commitment:', commitment);
+  console.log('commitment emmitted by blockchain:', leaf.value);
 
   return {
     zCorrect,

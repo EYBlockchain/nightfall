@@ -9,26 +9,45 @@ enables multiple transfers of an asset to take place. The code also talks direct
 
 import config from 'config';
 import utils from './zkpUtils';
+import merkleTree from './rest/merkle-tree';
 
 /**
 checks the details of an incoming (newly transferred token), to ensure the data we have received is correct and legitimate!!
 */
-async function checkCorrectness(A, pk, S, z, zIndex, nfTokenShield) {
+async function checkCorrectness(
+  asset,
+  publicKey,
+  salt,
+  commitment,
+  commitmentIndex,
+  nfTokenShield,
+) {
   console.log('Checking h(A|pk|S) = z...');
-  const zCheck = utils.concatenateThenHash(
-    utils.strip0x(A).slice(-(config.LEAF_HASHLENGTH * 2)),
-    pk,
-    S,
+  const commitmentCheck = utils.concatenateThenHash(
+    utils.strip0x(asset).slice(-(config.LEAF_HASHLENGTH * 2)),
+    publicKey,
+    salt,
   );
-  const z_correct = zCheck === z; // eslint-disable-line camelcase
-  console.log('z:', z);
-  console.log('zCheck:', zCheck);
+  const z_correct = commitmentCheck === commitment; // eslint-disable-line camelcase
+  console.log('commitment:', commitment);
+  console.log('commitmentCheck:', commitmentCheck);
 
-  console.log('Checking z exists on-chain...');
-  const zOnchain = await nfTokenShield.commitments.call(z, {}); // lookup the nfTokenShield commitment mapping - we hope to find our new z here!
-  const z_onchain_correct = zOnchain === z; // eslint-disable-line camelcase
-  console.log('z:', z);
-  console.log('zOnchain:', zOnchain);
+  console.log(
+    'Checking the commitment exists in the merkle-tree db (and therefore was emitted as an event on-chain)...',
+  );
+  console.log('commitment:', commitment);
+  console.log('commitmentIndex:', commitmentIndex);
+  const { contractName } = nfTokenShield.constructor._json; // eslint-disable-line no-underscore-dangle
+  const leaf = await merkleTree.getLeafByLeafIndex(contractName, commitmentIndex);
+  console.log('leaf found:', leaf);
+  if (leaf.value !== commitment)
+    throw new Error(
+      `Could not find commitment ${commitment} at the given commitmentIndex ${commitmentIndex} in  the merkle-tree microservice. Found ${leaf.value} instead.`,
+    );
+
+  const z_onchain_correct = leaf.value === commitment; // eslint-disable-line camelcase
+  console.log('commitment:', commitment);
+  console.log('commitment emmitted by blockchain:', leaf.value);
 
   return {
     z_correct,
