@@ -60,6 +60,8 @@ export default class FtBatchCommitmentTrasnferComponent implements OnInit , Afte
   transferDetails: FormArray;
 
   addForm: FormGroup;
+
+  transferData: any;
   /**
    * Reference of combo box
    */
@@ -145,7 +147,7 @@ export default class FtBatchCommitmentTrasnferComponent implements OnInit , Afte
         "commitment": data.ft_commitment,
         "commitmentIndex": data.ft_commitment_index,
         "id": data.id,
-        "transferData": this.transferDetails.value,
+        "transferData": this.transferData,
       }
     }
   }
@@ -160,12 +162,15 @@ export default class FtBatchCommitmentTrasnferComponent implements OnInit , Afte
       this.toastr.error('Invalid commitment Selection.');
       return;
     }
-    this.transferDetails.value.forEach(element => {
-      if(element.value == null || element.receiverName == null){
+    this.transferData = this.transferDetails.value.map(({value, receiverName}) => {
+      if(value == null || receiverName == null){
         emptyInputFlag = true;
       }else{
-        if(element.value != null){
-          element.value = this.toHex(element.value);
+        if(value != null){
+          return {
+            value: this.toHex(value),
+            receiverName,
+          }
         }
       }
     });
@@ -189,9 +194,10 @@ export default class FtBatchCommitmentTrasnferComponent implements OnInit , Afte
         transactions.splice(transactionId, 1);
         this.getFTCommitments();
         this.router.navigate(['/overview'], { queryParams: { selectedTab: 'ft-batch-commitment' } });
-      }, error => {
+      }, ({error}) => {
         this.isRequesting = false;
-        this.toastr.error('Please try again', 'Error');
+        if (error.error && error.error.message) this.toastr.error(error.error.message, 'Error');
+        else this.toastr.error('Please try again', 'Error');
     }); 
   }
 
