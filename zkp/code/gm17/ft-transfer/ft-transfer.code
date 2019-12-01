@@ -46,9 +46,12 @@ def unpackSiblingNode(field siblingNode)->(field[216]):
 	field[256] siblingNodeBits = unpack256(siblingNode)
 	return siblingNodeBits[40..256]
 
-// 'Truncate' a 256 bit hash down to 216 bits, returning as 256 bits padded with zeros. Obviously this is easy to adjust to accommodate other bit lengths than 216. This approach lets us use a 256 padding scheme for the sha hashing, rather than a 216 bit scheme, which is more flexible should we wish to change the 216 bits to something else - we won't need to recalculate all the padding values!
-def zeroMSBs(field[256] sha)->(field[256]):
-	return [...[0;40], ...sha[40..256]]
+// unpack a field[2] (assumed to be two 128-bit values) into 256 bits
+def unpack2xx128To256(field[2] input)->(field[256]):
+	field[128] left = unpack128(input[0])
+	field[128] right = unpack128(input[1])
+  field[256] output = [...left, ...right]
+  return output
 
 // Inputs for main are:
 // Alice's original coins are valueC and valueD
@@ -83,7 +86,7 @@ def zeroMSBs(field[256] sha)->(field[256]):
 
 // Each field element passed to main() can be at most 128bits, to make use of unpack128() so most variables occupy two fields (except the publicInputHash, which we maximize as 248-bits)
 
-def main(field publicInputHash, private field valueC, private field secretKeyAHigh, private field  secretKeyALow, private field saltCHigh, private field saltCLow, private field[32] pathC, private field orderC, private field valueD, private field saltDHigh, private field saltDLow, private field[32] pathD, private field orderD, private field nullifierCHigh, private field nullifierCLow, private field nullifierDHigh, private field nullifierDLow, private field valueE, private field publicKeyBHigh, private field publicKeyBLow, private field saltEHigh, private field saltELow, private field commitmentEHigh, private field commitmentELow, private field valueF, private field saltFHigh, private field saltFLow, private field commitmentFHigh, private field commitmentFLow, private field rootHigh, private field rootLow)->():
+def main(field publicInputHash, private field valueC, private field[2] secretKeyA, private field[2] saltC, private field[32] pathC, private field orderC, private field valueD, private field[2] saltD, private field[32] pathD, private field orderD, private field[2] nullifierC, private field[2] nullifierD, private field valueE, private field[2] publicKeyB, private field[2] saltE, private field[2] commitmentE, private field valueF, private field[2] saltF, private field[2] commitmentF, private field[2] root)->():
 
 	// Unpack the inputs of main() to 128 bits. We'll unpack each field to its own 128 bit string for simplicity for now. Later efficiencies could be made by grouping some inputs.
 
@@ -91,55 +94,33 @@ def main(field publicInputHash, private field valueC, private field secretKeyAHi
 
 	field[128] valueCBits = unpack128(valueC)
 
-	field[128] secretKeyAHighBits = unpack128(secretKeyAHigh)
-	field[128] secretKeyALowBits = unpack128(secretKeyALow)
-	field[256] secretKeyABits = [...secretKeyAHighBits, ...secretKeyALowBits]
+	field[256] secretKeyABits = unpack2xx128To256(secretKeyA)
 
-	field[128] saltCHighBits = unpack128(saltCHigh)
-	field[128] saltCLowBits = unpack128(saltCLow)
-	field[256] saltCBits = [...saltCHighBits, ...saltCLowBits]
+	field[256] saltCBits = unpack2xx128To256(saltC)
 
 	field[128] valueDBits = unpack128(valueD)
 
-	field[128] saltDHighBits = unpack128(saltDHigh)
-	field[128] saltDLowBits = unpack128(saltDLow)
-	field[256] saltDBits = [...saltDHighBits, ...saltDLowBits]
+	field[256] saltDBits = unpack2xx128To256(saltD)
 
-	field[128] nullifierCHighBits = unpack128(nullifierCHigh)
-	field[128] nullifierCLowBits = unpack128(nullifierCLow)
-	field[256] nullifierCBits = [...nullifierCHighBits, ...nullifierCLowBits]
+	field[256] nullifierCBits = unpack2xx128To256(nullifierC)
 
-	field[128] nullifierDHighBits = unpack128(nullifierDHigh)
-	field[128] nullifierDLowBits = unpack128(nullifierDLow)
-	field[256] nullifierDBits = [...nullifierDHighBits, ...nullifierDLowBits]
+	field[256] nullifierDBits = unpack2xx128To256(nullifierD)
 
 	field[128] valueEBits = unpack128(valueE)
 
-	field[128] publicKeyBHighBits = unpack128(publicKeyBHigh)
-	field[128] publicKeyBLowBits = unpack128(publicKeyBLow)
-	field[256] publicKeyBBits = [...publicKeyBHighBits, ...publicKeyBLowBits]
+	field[256] publicKeyBBits = unpack2xx128To256(publicKeyB)
 
-	field[128] saltEHighBits = unpack128(saltEHigh)
-	field[128] saltELowBits = unpack128(saltELow)
-	field[256] saltEBits = [...saltEHighBits, ...saltELowBits]
+	field[256] saltEBits = unpack2xx128To256(saltE)
 
-	field[128] commitmentEHighBits = unpack128(commitmentEHigh)
-	field[128] commitmentELowBits = unpack128(commitmentELow)
-	field[256] commitmentEBits = [...commitmentEHighBits, ...commitmentELowBits]
+	field[256] commitmentEBits = unpack2xx128To256(commitmentE)
 
 	field[128] valueFBits = unpack128(valueF)
 
-	field[128] saltFHighBits = unpack128(saltFHigh)
-	field[128] saltFLowBits = unpack128(saltFLow)
-	field[256] saltFBits = [...saltFHighBits, ...saltFLowBits]
+	field[256] saltFBits = unpack2xx128To256(saltF)
 
-	field[128] commitmentFHighBits = unpack128(commitmentFHigh)
-	field[128] commitmentFLowBits = unpack128(commitmentFLow)
-	field[256] commitmentFBits = [...commitmentFHighBits, ...commitmentFLowBits]
+	field[256] commitmentFBits = unpack2xx128To256(commitmentF)
 
-	field[128] rootHighBits = unpack128(rootHigh)
-	field[128] rootLowBits = unpack128(rootLow)
-	field[256] rootBits = [...rootHighBits, ...rootLowBits]
+	field[256] rootBits = unpack2xx128To256(root)
 
 	field[128] orderCBits = unpack128(orderC)
 	field[128] orderDBits = unpack128(orderD)
@@ -158,17 +139,17 @@ def main(field publicInputHash, private field valueC, private field secretKeyAHi
 	// H(saltD|secretKeyA) = nullifierD.
 
 	field[512] preimage512 = concatenate256x256(saltCBits, secretKeyABits)
-	field[256] nullifierCBitsCheck = zeroMSBs(sha256of1024(preimage512[0..256], preimage512[256..512], padding512To1024[0..256], padding512To1024[256..512]))
+	field[256] nullifierCBitsCheck = sha256of1024(preimage512[0..256], preimage512[256..512], padding512To1024[0..256], padding512To1024[256..512])
 
 	preimage512 = concatenate256x256(saltDBits, secretKeyABits)
-	field[256] nullifierDBitsCheck = zeroMSBs(sha256of1024(preimage512[0..256], preimage512[256..512], padding512To1024[0..256], padding512To1024[256..512]))
+	field[256] nullifierDBitsCheck = sha256of1024(preimage512[0..256], preimage512[256..512], padding512To1024[0..256], padding512To1024[256..512])
 
 
 
 	// H(valueC|publicKeyA|saltA) = commitmentC is in the Merkle Tree
 
 	// Calculation of publicKeyA from H(secretKeyA)
-	field[256] publicKeyABits = zeroMSBs(sha256of512(secretKeyABits, padding256To512))
+	field[256] publicKeyABits = sha256of512(secretKeyABits, padding256To512)
 
 
 	// And calculation of commitmentC
@@ -215,7 +196,7 @@ def main(field publicInputHash, private field valueC, private field secretKeyAHi
 
 	preimage1024 = [...preimage640, ...padding640To1024]
 
-	field[256] commitmentEBitsCheck = zeroMSBs(sha256of1024(preimage1024[0..256], preimage1024[256..512], preimage1024[512..768], preimage1024[768..1024])) // commitmentE
+	field[256] commitmentEBitsCheck = sha256of1024(preimage1024[0..256], preimage1024[256..512], preimage1024[512..768], preimage1024[768..1024]) // commitmentE
 
 
 	// And commitmentF
@@ -223,7 +204,7 @@ def main(field publicInputHash, private field valueC, private field secretKeyAHi
 
 	preimage1024 = [...preimage640, ...padding640To1024]
 
-	field[256] commitmentFBitsCheck = zeroMSBs(sha256of1024(preimage1024[0..256], preimage1024[256..512], preimage1024[512..768], preimage1024[768..1024])) // commitmentF
+	field[256] commitmentFBitsCheck = sha256of1024(preimage1024[0..256], preimage1024[256..512], preimage1024[512..768], preimage1024[768..1024]) // commitmentF
 
 
 	// Sum check C+D = E+F - we don't want anyone to create money.
@@ -232,7 +213,7 @@ def main(field publicInputHash, private field valueC, private field secretKeyAHi
 	field sumOut = valueE + valueF
 
 
-	// Now check the proofs
+	// Now check the inputs:
 
 	nullifierCBits == nullifierCBitsCheck
 	nullifierDBits == nullifierDBitsCheck
@@ -252,9 +233,9 @@ def main(field publicInputHash, private field valueC, private field secretKeyAHi
 	// Check that the 'public inputs' hash to the publicInputHash:
 	field[1280] preimage1280 = concatenate256x256x256x256x256(rootBits, nullifierCBits, nullifierDBits, commitmentEBits, commitmentFBits)
 
-	field[256] publicInputHashBitsCheck = zeroMSBs(sha256of1536(preimage1280[0..256], preimage1280[256..512], preimage1280[512..768], preimage1280[768..1024], preimage1280[1024..1280], padding1280To1536[0..256]))
+	field[256] publicInputHashBitsCheck = sha256of1536(preimage1280[0..256], preimage1280[256..512], preimage1280[512..768], preimage1280[768..1024], preimage1280[1024..1280], padding1280To1536[0..256])
 
-	publicInputHashBits == publicInputHashBitsCheck
+	publicInputHashBits[8..256] == publicInputHashBitsCheck[8..256]
 
 
 	return

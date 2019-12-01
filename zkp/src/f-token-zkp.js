@@ -15,9 +15,7 @@ checks the details of an incoming (newly transferred token), to ensure the data 
 */
 async function checkCorrectness(value, publicKey, salt, commitment, commitmentIndex, fTokenShield) {
   console.log('Checking h(A|pk|S) = z...');
-  const commitmentCheck = utils.zeroMSBs(
-    utils.concatenateThenHash(value, utils.zeroMSBs(publicKey), utils.zeroMSBs(salt)),
-  );
+  const commitmentCheck = utils.concatenateThenHash(value, publicKey, salt);
   const zCorrect = commitmentCheck === commitment;
   console.log('commitment:', commitment);
   console.log('commitmentCheck:', commitmentCheck);

@@ -89,7 +89,7 @@ For Mac & Linux users:
 Next pull a compatible Docker image of ZoKrates
 
 ```sh
-docker pull zokrates/zokrates:0.4.11
+docker pull zokrates/zokrates:0.5.1
 ```
 
 Next we have to generate the keys and constraint files for Zero Knowledge Proofs ([read more](./zkp/code/README-trusted-setup.md)), this is about 7GB and depends on randomness for security. This step can take a while, depending on your hardware. Before you start, check once more that you have provisioned enough memory for Docker, as described above:

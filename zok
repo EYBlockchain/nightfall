@@ -1,3 +1,6 @@
 #!/bin/bash
 #simple file to run up a zokrates container for debug
-docker run -ti --rm -v ~/git/nightfall/zkp/code/gm17:/home/zokrates/gm17 zokrates/zokrates:0.4.11
+docker run -ti --rm -v ~/git/nightfall/zkp/code/gm17:/home/zokrates/gm17 zokrates/zokrates:0.5.1
+
+# to generate a proof (after having copied the 'compute-witness' logging from the console) use:
+# ./zokrates generate-proof -i gm17/ft-batch-transfer/out -j gm17/ft-batch-transfer/proof.json -p gm17/ft-batch-transfer/proving.key -s gm17

@@ -29,7 +29,7 @@ jobs:
         with:
           node-version: '10.15.3'
       - name: Pull docker image
-        run: docker pull zokrates/zokrates:0.4.11
+        run: docker pull zokrates/zokrates:0.5.1
       - name: Increase swap memory
         run: |
           sudo usermod -a -G sudo runner
@@ -68,7 +68,7 @@ jobs:
         with:
           node-version: '10.15.3'
       - name: Pull docker image
-        run: docker pull zokrates/zokrates:0.4.11
+        run: docker pull zokrates/zokrates:0.5.1
       - name: Increase swap memory
         run: |
           sudo usermod -a -G sudo runner

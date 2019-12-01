@@ -97,8 +97,8 @@ src/vkIds.json
 #other zkp files
 #ensures users who do their own local 'trusted setups' don't 'corrupt' the shared zkp files in the opensource repo.
 **/gm17/*/**
-!**/*.pcode
 !**/*.code
+!**/*.zok
 # We want to keep ft-burn.code, but not out.code
 **/out.code
 **/vkIds.json

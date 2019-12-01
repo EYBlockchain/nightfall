@@ -15,15 +15,15 @@ const F = '0x00000000000000000000000000000010'; // don't forget to make C+D=E+F
 const G = '0x00000000000000000000000000000030';
 const H = '0x00000000000000000000000000000020'; // these constants used to enable a second transfer
 const I = '0x00000000000000000000000000000050';
-const skA = '0x0000000000111111111111111111111111111111111111111111111111111111';
-const skB = '0x0000000000222222222222222222222222222222222222222222222222222222';
+const skA = '0x1111111111111111111111111111111111111111111111111111111111111111';
+const skB = '0x2222222222222222222222222222222222222222222222222222222222222222';
 let S_A_C;
 let S_A_D;
 let sAToBE;
 let sAToAF;
 let pkA;
 let pkB;
-const pkE = '0x0000000000111111111111111111111111111111111111111111111111111112';
+const pkE = '0x1111111111111111111111111111111111111111111111111111111111111112';
 let Z_A_C;
 let Z_A_D;
 let S_B_G;
@@ -48,21 +48,21 @@ beforeAll(async () => {
   fTokenShieldAddress = contractInstance.address;
   fTokenShieldJson = contractJson;
   // blockchainOptions = { account, fTokenShieldJson, fTokenShieldAddress };
-  S_A_C = utils.zeroMSBs(await utils.rndHex(32));
-  S_A_D = utils.zeroMSBs(await utils.rndHex(32));
-  sAToBE = utils.zeroMSBs(await utils.rndHex(32));
-  sAToAF = utils.zeroMSBs(await utils.rndHex(32));
-  // pkA = utils.ensure0x(utils.zeroMSBs(utils.strip0x(utils.hash(skA)).padStart(32, '0')));
-  pkA = utils.zeroMSBs(utils.hash(skA));
-  pkB = utils.zeroMSBs(utils.hash(skB));
-  Z_A_C = utils.zeroMSBs(utils.concatenateThenHash(C, pkA, S_A_C));
-  Z_A_D = utils.zeroMSBs(utils.concatenateThenHash(D, pkA, S_A_D));
-  S_B_G = utils.zeroMSBs(await utils.rndHex(32));
-  sBToEH = utils.zeroMSBs(await utils.rndHex(32));
-  sBToBI = utils.zeroMSBs(await utils.rndHex(32));
-  Z_B_G = utils.zeroMSBs(utils.concatenateThenHash(G, pkB, S_B_G));
-  Z_B_E = utils.zeroMSBs(utils.concatenateThenHash(E, pkB, sAToBE));
-  Z_A_F = utils.zeroMSBs(utils.concatenateThenHash(F, pkA, sAToAF));
+  S_A_C = await utils.rndHex(32);
+  S_A_D = await utils.rndHex(32);
+  sAToBE = await utils.rndHex(32);
+  sAToAF = await utils.rndHex(32);
+  // pkA = utils.ensure0x(utils.strip0x(utils.hash(skA)).padStart(32, '0'));
+  pkA = utils.hash(skA);
+  pkB = utils.hash(skB);
+  Z_A_C = utils.concatenateThenHash(C, pkA, S_A_C);
+  Z_A_D = utils.concatenateThenHash(D, pkA, S_A_D);
+  S_B_G = await utils.rndHex(32);
+  sBToEH = await utils.rndHex(32);
+  sBToBI = await utils.rndHex(32);
+  Z_B_G = utils.concatenateThenHash(G, pkB, S_B_G);
+  Z_B_E = utils.concatenateThenHash(E, pkB, sAToBE);
+  Z_A_F = utils.concatenateThenHash(F, pkA, sAToAF);
 });
 
 // eslint-disable-next-line no-undef
