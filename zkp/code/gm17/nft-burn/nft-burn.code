@@ -42,12 +42,6 @@ def unpackSiblingNode(field siblingNode)->(field[216]):
 	field[256] siblingNodeBits = unpack256(siblingNode)
 	return siblingNodeBits[40..256]
 
-// unpack a field[2] (assumed to be two 128-bit values) into 256 bits
-def unpack2xx128To256(field[2] input)->(field[256]):
-	field[128] left = unpack128(input[0])
-	field[128] right = unpack128(input[1])
-  field[256] output = [...left, ...right]
-  return output
 
 // Inputs for main are:
 
@@ -65,23 +59,35 @@ def unpack2xx128To256(field[2] input)->(field[256]):
 
 // Each field element passed to main() can be at most 128bits, to make use of unpack128() so most variables occupy two fields (except the publicInputHash, which we maximize as 248-bits)
 
-def main(field publicInputHash, private field[2] payTo, private field[2] asset, private field[2] secretKey, private field[2] salt, private field[32] siblingPath, private field order, private field[2] nullifier, private field[2] root)->():
+def main(field publicInputHash, private field payToHigh, private field payToLow, private field assetHigh, private field assetLow, private field  secretKeyHigh, private field secretKeyLow, private field saltHigh, private field  saltLow, private field[32] siblingPath, private field order, private field nullifierHigh, private field nullifierLow, private field rootHigh, private field rootLow)->():
 
 	//Unpack the inputs of main() to 128 bits. We'll unpack each field to its own 128 bit string for simplicity for now. Later efficiencies could be made by grouping some inputs.
 
 	field[256] publicInputHashBits = unpack256(publicInputHash)
 
-	field[256] payToBits = unpack2xx128To256(payTo)
+	field[128] payToHighBits = unpack128(payToHigh)
+	field[128] payToLowBits = unpack128(payToLow)
+	field[256] payToBits = [...payToHighBits, ...payToLowBits]
 
-	field[256] assetBits = unpack2xx128To256(assetHigh)
+	field[128] assetHighBits = unpack128(assetHigh) //this may seem long-winded but ZoKrates needs intermediate variables for now
+	field[128] assetLowBits = unpack128(assetLow)
+	field[256] assetBits = [...assetHighBits, ...assetLowBits]
 
-	field[256] secretKeyBits = unpack2xx128To256(secretKey)
+	field[128] secretKeyHighBits = unpack128(secretKeyHigh)
+	field[128] secretKeyLowBits = unpack128(secretKeyLow)
+	field[256] secretKeyBits = [...secretKeyHighBits, ...secretKeyLowBits]
 
-	field[256] saltBits = unpack2xx128To256(salt)
+	field[128] saltHighBits = unpack128(saltHigh)
+	field[128] saltLowBits = unpack128(saltLow)
+	field[256] saltBits = [...saltHighBits, ...saltLowBits]
 
-	field[256] nullifierBits = unpack2xx128To256(nullifier)
+	field[128] nullifierHighBits = unpack128(nullifierHigh)
+	field[128] nullifierLowBits = unpack128(nullifierLow)
+	field[256] nullifierBits = [...nullifierHighBits, ...nullifierLowBits]
 
-	field[128] rootBits = unpack2xx128To256(root)
+	field[128] rootHighBits = unpack128(rootHigh)
+	field[128] rootLowBits = unpack128(rootLow)
+	field[256] rootBits = [...rootHighBits, ...rootLowBits]
 
 	field[128] orderBits = unpack128(order)
 
