@@ -75,12 +75,12 @@ beforeAll(async () => {
   fTokenShieldAddress = contractInstance.address;
   fTokenShieldJson = contractJson;
   for (let i = 0; i < PROOF_LENGTH; i++) {
-    pkB[i] = utils.zeroMSBs(utils.strip0x(utils.hash(skB[i])));
+    pkB[i] = utils.strip0x(utils.hash(skB[i]));
   }
-  pkB = (await Promise.all(pkB)).map(k => utils.zeroMSBs(k));
-  S_A_C = utils.zeroMSBs(await utils.rndHex(32));
-  pkA = utils.zeroMSBs(utils.strip0x(utils.hash(skA)));
-  Z_A_C = utils.zeroMSBs(utils.concatenateThenHash(C, pkA, S_A_C));
+  pkB = await Promise.all(pkB);
+  S_A_C = await utils.rndHex(32);
+  pkA = utils.strip0x(utils.hash(skA));
+  Z_A_C = utils.concatenateThenHash(C, pkA, S_A_C);
 });
 
 // eslint-disable-next-line no-undef

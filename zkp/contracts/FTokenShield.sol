@@ -108,8 +108,8 @@ contract FTokenShield is Ownable, MerkleTree {
       require(_vkId == mintVkId, "Incorrect vkId");
 
       // Check that the publicInputHash equals the hash of the 'public inputs':
-      bytes32 publicInputHash = bytes32(_inputs[0]);
-      bytes32 publicInputHashCheck = zeroMSBs(bytes32(sha256(abi.encodePacked(uint128(_value), _commitment)))); // Note that we force the _value to be left-padded with zeros to fill 128-bits, so as to match the padding in the hash calculation performed within the zokrates proof.
+      bytes31 publicInputHash = bytes31(bytes32(_inputs[0]) << 8);
+      bytes31 publicInputHashCheck = bytes31(sha256(abi.encodePacked(uint128(_value), _commitment)) << 8); // Note that we force the _value to be left-padded with zeros to fill 128-bits, so as to match the padding in the hash calculation performed within the zokrates proof.
       require(publicInputHashCheck == publicInputHash, "publicInputHash cannot be reconciled");
 
       // gas measurement:
@@ -148,8 +148,8 @@ contract FTokenShield is Ownable, MerkleTree {
       require(_vkId == transferVkId, "Incorrect vkId");
 
       // Check that the publicInputHash equals the hash of the 'public inputs':
-      bytes32 publicInputHash = bytes32(_inputs[0]);
-      bytes32 publicInputHashCheck = zeroMSBs(bytes32(sha256(abi.encodePacked(_root, _nullifierC, _nullifierD, _commitmentE, _commitmentF))));
+      bytes31 publicInputHash = bytes31(bytes32(_inputs[0]) << 8);
+      bytes31 publicInputHashCheck = bytes31(sha256(abi.encodePacked(_root, _nullifierC, _nullifierD, _commitmentE, _commitmentF)) << 8);
       require(publicInputHashCheck == publicInputHash, "publicInputHash cannot be reconciled");
 
       // gas measurement:
@@ -200,8 +200,8 @@ contract FTokenShield is Ownable, MerkleTree {
       require(_vkId == simpleBatchTransferVkId, "Incorrect vkId");
 
       // Check that the publicInputHash equals the hash of the 'public inputs':
-      bytes32 publicInputHash = bytes32(_inputs[0]);
-      bytes32 publicInputHashCheck = zeroMSBs(sha256(abi.encodePacked(_root, _nullifier, _commitments)));
+      bytes31 publicInputHash = bytes31(bytes32(_inputs[0]) << 8);
+      bytes31 publicInputHashCheck = bytes31(sha256(abi.encodePacked(_root, _nullifier, _commitments)) << 8);
       require(publicInputHashCheck == publicInputHash, "publicInputHash cannot be reconciled");
 
       // gas measurement:
@@ -242,8 +242,8 @@ contract FTokenShield is Ownable, MerkleTree {
       require(_vkId == burnVkId, "Incorrect vkId");
 
       // Check that the publicInputHash equals the hash of the 'public inputs':
-      bytes32 publicInputHash = bytes32(_inputs[0]);
-      bytes32 publicInputHashCheck = zeroMSBs(bytes32(sha256(abi.encodePacked(_root, _nullifier, uint128(_value), _payTo)))); // Note that although _payTo represents an address, we have declared it as a uint256. This is because we want it to be abi-encoded as a bytes32 (left-padded with zeros) so as to match the padding in the hash calculation performed within the zokrates proof. Similarly, we force the _value to be left-padded with zeros to fill 128-bits.
+      bytes31 publicInputHash = bytes31(bytes32(_inputs[0]) << 8);
+      bytes31 publicInputHashCheck = bytes31(sha256(abi.encodePacked(_root, _nullifier, uint128(_value), _payTo)) << 8); // Note that although _payTo represents an address, we have declared it as a uint256. This is because we want it to be abi-encoded as a bytes32 (left-padded with zeros) so as to match the padding in the hash calculation performed within the zokrates proof. Similarly, we force the _value to be left-padded with zeros to fill 128-bits.
       require(publicInputHashCheck == publicInputHash, "publicInputHash cannot be reconciled");
 
       // gas measurement:
@@ -274,11 +274,4 @@ contract FTokenShield is Ownable, MerkleTree {
       gasUsedByShieldContract = gasUsedByShieldContract + gasCheckpoint - gasleft();
       emit GasUsed(gasUsedByShieldContract, gasUsedByVerifierContract);
   }
-
-  // function to zero out the 'bitLength'-most siginficant bits
-  function zeroMSBs(bytes32 value) private pure returns (bytes32) {
-    uint256 shift = 256 - bitLength;
-    return (value<<shift)>>shift;
-  }
-
 }

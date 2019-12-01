@@ -1,5 +1,5 @@
 # Pull in a Zokrates container so that we can pull its contents into the below container.
-FROM zokrates/zokrates:0.4.11 as builder
+FROM zokrates/zokrates:0.5.1 as builder
 
 FROM node:11.15
 WORKDIR /app

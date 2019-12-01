@@ -38,7 +38,7 @@ export default class UserService {
    * @returns {object} a user object
    */
   async createUser(data) {
-    const secretkey = utils.zeroMSBs(await utils.rndHex(32));
+    const secretkey = await utils.rndHex(32);
     const publickey = utils.hash(secretkey);
 
     const mappedData = userMapper({ ...data, secretkey, publickey });

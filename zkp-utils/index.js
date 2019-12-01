@@ -508,19 +508,7 @@ function padHex(A, l) {
   return ensure0x(strip0x(A).padStart(l / 4, '0'));
 }
 
-/**
-This function expects a hex string and will set bits longer than 'bits'
-to zero returning a hex string the same length as the original str
-(note: this is different from truncation, although the actual numerical value is the same)
-*/
-function zeroMSBs(_b, bits = 27 * 8) {
-  if (!isHex(_b)) throw new Error('zeroMSBs function requires hex strings');
-  const b = strip0x(_b);
-  return ensure0x(b.slice(-bits / 4).padStart(b.length, '0'));
-}
-
 module.exports = {
-  zeroMSBs,
   isHex,
   utf8StringToHex,
   hexToUtf8String,

@@ -46,13 +46,12 @@ def unpackSiblingNode(field siblingNode)->(field[216]):
 	field[256] siblingNodeBits = unpack256(siblingNode)
 	return siblingNodeBits[40..256]
 
-//'truncate' a 256 bit hash down to 216 bits, returning as 256 bits padded with zeros
-//obviously this is easy to adjust to accommodate other bit lengths than 216.
-//This approach lets us use a 256 padding scheme for the sha hashing, rather than a 216 bit
-//scheme, which is more flexible should we wish to change the 216 bits to something else -
-// we won't need to recalculate all the padding values!
-def zeroMSBs(field[256] sha)->(field[256]):
-	return [...[0;40], ...sha[40..256]]
+// unpack a field[2] (assumed to be two 128-bit values) into 256 bits
+def unpack2xx128To256(field[2] input)->(field[256]):
+	field[128] left = unpack128(input[0])
+	field[128] right = unpack128(input[1])
+  field[256] output = [...left, ...right]
+  return output
 
 // Inputs for main are:
 
@@ -72,35 +71,25 @@ def zeroMSBs(field[256] sha)->(field[256]):
 
 // Each field element passed to main() can be at most 128bits, to make use of unpack128() so most variables occupy two fields (except the publicInputHash, which we maximize as 248-bits)
 
-def main(field publicInputHash, private field payToHigh, private field payToLow, private field value, private field secretKeyHigh, private field secretKeyLow, private field saltHigh, private field saltLow, private field[32] path, private field order, private field nullifierHigh, private field nullifierLow, private field rootHigh, private field rootLow)->():
+def main(field publicInputHash, private field[2] payTo, private field value, private field[2] secretKey, private field[2] salt, private field[32] path, private field order, private field[2] nullifier, private field[2] root)->():
 
 	// Unpack the inputs of main() to 128 bits. We'll unpack each field to its own 128 bit string for simplicity for now. Later efficiencies could be made by grouping some inputs. We don't need to unpack payTo, because it isn't part of a hash.
 
 	field[256] publicInputHashBits = unpack256(publicInputHash)
 
-	field[128] payToHighBits = unpack128(payToHigh)
-	field[128] payToLowBits = unpack128(payToLow)
-	field[256] payToBits = [...payToHighBits, ...payToLowBits]
+	field[256] payToBits = unpack2xx128To256(payTo)
 
 	field[128] valueBits = unpack128(value)
 
-	field[128] secretKeyHighBits = unpack128(secretKeyHigh)
-	field[128] secretKeyLowBits = unpack128(secretKeyLow)
-	field[256] secretKeyBits = [...secretKeyHighBits, ...secretKeyLowBits]
+	field[256] secretKeyBits = unpack2xx128To256(secretKey)
 
-	field[128] saltHighBits = unpack128(saltHigh)
-	field[128] saltLowBits = unpack128(saltLow)
-	field[256] saltBits = [...saltHighBits, ...saltLowBits]
+	field[256] saltBits = unpack2xx128To256(salt)
 
 	field[128] orderBits = unpack128(order)
 
- 	field[128] nullifierHighBits = unpack128(nullifierHigh)
- 	field[128] nullifierLowBits = unpack128(nullifierLow)
- 	field[256] nullifierBits = [...nullifierHighBits, ...nullifierLowBits]
+ 	field[256] nullifierBits = unpack2xx128To256(nullifier)
 
- 	field[128] rootHighBits = unpack128(rootHigh)
- 	field[128] rootLowBits = unpack128(rootLow)
- 	field[256] rootBits = [...rootHighBits, ...rootLowBits]
+ 	field[256] rootBits = unpack2xx128To256(root)
 
 
 	field[256] padding256To512 = shaPad256To512()
@@ -115,15 +104,14 @@ def main(field publicInputHash, private field payToHigh, private field payToLow,
 
 	field[512] preimage512 = concatenate256x256(saltBits, secretKeyBits)
 
-	field[256] nullifierBitsCheck = zeroMSBs(sha256of1024(preimage512[0..256], preimage512[256..512], padding512To1024[0..256], padding512To1024[256..512]))
-
+	field[256] nullifierBitsCheck = sha256of1024(preimage512[0..256], preimage512[256..512], padding512To1024[0..256], padding512To1024[256..512])
 
 
 	// Prove that the commitment is in the Merkle tree
 
 	// First, calculate Alice's public key from her private key: publicKey = H(secretKey).
 
- 	field[256] publicKeyBits = zeroMSBs(sha256of512(secretKeyBits, padding256To512))
+ 	field[256] publicKeyBits = sha256of512(secretKeyBits, padding256To512)
 
 
  	// Next calculate the commitment = H(value|publicKey|salt)
@@ -158,9 +146,9 @@ def main(field publicInputHash, private field payToHigh, private field payToLow,
 
 	preimage1024 = [...preimage896, ...padding896To1024]
 
-	field[256] publicInputHashBitsCheck = zeroMSBs(sha256of1024(preimage1024[0..256], preimage1024[256..512], preimage1024[512..768], preimage1024[768..1024]))
+	field[256] publicInputHashBitsCheck = sha256of1024(preimage1024[0..256], preimage1024[256..512], preimage1024[512..768], preimage1024[768..1024])
 
-	publicInputHashBits == publicInputHashBitsCheck
+	publicInputHashBits[8..256] == publicInputHashBitsCheck[8..256]
 
 
  	return

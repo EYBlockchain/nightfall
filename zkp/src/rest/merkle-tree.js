@@ -32,9 +32,9 @@ const startEventFilterPollingFunction = async args => {
   try {
     const { contractName } = args;
 
-    await start(contractName);
+    const response = await start(contractName);
 
-    return true;
+    return response;
   } catch (err) {
     console.log(
       `Got a polling error "${err}", but that might be because the external server missed our call - we'll poll again...`,
@@ -52,9 +52,14 @@ async function startEventFilter(contractName) {
   console.log('\nRequesting the merkle-tree microservice start its filter...');
   try {
     // we poll the merkle-tree microservice, because it might not be 'up' yet
-    await utilsPoll.poll(startEventFilterPollingFunction, config.POLLING_FREQUENCY, {
-      contractName,
-    });
+    const response = await utilsPoll.poll(
+      startEventFilterPollingFunction,
+      config.POLLING_FREQUENCY,
+      {
+        contractName,
+      },
+    );
+    return response;
   } catch (err) {
     throw new Error(`Could not start merkle-tree microservice's filter`);
   }

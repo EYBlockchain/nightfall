@@ -27,7 +27,7 @@ docker-compose -f docker-compose.merkle-tree.yml -f docker-compose.yml down -v |
 }
 
 printf "${GREEN}*** Pull zokrates docker image ***${NC}\n"
-docker pull zokrates/zokrates:0.4.11
+docker pull zokrates/zokrates:0.5.1
 
 printf "${GREEN}*** Installing zkp-util dependencies"
 pushd zkp-utils
