@@ -36,14 +36,7 @@ async function insertFTTransactionToDb(data, userData) {
 }
 
 async function insertNFTCommitmentToDb(data, userData) {
-  console.log(
-    '\noffchain/src/listeners.js',
-    '\naddToken',
-    '\ndata',
-    data,
-    '\nuserData',
-    userData,
-  );
+  console.log('\noffchain/src/listeners.js', '\naddToken', '\ndata', data, '\nuserData', userData);
 
   const correctnessChecks = await apiGateway.checkCorrectnessForNFTCommitment(
     {
