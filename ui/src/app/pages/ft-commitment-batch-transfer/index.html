@@ -13,19 +13,19 @@
           <a [routerLink]="['/overview']">Overview</a>
         </li>
         <li class="breadcrumb-item active" aria-current="page">
-          Transfer {{ this.ftName }} Batch Commitment
+          Batch Transfer {{ this.ftName }} Commitment
         </li>
       </ol>
     </nav>
     <div class="box">
       <div>
       <div class="box-header">
-        <h3>Transfer {{ this.ftName }} Batch Commitment</h3>
+        <h3>Batch Transfer {{ ftName }} Commitment</h3>
       </div>
 
       <div class="box-body" *ngIf="transactions">
         <div class="form-group">
-          <label for="name mb-1">Select {{ this.ftName }} To Transfer</label>
+          <label for="name mb-1">Select {{ ftSymbol }} Commitment To Transfer</label>
           <div class="row col-sm-12">
             <ng-select
               #select
@@ -37,17 +37,17 @@
               [(ngModel)]="selectedCommitmentList"
               [maxSelectedItems]="1"
               [searchFn]="customSearchFn"
-              placeholder="Select Coins"
+              placeholder="Select Commitment"
               style="width:50%;"
             >
               <ng-template ng-label-tmp let-item="item">
                 <span aria-hidden="true" class="ng-value-icon left" (click)="onRemove(item)"
                   >×</span
                 >
-                <b>{{ utilService.convertToNumber(item.ft_commitment_value) }} </b>Coin &nbsp;
+                <b>{{ utilService.convertToNumber(item.ft_commitment_value) }} </b>{{ ftSymbol }} &nbsp;
               </ng-template>
               <ng-template ng-option-tmp let-item="item" let-index="index">
-                <b>{{ utilService.convertToNumber(item.ft_commitment_value) }} </b>Coin ({{
+                <b>{{ utilService.convertToNumber(item.ft_commitment_value) }} </b>{{ ftSymbol }} ({{
                   item.ft_commitment.slice(0, 20)
                 }})...
               </ng-template>
@@ -56,13 +56,13 @@
         </div>
 
         <div class="form-group" [formGroup]="addForm">
-          <div class="row" *ngIf="!noCoin">
+          <div class="row" *ngIf="transactions">
             <div class="col-sm-6">
               <table class="batch-transfer-table">
                 <tr class="batch-transfer-table-row">
                   <th class="batch-transfer-table-head batch-table-actions">Actions</th>                  
-                  <th class="batch-transfer-table-head batch-table-value">Value Of {{ ftName }} Commitment To Transfer</th>
-                  <th class="batch-transfer-table-head">Select Receiver</th>
+                  <th class="batch-transfer-table-head batch-table-value">Values of {{ ftSymbol }} Commitment To Transfer</th>
+                  <th class="batch-transfer-table-head">Select Receivers</th>
                 </tr>
                 <tr>
                   <td class="batch-transfer-table-content">
@@ -116,7 +116,7 @@
               class="btn btn-md btn-primary"
               (click)="initiateTransfer()"
             >
-              Transfer {{ this.ftName }} Commitment
+              Batch Transfer {{ this.ftName }} Commitment
             </button>
           </div>
         </div>

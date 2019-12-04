@@ -11,13 +11,13 @@ import { FormGroup, FormBuilder, FormArray } from '@angular/forms'
  *  ft-commitment trasfer component, which is used for rendering the page of transfer ERC-20 token commitments to the selected receipent.
  */
 @Component({
-  selector: 'ft-batch-commitment-transfer',
+  selector: 'ft-commitment-batch-transfer',
   templateUrl: './index.html',
   providers: [FtCommitmentService, UserService, UtilService],
   styleUrls: ['./index.css']
 })
 
-export default class FtBatchCommitmentTrasnferComponent implements OnInit , AfterContentInit {
+export default class FtCommitmentBatchTrasnferComponent implements OnInit , AfterContentInit {
 
   /**
    *  To store ERC-20 token commitment transaction objects
@@ -55,6 +55,11 @@ export default class FtBatchCommitmentTrasnferComponent implements OnInit , Afte
   ftName: string;
 
   /**
+   *  Fungeble Token Symbol , read from ERC-20 contract.
+   */
+  ftSymbol: string;
+
+  /**
    * To store all transferror and value
    */
   transferDetails: FormArray;
@@ -85,9 +90,11 @@ export default class FtBatchCommitmentTrasnferComponent implements OnInit , Afte
 
   ngOnInit () {
     this.ftName = localStorage.getItem('ftName');
+    this.ftSymbol = localStorage.getItem('ftSymbol');
     this.getAllRegisteredNames();
     this.getFTCommitments();
     this.addForm.addControl('rows', this.transferDetails);
+    this.transferDetails.push(this.createItemFormGroup());
   }
 
   ngAfterContentInit() {
@@ -202,7 +209,7 @@ export default class FtBatchCommitmentTrasnferComponent implements OnInit , Afte
   }
 
   /**
-   * Method to set new coin list in select box, on removing.
+   * Method unset the selected commitment.
    * @param item {Object} Item to be removed.
    */
   onRemove(item) {

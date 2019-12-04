@@ -42,7 +42,7 @@ import FtTransferComponent from './pages/ft-transfer';
 
 import FtCommitmentMintComponent from './pages/ft-commitment-mint';
 import FtCommitmentTrasnferComponent from './pages/ft-commitment-transfer';
-import FtBatchCommitmentTrasnferComponent from './pages/ft-batch-commitment-transfer';
+import FtCommitmentBatchTrasnferComponent from './pages/ft-commitment-batch-transfer';
 import FtCommitmentBurnComponent from './pages/ft-commitment-burn';
 import FtCommitmentListComponent from './pages/ft-commitment-list';
 
@@ -67,7 +67,7 @@ import { AppAutoFocusDirective } from './shared/autofocus.directive';
     NftBurnComponent,
     NftListComponent,
     FtCommitmentTrasnferComponent,
-    FtBatchCommitmentTrasnferComponent,
+    FtCommitmentBatchTrasnferComponent,
     FtCommitmentBurnComponent,
     FtMintComponent,
     FtTransferComponent,
