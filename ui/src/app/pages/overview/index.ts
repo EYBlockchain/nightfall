@@ -25,23 +25,23 @@ export default class OverviewComponent extends Config implements OnInit {
   /**
    *  To store ERC-721 token commitment transaction objects
    */
-  tokenTransactions: any;
+  nftCommitmentTransactions: any;
   /**
    *  To store ERC-721 token transaction objects
    */
-  publicTokenTransactions: any = [];
+  nftTransactions: any = [];
   /**
    *  To store ERC-20 token transaction objects
    */
-  publicCoinTransactions: any = [];
+  ftTransactions: any = [];
   /**
    *  To store ERC-20 token commitment transaction objects
    */
-  coinTransactions: any;
+  ftCommitmentTransactions: any;
   /**
    * ERC-20 token commitment count
    */
-  coinCount;
+  ftBalance;
   /**
    * ERC-721 token count
    */
@@ -128,14 +128,14 @@ export default class OverviewComponent extends Config implements OnInit {
    * Method to retrive the count and symbols of ERC-20 token, ERC-20 token commitments, ERC-721 token & ERC-721 token commitments.
    */
   getUserERC20AndERC721TokenCount() {
-    const coins = this.userService.getFTokenInfo();
+    const ftCount = this.userService.getFTokenInfo();
     const tokenCount = this.userService.getTokenCommitmentCounts();
     const nftBalance = this.userService.getNFTBalance();
-    Observable.forkJoin([coins, tokenCount, nftBalance]).subscribe(
+    Observable.forkJoin([ftCount, tokenCount, nftBalance]).subscribe(
       responseList  => {
         console.log(responseList[2]);
         this.count = responseList[1]['data'];
-        this.coinCount =  responseList[0]['data']['balance'];
+        this.ftBalance =  responseList[0]['data']['balance'];
         this.ftName = responseList[0]['data']['name'];
         localStorage.setItem('ftName', this.ftName);
         this.ftSymbol = responseList[0]['data']['symbol'];
@@ -146,7 +146,6 @@ export default class OverviewComponent extends Config implements OnInit {
         this.nftSymbol = responseList[2]['data']['nftSymbol'];
         localStorage.setItem('nftSymbol', this.nftSymbol);
         console.log('this.count', this.count );
-        console.log('this.coinCount', this.coinCount);
         this.isRequesting = false;
       },
       error => {
@@ -162,10 +161,10 @@ export default class OverviewComponent extends Config implements OnInit {
    * @param type {String} Possible types are nft-commitment, nft, ft-commitment, ft
    */
   getTransactions(type: string) {
-    this.tokenTransactions = [];
-    this.publicTokenTransactions = [];
-    this.publicCoinTransactions = [];
-    this.coinTransactions = [];
+    this.nftCommitmentTransactions = [];
+    this.nftTransactions = [];
+    this.ftTransactions = [];
+    this.ftCommitmentTransactions = [];
 
     this.pageNo = 1; // reset page number to 1
     this.isPagination = false;
@@ -174,7 +173,7 @@ export default class OverviewComponent extends Config implements OnInit {
         console.log('getTransactions', data, type);
         if (type === 'nft-commitment') {
           this.currentType = 'nft-commitment';
-          this.tokenTransactions = data['data']['data'].length > 0 ? data['data']['data'] : [];
+          this.nftCommitmentTransactions = data['data']['data'].length > 0 ? data['data']['data'] : [];
           const totalCount = parseInt(data['data']['totalCount'], 10);
           const totalPages = this.getTotalPages(totalCount);
           console.log('totalPages', totalPages);
@@ -184,7 +183,7 @@ export default class OverviewComponent extends Config implements OnInit {
           this.totalCollection = Promise.resolve(totalCount); // should be a promise for ngb pagination component
         } else if (type === 'nft') {
           this.currentType = 'nft';
-          this.publicTokenTransactions = data['data']['data'].length > 0 ? data['data']['data'] : [];
+          this.nftTransactions = data['data']['data'].length > 0 ? data['data']['data'] : [];
           const totalCount = parseInt(data['data']['totalCount'], 10);
           const totalPages = this.getTotalPages(totalCount);
           console.log('totalPages', totalPages);
@@ -194,7 +193,7 @@ export default class OverviewComponent extends Config implements OnInit {
           this.totalCollection = Promise.resolve(totalCount); // should be a promise for ngb pagination component
         } else if (type === 'ft') {
           this.currentType = 'ft';
-          this.publicCoinTransactions = data['data']['data'].length > 0 ? data['data']['data'] : [];
+          this.ftTransactions = data['data']['data'].length > 0 ? data['data']['data'] : [];
           const totalCount = parseInt(data['data']['totalCount'], 10);
           const totalPages = this.getTotalPages(totalCount);
           console.log('totalPages', totalPages);
@@ -204,7 +203,7 @@ export default class OverviewComponent extends Config implements OnInit {
           this.totalCollection = Promise.resolve(totalCount); // should be a promise for ngb pagination component
         } else {
           this.currentType = 'ft-commitment';
-          this.coinTransactions = data['data']['data'].length > 0 ? data['data']['data'] : [];
+          this.ftCommitmentTransactions = data['data']['data'].length > 0 ? data['data']['data'] : [];
           const totalCount = parseInt(data['data']['totalCount'], 10);
           const totalPages = this.getTotalPages(totalCount);
           console.log('totalPages', totalPages);
@@ -213,7 +212,6 @@ export default class OverviewComponent extends Config implements OnInit {
           }
           this.totalCollection = Promise.resolve(totalCount); // should be a promise for ngb pagination component
         }
-        console.log('this.this.coinTransactions', this.coinTransactions);
       },
       error => {
         console.log('error in user get', error);
@@ -240,16 +238,16 @@ export default class OverviewComponent extends Config implements OnInit {
         console.log('getTransactions', data);
         if (type === 'nft-commitment') {
           this.currentType = 'nft-commitment';
-          this.tokenTransactions = data['data']['data'].length > 0 ? data['data']['data'] : [];
+          this.nftCommitmentTransactions = data['data']['data'].length > 0 ? data['data']['data'] : [];
         } else if (type === 'nft') {
           this.currentType = 'nft';
-          this.publicTokenTransactions = data['data']['data'].length > 0 ? data['data']['data'] : [];
+          this.nftTransactions = data['data']['data'].length > 0 ? data['data']['data'] : [];
         } else if (type === 'ft') {
           this.currentType = 'ft';
-          this.publicCoinTransactions = data['data']['data'].length > 0 ? data['data']['data'] : [];
+          this.ftTransactions = data['data']['data'].length > 0 ? data['data']['data'] : [];
         } else {
           this.currentType = 'ft-commitment';
-          this.coinTransactions = data['data']['data'].length > 0 ? data['data']['data'] : [];
+          this.ftCommitmentTransactions = data['data']['data'].length > 0 ? data['data']['data'] : [];
         }
       },
       error => {

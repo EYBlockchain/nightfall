@@ -93,7 +93,7 @@ export default class NftBurnComponent implements OnInit , AfterContentInit {
   }
 
   /**
-   * Method to set new coin list in select box, on removing.
+   * Method will remove selected token
    * @param item {Object} Item to be removed.
    */
   onRemove(item) {

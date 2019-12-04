@@ -131,7 +131,7 @@ export default class NftCommitmentBurnComponent implements OnInit, AfterContentI
   }
 
   /**
-   * Method to set new coin list in select box, on removing.
+   * Method will remove slected commitment.
    * @param item {Object} Item to be removed.
    */
   onRemove(item) {

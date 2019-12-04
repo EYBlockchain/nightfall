@@ -89,7 +89,7 @@ export default class NftCommitmentMintComponent implements OnInit, AfterContentI
 
 
   /**
-   * Method to set new coin list in select box, on removing.
+   * Method will remove selcted token.
    * @param item {Object} Item to be removed.
    */
   onRemove(item) {

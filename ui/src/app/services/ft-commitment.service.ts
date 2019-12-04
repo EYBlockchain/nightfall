@@ -6,7 +6,7 @@ import { Observable } from 'rxjs/Observable';
 import { config } from '../shared/config';
 
 /**
- * Coin services, which accomodated all ERC-20 related methods.
+ * Fungible Token services, which accomodated all ERC-20 related methods.
  */
 @Injectable()
 export default class FtCommitmentService {
@@ -35,7 +35,7 @@ export default class FtCommitmentService {
 
   return this.http
       .post(url, body, httpOptions)
-      .pipe(tap(data => console.log(`Coin minted `)), catchError(this.handleError('mintCoin', [])));
+      .pipe(tap(data => console.log(`ft-commitment minted `)), catchError(this.handleError('mintFTCommitment', [])));
  }
 
   /**
@@ -50,7 +50,7 @@ export default class FtCommitmentService {
 
     return this.http
       .get(url, httpOptions)
-      .pipe(tap(data => console.log(data)), catchError(this.handleError('getCoinByAccount', [])));
+      .pipe(tap(data => console.log(data)), catchError(this.handleError('getFTCommitments', [])));
   }
 
   /**
@@ -85,7 +85,7 @@ export default class FtCommitmentService {
     const url = config.apiGateway.root + 'burnFTCommitment';
     return this.http
       .post(url, body, httpOptions)
-      .pipe(tap(data => console.log(data)), catchError(this.handleError('BurnCoin', [])));
+      .pipe(tap(data => console.log(data)), catchError(this.handleError('burnFTCommitment', [])));
   }
 
   /**

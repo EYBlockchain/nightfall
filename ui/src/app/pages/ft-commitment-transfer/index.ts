@@ -52,6 +52,11 @@ export default class FtCommitmentTrasnferComponent implements OnInit , AfterCont
    *  Fungeble Token name , read from ERC-20 contract.
    */
   ftName: string;
+  
+  /**
+   *  Fungeble Token Symbol , read from ERC-20 contract.
+   */
+  ftSymbol: string;
 
   /**
    * Reference of combo box
@@ -71,6 +76,7 @@ export default class FtCommitmentTrasnferComponent implements OnInit , AfterCont
 
   ngOnInit () {
     this.ftName = localStorage.getItem('ftName');
+    this.ftSymbol = localStorage.getItem('ftSymbol');
     this.getAllRegisteredNames();
     this.getFTCommitments();
   }
@@ -130,7 +136,7 @@ export default class FtCommitmentTrasnferComponent implements OnInit , AfterCont
       this.toastr.error('Invalid commitment Selection.');
       return;
     }
-    const [coin1, coin2] = this.selectedCommitmentList;
+    const [commitment1, commitment2] = this.selectedCommitmentList;
     const {
       transferValue,
       transactions
@@ -142,28 +148,28 @@ export default class FtCommitmentTrasnferComponent implements OnInit , AfterCont
     }
 
     this.isRequesting = true;
-    let returnValue = Number(coin1['ft_commitment_value']) + Number(coin2['ft_commitment_value']);
+    let returnValue = Number(commitment1['ft_commitment_value']) + Number(commitment2['ft_commitment_value']);
     returnValue -= transferValue;
     console.log('RETURNVALUE', returnValue, transferValue, this.toHex(returnValue), this.toHex(transferValue));
 
     this.ftCommitmentService.transferFTCommitment(
-      coin1['ft_commitment_value'],
-      coin2['ft_commitment_value'],
+      commitment1['ft_commitment_value'],
+      commitment2['ft_commitment_value'],
       this.toHex(transferValue),
       this.toHex(returnValue),
-      coin1['salt'],
-      coin2['salt'],
-      coin1['ft_commitment_index'],
-      coin2['ft_commitment_index'],
-      coin1['ft_commitment'],
-      coin2['ft_commitment'],
+      commitment1['salt'],
+      commitment2['salt'],
+      commitment1['ft_commitment_index'],
+      commitment2['ft_commitment_index'],
+      commitment1['ft_commitment'],
+      commitment2['ft_commitment'],
       localStorage.getItem('publickey'),
       this.receiverName
     ).subscribe( data => {
         this.isRequesting = false;
         this.toastr.success('Transfer to Receiver ' + this.receiverName);
-        transactions.splice(Number(coin1['id']), 1);
-        transactions.splice(Number(coin2['id']) - 1, 1);
+        transactions.splice(Number(commitment1['id']), 1);
+        transactions.splice(Number(commitment2['id']) - 1, 1);
         this.getFTCommitments();
         this.router.navigate(['/overview'], { queryParams: { selectedTab: 'ft-commitment' } });
       }, error => {
@@ -173,7 +179,7 @@ export default class FtCommitmentTrasnferComponent implements OnInit , AfterCont
   }
 
   /**
-   * Method to set new coin list in select box, on removing.
+   * Method remove selected commitment.
    * @param item {Object} Item to be removed.
    */
   onRemove(item) {

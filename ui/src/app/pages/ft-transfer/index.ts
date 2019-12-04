@@ -43,7 +43,7 @@ export default class FtTransferComponent implements OnInit {
   /**
    * To store the ERC-20 token count.
    */
-  coinCount;
+  ftBalance;
 
 
   constructor(
@@ -68,7 +68,7 @@ export default class FtTransferComponent implements OnInit {
   getFTokenInfo() {
     this.userService.getFTokenInfo().subscribe(
       data => {
-        this.coinCount = data['data']['balance'];
+        this.ftBalance = data['data']['balance'];
       },
       error => {
         console.log('error in user get', error);
@@ -80,7 +80,7 @@ export default class FtTransferComponent implements OnInit {
    */
   transferFToken() {
     if (!this.amount || !this.receiverName) { return; }
-    if (this.amount > this.coinCount) {
+    if (this.amount > this.ftBalance) {
       return this.toastr.error('You do not have enough ERC-20 tokens');
     }
     this.isRequesting = true;

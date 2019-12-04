@@ -41,6 +41,11 @@ export default class FtCommitmentBurnComponent implements OnInit , AfterContentI
   ftName: string;
 
   /**
+   *  Fungeble Token Symbol , read from ERC-20 contract.
+   */
+  ftSymbol: string;
+
+  /**
    * To store all users
    */
   users: any;
@@ -68,6 +73,7 @@ export default class FtCommitmentBurnComponent implements OnInit , AfterContentI
 
   ngOnInit () {
     this.ftName = localStorage.getItem('ftName');
+    this.ftSymbol = localStorage.getItem('ftSymbol');
     this.getAllRegisteredNames();
   }
 
@@ -79,7 +85,7 @@ export default class FtCommitmentBurnComponent implements OnInit , AfterContentI
   }
 
   /**
-   * Method to list down all ERC-20 coins.
+   * Method to list down all ERC-20 commitments.
    */
   getFTCommitments() {
     this.transactions = null;
@@ -103,28 +109,27 @@ export default class FtCommitmentBurnComponent implements OnInit , AfterContentI
   }
 
   /**
-   * Method to burn a private coin, this will revert back to public
+   * Method to burn a fungilbe token commitment, this will revert back to public
    */
   initiateBurn () {
     this.selectedCommitment = this.selectedCommitmentList[0];
-    console.log(this.selectedCommitment, 'selected coin');
-    const coin = this.selectedCommitment;
-    if (!coin) { return; }
+    const commitment = this.selectedCommitment;
+    if (!commitment) { return; }
     const {
       transactions,
       index
     } = this;
     this.isRequesting = true;
     this.ftCommitmentService.burnFTCommitment(
-      coin['ft_commitment_value'],
-      coin['salt'],
-      coin['ft_commitment_index'],
-      coin['ft_commitment'],
+      commitment['ft_commitment_value'],
+      commitment['salt'],
+      commitment['ft_commitment_index'],
+      commitment['ft_commitment'],
       localStorage.getItem('publickey'),
       this.receiverName
     ).subscribe( data => {
         this.isRequesting = false;
-        this.toastr.success('Burned Coin ' + coin['ft_commitment']);
+        this.toastr.success('Burned commitment ' + commitment['ft_commitment']);
         transactions.splice(Number(index), 1);
         this.selectedCommitment = undefined;
         this.router.navigate(['/overview'], { queryParams: { selectedTab: 'ft-commitment' } });
@@ -135,7 +140,7 @@ export default class FtCommitmentBurnComponent implements OnInit , AfterContentI
   }
 
   /**
-   * Method to set new coin list in select box, on removing.
+   * Method removes a commitment from the commitment list.
    * @param item {Object} Item to be removed.
    */
   onRemove(item) {

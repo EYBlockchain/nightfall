@@ -33,7 +33,7 @@
           <div class="col-md-3">
             <div class="card">
               <div class="card-body">
-                <h3>{{ coinCount }}</h3>
+                <h3>{{ ftBalance }}</h3>
                 <p class="card-text">
                   ERC-20: {{ ftName || '' }} <span *ngIf="ftSymbol">({{ ftSymbol }})</span>
                 </p>
@@ -102,8 +102,8 @@
             <a class="btn btn-primary btn-list ft-commitment" [routerLink]="['/ft-commitment/transfer']"
               >Transfer {{ ftName }} Commitment</a
             >
-            <a class="btn btn-primary btn-list ft-commitment" [routerLink]="['/ft-batch-commitment/transfer']"
-              >Transfer {{ ftName }} Batch Commitment</a
+            <a class="btn btn-primary btn-list ft-commitment" [routerLink]="['/ft-commitment/batch-transfer']"
+              >Batch Transfer {{ ftName }} Commitment</a
             >
             <a class="btn btn-primary btn-list ft-commitment" [routerLink]="['/ft-commitment/burn']"
               >Burn {{ ftName }} Commitment</a
@@ -135,7 +135,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let transaction of publicTokenTransactions">
+                  <tr *ngFor="let transaction of nftTransactions">
                     <td>{{ transaction.type.toUpperCase() }}</td>
                     <td [title]="transaction.token_id">
                       {{ transaction.token_id.slice(0, 20) }}....
@@ -189,7 +189,7 @@
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let transaction of tokenTransactions">
+                  <tr *ngFor="let transaction of nftCommitmentTransactions">
                     <td>{{ transaction.type.toUpperCase() }}</td>
                     <td [title]="transaction.token_id">
                       {{ transaction.token_id.slice(0, 20) }}....
@@ -223,13 +223,13 @@
                 <thead>
                   <tr>
                     <th>Type</th>
-                    <th>Coin Value</th>
+                    <th>Amount</th>
                     <th>Date</th>
                     <th>Send To</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let transaction of publicCoinTransactions">
+                  <tr *ngFor="let transaction of ftTransactions">
                     <td>{{ transaction.type.toUpperCase() }}</td>
                     <td>{{ ftSymbol + ' ' + transaction.amount }}</td>
                     <td>{{ transaction.created_at | date: 'dd/MM/yyyy hh:mm:ss a' }}</td>
@@ -263,14 +263,14 @@
                 <thead>
                   <tr>
                     <th>Type</th>
-                    <th>Coin Value</th>
-                    <th>Coin Commitment</th>
+                    <th>Amount</th>
+                    <th>Commitment</th>
                     <th>Date</th>
                     <th>Send To</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <ng-container *ngFor="let transaction of coinTransactions; index as i">
+                  <ng-container *ngFor="let transaction of ftCommitmentTransactions; index as i">
                     <tr>
                         <td [ngClass]="{'active': (transaction.type === 'transferred' || transaction.type === 'batchTransfer' )}" data-toggle="collapse" [attr.data-target]="'#collapse-' + i" [attr.aria-expanded]="false" [attr.aria-controls] = "'collapse-' + i">
                           {{ transaction.type.toUpperCase() }}
@@ -288,8 +288,8 @@
                             <div [attr.id]="'collapse-' + i" class="collapse out">
                               <table class="details-table table table-striped" *ngIf="transaction.type === 'transferred'">
                                 <tr>
-                                  <th>Used Coin Value</th>
-                                  <th>Used Coin Commitment</th>
+                                  <th>Used Amount</th>
+                                  <th>Used Commitment</th>
                                 </tr>
                                 <tr *ngFor="let used_commitments of transaction.used_ft_commitments; index as i">
                                     <td>{{ ftSymbol +' ' +utilService.convertToNumber(used_commitments.ft_commitment_value) }}</td>
@@ -298,9 +298,9 @@
                               </table>
                               <table class="details-table table table-striped" *ngIf="transaction.type === 'batchTransfer'">
                                   <tr>
-                                    <th>Transferred Coin Value</th>
-                                    <th>Transferred Coin Commitment</th>
-                                    <th>Receiver Name</th>
+                                    <th>Transferred Amounts</th>
+                                    <th>Transferred Commitments</th>
+                                    <th>Receiver Names</th>
                                   </tr>
                                   <tr *ngFor="let commitments of transaction.batch_transfer; index as i">
                                       <td>{{ ftSymbol +' ' +utilService.convertToNumber(commitments.ft_commitment_value) }}</td>

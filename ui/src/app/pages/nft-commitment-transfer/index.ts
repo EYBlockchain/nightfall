@@ -159,7 +159,7 @@ export default class NftCommitmentTransferComponent implements OnInit, AfterCont
   }
 
   /**
-   * Method to set new coin list in select box, on removing.
+   * Method will remove slected commitment.
    * @param item {Object} Item to be removed.
    */
   onRemove(item) {

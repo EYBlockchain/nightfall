@@ -63,7 +63,7 @@ export default class UserService {
 
   /**
    * Method to initiate a HTTP request to get transaction history based on type
-   * @param type Possible types are tokens, publictokens, coins, publiccoins
+   * @param type Possible types are nft-commitment, nft, ft, ft-commitment
    * @param pageNo Page number
    * @param limit Page limit
    */
@@ -95,12 +95,10 @@ export default class UserService {
     const url = config.apiGateway.root + 'getFTokenInfo';
     return this.http.get(url).pipe(
       map((data: any) => {
-        console.log('coins', data);
         data.data.balance = Number('0x' + data.data.balance);
         return data;
       }),
       catchError(err => {
-        console.log('Coins Not Found', err);
         return err;
       })
     );
@@ -114,7 +112,6 @@ export default class UserService {
     return this.http.get(url).pipe(
       tap(data => {}),
       catchError(err => {
-        console.log('Coins Not Found', err);
         return err;
       })
     );

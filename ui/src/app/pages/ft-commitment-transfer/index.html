@@ -25,7 +25,7 @@
 
       <div class="box-body" *ngIf="transactions">
         <div class="form-group">
-          <label for="name mb-1">Select Two {{ this.ftName }} To Transfer</label>
+          <label for="name mb-1">Select Two {{ this.ftSymbol }} Commitment To Transfer</label>
           <div class="row col-sm-12">
             <ng-select
               #select
@@ -37,17 +37,17 @@
               [(ngModel)]="selectedCommitmentList"
               [maxSelectedItems]="2"
               [searchFn]="customSearchFn"
-              placeholder="Select Coins"
+              placeholder="Select Commitments"
               style="width:50%;"
             >
               <ng-template ng-label-tmp let-item="item">
                 <span aria-hidden="true" class="ng-value-icon left" (click)="onRemove(item)"
                   >×</span
                 >
-                <b>{{ utilService.convertToNumber(item.ft_commitment_value) }} </b>Coin &nbsp;
+                <b>{{ utilService.convertToNumber(item.ft_commitment_value) }} </b>{{this.ftSymbol}} &nbsp;
               </ng-template>
               <ng-template ng-option-tmp let-item="item" let-index="index">
-                <b>{{ utilService.convertToNumber(item.ft_commitment_value) }} </b>Coin ({{
+                <b>{{ utilService.convertToNumber(item.ft_commitment_value) }} </b>{{this.ftSymbol}} ({{
                   item.ft_commitment.slice(0, 20)
                 }})...
               </ng-template>
@@ -55,8 +55,8 @@
           </div>
         </div>
 
-        <div class="" *ngIf="!noCoin">
-          <label for="name">Value Of {{ this.ftName }} Commitment To Transfer</label>
+        <div class="" *ngIf="transactions">
+          <label for="name">Value Of {{ this.ftSymbol }} Commitment To Transfer</label>
           <div class="row form-group">
             <div class="col-md-6">
               <input
