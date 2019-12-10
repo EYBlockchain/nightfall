@@ -24,16 +24,14 @@
     "url": "https://github.com/EYBlockchain/nightfall/issues"
   },
   "homepage": "https://github.com/EYBlockchain/nightfall#readme",
-  "dependencies": {
-    "lodash": "^4.17.15",
-    "typescript": "^2.9.2"
-  },
   "devDependencies": {
     "@babel/core": "^7.5.0",
     "@babel/preset-env": "^7.5.0",
     "@babel/register": "^7.4.4",
     "@commitlint/cli": "^7.6.1",
     "@commitlint/config-conventional": "^7.6.0",
+    "lodash": "^4.17.15",
+    "typescript": "^2.9.2",
     "chai": "^4.2.0",
     "config": "^3.1.0",
     "eslint": "^5.16.0",
