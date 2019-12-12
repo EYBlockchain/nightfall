@@ -17,6 +17,7 @@ const inputsHashLength = 32;
 /**
 utility function to remove a leading 0x on a string representing a hex number.
 If no 0x is present then it returns the string un-altered.
+In use - Miranda
 */
 function strip0x(hex) {
   if (typeof hex === 'undefined') return '';
@@ -35,6 +36,7 @@ function isHex(h) {
 utility function to check that a string has a leading 0x (which the Solidity
 compiler uses to check for a hex string).  It adds it if it's not present. If
 it is present then it returns the string unaltered
+In use - Miranda
 */
 function ensure0x(hex = '') {
   const hexString = hex.toString();
@@ -50,6 +52,7 @@ Utility function to convert a string into a hex representation of fixed length.
 @param {int} outLength - the length of the output hex string in bytes (excluding the 0x)
 if the string is too short to fill the output hex string, it is padded on the left with 0s
 if the string is too long, an error is thrown
+In use - Miranda
 */
 function utf8StringToHex(str, outLengthBytes) {
   const outLength = outLengthBytes * 2; // work in characters rather than bytes
@@ -71,6 +74,7 @@ function hexToUtf8String(hex) {
 /**
 Converts hex strings into binary, so that they can be passed into merkle-proof.code
 for example (0xff -> [1,1,1,1,1,1,1,1])
+In use - Miranda
 */
 function hexToBin(hex) {
   return hexToBinary(strip0x(hex)).split('');
@@ -78,6 +82,9 @@ function hexToBin(hex) {
 
 /** Helper function for the converting any base to any base
  */
+
+ /** In use - Miranda*/
+
 function parseToDigitsArray(str, base) {
   const digits = str.split('');
   const ary = [];
@@ -89,7 +96,10 @@ function parseToDigitsArray(str, base) {
   return ary;
 }
 
+
+
 /** Helper function for the converting any base to any base
+In use - Miranda
  */
 function add(x, y, base) {
   const z = [];
@@ -111,6 +121,8 @@ function add(x, y, base) {
  Returns a*x, where x is an array of decimal digits and a is an ordinary
  JavaScript number. base is the number base of the array x.
 */
+
+//In use - Miranda
 function multiplyByNumber(num, x, base) {
   if (num < 0) return null;
   if (num === 0) return [];
@@ -131,6 +143,8 @@ function multiplyByNumber(num, x, base) {
 }
 
 /** Helper function for the converting any base to any base
+
+In use - Miranda
  */
 function convertBase(str, fromBase, toBase) {
   const digits = parseToDigitsArray(str, fromBase);
@@ -163,6 +177,7 @@ function convertBase(str, fromBase, toBase) {
 }
 
 // the hexToBinary library was giving some funny values with 'undefined' elements within the binary string. Using convertBase seems to be working nicely. THe 'Simple' suffix is to distinguish from hexToBin, which outputs an array of bit elements.
+// in use - Miranda
 function hexToBinSimple(hex) {
   const bin = convertBase(strip0x(hex), 16, 2);
   return bin;
@@ -172,6 +187,8 @@ function hexToBinSimple(hex) {
 Converts hex strings into byte (decimal) values.  This is so that they can
 be passed into  merkle-proof.code in a more compressed fromat than bits.
 Each byte is invididually converted so 0xffff becomes [15,15]
+
+In use - Miranda
 */
 function hexToBytes(hex) {
   const cleanHex = strip0x(hex);
@@ -184,6 +201,7 @@ function hexToBytes(hex) {
 }
 
 // Converts hex strings to decimal values
+// In use - Miranda
 function hexToDec(hexStr) {
   if (hexStr.substring(0, 2) === '0x') {
     return convertBase(hexStr.substring(2).toLowerCase(), 16, 10);
@@ -195,6 +213,7 @@ function hexToDec(hexStr) {
 @param {string} hexStr A hex string.
 @param {integer} fieldSize The number of elements in the finite field.
 @return {string} A Field Value (decimal value) (formatted as string, because they're very large)
+In use - Miranda
 */
 function hexToField(hexStr, fieldSize) {
   const cleanHexStr = strip0x(hexStr);
@@ -210,6 +229,7 @@ Left-pads the input hex string with zeros, so that it becomes of size N octets.
 @param {string} hexStr A hex number/string.
 @param {integer} N The string length (i.e. the number of octets).
 @return A hex string (padded) to size N octets, (plus 0x at the start).
+In use - Miranda
 */
 function leftPadHex(hexStr, n) {
   return ensure0x(strip0x(hexStr).padStart(n, '0'));
@@ -221,7 +241,10 @@ Left-pads the input binary string with zeros, so that it becomes of size N bits.
 @param {string} bitStr A binary number/string.
 @param {integer} N The 'chunk size'.
 @return A binary string (padded) to size N bits.
-*/
+
+In use - Miranda */
+
+
 function leftPadBitsN(bitStr, n) {
   const len = bitStr.length;
   let paddedStr;
@@ -236,12 +259,15 @@ function leftPadBitsN(bitStr, n) {
   return paddedStr;
 }
 
+
+
 /**
 Used by split'X'ToBitsN functions.
 Checks whether a binary number is larger than N bits, and splits its binary representation into chunks of size = N bits. The left-most (big endian) chunk will be the only chunk of size <= N bits. If the inequality is strict, it left-pads this left-most chunk with zeros.
 @param {string} bitStr A binary number/string.
 @param {integer} N The 'chunk size'.
 @return An array whose elements are binary 'chunks' which altogether represent the input binary number.
+In use - Miranda
 */
 function splitAndPadBitsN(bitStr, n) {
   let a = [];
@@ -261,6 +287,7 @@ function splitAndPadBitsN(bitStr, n) {
 @param {string} hexStr A hex number/string.
 @param {integer} N The 'chunk size'.
 @return An array whose elements are binary 'chunks' which altogether represent the input hex number.
+In use - Miranda
 */
 function splitHexToBitsN(hexStr, n) {
   const strippedHexStr = strip0x(hexStr);
@@ -271,6 +298,7 @@ function splitHexToBitsN(hexStr, n) {
 }
 
 // Converts binary value strings to decimal values
+// In use - Miranda
 function binToDec(binStr) {
   const dec = convertBase(binStr, 2, 10);
   return dec;
@@ -278,6 +306,7 @@ function binToDec(binStr) {
 
 /** Preserves the magnitude of a hex number in a finite field, even if the order of the field is smaller than hexStr. hexStr is converted to decimal (as fields work in decimal integer representation) and then split into chunks of size packingSize. Relies on a sensible packing size being provided (ZoKrates uses packingSize = 128).
  *if the result has fewer elements than it would need for compatibiity with the dsl, it's padded to the left with zero elements
+ In use - Miranda
  */
 function hexToFieldPreserve(hexStr, packingSize, packets, silenceWarnings) {
   let bitsArr = [];
@@ -306,7 +335,12 @@ function hexToFieldPreserve(hexStr, packingSize, packets, silenceWarnings) {
   return decArr;
 }
 
-// Converts binary value strings to hex values
+
+/*
+
+//Converts binary value strings to hex values
+//MARKED FOR DELETION??? - Miranda
+
 function binToHex(binStr) {
   const hex = convertBase(binStr, 2, 16);
   return hex ? `0x${hex}` : null;
@@ -315,21 +349,24 @@ function binToHex(binStr) {
 // FUNCTIONS ON DECIMAL VALUES
 
 // Converts decimal value strings to hex values
+//MARKED FOR DELETION??? - Miranda
 function decToHex(decStr) {
   const hex = convertBase(decStr, 10, 16);
   return hex ? `0x${hex}` : null;
 }
 
 // Converts decimal value strings to binary values
+//MARKED FOR DELETION??? - Miranda
 function decToBin(decStr) {
   return convertBase(decStr, 10, 2);
 }
 
-/** Checks whether a decimal integer is larger than N bits, and splits its binary representation into chunks of size = N bits. The left-most (big endian) chunk will be the only chunk of size <= N bits. If the inequality is strict, it left-pads this left-most chunk with zeros.
+//Checks whether a decimal integer is larger than N bits, and splits its binary representation into chunks of size = N bits. The left-most (big endian) chunk will be the only chunk of size <= N bits. If the inequality is strict, it left-pads this left-most chunk with zeros.
 @param {string} decStr A decimal number/string.
 @param {integer} N The 'chunk size'.
 @return An array whose elements are binary 'chunks' which altogether represent the input decimal number.
-*/
+
+//MARKED FOR DELETION??? - Miranda
 function splitDecToBitsN(decStr, N) {
   const bitStr = decToBin(decStr.toString());
   let a = [];
@@ -337,11 +374,18 @@ function splitDecToBitsN(decStr, N) {
   return a;
 }
 
+// MARKED FOR DELETION??? - Miranda
 function isProbablyBinary(arr) {
   const foundField = arr.find(el => el !== 0 && el !== 1);
   // ...hence it is not binary:
   return !foundField;
 }
+
+*/
+
+
+
+
 
 // FUNCTIONS ON FIELDS
 
@@ -351,6 +395,8 @@ Converts an array of Field Elements (decimal numbers which are smaller in magnit
 @param {integer} packingSize Each field element of fieldsArr is a 'packing' of exactly 'packingSize' bits. I.e. packingSize is the size (in bits) of each chunk (element) of fieldsArr. We use this to reconstruct the underlying decimal value which was, at some point previously, packed into a fieldsArr format.
 @returns {string} A decimal number (as a string, because it might be a very large number)
 */
+/** MARKED FOR DELETION??? - Miranda */
+/*
 function fieldsToDec(fieldsArr, packingSize) {
   const len = fieldsArr.length;
   let acc = new BI('0');
@@ -367,7 +413,9 @@ function fieldsToDec(fieldsArr, packingSize) {
   }
   const decStr = acc.toString();
   return decStr;
-}
+}*/
+
+
 
 // UTILITY FUNCTIONS:
 
@@ -375,6 +423,7 @@ function fieldsToDec(fieldsArr, packingSize) {
 Utility function to xor to two hex strings and return as buffer
 Looks like the inputs are somehow being changed to decimal!
 */
+// In use - Miranda
 function xor(a, b) {
   const length = Math.max(a.length, b.length);
   const buffer = Buffer.allocUnsafe(length); // creates a buffer object of length 'length'
@@ -391,6 +440,7 @@ function xor(a, b) {
 Utility function to concatenate two hex strings and return as buffer
 Looks like the inputs are somehow being changed to decimal!
 */
+// In use - Miranda
 function concatenate(a, b) {
   const length = a.length + b.length;
   const buffer = Buffer.allocUnsafe(length); // creates a buffer object of length 'length'
@@ -411,6 +461,7 @@ and then repeating the process until you end up with a single hash.  That way
 we can generate a hash without needing to use more than a single sha round.  It's
 not the same value as we'd get using rounds but it's at least doable.
 */
+// In use - Miranda
 function hash(item) {
   const preimage = strip0x(item);
 
@@ -434,6 +485,7 @@ update: [input string to hash (an array of bytes (in decimal representaion) [byt
 digest: [output format ("hex" in our case)]
 slice: [begin value] outputs the items in the array on and after the 'begin value'
 */
+//In use - Miranda
 function concatenateThenHash(...items) {
   const concatvalue = items
     .map(item => Buffer.from(strip0x(item), 'hex'))
@@ -450,6 +502,8 @@ function concatenateThenHash(...items) {
 function to generate a promise that resolves to a string of hex
 @param {int} bytes - the number of bytes of hex that should be returned
 */
+//In use - Miranda
+
 function rndHex(bytes) {
   return new Promise((resolve, reject) => {
     crypto.randomBytes(bytes, (err, buf) => {
@@ -494,6 +548,7 @@ A vk of the form:
 is converted to:
 ['1','2','3','4','5','6',...]
 */
+//In use - Miranda
 function flattenDeep(arr) {
   return arr.reduce(
     (acc, val) => (Array.isArray(val) ? acc.concat(flattenDeep(val)) : acc.concat(val)),
@@ -503,6 +558,7 @@ function flattenDeep(arr) {
 
 // function to pad out a Hex value with leading zeros to l bits total length,
 // preserving the '0x' at the start
+// In use - Miranda
 function padHex(A, l) {
   if (l % 8 !== 0) throw new Error('cannot convert bits into a whole number of bytes');
   return ensure0x(strip0x(A).padStart(l / 4, '0'));
@@ -520,12 +576,12 @@ export default {
   hexToDec,
   hexToField,
   hexToFieldPreserve,
-  decToHex,
-  decToBin,
+  //decToHex,
+  //decToBin,
   binToDec,
-  binToHex,
-  isProbablyBinary,
-  fieldsToDec,
+  //binToHex,
+  //isProbablyBinary,
+  //fieldsToDec,
   xor,
   concatenate,
   hash,
@@ -533,7 +589,7 @@ export default {
   add,
   parseToDigitsArray,
   convertBase,
-  splitDecToBitsN,
+  //splitDecToBitsN,
   splitHexToBitsN,
   splitAndPadBitsN,
   leftPadBitsN,

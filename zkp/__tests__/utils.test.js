@@ -4,6 +4,8 @@ const dec = '17408914224622445472';
 const hex = '0xf198e3403bdda3a0';
 const bin = '1111000110011000111000110100000000111011110111011010001110100000';
 
+//Commented out tests correspond to commented functions in zkpUtils - Miranda
+
 describe('utils.js tests', () => {
   describe('Functions on Hex Values', () => {
     test('hexToBin should correctly convert a hex string into a bit string array', () => {
@@ -46,31 +48,43 @@ describe('utils.js tests', () => {
     });
   });
 
+  /*
   describe('Functions on Decimal Values', () => {
     test('decToHex should correctly convert a decimal to hex', () => {
       expect(hex).toEqual(utils.decToHex(dec));
-    });
+    });  */
 
+
+
+    /*
     test('decToBin should correctly convert a decimal to binary', () => {
       expect(bin).toEqual(utils.decToBin(dec));
-    });
-  });
+    });    */
+
+
+  //});
 
   describe('Functions on Binary Values', () => {
     test('binToDec should correctly convert a binary number to decimal', () => {
       expect(dec).toEqual(utils.binToDec(bin));
     });
 
+    /*
     test('binToHex should correctly convert a binary number to hex', () => {
       expect(hex).toEqual(utils.binToHex(bin));
-    });
+    });    */
+
+
   });
 
+  /*
   describe('Functions on Field Values', () => {
     test('fieldsToDec should correctly convert an array of packed field elements (packed according to a set packing size) into the original decimal value which they represent', () => {
       expect(utils.fieldsToDec(['1', '3', '2'], 2)).toEqual('30');
     }); // [1,3,2]=[01,11,10](when packed in blocks of 2 bits)=011110 = 30(dec) = 1e (hex)
-  });
+  });  */
+
+
 
   describe('Utility Functions', () => {
     test('utils.hash should correctly create a truncated sha256 hash of a concatentation of numbers', () => {
@@ -90,7 +104,8 @@ describe('utils.js tests', () => {
       expect(calculatedHash).toEqual(testInputHash);
     });
 
-    test('splitDecToBitsN should split a decimal string into chunks of size N bits (N=8 in this test)', () => {
+    /*
+test('splitDecToBitsN should split a decimal string into chunks of size N bits (N=8 in this test)', () => {
       expect([
         '11110001',
         '10011000',
@@ -101,7 +116,9 @@ describe('utils.js tests', () => {
         '10100011',
         '10100000',
       ]).toEqual(utils.splitDecToBitsN(dec, 8));
-    });
+    });*/
+
+
 
     test('splitHexToBitsN should split a decimal string into chunks of size N bits (N=8 in this test)', () => {
       expect([
@@ -129,8 +146,11 @@ describe('utils.js tests', () => {
       ]).toEqual(utils.splitAndPadBitsN(bin, 8));
     });
 
+
     test('leftPadBits should split a bit string into chunks of size N bits (N=8 in this test), and pad the left-most chunk with zeros', () => {
       expect('00000000000000000001').toEqual(utils.leftPadBitsN('1', 20));
     });
+
+
   });
 });
