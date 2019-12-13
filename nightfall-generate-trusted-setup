@@ -12,11 +12,11 @@ completedSetupList=""
 selectedSetupsIndexes=""
 declare -i index=0
 
-# Get available trusted setup names
+# Get available trusted setup names, excluding the 'common' directory
 pushd zkp/code/gm17/
 for d in *
 do
-  if [ -d "$d" ]
+  if [ -d "$d" ] && [ "$d" != "common" ]
   then
     index+=1
     setupList+="${index} $d\n"
