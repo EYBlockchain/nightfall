@@ -1,6 +1,6 @@
+import { merkleTree } from '@eyblockchain/nightlite';
 import bc from '../src/web3';
 import vk from '../src/vk-controller';
-import mtController from '../src/merkle-tree-controller';
 
 async function loadVkIds() {
   if (!(await bc.isConnected())) return;
@@ -10,7 +10,7 @@ async function loadVkIds() {
 
 async function startEventFilter() {
   console.log(`\nStarting event filters...`);
-  await mtController.startEventFilter();
+  await merkleTree.startEventFilter();
 }
 
 // This is TRIGGERED via the jest configuration options in ../package.json

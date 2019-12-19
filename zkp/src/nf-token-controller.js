@@ -13,9 +13,9 @@ import config from 'config';
 // eslint-disable-next-line import/extensions
 import zokrates from '@eyblockchain/zokrates.js';
 import fs from 'fs';
+import { merkleTree } from '@eyblockchain/nightlite';
 import utils from './zkpUtils';
 import zkp from './nf-token-zkp';
-import { getSiblingPath, checkRoot } from './merkle-tree-controller';
 import formatInputsForZkSnark from './format-inputs';
 import Element from './Element';
 import Web3 from './web3';
@@ -408,7 +408,7 @@ async function transfer(
   );
 
   // Get the sibling-path from the token commitment (leaf) to the root. Express each node as an Element class.
-  const siblingPath = await getSiblingPath(
+  const siblingPath = await merkleTree.getSiblingPath(
     account,
     nfTokenShieldInstance,
     commitment,
@@ -417,7 +417,7 @@ async function transfer(
 
   const root = siblingPath[0];
   // TODO: checkRoot() is not essential. It's only useful for debugging as we make iterative improvements to nightfall's zokrates files. Possibly delete in future.
-  checkRoot(commitment, commitmentIndex, siblingPath, root);
+  merkleTree.checkRoot(commitment, commitmentIndex, siblingPath, root);
 
   const siblingPathElements = siblingPath.map(
     nodeValue => new Element(nodeValue, 'field', config.NODE_HASHLENGTH * 8, 1),
@@ -605,7 +605,7 @@ async function burn(
   const nullifier = utils.concatenateThenHash(salt, secretKey);
 
   // Get the sibling-path from the token commitment (leaf) to the root. Express each node as an Element class.
-  const siblingPath = await getSiblingPath(
+  const siblingPath = await merkleTree.getSiblingPath(
     account,
     nfTokenShieldInstance,
     commitment,
@@ -613,7 +613,7 @@ async function burn(
   );
 
   const root = siblingPath[0];
-  checkRoot(commitment, commitmentIndex, siblingPath, root);
+  merkleTree.checkRoot(commitment, commitmentIndex, siblingPath, root);
 
   const siblingPathElements = siblingPath.map(
     nodeValue => new Element(nodeValue, 'field', config.NODE_HASHLENGTH * 8, 1),

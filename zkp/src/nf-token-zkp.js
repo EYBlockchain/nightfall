@@ -8,8 +8,8 @@ enables multiple transfers of an asset to take place. The code also talks direct
 */
 
 import config from 'config';
+import { merkleTree } from '@eyblockchain/nightlite';
 import utils from './zkpUtils';
-import merkleTree from './rest/merkle-tree';
 
 /**
 checks the details of an incoming (newly transferred token), to ensure the data we have received is correct and legitimate!!

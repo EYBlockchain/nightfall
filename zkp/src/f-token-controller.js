@@ -13,9 +13,9 @@ import jsonfile from 'jsonfile';
 // eslint-disable-next-line import/extensions
 import zokrates from '@eyblockchain/zokrates.js';
 import fs from 'fs';
+import { merkleTree } from '@eyblockchain/nightlite';
 import utils from './zkpUtils';
 import zkp from './f-token-zkp';
-import { getSiblingPath, checkRoot } from './merkle-tree-controller';
 import formatInputsForZkSnark from './format-inputs';
 import Element from './Element';
 import Web3 from './web3';
@@ -399,13 +399,13 @@ async function transfer(
   );
 
   // Get the sibling-path from the token commitments (leaves) to the root. Express each node as an Element class.
-  inputCommitments[0].siblingPath = await getSiblingPath(
+  inputCommitments[0].siblingPath = await merkleTree.getSiblingPath(
     account,
     fTokenShieldInstance,
     inputCommitments[0].commitment,
     inputCommitments[0].index,
   );
-  inputCommitments[1].siblingPath = await getSiblingPath(
+  inputCommitments[1].siblingPath = await merkleTree.getSiblingPath(
     account,
     fTokenShieldInstance,
     inputCommitments[1].commitment,
@@ -418,13 +418,13 @@ async function transfer(
 
   const root = inputCommitments[0].siblingPath[0];
   // TODO: checkRoot() is not essential. It's only useful for debugging as we make iterative improvements to nightfall's zokrates files. Possibly delete in future.
-  checkRoot(
+  merkleTree.checkRoot(
     inputCommitments[0].commitment,
     inputCommitments[0].index,
     inputCommitments[0].siblingPath,
     root,
   );
-  checkRoot(
+  merkleTree.checkRoot(
     inputCommitments[1].commitment,
     inputCommitments[1].index,
     inputCommitments[1].siblingPath,
@@ -730,7 +730,7 @@ async function simpleFungibleBatchTransfer(
   }
 
   // Get the sibling-path from the token commitments (leaves) to the root. Express each node as an Element class.
-  inputCommitment.siblingPath = await getSiblingPath(
+  inputCommitment.siblingPath = await merkleTree.getSiblingPath(
     account,
     fTokenShieldInstance,
     inputCommitment.commitment,
@@ -739,7 +739,12 @@ async function simpleFungibleBatchTransfer(
 
   const root = inputCommitment.siblingPath[0];
   // TODO: checkRoot() is not essential. It's only useful for debugging as we make iterative improvements to nightfall's zokrates files.  Although we only strictly need the root to be reconciled within zokrates, it's easier to check and intercept any errors in js; so we'll first try to reconcole here. Possibly delete in future.
-  checkRoot(inputCommitment.commitment, inputCommitment.index, inputCommitment.siblingPath, root);
+  merkleTree.checkRoot(
+    inputCommitment.commitment,
+    inputCommitment.index,
+    inputCommitment.siblingPath,
+    root,
+  );
 
   inputCommitment.siblingPathElements = inputCommitment.siblingPath.map(
     nodeValue => new Element(nodeValue, 'field', config.NODE_HASHLENGTH * 8, 1),
@@ -891,7 +896,7 @@ async function burn(
   const nullifier = utils.concatenateThenHash(salt, receiverSecretKey);
 
   // Get the sibling-path from the token commitments (leaves) to the root. Express each node as an Element class.
-  const siblingPath = await getSiblingPath(
+  const siblingPath = await merkleTree.getSiblingPath(
     account,
     fTokenShieldInstance,
     commitment,
@@ -900,7 +905,7 @@ async function burn(
 
   const root = siblingPath[0];
   // TODO: checkRoot() is not essential. It's only useful for debugging as we make iterative improvements to nightfall's zokrates files. Possibly delete in future.
-  checkRoot(commitment, commitmentIndex, siblingPath, root);
+  merkleTree.checkRoot(commitment, commitmentIndex, siblingPath, root);
 
   const siblingPathElements = siblingPath.map(
     nodeValue => new Element(nodeValue, 'field', config.NODE_HASHLENGTH * 8, 1),

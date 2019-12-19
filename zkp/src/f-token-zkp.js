@@ -7,8 +7,8 @@ before it will work. This version works by transforming an existing commitment t
 new one, which enables sending of arbritrary amounts. The code also talks directly to Verifier.
 */
 
+import { merkleTree } from '@eyblockchain/nightlite';
 import utils from './zkpUtils';
-import merkleTree from './rest/merkle-tree';
 
 /**
 checks the details of an incoming (newly transferred token), to ensure the data we have received is correct and legitimate!!
