@@ -104,6 +104,14 @@ You just created all the files needed to generate zk-SNARKs. The proving keys, v
 
 ### Starting Nightfall
 
+### Github Configuration
+
+In order to use Nightfall, you will need to be logged into the Github package registry. To do this, you will need to [generate a Github Personal Access Token](https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line). Make sure that the token you generate has at minimum `read: packages` and `repo` permissions.
+
+After you've done that, log in to the Github package registry by running
+
+`docker login -u <your-username> -p <the-token-you-just-generated> docker.pkg.github.com`
+
 #### Re-installation
 
 If this isn't your first time running Nightfall, but you have just pulled new changes from the repo, then you might need to 're-install' certain features due to code changes. First run:  
