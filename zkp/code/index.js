@@ -18,16 +18,16 @@ const getDirectories = source =>
     .filter(isDirectory);
 
 /**
- * Trusted setup for Nightfall. Either compiles all directories in /code/gm17, or a single directory using the -i flag.
+ * Trusted setup for Nightfall. Either compiles all directories in /code/gm17, or a single directory using the -f flag.
  * Calls zokrates' compile, setup, and export-verifier on all (or a specified) directories in `/zkp/code/gm17`.
  */
 async function main() {
-  // -i being the name of the .code file (i.e., 'ft-mint')
-  const { i } = argv;
+  // -f being the name of the .code file (i.e., 'ft-mint')
+  const { f } = argv;
 
-  if (!i) {
+  if (!f) {
     console.log(
-      "The '-i' option has not been specified.\nThat's OK, we can go ahead and loop through every .code file.\nHOWEVER, if you wanted to choose just one file, cancel this process, and instead use option -i (see the README-trusted-setup)",
+      "The '-f' option has not been specified.\nThat's OK, we can go ahead and loop through every .code file.\nHOWEVER, if you wanted to choose just one file, cancel this process, and instead use option -f (see the README-trusted-setup)",
     );
     console.log('Be warned, this could take up to an hour!');
 
@@ -55,7 +55,7 @@ async function main() {
       throw new Error(`Trusted setup failed: ${err}`);
     }
   } else {
-    await generateZokratesFiles(`${process.cwd()}/code/${i}`);
+    await generateZokratesFiles(`${process.cwd()}/code/${f}`);
   }
 }
 

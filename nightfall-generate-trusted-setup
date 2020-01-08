@@ -40,7 +40,7 @@ generateSetups(){
   selectedSetupsIndexes=$(echo $selectedSetupsIndexes | tr "," "\n")
   for i in $selectedSetupsIndexes
   do
-    npm run setup -- -i gm17/${setups[$i-1]}
+    npm run setup -- -f gm17/${setups[$i-1]}
   done
 }
 

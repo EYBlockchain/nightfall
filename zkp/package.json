@@ -5,8 +5,8 @@
   "repository": "https://github.com/EYBlockchain/nightfall",
   "main": "index.js",
   "scripts": {
-    "setup": "NODE_ENV=setup npx babel-node code/index.js",
-    "setup-all": "yes | NODE_ENV=setup npx babel-node code/index.js",
+    "setup": "NODE_ENV=setup babel-node code/index.js",
+    "setup-all": "yes | NODE_ENV=setup babel-node code/index.js",
     "start": "nodemon --ignore src/vkIds.json --ignore stats-config/ --ignore code/ --exec babel-node ./src/index.js",
     "test": "jest --verbose --runInBand --forceExit ./__tests__/*.test.js"
   },
