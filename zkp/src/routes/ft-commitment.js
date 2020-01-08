@@ -79,7 +79,24 @@ async function mint(req, res, next) {
  */
 async function transfer(req, res, next) {
   const { address } = req.headers;
+<<<<<<< HEAD
   const { inputCommitments, outputCommitments, receiver, sender } = req.body;
+=======
+  const {
+    C,
+    D,
+    E,
+    F,
+    pk_B: receiverPublicKey,
+    S_C,
+    S_D,
+    sk_A: senderSecretKey,
+    z_C,
+    z_C_index,
+    z_D,
+    z_D_index,
+  } = req.body;
+>>>>>>> perf: remove verifier registry & vkid's
   const {
     contractJson: fTokenShieldJson,
     contractInstance: fTokenShield,
@@ -92,8 +109,13 @@ async function transfer(req, res, next) {
     const { txReceipt } = await erc20.transfer(
       inputCommitments,
       outputCommitments,
+<<<<<<< HEAD
       receiver.publicKey,
       sender.secretKey,
+=======
+      receiverPublicKey,
+      senderSecretKey,
+>>>>>>> perf: remove verifier registry & vkid's
       {
         fTokenShieldJson,
         fTokenShieldAddress: fTokenShield.address,
@@ -287,7 +309,11 @@ async function simpleFTCommitmentBatchTransfer(req, res, next) {
       inputCommitment,
       outputCommitments,
       receiversPublicKeys,
+<<<<<<< HEAD
       sender.secretKey,
+=======
+      senderSecretKey,
+>>>>>>> perf: remove verifier registry & vkid's
       {
         account: address,
         fTokenShieldJson,
