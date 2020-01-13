@@ -33,6 +33,13 @@ export class UtilService {
     return Number(hex);
   }
 
+  sumCommitmentValues(commitment) {
+    console.log(commitment)
+    return commitment.reduce((a,b) => {
+      return {value: (Number(a.value) + Number(b.value))};
+    });
+  }
+
   validate(evt) {
     const theEvent = evt || window.event;
     let key;

@@ -134,11 +134,6 @@ tbody{
   content: "\f107";
 }
 
-.collapsed:before{
-  font-family: 'FontAwesome';
-  content: "\f105";
-}
-
 .details-table{
   font-size: smaller;
   margin: 1em 0 1em 1em;

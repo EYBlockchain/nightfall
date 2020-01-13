@@ -4,54 +4,25 @@
  *  as usecase is identical
  */
 
-export default function({
-  amount,
-  salt,
-  commitment,
-  commitmentIndex,
-
-  batchTransfer,
-
-  changeAmount,
-  changeSalt,
-  changeCommitment,
-  changeCommitmentIndex,
-
-  receiver,
-  usedFTCommitments,
-}) {
-  let parsedUsedCoin;
-  let parsedBatchTranferData;
-
-  if (Array.isArray(usedFTCommitments))
-    parsedUsedCoin = usedFTCommitments.map(ft => ({
-      ft_commitment_value: ft.amount,
-      ft_commitment: ft.commitment,
-    }));
-
-  if (Array.isArray(batchTransfer))
-    parsedBatchTranferData = batchTransfer.map(ft => ({
-      ft_commitment_value: ft.value,
-      salt: ft.salt,
-      ft_commitment: ft.commitment,
-      ft_commitment_index: ft.commitmentIndex,
-      receiver: ft.receiverName,
-    }));
-
+export default function({ outputCommitments, inputCommitments, sender, receiver }) {
   return {
-    ft_commitment_value: amount,
-    salt,
-    ft_commitment: commitment,
-    ft_commitment_index: commitmentIndex,
-
-    [batchTransfer ? 'batch_transfer' : undefined]: parsedBatchTranferData,
-
-    [changeAmount ? 'change_ft_commitment_value' : undefined]: changeAmount,
-    [changeSalt ? 'change_salt' : undefined]: changeSalt,
-    [changeCommitment ? 'change_ft_ommitment' : undefined]: changeCommitment,
-    [changeCommitmentIndex ? 'change_ft_commitment_index' : undefined]: changeCommitmentIndex,
-
-    [receiver ? 'receiver' : undefined]: receiver,
-    [usedFTCommitments ? 'used_ft_commitments' : undefined]: parsedUsedCoin,
+    [outputCommitments && 'output_commitments']:
+      outputCommitments &&
+      outputCommitments.map(
+        ({ value, salt, commitment, commitmentIndex, owner, receiver: _receiver }) => {
+          return {
+            value,
+            salt,
+            commitment,
+            commitment_index: commitmentIndex,
+            owner:
+              (owner && { name: owner.name, public_key: owner.publicKey }) ||
+              (_receiver && { name: _receiver.name, public_key: _receiver.publicKey }),
+          };
+        },
+      ),
+    [inputCommitments ? 'input_commitments' : undefined]: inputCommitments,
+    [sender && 'sender']: sender && { ...sender, public_key: sender.publicKey },
+    [receiver && 'receiver']: receiver && { ...receiver, public_key: receiver.publicKey },
   };
 }

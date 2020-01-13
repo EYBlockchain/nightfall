@@ -16,42 +16,32 @@ export default class FtCommitmentService {
   insertFTCommitmentTransaction(data) {
     const { isTransferred, isReceived, isChange, isBurned, isBatchTransferred } = data;
 
-    let mappedData;
-
-    if (isTransferred) mappedData = ftCommitmentTransferTransactionMapper(data);
-    else if (isBatchTransferred) mappedData = ftCommitmentTransferTransactionMapper(data);
-    else mappedData = ftCommitmentMapper(data);
+    const mappedData = ftCommitmentTransferTransactionMapper(data);
 
     if (isReceived)
       return this.ftCommitmentTransactionService.insertTransaction({
         ...mappedData,
-        type: 'received',
+        transaction_type: 'transfer_incoming',
       });
-    if (isTransferred)
+    if (isTransferred || isBatchTransferred)
       return this.ftCommitmentTransactionService.insertTransaction({
         ...mappedData,
-        type: 'transferred',
+        transaction_type: 'transfer_outgoing',
       });
     if (isBurned)
       return this.ftCommitmentTransactionService.insertTransaction({
         ...mappedData,
-        type: 'burned',
+        transaction_type: 'burn',
       });
     if (isChange)
       return this.ftCommitmentTransactionService.insertTransaction({
         ...mappedData,
-        type: 'change',
-      });
-
-    if (isBatchTransferred)
-      return this.ftCommitmentTransactionService.insertTransaction({
-        ...mappedData,
-        type: 'batchTransfer',
+        transaction_type: 'change',
       });
 
     return this.ftCommitmentTransactionService.insertTransaction({
       ...mappedData,
-      type: 'minted',
+      transaction_type: 'mint',
     });
   }
 
@@ -69,20 +59,16 @@ export default class FtCommitmentService {
    * @param {object} data - contains all the atributes required while transfer and burn of a coin
    */
   async updateFTCommitmentByCommitmentHash(commitmentHash, data) {
-    const { isBurned, isBatchTransferred } = data;
     const mappedData = ftCommitmentMapper(data);
-
     await this.db.updateData(
       COLLECTIONS.FT_COMMITMENT,
       {
-        ft_commitment: commitmentHash,
+        commitment: commitmentHash,
         is_transferred: { $exists: false },
         is_batch_transferred: { $exists: false },
       },
       { $set: mappedData },
     );
-
-    if (isBurned || isBatchTransferred) await this.insertFTCommitmentTransaction(data);
   }
 
   /**

@@ -44,11 +44,11 @@
                 <span aria-hidden="true" class="ng-value-icon left" (click)="onRemove(item)"
                   >×</span
                 >
-                <b>{{ utilService.convertToNumber(item.ft_commitment_value) }} </b>{{ ftSymbol }} &nbsp;
+                <b>{{ utilService.convertToNumber(item.value) }} </b>{{ ftSymbol }} &nbsp;
               </ng-template>
               <ng-template ng-option-tmp let-item="item" let-index="index">
-                <b>{{ utilService.convertToNumber(item.ft_commitment_value) }} </b>{{ ftSymbol }} ({{
-                  item.ft_commitment.slice(0, 20)
+                <b>{{ utilService.convertToNumber(item.value) }} </b>{{ ftSymbol }} ({{
+                  item.commitment.slice(0, 20)
                 }})...
               </ng-template>
             </ng-select>

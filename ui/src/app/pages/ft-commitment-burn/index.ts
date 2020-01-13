@@ -120,16 +120,9 @@ export default class FtCommitmentBurnComponent implements OnInit , AfterContentI
       index
     } = this;
     this.isRequesting = true;
-    this.ftCommitmentService.burnFTCommitment(
-      commitment['ft_commitment_value'],
-      commitment['salt'],
-      commitment['ft_commitment_index'],
-      commitment['ft_commitment'],
-      localStorage.getItem('publickey'),
-      this.receiverName
-    ).subscribe( data => {
+    this.ftCommitmentService.burnFTCommitment(commitment, this.receiverName).subscribe( data => {
         this.isRequesting = false;
-        this.toastr.success('Burned commitment ' + commitment['ft_commitment']);
+        this.toastr.success('Burned commitment ' + commitment['commitment']);
         transactions.splice(Number(index), 1);
         this.selectedCommitment = undefined;
         this.router.navigate(['/overview'], { queryParams: { selectedTab: 'ft-commitment' } });

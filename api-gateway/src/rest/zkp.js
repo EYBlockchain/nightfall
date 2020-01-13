@@ -93,7 +93,7 @@ export default {
   },
 
   // burn fungible token commitment
-  burnFTCommitment(body, { address }) {
+  burnFTCommitment({ address }, body) {
     const options = {
       url: `${url}/burnFTCommitment`,
       method: 'POST',

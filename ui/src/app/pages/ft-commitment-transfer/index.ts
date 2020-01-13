@@ -148,22 +148,13 @@ export default class FtCommitmentTrasnferComponent implements OnInit , AfterCont
     }
 
     this.isRequesting = true;
-    let returnValue = Number(commitment1['ft_commitment_value']) + Number(commitment2['ft_commitment_value']);
+    let returnValue = Number(commitment1['value']) + Number(commitment2['value']);
     returnValue -= transferValue;
     console.log('RETURNVALUE', returnValue, transferValue, this.toHex(returnValue), this.toHex(transferValue));
 
     this.ftCommitmentService.transferFTCommitment(
-      commitment1['ft_commitment_value'],
-      commitment2['ft_commitment_value'],
-      this.toHex(transferValue),
-      this.toHex(returnValue),
-      commitment1['salt'],
-      commitment2['salt'],
-      commitment1['ft_commitment_index'],
-      commitment2['ft_commitment_index'],
-      commitment1['ft_commitment'],
-      commitment2['ft_commitment'],
-      localStorage.getItem('publickey'),
+      [commitment1, commitment2],
+      [{value: this.toHex(transferValue)}, {value: this.toHex(returnValue)}],
       this.receiverName
     ).subscribe( data => {
         this.isRequesting = false;
@@ -198,11 +189,12 @@ export default class FtCommitmentTrasnferComponent implements OnInit , AfterCont
    * @param item {Item} Item which searched by user.
    */
   customSearchFn(term: string, item: any) {
+    console.log(term, item)
     if (!item) {
       return;
     }
     term = term.toLocaleLowerCase();
-    const itemToSearch = this.utilService.convertToNumber(item.ft_commitment_value).toString().toLocaleLowerCase();
+    const itemToSearch = this.utilService.convertToNumber(item.value).toString().toLocaleLowerCase();
     return itemToSearch.indexOf(term) > -1;
   }
 

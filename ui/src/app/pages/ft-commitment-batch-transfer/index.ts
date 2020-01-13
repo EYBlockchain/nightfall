@@ -99,7 +99,7 @@ export default class FtCommitmentBatchTrasnferComponent implements OnInit , Afte
 
   ngAfterContentInit() {
     setTimeout(() => {
-      this.select.filterInput.nativeElement.focus();
+      if(this.select) this.select.filterInput.nativeElement.focus();
     }, 500);
   }
 
@@ -112,7 +112,6 @@ export default class FtCommitmentBatchTrasnferComponent implements OnInit , Afte
       .subscribe(
         (data) => {
         this.isRequesting = false;
-        console.log(data['data']);
         if (data && data['data'].length ) {
           this.transactions = data['data'].map((tx, indx) => {
             tx.selected = false;
@@ -143,23 +142,6 @@ export default class FtCommitmentBatchTrasnferComponent implements OnInit , Afte
   }
 
   /**
-   * Method to generate batch transaction object.
-   */
-  batchTransactionGenerator () {
-    if(this.selectedCommitmentList[0]){
-      const data = this.selectedCommitmentList[0];
-      this.batchTransactions = {
-        "amount": data.ft_commitment_value,
-        "salt": data.salt,
-        "commitment": data.ft_commitment,
-        "commitmentIndex": data.ft_commitment_index,
-        "id": data.id,
-        "transferData": this.transferData,
-      }
-    }
-  }
-
-  /**
    * Method to transfer two ERC-20 token commitement to selected user.
    */
   initiateTransfer () {
@@ -176,7 +158,7 @@ export default class FtCommitmentBatchTrasnferComponent implements OnInit , Afte
         if(value != null){
           return {
             value: this.toHex(value),
-            receiverName,
+            receiver: { name: receiverName },
           }
         }
       }
@@ -187,18 +169,15 @@ export default class FtCommitmentBatchTrasnferComponent implements OnInit , Afte
       return;
     }
     this.isRequesting = true;
-    this.batchTransactionGenerator();
-    const transactionId = this.batchTransactions['id'];
+    const [commitment] = this.selectedCommitmentList;
+    // const transactionId = this.batchTransactions['id'];
     this.ftCommitmentService.transferFTBatchCommitment(
-      this.batchTransactions.amount,
-      this.batchTransactions.salt,
-      this.batchTransactions.commitment,
-      this.batchTransactions.commitmentIndex,
-      this.batchTransactions.transferData
+      this.selectedCommitmentList[0],
+      this.transferData,
     ).subscribe( data => {
         this.isRequesting = false;
         this.toastr.success('Transferred to selected receivers');
-        transactions.splice(transactionId, 1);
+        transactions.splice(commitment.id, 1);
         this.getFTCommitments();
         this.router.navigate(['/overview'], { queryParams: { selectedTab: 'ft-batch-commitment' } });
       }, ({error}) => {
@@ -213,12 +192,10 @@ export default class FtCommitmentBatchTrasnferComponent implements OnInit , Afte
    * @param item {Object} Item to be removed.
    */
   onRemove(item) {
-    console.log('selected items', this.selectedCommitmentList, item);
     const newList = this.selectedCommitmentList.filter((it) => {
       return item._id !== it._id;
     });
     this.selectedCommitmentList = newList;
-    console.log('selected new items', this.selectedCommitmentList);
   }
 
   /**
@@ -232,7 +209,7 @@ export default class FtCommitmentBatchTrasnferComponent implements OnInit , Afte
       return;
     }
     term = term.toLocaleLowerCase();
-    const itemToSearch = this.utilService.convertToNumber(item.ft_commitment_value).toString().toLocaleLowerCase();
+    const itemToSearch = this.utilService.convertToNumber(item.value).toString().toLocaleLowerCase();
     return itemToSearch.indexOf(term) > -1;
   }
 
