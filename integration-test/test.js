@@ -573,12 +573,14 @@ describe('****** Integration Test ******\n', function() {
         .post('/simpleFTCommitmentBatchTransfer')
         .use(prefix(apiServerURL))
         .send({
-          inputCommitments: [{
-            value,
-            salt,
-            commitment,
-            commitment_index,
-          }],
+          inputCommitments: [
+            {
+              value,
+              salt,
+              commitment,
+              commitment_index,
+            },
+          ],
           outputCommitments: transferData,
         })
         .set('Accept', 'application/json')

@@ -21,7 +21,7 @@ const router = express.Router();
  *
  * @apiExample {js} Example usage:
  * const data = {
- *   "amount": 1000
+ *   "value": 1000
  * }
  *
  * $http.post(url, data)
@@ -49,8 +49,8 @@ router.route('/mintFToken').post(mintFToken);
  *
  * @apiExample {js} Example usage:
  * const data = {
- *   "amount": 20,
- *   "receiver_name": "Bob"
+ *   "value": 20,
+ *   "receiver": {name": "Bob"}
  * }
  *
  * $http.post(url, data)
@@ -77,7 +77,7 @@ router.route('/transferFToken').post(transferFToken);
  *
  * @apiExample {js} Example usage:
  * const data = {
- *   "amount": 10
+ *   "value": 10
  * }
  *
  * $http.post(url, data)
@@ -158,12 +158,16 @@ router.route('/getFTokenInfo').get(getFTokenInfo);
  *
  * @apiExample {js} Example usage:
  * const data = {
- *   "amount": 10,
+ *   "value": 10,
  *   "shieldContractAddress": "0x033..",
- *   "receiver": "BOB",
- *   "receiverAddress": "0xb0b",
- *   "sender": "ALICE",
- *   "senderAddress": "0xA71CE"
+ *   "receiver": {
+ *     "name": "BOB",
+ *     "address": "0xb0b",
+ *   }
+ *   "sender": {
+ *     "name": "Alice",
+ *     "address": "0xb0b",
+ *   }
  * }
  *
  * $http.post(url, data)
