@@ -111,7 +111,7 @@ export default class FtCommitmentService {
    * @param transferData {Array} Array of value to transfer and receiver name
    */
   transferFTBatchCommitment (
-    inputCommitment,
+    commitment,
     outputCommitments,
     ) {
     const httpOptions = {
@@ -119,7 +119,7 @@ export default class FtCommitmentService {
     };
 
     const body = {
-      inputCommitment,
+      inputCommitments: [commitment],
       outputCommitments,
     };
 

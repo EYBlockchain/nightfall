@@ -202,23 +202,13 @@ export async function transferFTCommitment(req, res, next) {
 
     // update slected coin1 with tansferred data
     await db.updateFTCommitmentByCommitmentHash(req.user, inputCommitments[0].commitment, {
-      outputCommitments: [
-        {
-          ...inputCommitments[0],
-          owner: receiver,
-        },
-      ],
+      outputCommitments: [{ owner: receiver }],
       isTransferred: true,
     });
 
     // update slected coin with tansferred data
     await db.updateFTCommitmentByCommitmentHash(req.user, inputCommitments[1].commitment, {
-      outputCommitments: [
-        {
-          ...inputCommitments[1],
-          owner: receiver,
-        },
-      ],
+      outputCommitments: [{ owner: receiver }],
       isTransferred: true,
     });
 
@@ -337,12 +327,12 @@ export async function burnFTCommitment(req, res, next) {
     password: 'alicesPassword'
   }
  * req.body {
-    inputCommitment: {
+    inputCommitments: [{
       value: "0x00000000000000000000000000000028",
       salt: "0x75f9ceee5b886382c4fe81958da985cd812303b875210b9ca2d75378bb9bd801",
       commitment: "0x00000000008ec724591fde260927e3fcf85f039de689f4198ee841fcb63b16ed",
       commitment_index: 1,
-    },
+    }],
     outputCommitments: [
       {
         "value": "0x00000000000000000000000000000002",
@@ -365,7 +355,7 @@ export async function simpleFTCommitmentBatchTransfer(req, res, next) {
   let changeIndex;
   let changeData = {};
 
-  const { inputCommitment, outputCommitments } = req.body;
+  const { inputCommitments: [inputCommitment], outputCommitments } = req.body;
   let selectedCommitmentValue = Number(inputCommitment.value); // amount of selected commitment
 
   try {
@@ -402,7 +392,8 @@ export async function simpleFTCommitmentBatchTransfer(req, res, next) {
     const { outputCommitments: commitments, txReceipt } = await zkp.simpleFTCommitmentBatchTransfer(
       { address },
       {
-        ...req.body,
+        inputCommitment,
+        outputCommitments,
         sender: {
           secretKey: user.secretkey,
         },
