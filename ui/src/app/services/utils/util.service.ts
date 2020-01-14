@@ -34,9 +34,10 @@ export class UtilService {
   }
 
   sumCommitmentValues(commitment) {
-    console.log(commitment)
-    return commitment.reduce((a,b) => {
-      return {value: (Number(a.value) + Number(b.value))};
+    return commitment.reduce((a, b) => {
+      return {
+        value: (Number(a.value) + Number(b.value)),
+      };
     });
   }
 
@@ -76,8 +77,12 @@ export class UtilService {
     let value;
     if (evt.type !== 'paste') {
       value = evt.key;
-    }  
-    if(isNaN(value)) return evt.returnValue = false;
-    if(Number(value) < 0) return evt.returnValue = false;
+    }
+    if (isNaN(value)) {
+      return evt.returnValue = false;
+    }
+    if (Number(value) < 0) {
+      return evt.returnValue = false;
+    }
   }
 }

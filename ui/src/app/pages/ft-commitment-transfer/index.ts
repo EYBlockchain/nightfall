@@ -10,7 +10,7 @@ import { NgSelectComponent } from '@ng-select/ng-select';
  *  ft-commitment trasfer component, which is used for rendering the page of transfer ERC-20 token commitments to the selected receipent.
  */
 @Component({
-  selector: 'ft-commitment-transfer',
+  selector: 'app-ft-commitment-transfer',
   templateUrl: './index.html',
   providers: [FtCommitmentService, UserService, UtilService],
   styleUrls: ['./index.css']
@@ -52,7 +52,7 @@ export default class FtCommitmentTrasnferComponent implements OnInit , AfterCont
    *  Fungeble Token name , read from ERC-20 contract.
    */
   ftName: string;
-  
+
   /**
    *  Fungeble Token Symbol , read from ERC-20 contract.
    */
@@ -189,7 +189,6 @@ export default class FtCommitmentTrasnferComponent implements OnInit , AfterCont
    * @param item {Item} Item which searched by user.
    */
   customSearchFn(term: string, item: any) {
-    console.log(term, item)
     if (!item) {
       return;
     }

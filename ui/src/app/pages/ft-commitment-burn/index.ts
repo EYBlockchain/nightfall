@@ -9,7 +9,7 @@ import UserService from '../../services/user.service';
  *  Burn ft-commitment component, which is used for rendering the page of burn fungible token commitment.
  */
 @Component({
-  selector: 'ft-commitment-burn',
+  selector: 'app-ft-commitment-burn',
   templateUrl: './index.html',
   providers: [UserService, FtCommitmentService, UtilService],
   styleUrls: ['./index.css']

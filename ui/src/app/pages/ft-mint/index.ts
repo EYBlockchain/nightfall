@@ -7,7 +7,7 @@ import { UtilService } from '../../services/utils/util.service';
  * Mint fungible token component, which is used for rendering the page of mint ERC-20 token.
  */
 @Component({
-  selector: 'ft-mint',
+  selector: 'app-ft-mint',
   templateUrl: './index.html',
   providers: [FtService, UtilService],
   styleUrls: ['./index.css']

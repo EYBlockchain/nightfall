@@ -9,7 +9,7 @@ import { UtilService } from '../../services/utils/util.service';
  * Burn fungible token component, which is used for rendering the page of burn fungible token.
  */
 @Component({
-  selector: 'ft-burn',
+  selector: 'app-ft-burn',
   templateUrl: './index.html',
   providers: [FtService, UtilService, UserService],
   styleUrls: ['./index.css']

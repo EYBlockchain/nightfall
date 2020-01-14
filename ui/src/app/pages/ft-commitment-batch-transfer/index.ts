@@ -5,13 +5,13 @@ import FtCommitmentService from '../../services/ft-commitment.service';
 import UserService from '../../services/user.service';
 import { UtilService } from '../../services/utils/util.service';
 import { NgSelectComponent } from '@ng-select/ng-select';
-import { FormGroup, FormBuilder, FormArray } from '@angular/forms'
+import { FormGroup, FormBuilder, FormArray } from '@angular/forms';
 
 /**
  *  ft-commitment trasfer component, which is used for rendering the page of transfer ERC-20 token commitments to the selected receipent.
  */
 @Component({
-  selector: 'ft-commitment-batch-transfer',
+  selector: 'app-ft-commitment-batch-transfer',
   templateUrl: './index.html',
   providers: [FtCommitmentService, UserService, UtilService],
   styleUrls: ['./index.css']
@@ -99,7 +99,9 @@ export default class FtCommitmentBatchTrasnferComponent implements OnInit , Afte
 
   ngAfterContentInit() {
     setTimeout(() => {
-      if(this.select) this.select.filterInput.nativeElement.focus();
+      if (this.select) {
+        this.select.filterInput.nativeElement.focus();
+      }
     }, 500);
   }
 
@@ -152,19 +154,19 @@ export default class FtCommitmentBatchTrasnferComponent implements OnInit , Afte
       return;
     }
     this.transferData = this.transferDetails.value.map(({value, receiverName}) => {
-      if(value == null || receiverName == null){
+      if (value == null || receiverName == null) {
         emptyInputFlag = true;
-      }else{
-        if(value != null){
+      } else {
+        if (value != null) {
           return {
             value: this.toHex(value),
             receiver: { name: receiverName },
-          }
+          };
         }
       }
     });
     const { transactions } = this;
-    if(emptyInputFlag == true){
+    if (emptyInputFlag === true) {
       this.toastr.error('All fields are mandatory');
       return;
     }
@@ -182,9 +184,12 @@ export default class FtCommitmentBatchTrasnferComponent implements OnInit , Afte
         this.router.navigate(['/overview'], { queryParams: { selectedTab: 'ft-batch-commitment' } });
       }, ({error}) => {
         this.isRequesting = false;
-        if (error.error && error.error.message) this.toastr.error(error.error.message, 'Error');
-        else this.toastr.error('Please try again', 'Error');
-    }); 
+        if (error.error && error.error.message) {
+          this.toastr.error(error.error.message, 'Error');
+        } else {
+          this.toastr.error('Please try again', 'Error');
+        }
+    });
   }
 
   /**
@@ -226,8 +231,7 @@ export default class FtCommitmentBatchTrasnferComponent implements OnInit , Afte
     return '0x' + hexValue.padStart(32, '0');
   }
   /**
-   * Method to return the value to and reveiver name updated in form 
-   *
+   * Method to return the value to and reveiver name updated in form
    */
   createItemFormGroup(): FormGroup {
     return this.formBuilder.group({
@@ -241,7 +245,7 @@ export default class FtCommitmentBatchTrasnferComponent implements OnInit , Afte
    *
    * @param event {Event} Event
    */
-  addTransferInfo(event){
+  addTransferInfo(event) {
     this.transferDetails.push(this.createItemFormGroup());
   }
 
@@ -250,7 +254,7 @@ export default class FtCommitmentBatchTrasnferComponent implements OnInit , Afte
    *
    * @param index {Number} Number
    */
-  removeTransferInfo(index: number){
+  removeTransferInfo(index: number) {
     this.transferDetails.removeAt(index);
   }
 }

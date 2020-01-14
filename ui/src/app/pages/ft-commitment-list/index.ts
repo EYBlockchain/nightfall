@@ -7,7 +7,7 @@ import { UtilService } from '../../services/utils/util.service';
  * Component for listing all ERC-20 commitments
  */
 @Component({
-  selector: 'ft-commitment-list',
+  selector: 'app-ft-commitment-list',
   templateUrl: './index.html',
   styleUrls: ['./index.css'],
   providers: [FtCommitmentService, UtilService]

@@ -9,7 +9,7 @@ import { UtilService } from '../../services/utils/util.service';
  *  This component, which is used for rendering the page of Mint ERC-20 token commitment.
  */
 @Component({
-  selector: 'ft-commitment-mint',
+  selector: 'app-ft-commitment-mint',
   templateUrl: './index.html',
   providers: [FtCommitmentService, UserService, UtilService],
   styleUrls: ['./index.css'],

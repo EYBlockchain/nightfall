@@ -9,7 +9,7 @@ import { UtilService } from '../../services/utils/util.service';
  *  Spend fungible token component, which is used for rendering the page of transfer ERC-20 token to the selected receipent.
  */
 @Component({
-  selector: 'ft-transfer',
+  selector: 'app-ft-transfer',
   templateUrl: './index.html',
   providers: [FtService, UserService, UtilService],
   styleUrls: ['./index.css']
