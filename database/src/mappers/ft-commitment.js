@@ -22,9 +22,9 @@ export default function({
   }
   const [{ value, salt, commitment, commitmentIndex, owner }] = outputCommitments;
   return {
-    value,
-    salt,
-    commitment,
+    [value && 'value']: value,
+    [salt && 'salt']: salt,
+    [commitment && 'commitment']: commitment,
     [commitmentIndex !== undefined ? 'commitment_index' : undefined]: commitmentIndex,
     owner: { ...owner, public_key: owner.publicKey },
 
