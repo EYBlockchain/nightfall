@@ -129,10 +129,6 @@ tbody{
   color: blue;
 }
 
-.active:before{
-  font-family: 'FontAwesome';
-  content: "\f107";
-}
 
 .details-table{
   font-size: smaller;

@@ -319,7 +319,7 @@
                         {{ transaction.transaction_type.toUpperCase() }}
                       </td>
                       <td>{{ transaction.receiver ? (ftSymbol + ' ' + utilService.convertToNumber(transaction.output_commitments[0].value)) : (ftSymbol + ' ' + utilService.sumCommitmentValues(transaction.output_commitments).value) }}</td>
-                      <td title="Click to see list of commitments"><a class="btn-link">View commitments</a></td>
+                      <td title="Click to see list of commitments"><span class="active fas collapsed" >View commitments</span></td>
                       <td>{{ transaction.created_at | date: 'dd/MM/yyyy hh:mm:ss a' }}</td>
                       <td>{{transaction.receiver && transaction.receiver.name}}</td>
                       <td></td>
