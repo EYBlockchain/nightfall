@@ -355,7 +355,10 @@ export async function simpleFTCommitmentBatchTransfer(req, res, next) {
   let changeIndex;
   let changeData = {};
 
-  const { inputCommitments: [inputCommitment], outputCommitments } = req.body;
+  const {
+    inputCommitments: [inputCommitment],
+    outputCommitments,
+  } = req.body;
   let selectedCommitmentValue = Number(inputCommitment.value); // amount of selected commitment
 
   try {
