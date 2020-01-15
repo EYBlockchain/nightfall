@@ -14,7 +14,7 @@ export default class FtCommitmentTransactionService {
    *    value,
    *    salt,
    *    commitment,
-   *    commitment_index,
+   *    commitmentIndex,
    *    owner,
    *  }]
    * }
@@ -34,7 +34,7 @@ export default class FtCommitmentTransactionService {
       COLLECTIONS.FT_COMMITMENT_TRANSACTION,
       {},
       undefined,
-      { created_at: -1 },
+      { createdAt: -1 },
       parseInt(pageNo, 10),
       parseInt(limit, 10),
     );

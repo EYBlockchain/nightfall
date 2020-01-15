@@ -123,7 +123,7 @@ describe('f-token-controller.js tests', () => {
   test('Should transfer ERC-20 commitments of various values to 19 receipients and get change', async () => {
     // the E's becomes Bobs'.
     const bal1 = await controller.getBalance(accounts[0]);
-    const inputCommitment = { value: C, salt: S_A_C, commitment: Z_A_C, commitment_index: zInd1 };
+    const inputCommitment = { value: C, salt: S_A_C, commitment: Z_A_C, commitmentIndex: zInd1 };
     const outputCommitments = [];
     for (let i = 0; i < E.length; i++) {
       outputCommitments[i] = { value: E[i], salt: S_B_E[i] };
@@ -163,8 +163,8 @@ describe('f-token-controller.js tests', () => {
     const f = '0x00000000000000000000000000000003';
     const pkE = await utils.rndHex(32); // public key of Eve, who we transfer to
     const inputCommitments = [
-      { value: c, salt: S_B_E[18], commitment: commitments[18], commitment_index: zInd2 - 1 },
-      { value: d, salt: S_B_E[19], commitment: commitments[19], commitment_index: zInd2 },
+      { value: c, salt: S_B_E[18], commitment: commitments[18], commitmentIndex: zInd2 - 1 },
+      { value: d, salt: S_B_E[19], commitment: commitments[19], commitmentIndex: zInd2 },
     ];
     const outputCommitments = [
       { value: e, salt: await utils.rndHex(32) },

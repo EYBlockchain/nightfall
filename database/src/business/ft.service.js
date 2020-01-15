@@ -1,4 +1,3 @@
-import { ftMapper } from '../mappers';
 import FtTransactionService from './ft-transaction.service';
 
 export default class FtService {
@@ -14,27 +13,26 @@ export default class FtService {
    */
   insertFTokenTransaction(data) {
     const { isReceived, isTransferred, isBurned } = data;
-    const mappedData = ftMapper(data);
 
     if (isReceived)
       return this.ftTransactionService.insertTransaction({
-        ...mappedData,
-        transaction_type: 'transfer_incoming',
+        ...data,
+        transactionType: 'transfer_incoming',
       });
     if (isTransferred)
       return this.ftTransactionService.insertTransaction({
-        ...mappedData,
-        transaction_type: 'transfer_outgoing',
+        ...data,
+        transactionType: 'transfer_outgoing',
       });
     if (isBurned)
       return this.ftTransactionService.insertTransaction({
-        ...mappedData,
-        transaction_type: 'burn',
+        ...data,
+        transactionType: 'burn',
       });
 
     return this.ftTransactionService.insertTransaction({
-      ...mappedData,
-      transaction_type: 'mint',
+      ...data,
+      transactionType: 'mint',
     });
   }
 

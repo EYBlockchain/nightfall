@@ -73,6 +73,10 @@ export class UtilService {
     }
   }
 
+  replaceUnderscores(string) {
+    return string.replace(/_/g, ' ').toUpperCase();
+  }
+
   noNegtiveNumber(evt) {
     let value;
     if (evt.type !== 'paste') {

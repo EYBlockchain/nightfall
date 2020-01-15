@@ -2,7 +2,7 @@ import { Schema } from 'mongoose';
 
 export default new Schema(
   {
-    transaction_type: {
+    transactionType: {
       type: String,
       enum: ['mint', 'transfer_outgoing', 'transfer_incoming', 'burn'],
       required: true,
@@ -11,7 +11,7 @@ export default new Schema(
       type: String,
       required: true,
     },
-    shield_contract_address: {
+    shieldContractAddress: {
       type: String,
       index: true,
     },
@@ -28,5 +28,5 @@ export default new Schema(
       address: String,
     },
   },
-  { timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } },
+  { timestamps: true },
 );

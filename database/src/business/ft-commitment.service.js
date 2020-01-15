@@ -1,5 +1,5 @@
 import { COLLECTIONS } from '../common/constants';
-import { ftCommitmentMapper, ftCommitmentTransferTransactionMapper } from '../mappers';
+import { ftCommitmentMapper } from '../mappers';
 import FtCommitmentTransactionService from './ft-commitment-transaction.service';
 
 export default class FtCommitmentService {
@@ -16,32 +16,30 @@ export default class FtCommitmentService {
   insertFTCommitmentTransaction(data) {
     const { isTransferred, isReceived, isChange, isBurned, isBatchTransferred } = data;
 
-    const mappedData = ftCommitmentTransferTransactionMapper(data);
-
     if (isReceived)
       return this.ftCommitmentTransactionService.insertTransaction({
-        ...mappedData,
-        transaction_type: 'transfer_incoming',
+        ...data,
+        transactionType: 'transfer_incoming',
       });
     if (isTransferred || isBatchTransferred)
       return this.ftCommitmentTransactionService.insertTransaction({
-        ...mappedData,
-        transaction_type: 'transfer_outgoing',
+        ...data,
+        transactionType: 'transfer_outgoing',
       });
     if (isBurned)
       return this.ftCommitmentTransactionService.insertTransaction({
-        ...mappedData,
-        transaction_type: 'burn',
+        ...data,
+        transactionType: 'burn',
       });
     if (isChange)
       return this.ftCommitmentTransactionService.insertTransaction({
-        ...mappedData,
-        transaction_type: 'change',
+        ...data,
+        transactionType: 'change',
       });
 
     return this.ftCommitmentTransactionService.insertTransaction({
-      ...mappedData,
-      transaction_type: 'mint',
+      ...data,
+      transactionType: 'mint',
     });
   }
 
@@ -64,8 +62,8 @@ export default class FtCommitmentService {
       COLLECTIONS.FT_COMMITMENT,
       {
         commitment: commitmentHash,
-        is_transferred: { $exists: false },
-        is_batch_transferred: { $exists: false },
+        isTransferred: { $exists: false },
+        isBatchTransferred: { $exists: false },
       },
       { $set: mappedData },
     );
@@ -80,20 +78,21 @@ export default class FtCommitmentService {
   getFTCommitments(pageination) {
     if (!pageination || !pageination.pageNo || !pageination.limit) {
       return this.db.getData(COLLECTIONS.FT_COMMITMENT, {
-        is_transferred: { $exists: false },
-        is_batch_transferred: { $exists: false },
-        is_burned: { $exists: false },
+        isTransferred: { $exists: false },
+        isBatchTransferred: { $exists: false },
+        isBurned: { $exists: false },
       });
     }
     const { pageNo, limit } = pageination;
     return this.db.getDbData(
       COLLECTIONS.FT_COMMITMENT,
       {
-        is_transferred: { $exists: false },
-        is_burned: { $exists: false },
+        isTransferred: { $exists: false },
+        isBatchTransferred: { $exists: false },
+        isBurned: { $exists: false },
       },
       undefined,
-      { created_at: -1 },
+      { createdAt: -1 },
       parseInt(pageNo, 10),
       parseInt(limit, 10),
     );

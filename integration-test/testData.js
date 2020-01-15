@@ -77,7 +77,7 @@ export default {
       mint: [
         {
           value: leftPadHex(erc20.toBeMintedAsCommitment[0], 32),
-          commitment_index: 0,
+          commitmentIndex: 0,
           get commitment() {
             return utils.concatenateThenHash(
               this.value,
@@ -88,7 +88,7 @@ export default {
         },
         {
           value: leftPadHex(erc20.toBeMintedAsCommitment[1], 32),
-          commitment_index: 1,
+          commitmentIndex: 1,
           get commitment() {
             return utils.concatenateThenHash(
               this.value,
@@ -100,7 +100,7 @@ export default {
       ],
       transfer: {
         value: leftPadHex(erc20.transfer, 32),
-        commitment_index: 2,
+        commitmentIndex: 2,
         get commitment() {
           return utils.concatenateThenHash(
             this.value,
@@ -111,7 +111,7 @@ export default {
       },
       change: {
         value: leftPadHex(erc20.change, 32),
-        commitment_index: 3,
+        commitmentIndex: 3,
         get commitment() {
           return utils.concatenateThenHash(
             this.value,
@@ -137,7 +137,7 @@ export default {
           this.salt === undefined ? '0x0' : this.salt, // S_A - set at erc-20 commitment mint (step 18)
         );
       },
-      commitment_index: 4,
+      commitmentIndex: 4,
       transferData: [
         {
           value: '0x00000000000000000000000000000002',
@@ -155,7 +155,6 @@ export default {
           value: '0x00000000000000000000000000000002',
           receiver: { name: alice.name },
           commitmentIndex: 6,
-          commitment_index: 6,
           get commitment() {
             return utils.concatenateThenHash(
               this.value,

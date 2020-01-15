@@ -15,7 +15,7 @@ export default new Schema(
       unique: true,
       required: true,
     },
-    commitment_index: {
+    commitmentIndex: {
       type: Number,
       required: true,
     },
@@ -24,22 +24,22 @@ export default new Schema(
       name: {
         type: String,
       },
-      public_key: {
+      publicKey: {
         type: String,
       },
     },
 
     // boolean stats
-    is_minted: Boolean,
-    is_transferred: Boolean,
-    is_burned: Boolean,
-    is_received: Boolean,
-    is_change: Boolean,
-    is_batch_transferred: Boolean,
+    isMinted: Boolean,
+    isTransferred: Boolean,
+    isBurned: Boolean,
+    isReceived: Boolean,
+    isChange: Boolean,
+    isBatchTransferred: Boolean,
 
     // boolean stats - correctness checks
-    commitment_reconciles: Boolean, // for a given A, pk, S and z, do we have that h(A,pk,S)=z?
-    commitment_exists_onchain: Boolean, // does z exist on-chain?
+    commitmentReconciles: Boolean, // for a given A, pk, S and z, do we have that h(A,pk,S)=z?
+    commitmentExistsOnchain: Boolean, // does z exist on-chain?
   },
-  { timestamps: { createdAt: 'created_at', updatedAt: 'updated_at' } },
+  { timestamps: true },
 );

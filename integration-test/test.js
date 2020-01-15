@@ -334,7 +334,7 @@ describe('****** Integration Test ******\n', function() {
             erc20Commitments.mint[0].salt = res.body.data.salt; // set Salt from response to calculate and verify commitment.
             expect(res.body.data.commitment).to.be.equal(erc20Commitments.mint[0].commitment);
             expect(res.body.data.commitmentIndex).to.be.equal(
-              erc20Commitments.mint[0].commitment_index,
+              erc20Commitments.mint[0].commitmentIndex,
             );
             return done();
           });
@@ -360,7 +360,7 @@ describe('****** Integration Test ******\n', function() {
 
             expect(res.body.data.commitment).to.be.equal(erc20Commitments.mint[1].commitment);
             expect(res.body.data.commitmentIndex).to.be.equal(
-              erc20Commitments.mint[1].commitment_index,
+              erc20Commitments.mint[1].commitmentIndex,
             );
             return done();
           });
@@ -391,11 +391,11 @@ describe('****** Integration Test ******\n', function() {
               erc20Commitments.transfer.commitment,
             );
             expect(outputCommitments[0].commitmentIndex).to.be.equal(
-              erc20Commitments.transfer.commitment_index,
+              erc20Commitments.transfer.commitmentIndex,
             );
             expect(outputCommitments[1].commitment).to.be.equal(erc20Commitments.change.commitment);
             expect(outputCommitments[1].commitmentIndex).to.be.equal(
-              erc20Commitments.change.commitment_index,
+              erc20Commitments.change.commitmentIndex,
             );
             return done();
           });
@@ -552,7 +552,7 @@ describe('****** Integration Test ******\n', function() {
           erc20CommitmentBatchTransfer.salt = res.body.data.salt; // set Salt from response to calculate and verify commitment.
           expect(res.body.data.commitment).to.be.equal(erc20CommitmentBatchTransfer.commitment);
           expect(res.body.data.commitmentIndex).to.be.equal(
-            erc20CommitmentBatchTransfer.commitment_index,
+            erc20CommitmentBatchTransfer.commitmentIndex,
           );
           return done();
         });
@@ -566,7 +566,7 @@ describe('****** Integration Test ******\n', function() {
         value,
         salt,
         commitment,
-        commitment_index,
+        commitmentIndex,
         transferData,
       } = erc20CommitmentBatchTransfer;
       request
@@ -578,7 +578,7 @@ describe('****** Integration Test ******\n', function() {
               value,
               salt,
               commitment,
-              commitment_index,
+              commitmentIndex,
             },
           ],
           outputCommitments: transferData,

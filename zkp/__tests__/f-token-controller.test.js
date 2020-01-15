@@ -155,8 +155,8 @@ describe('f-token-controller.js tests', () => {
   test('Should transfer a ERC-20 commitment to Bob (two coins get nullified, two created; one coin goes to Bob, the other goes back to Alice as change)', async () => {
     // E becomes Bob's, F is change returned to Alice
     const inputCommitments = [
-      { value: C, salt: S_A_C, commitment: Z_A_C, commitment_index: zInd1 },
-      { value: D, salt: S_A_D, commitment: Z_A_D, commitment_index: zInd2 },
+      { value: C, salt: S_A_C, commitment: Z_A_C, commitmentIndex: zInd1 },
+      { value: D, salt: S_A_D, commitment: Z_A_D, commitmentIndex: zInd2 },
     ];
     const outputCommitments = [{ value: E, salt: sAToBE }, { value: F, salt: sAToAF }];
     await controller.transfer(
@@ -203,8 +203,8 @@ describe('f-token-controller.js tests', () => {
   test('Should transfer an ERC-20 commitment to Eve', async () => {
     // H becomes Eve's, I is change returned to Bob
     const inputCommitments = [
-      { value: E, salt: sAToBE, commitment: Z_B_E, commitment_index: zInd1 + 2 },
-      { value: G, salt: S_B_G, commitment: Z_B_G, commitment_index: zInd3 },
+      { value: E, salt: sAToBE, commitment: Z_B_E, commitmentIndex: zInd1 + 2 },
+      { value: G, salt: S_B_G, commitment: Z_B_G, commitmentIndex: zInd3 },
     ];
     const outputCommitments = [{ value: H, salt: sBToEH }, { value: I, salt: sBToBI }];
 

@@ -148,14 +148,14 @@ export async function mintFTCommitment(req, res, next) {
         value: '0x00000000000000000000000000002710',
         salt: '0x14de022c9b4a437b346f04646bd7809deb81c38288e9614478351d',
         commitment: '0x39aaa6fe40c2106f49f72c67bc24d377e180baf3fe211c5c90e254',
-        commitment_index: 0,
+        commitmentIndex: 0,
         owner,
       },
       {
         value: '0x00000000000000000000000000001388',
         salt: '0x14de022c9b4a437b346f04646bd7809deb81c38288e9614478351d',
         commitment: '0x39aaa6fe40c2106f49f72c67bc24d377e180baf3fe211c5c90e254',
-        commitment_index: 1,
+        commitmentIndex: 1,
         owner,
       },
     ],
@@ -241,7 +241,10 @@ export async function transferFTCommitment(req, res, next) {
       outputCommitments: [transferCommitment],
       blockNumber: txReceipt.receipt.blockNumber,
       receiver,
-      sender: req.user,
+      sender: {
+        name: req.user.name,
+        publicKey: req.user.pk_A,
+      },
       isReceived: true,
       for: 'FTCommitment',
     });
@@ -261,7 +264,7 @@ export async function transferFTCommitment(req, res, next) {
         value: '0x00000000000000000000000000000001',
         salt: '0xa31adb1074f977413fddd3953e333529a3494e110251368cc823fb',
         commitment: '0x1ec4a9b406fd3d79a01360ccd14c8530443ea9869f8e9560dafa56',
-        commitment_index: 0,
+        commitmentIndex: 0,
       }
     ],
     receiver: {
@@ -331,7 +334,7 @@ export async function burnFTCommitment(req, res, next) {
       value: "0x00000000000000000000000000000028",
       salt: "0x75f9ceee5b886382c4fe81958da985cd812303b875210b9ca2d75378bb9bd801",
       commitment: "0x00000000008ec724591fde260927e3fcf85f039de689f4198ee841fcb63b16ed",
-      commitment_index: 1,
+      commitmentIndex: 1,
     }],
     outputCommitments: [
       {
@@ -417,16 +420,6 @@ export async function simpleFTCommitmentBatchTransfer(req, res, next) {
       });
     }
 
-    await db.insertFTCommitmentTransaction(req.user, {
-      inputCommitments: [inputCommitment],
-      outputCommitments: commitments,
-      sender: {
-        name: req.user.name,
-        publicKey: req.user.pk_A,
-      },
-      isBatchTransferred: true,
-    });
-
     for (const data of commitments) {
       /* eslint-disable no-continue */
       if (!Number(data.value)) continue;
@@ -440,6 +433,16 @@ export async function simpleFTCommitmentBatchTransfer(req, res, next) {
         for: 'FTCommitment',
       });
     }
+
+    await db.insertFTCommitmentTransaction(req.user, {
+      inputCommitments: [inputCommitment],
+      outputCommitments: commitments,
+      sender: {
+        name: req.user.name,
+        publicKey: req.user.pk_A,
+      },
+      isBatchTransferred: true,
+    });
 
     res.data = commitments;
     next();

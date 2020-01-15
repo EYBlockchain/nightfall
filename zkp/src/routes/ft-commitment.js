@@ -83,7 +83,7 @@ async function transfer(req, res, next) {
 }
 
 async function burn(req, res, next) {
-  const { value, salt, commitment, commitment_index: commitmentIndex, receiver, sender } = req.body;
+  const { value, salt, commitment, commitmentIndex, receiver, sender } = req.body;
   const { address } = req.headers;
   const vkId = await getVkId('BurnFToken');
   const {

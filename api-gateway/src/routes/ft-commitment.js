@@ -146,7 +146,7 @@ router.route('/transferFTCommitment').post(transferFTCommitment);
  *      value: '0x00000000000000000000000000000001',
  *      salt: '0xa31adb1074f977413fddd3953e333529a3494e110251368cc823fb',
  *      commitment: '0x1ec4a9b406fd3d79a01360ccd14c8530443ea9869f8e9560dafa56',
- *      commitment_index: 0,
+ *      commitmentIndex: 0,
  *    }
  *  ],
  *  receiver: {
@@ -308,7 +308,7 @@ router.route('/getFTCommitmentTransactions').get(getFTCommitmentTransactions);
  *    value: "0x00000000000000000000000000000028",
  *    salt: "0x75f9ceee5b886382c4fe81958da985cd812303b875210b9ca2d75378bb9bd801",
  *    commitment: "0x00000000008ec724591fde260927e3fcf85f039de689f4198ee841fcb63b16ed",
- *    commitment_index: 1,
+ *    commitmentIndex: 1,
  *  }],
  *  outputCommitments: [
  *    {

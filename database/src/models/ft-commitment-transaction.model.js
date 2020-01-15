@@ -2,13 +2,13 @@ import { Schema } from 'mongoose';
 
 export default new Schema(
   {
-    transaction_type: {
+    transactionType: {
       type: String,
       enum: ['mint', 'transfer_outgoing', 'transfer_incoming', 'change', 'burn'],
       required: true,
     },
 
-    input_commitments: [
+    inputCommitments: [
       {
         value: {
           type: String,
@@ -23,7 +23,7 @@ export default new Schema(
           index: true,
           required: true,
         },
-        commitment_index: {
+        commitmentIndex: {
           type: Number,
           required: true,
         },
@@ -31,14 +31,14 @@ export default new Schema(
           name: {
             type: String,
           },
-          public_key: {
+          publicKey: {
             type: String,
           },
         },
       },
     ],
 
-    output_commitments: [
+    outputCommitments: [
       {
         value: {
           type: String,
@@ -53,7 +53,7 @@ export default new Schema(
           index: true,
           required: true,
         },
-        commitment_index: {
+        commitmentIndex: {
           type: Number,
           required: true,
         },
@@ -61,7 +61,7 @@ export default new Schema(
           name: {
             type: String,
           },
-          public_key: {
+          publicKey: {
             type: String,
           },
         },
@@ -69,7 +69,7 @@ export default new Schema(
     ],
 
     sender: {
-      public_key: {
+      publicKey: {
         type: String,
       },
       name: {
@@ -77,7 +77,7 @@ export default new Schema(
       },
     },
     receiver: {
-      public_key: {
+      publicKey: {
         type: String,
       },
       name: {
@@ -85,10 +85,5 @@ export default new Schema(
       },
     },
   },
-  {
-    timestamps: {
-      createdAt: 'created_at',
-      updatedAt: 'updated_at',
-    },
-  },
+  { timestamps: true },
 );
