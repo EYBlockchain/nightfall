@@ -170,10 +170,10 @@ async function checkCorrectness(req, res, next) {
 
 async function setNFTCommitmentShieldAddress(req, res, next) {
   const {address} = req.headers;
-  const {tokenShield} = req.body;
+  const {nftCommitmentShield} = req.body;
 
   try {
-    await nfController.setShield(tokenShield, address);
+    await nfController.setShield(nftCommitmentShield, address);
     await nfController.getNFTName(address);
     res.data = {
       message: 'NFTokenShield Address Set.',

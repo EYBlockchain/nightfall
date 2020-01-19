@@ -143,10 +143,10 @@ async function checkCorrectness(req, res, next) {
 
 async function setFTCommitmentShieldAddress(req, res, next) {
   const {address} = req.headers;
-  const {coinShield} = req.body;
+  const {ftCommitmentShield} = req.body;
 
   try {
-    await fTokenController.setShield(coinShield, address);
+    await fTokenController.setShield(ftCommitmentShield, address);
     await fTokenController.getBalance(address);
     res.data = {
       message: 'FTokenShield Address Set.',

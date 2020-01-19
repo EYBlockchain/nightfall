@@ -18,11 +18,11 @@ const router = express.Router();
  * @apiName  Mint a non-fungible token
  * @apiGroup ERC-721
  *
- * @apiParam (Request body) {String} tokenURI URI of token.
+ * @apiParam (Request body) {String} tokenUri URI of token.
  *
  * @apiExample {js} Example usage:
  * const data = {
- *   tokenURI: 'unique token URI'
+ *   tokenUri: 'unique token URI'
  * }
  *
  * $http.post(url, data)
@@ -46,14 +46,14 @@ router.route('/mintNFToken').post(mintNFToken);
  * @apiGroup ERC-721
  *
  * @apiParam (Request body) {String} tokenId unique ERC-721 token Id.
- * @apiParam (Request body) {String} tokenURI URI of token.
+ * @apiParam (Request body) {String} tokenUri URI of token.
  * @apiParam (Request body) {String} receiver Name of Receiver.
  * @apiParam (Request body) {String} contractAddress TokenShield Address (optional).
  *
  * @apiExample {js} Example usage:
  * const data = {
  *    tokenId: '0xc3b53ccd640c680000000000000000000000000000000000000000000000000',
- *    tokenURI: 'unique token name',
+ *    tokenUri: 'unique token name',
  *    receiver: {
  *      name: 'bob',
  *    }
@@ -80,13 +80,13 @@ router.route('/transferNFToken').post(transferNFToken);
  * @apiGroup ERC-721
  *
  * @apiParam (Request body) {String} tokenId unique ERC-721 token Id.
- * @apiParam (Request body) {String} tokenURI URI of token.
+ * @apiParam (Request body) {String} tokenUri URI of token.
  * @apiParam (Request body) {String} contractAddress TokenShield Address (optional).
  *
  * @apiExample {js} Example usage:
  * const data = {
  *    tokenId: '0xc3b53ccd640c680000000000000000000000000000000000000000000000000',
- *    tokenURI: 'unique token name',
+ *    tokenUri: 'unique token name',
  *    contractAddress: 'Oxad23..'
  * }
  *
@@ -152,7 +152,7 @@ router.get('/getNFTokens', getNFTokens);
  * @apiName  insert non-fungible tokens
  * @apiGroup ERC-721
  *
- * @apiParam (Request body) {String} tokenURI
+ * @apiParam (Request body) {String} tokenUri
  * @apiParam (Request body) {String} tokenId
  * @apiParam (Request body) {String} shieldContractAddress
  * @apiParam (Request body) {String} sender
@@ -161,7 +161,7 @@ router.get('/getNFTokens', getNFTokens);
  *
  * @apiExample {js} Example usage:
  * const body = {
- *    tokenURI: 'unique token URI',
+ *    tokenUri: 'unique token URI',
  *    tokenId: '0x1448d8ab4e0d610000000000000000000000000000000000000000000000000',
  *    shieldContractAddress: '0x04b95c76d5075620a655b707a7901462aea8656c',
  *    sender: 'a',
@@ -211,7 +211,7 @@ router.post('/insertNFTToDb', insertNFTToDb);
  *      "data":[
  *        {
  *          "_id":"5d951085f359c40039add23b",
- *          "tokenURI":"one",
+ *          "tokenUri":"one",
  *          "tokenId":"0x119eda3adb1dab00000000000000000000000000000000000000000000000000",
  *          "type":"minted",
  *          "created_at":"2019-10-02T21:03:01.491Z",

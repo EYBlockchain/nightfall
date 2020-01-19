@@ -27,7 +27,6 @@ export class CustomTextComponent implements ViewCell, OnInit {
   @Input() rowData: any;
 
   ngOnInit() {
-      console.log('this.value', this.value);
       this.renderValue = this.value.slice(0, 20) + '...';
   }
 

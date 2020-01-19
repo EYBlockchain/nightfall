@@ -1,4 +1,4 @@
-import { whisperTransaction } from './whisper';
+import { sendWhisperMessage } from './whisper';
 import { db, offchain, zkp } from '../rest';
 
 // ERC-721 token
@@ -63,26 +63,25 @@ export async function getNFTTransactions(req, res, next) {
     password: 'alicesPassword'
   }
  * req.body {
-    tokenURI: 'unique token URI',
+    tokenUri: 'unique token URI',
   }
  * @param {*} req
  * @param {*} res
  */
 export async function mintNFToken(req, res, next) {
-  const randomHex = `0x${Math.floor(Math.random() * 10e14)
+  const tokenId = `0x${Math.floor(Math.random() * 10e14)
     .toString(16)
     .padEnd(64, '0')}`; // create a random number, left-padded to 64 octets
-  const reqBody = {
-    tokenId: req.body.tokenId || randomHex,
-    tokenURI: req.body.tokenURI || '',
-  };
 
+  const {tokenUri} = req.body;
   try {
-    res.data = await zkp.mintNFToken(req.user, reqBody);
+    res.data = await zkp.mintNFToken(req.user, {tokenUri, tokenId});
+    const {selectedNFTokenShield} = await db.fetchUser(req.user);
 
     await db.insertNFToken(req.user, {
-      tokenURI: reqBody.tokenURI,
-      tokenId: reqBody.tokenId,
+      tokenUri,
+      tokenId,
+      shieldContractAddress: selectedNFTokenShield,
       isMinted: true,
     });
 
@@ -102,7 +101,7 @@ export async function mintNFToken(req, res, next) {
   }
  * req.body {
     tokenId: '0xc3b53ccd640c680000000000000000000000000000000000000000000000000',
-    tokenURI: 'unique token name',
+    tokenUri: 'unique token name',
     receiver: {
       name: 'bob', 
     }
@@ -111,30 +110,21 @@ export async function mintNFToken(req, res, next) {
  * @param {*} res
  */
 export async function transferNFToken(req, res, next) {
-  const { tokenURI, tokenId } = req.body;
+  const { tokenUri, tokenId, receiver } = req.body;
   try {
-    const receiverAddress = await offchain.getAddressFromName(req.body.receiver.name);
-    res.data = await zkp.transferNFToken(req.user, {
-      tokenId,
-      to: receiverAddress,
-    });
+    receiver.address = await offchain.getAddressFromName(receiver.name);
+    res.data = await zkp.transferNFToken(req.user, req.body);
 
     await db.updateNFTokenByTokenId(req.user, tokenId, {
-      tokenURI,
-      tokenId,
-      receiver: {
-        name: req.body.receiver.name,
-        address: receiverAddress,
-      },
+      ...req.body,
       isTransferred: true,
     });
 
-    await whisperTransaction(req, {
-      tokenURI,
-      tokenId,
-      receiver: req.body.receiver.name,
-      sender: req.user.name,
-      senderAddress: req.user.address,
+     const user = await db.fetchUser(req.user);
+    await sendWhisperMessage(user.shhIdentity, {
+      ...req.body,
+      sender: req.user,
+      isReceived: true,
       for: 'NFTToken',
     }); // send nft token data to BOB side
 
@@ -154,7 +144,7 @@ export async function transferNFToken(req, res, next) {
   }
  * req.body {
     tokenId: '0xc3b53ccd640c680000000000000000000000000000000000000000000000000',
-    tokenURI: 'unique token name',
+    tokenUri: 'unique token name',
   }
  * @param {*} req
  * @param {*} res
@@ -165,8 +155,7 @@ export async function burnNFToken(req, res, next) {
     res.data = await zkp.burnNFToken(req.user, { tokenId });
 
     await db.updateNFTokenByTokenId(req.user, tokenId, {
-      tokenURI,
-      tokenId,
+      ...req.body,
       isBurned: true,
     });
 

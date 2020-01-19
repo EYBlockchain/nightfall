@@ -7,12 +7,12 @@ export default new Schema({
   publicKey: {type: String, requird: true},
   secretKey: {type: String, requird: true},
   shhIdentity: {type: String},
-  selected_ftoken_shield_contract: {type: String},
-  selected_nftoken_shield_contract: {type: String},
-  ftokenshield_contracts: [
+  selectedFTokenShield: {type: String},
+  selectedNFTokenShield: {type: String},
+  fTokenShields: [
     {
-      contract_name: {type: String},
-      contract_address: {
+      contractName: {type: String},
+      contractAddress: {
         type: String,
         trim: true,
         required: true,
@@ -20,10 +20,10 @@ export default new Schema({
       },
     },
   ],
-  nftokenshield_contracts: [
+  nfTokenShields: [
     {
-      contract_name: {type: String},
-      contract_address: {
+      contractName: {type: String},
+      contractAddress: {
         type: String,
         trim: true,
         required: true,

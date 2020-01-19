@@ -21,12 +21,12 @@ export default class NftService {
   *
   * @param tokenURI {String} Token name
   */
-  mintNFToken (tokenURI: string) {
+  mintNFToken (tokenUri: string) {
     const httpOptions = {
       headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
     };
 
-    const body = { tokenURI };
+    const body = { tokenUri };
 
     const url = config.apiGateway.root + 'mintNFToken';
 
@@ -45,7 +45,7 @@ export default class NftService {
     const httpOptions = {
       headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
     };
-    const body = { tokenId: nftToken.token_id, tokenURI: nftToken.token_uri, receiver};
+    const body = { ...nftToken, receiver};
     const url = config.apiGateway.root + 'transferNFToken';
     return this.http
       .post(url, body, httpOptions)
@@ -62,7 +62,7 @@ export default class NftService {
       headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
     };
 
-    const body = { tokenId: nftToken.token_id, tokenURI: nftToken.token_uri};
+    const body = nftToken;
     const url = config.apiGateway.root + 'burnNFToken';
 
     return this.http

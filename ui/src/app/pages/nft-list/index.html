@@ -31,9 +31,9 @@
                 class="col-md-3 no-padding-left"
                 *ngFor="let transaction of transactions; let i = index"
               >
-                <div *ngIf="transaction.token_id" class="token-card">
-                  <p class="list-token header">{{ transaction.token_uri }}</p>
-                  <p class="list-token">TokenId : {{ transaction.token_id.slice(0, 8) }}...</p>
+                <div *ngIf="transaction.tokenId" class="token-card">
+                  <p class="list-token header">{{ transaction.tokenUri }}</p>
+                  <p class="list-token">TokenId : {{ transaction.tokenId.slice(0, 8) }}...</p>
                 </div>
               </div>
             </div>

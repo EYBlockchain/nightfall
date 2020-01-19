@@ -11,16 +11,7 @@ export async function getShieldAddresses(req, res, next) {
     const ftCommitmentShield = await zkp.getFTCommitmentShield(req.user);
     const nftCommitmentShield = await zkp.getNFTCommitmentShield(req.user);
 
-    res.data = {
-      ftCommitmentShield: {
-        contract_address: ftCommitmentShield.shieldAddress,
-        contract_name: ftCommitmentShield.name,
-      },
-      nftCommitmentShield: {
-        contract_address: nftCommitmentShield.shieldAddress,
-        contract_name: nftCommitmentShield.name,
-      },
-    };
+    res.data = { ftCommitmentShield, nftCommitmentShield};
     next();
   } catch (err) {
     next(err);

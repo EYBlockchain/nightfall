@@ -1,21 +1,9 @@
 import apiGateway from './rest/api-gateway';
 
-async function insertNFTToDb(data, userData) {
+async function insertNFTToDb(data, {jwtToken}) {
   console.log('\noffchain/src/listeners.js', 'insertNFTToDb', '\ndata', data);
 
-  await apiGateway.insertNFTToDb(
-    {
-      authorization: userData.jwtToken,
-    },
-    {
-      tokenURI: data.tokenURI,
-      tokenId: data.tokenId,
-      shieldContractAddress: data.shieldContractAddress,
-      sender: data.sender,
-      senderAddress: data.senderAddress,
-      isReceived: true,
-    },
-  );
+  await apiGateway.insertNFTToDb({ authorization: jwtToken }, data);
 }
 
 async function insertFTTransactionToDb(data, {jwtToken}) {

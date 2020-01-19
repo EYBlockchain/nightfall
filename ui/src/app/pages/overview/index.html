@@ -136,23 +136,23 @@
                 </thead>
                 <tbody>
                   <tr *ngFor="let transaction of nftTransactions">
-                    <td>{{ transaction.transaction_type.toUpperCase() }}</td>
-                    <td [title]="transaction.token_id">
-                      {{ transaction.token_id.slice(0, 20) }}....
+                    <td>{{ transaction.transactionType.toUpperCase() }}</td>
+                    <td [title]="transaction.tokenId">
+                      {{ transaction.tokenId.slice(0, 20) }}....
                     </td>
-                    <td>{{ transaction.token_uri }}</td>
-                    <td>{{ transaction.created_at | date: 'dd/MM/yyyy hh:mm:ss a' }}</td>
+                    <td>{{ transaction.tokenUri }}</td>
+                    <td>{{ transaction.createdAt | date: 'dd/MM/yyyy hh:mm:ss a' }}</td>
                     <td>
                       {{
-                        transaction.transaction_type !== 'transfer_incoming' && transaction.receiver
+                        transaction.transactionType !== 'transfer_incoming' && transaction.receiver
                           ? transaction.receiver.name
                           : ''
                       }}
                     </td>
                     <td>
                       {{
-                        transaction.transaction_type === 'transfer_incoming' && transaction.sender
-                          ? transaction.sender
+                        transaction.transactionType === 'transfer_incoming' && transaction.sender
+                          ? transaction.sender.name
                           : ''
                       }}
                     </td>
