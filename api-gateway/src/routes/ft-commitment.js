@@ -97,29 +97,29 @@ router.route('/mintFTCommitment').post(mintFTCommitment);
  *     {
  *       "value":"0x00000000000000000000000000000002",
  *       "receiver":{
- *        "name":"b",
- *        "publicKey":"0xea6eabb8e7b17615d841c8ac12dfecd919cad7d40b1cb0be568e00d180350835"
+ *          "name":"b",
+ *          "publicKey":"0xea6eabb8e7b17615d841c8ac12dfecd919cad7d40b1cb0be568e00d180350835"
  *       },
  *       "salt":"0xe1c8478eee576a419ebde9df31b9acadc990c1a1d2910394de86a17c6246a901",
  *       "commitment":"0x5e84e824bbaedad48c257f46f7f0fc50936faf848c83895f745a46c996e03dab",
  *       "commitmentIndex":1,
  *       "owner":{
- *        "name":"b",
- *        "publicKey":"0xea6eabb8e7b17615d841c8ac12dfecd919cad7d40b1cb0be568e00d180350835"
+ *          "name":"b",
+ *          "publicKey":"0xea6eabb8e7b17615d841c8ac12dfecd919cad7d40b1cb0be568e00d180350835"
  *       }
  *     },
  *     {
  *      "value":"0x00000000000000000000000000000001",
  *      "receiver":{
- *       "name":"a",
- *       "publicKey":"0xa87e22f2053c33656374077f2dec067a4494c75813778dd7459e79d1c5ba8b64"
+ *        "name":"a",
+ *        "publicKey":"0xa87e22f2053c33656374077f2dec067a4494c75813778dd7459e79d1c5ba8b64"
  *      },
  *      "salt":"0x40fb7ce1b35f3df2e93fb3f7b773e3b3a10bb17f664015e2a6d2e80b23909383",
  *      "commitment":"0x71b6ae5d150dcf22570a0e524d96bc42d3ff44d1d841056f1ce7b33a47f07197",
  *      "commitmentIndex":2,
  *      "owner":{
- *       "name":"a",
- *       "publicKey":"0xa87e22f2053c33656374077f2dec067a4494c75813778dd7459e79d1c5ba8b64"
+ *        "name":"a",
+ *        "publicKey":"0xa87e22f2053c33656374077f2dec067a4494c75813778dd7459e79d1c5ba8b64"
  *      }
  *    }
  *   ]
@@ -132,12 +132,13 @@ router.route('/transferFTCommitment').post(transferFTCommitment);
  * @apiName  Burn a ERC-20 commitment
  * @apiGroup ERC-20 commitment
  *
- * @apiParam (Request body) {String} amount Hex String representing the 'amount' of a fungible currency to transact.
+ * @apiParam (Request body) {String} value Hex String representing the 'amount' of a fungible currency to transact.
  * @apiParam (Request body) {String} publicKey Public key of Burner (Alice).
  * @apiParam (Request body) {String} senderSecretKey Secret key of Burner (Alice).
- * @apiParam (Request body) {String} salt Slat of coin A.
+ * @apiParam (Request body) {String} salt Salt of coin A.
  * @apiParam (Request body) {String} commitmentIndex coin index value of coin A.
  * @apiParam (Request body) {String} commitment Coin Commitment of coin A.
+ * @apiParam (Request body) {Object} receiver reciever name.
  *
  * @apiExample {js} Example usage:
  * const data = {
@@ -174,10 +175,10 @@ router.route('/burnFTCommitment').post(burnFTCommitment);
  * @apiName  Insert ERC-20 commitment
  * @apiGroup ERC-20 commitment
  *
- * @apiParam (Request body) {String} amount Hex String representing the 'amount' of a fungible currency to transact.
- * @apiParam (Request body) {String} salt Salt.
- * @apiParam (Request body) {String} commitment Token commitment.
- * @apiParam (Request body) {String} commitmentIndex Token index.
+ * @apiParam (Request body) {String}  value Hex String representing the 'amount' of a fungible currency to transact.
+ * @apiParam (Request body) {String}  salt Salt.
+ * @apiParam (Request body) {String}  commitment Token commitment.
+ * @apiParam (Request body) {String}  commitmentIndex Token index.
  * @apiParam (Request body) {Boolean} isMinted if data is for minted token.
  *
  * @apiExample {js} Example usage:
@@ -232,7 +233,7 @@ router.post('/insertFTCommitmentToDb', insertFTCommitmentToDb);
  *      "data":[
  *        {
  *          "_id":"5d9583cff359c40039add240",
- *          "amount":"0x00000000000000000000000000000002",
+ *          "value":"0x00000000000000000000000000000002",
  *          "salt":"0xdba2b9fd61a7a5ff60cc6d025777b736aa1bf74e1fdcb90ee34b33",
  *          "commitment":"0x33894fa46908748639356cad7e69a2962316f07a9fb711fc2a2997",
  *          "commitmentIndex":0,
@@ -276,7 +277,7 @@ router.get('/getFTCommitments', getFTCommitments);
  *      "data":[
  *        {
  *         "_id":"5d9583cff359c40039add241",
- *         "amount":"0x00000000000000000000000000000002",
+ *         "value":"0x00000000000000000000000000000002",
  *         "salt":"0xdba2b9fd61a7a5ff60cc6d025777b736aa1bf74e1fdcb90ee34b33",
  *         "commitment":"0x33894fa46908748639356cad7e69a2962316f07a9fb711fc2a2997",
  *         "commitmentIndex":0,
@@ -314,13 +315,13 @@ router.route('/getFTCommitmentTransactions').get(getFTCommitmentTransactions);
  *    {
  *      "value": "0x00000000000000000000000000000002",
  *      "receiver": {
- *        name: "b",
+ *          name: "b",
  *      }
  *    },
  *    {
  *      "value": "0x00000000000000000000000000000002",
  *      "receiver": {
- *        name: "a",
+ *          name: "a",
  *      }
  *    }
  *  ]
@@ -337,29 +338,29 @@ router.route('/getFTCommitmentTransactions').get(getFTCommitmentTransactions);
  *     {
  *       "value":"0x00000000000000000000000000000002",
  *       "receiver":{
- *        "name":"b",
- *        "publicKey":"0xea6eabb8e7b17615d841c8ac12dfecd919cad7d40b1cb0be568e00d180350835"
+ *          "name":"b",
+ *          "publicKey":"0xea6eabb8e7b17615d841c8ac12dfecd919cad7d40b1cb0be568e00d180350835"
  *       },
  *       "salt":"0xe1c8478eee576a419ebde9df31b9acadc990c1a1d2910394de86a17c6246a901",
  *       "commitment":"0x5e84e824bbaedad48c257f46f7f0fc50936faf848c83895f745a46c996e03dab",
  *       "commitmentIndex":1,
  *       "owner":{
- *        "name":"b",
- *        "publicKey":"0xea6eabb8e7b17615d841c8ac12dfecd919cad7d40b1cb0be568e00d180350835"
+ *          "name":"b",
+ *          "publicKey":"0xea6eabb8e7b17615d841c8ac12dfecd919cad7d40b1cb0be568e00d180350835"
  *       }
  *     },
  *     {
  *      "value":"0x00000000000000000000000000000003",
  *      "receiver":{
- *       "name":"a",
- *       "publicKey":"0xa87e22f2053c33656374077f2dec067a4494c75813778dd7459e79d1c5ba8b64"
+ *        "name":"a",
+ *        "publicKey":"0xa87e22f2053c33656374077f2dec067a4494c75813778dd7459e79d1c5ba8b64"
  *      },
  *      "salt":"0x40fb7ce1b35f3df2e93fb3f7b773e3b3a10bb17f664015e2a6d2e80b23909383",
  *      "commitment":"0x71b6ae5d150dcf22570a0e524d96bc42d3ff44d1d841056f1ce7b33a47f07197",
  *      "commitmentIndex":2,
  *      "owner":{
- *       "name":"a",
- *       "publicKey":"0xa87e22f2053c33656374077f2dec067a4494c75813778dd7459e79d1c5ba8b64"
+ *         "name":"a",
+ *         "publicKey":"0xa87e22f2053c33656374077f2dec067a4494c75813778dd7459e79d1c5ba8b64"
  *      }
  *    }
  *   ]

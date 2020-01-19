@@ -38,7 +38,7 @@ export default class NftTransactionService {
       COLLECTIONS.NFT_TRANSACTION,
       {},
       undefined,
-      { created_at: -1 },
+      { createdAt: -1 },
       parseInt(pageNo, 10),
       parseInt(limit, 10),
     );

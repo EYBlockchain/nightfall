@@ -102,6 +102,7 @@ export async function mintNFToken(req, res, next) {
  * req.body {
     tokenId: '0xc3b53ccd640c680000000000000000000000000000000000000000000000000',
     tokenUri: 'unique token name',
+    shieldContractAddress: "0x432038accaf756a8936a7f067a8223c2d929d58f"
     receiver: {
       name: 'bob', 
     }
@@ -110,19 +111,25 @@ export async function mintNFToken(req, res, next) {
  * @param {*} res
  */
 export async function transferNFToken(req, res, next) {
-  const { tokenUri, tokenId, receiver } = req.body;
+  const { tokenUri, tokenId, receiver, shieldContractAddress } = req.body;
   try {
     receiver.address = await offchain.getAddressFromName(receiver.name);
     res.data = await zkp.transferNFToken(req.user, req.body);
 
     await db.updateNFTokenByTokenId(req.user, tokenId, {
-      ...req.body,
+      tokenUri,
+      tokenId,
+      shieldContractAddress,
+      receiver,
       isTransferred: true,
     });
 
      const user = await db.fetchUser(req.user);
     await sendWhisperMessage(user.shhIdentity, {
-      ...req.body,
+      tokenUri,
+      tokenId,
+      shieldContractAddress,
+      receiver,
       sender: req.user,
       isReceived: true,
       for: 'NFTToken',
@@ -150,12 +157,15 @@ export async function transferNFToken(req, res, next) {
  * @param {*} res
  */
 export async function burnNFToken(req, res, next) {
-  const { tokenURI, tokenId } = req.body;
+  const { tokenUri, tokenId, receiver, shieldContractAddress } = req.body;
   try {
     res.data = await zkp.burnNFToken(req.user, { tokenId });
 
     await db.updateNFTokenByTokenId(req.user, tokenId, {
-      ...req.body,
+      tokenUri,
+      tokenId,
+      shieldContractAddress,
+      receiver,
       isBurned: true,
     });
 

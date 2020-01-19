@@ -90,7 +90,7 @@ export default class NftService {
         isShielded: {$exists: false},
       },
       undefined,
-      {created_at: -1},
+      {createdAt: -1},
       parseInt(pageNo, 10),
       parseInt(limit, 10),
     );

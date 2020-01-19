@@ -217,7 +217,7 @@ describe('****** Integration Test ******\n', function() {
        * Step 6.
        * Burn ERC-721 Commitment.
        */
-      it('Burn ERC-721 Commitment', function(done) {
+     /*  it('Burn ERC-721 Commitment', function(done) {
         request
           .post('/burnNFTCommitment')
           .use(prefix(apiServerURL))
@@ -236,7 +236,7 @@ describe('****** Integration Test ******\n', function() {
 
             return done();
           });
-      });
+      }); */
       /*
        * Step 7.
        * Tranfer ERC-721 Token.

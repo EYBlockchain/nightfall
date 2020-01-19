@@ -1,4 +1,4 @@
-import { FtService } from '../business';
+import {FtService} from '../business';
 
 /**
  * This function add ERC-20 transactions in database
@@ -21,7 +21,7 @@ async function insertFTTransaction(req, res, next) {
   try {
     const ftService = new FtService(req.user.db);
     await ftService.insertFTokenTransaction(req.body);
-    res.data = { message: 'inserted' };
+    res.data = {message: 'inserted'};
     next();
   } catch (err) {
     next(err);

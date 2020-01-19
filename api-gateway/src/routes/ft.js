@@ -44,8 +44,8 @@ router.route('/mintFToken').post(mintFToken);
  * @apiName  Transfer fungible token
  * @apiGroup ERC-20
  *
- * @apiParam (Request body) {String} amount The amount of ERC-20 token.
- * @apiParam (Request body) {String} receiver The name of the Receiver.
+ * @apiParam (Request body) {String} value The amount of ERC-20 token.
+ * @apiParam (Request body) {Object} receiver The name of the Receiver.
  *
  * @apiExample {js} Example usage:
  * const data = {
@@ -73,7 +73,7 @@ router.route('/transferFToken').post(transferFToken);
  * @apiName  Burn fungible token
  * @apiGroup ERC-20
  *
- * @apiParam (Request body) {String} amount The amount of ERC-20 token.
+ * @apiParam (Request body) {String} value The amount of ERC-20 token.
  *
  * @apiExample {js} Example usage:
  * const data = {
@@ -149,24 +149,22 @@ router.route('/getFTokenInfo').get(getFTokenInfo);
  * @apiName  insert fungible token transaction
  * @apiGroup ERC-20
  *
- * @apiParam (Request body) {String} amount The amount of ERC-20 token.
+ * @apiParam (Request body) {String} value The amount of ERC-20 token.
  * @apiParam (Request body) {String} shieldContractAddress current user slected shield contract address.
- * @apiParam (Request body) {String} receiver receiver name.
- * @apiParam (Request body) {String} receiverAddress.
- * @apiParam (Request body) {String} sender.
- * @apiParam (Request body) {String} senderAddress.
+ * @apiParam (Request body) {Object} receiver receiver name and address.
+ * @apiParam (Request body) {Object} sender sender name and address
  *
  * @apiExample {js} Example usage:
  * const data = {
  *   "value": 10,
  *   "shieldContractAddress": "0x033..",
  *   "receiver": {
- *     "name": "BOB",
- *     "address": "0xb0b",
+ *      "name": "BOB",
+ *      "address": "0xb0b",
  *   }
  *   "sender": {
- *     "name": "Alice",
- *     "address": "0xb0b",
+ *      "name": "Alice",
+ *      "address": "0xb0b",
  *   }
  * }
  *
@@ -214,8 +212,8 @@ router.post('/insertFTTransactionToDb', insertFTTransactionToDb);
  *      "data":[
  *        {
  *          "_id":"5d95825ff359c40039add23f",
- *          "amount":"1000",
- *          "type":"minted",
+ *          "value":"1000",
+ *          "transaction_type":"minted",
  *          "created_at":"2019-10-03T05:08:47.675Z",
  *          "updated_at":"2019-10-03T05:08:47.675Z",
  *        }

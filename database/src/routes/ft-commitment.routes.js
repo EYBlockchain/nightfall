@@ -1,4 +1,4 @@
-import { FtCommitmentService } from '../business';
+import {FtCommitmentService} from '../business';
 
 /**
  * This function is used to add a coin to the db.
@@ -16,7 +16,7 @@ async function insertFTCommitment(req, res, next) {
   try {
     const ftCommitmentService = new FtCommitmentService(req.user.db);
     await ftCommitmentService.insertFTCommitment(req.body);
-    res.data = { message: 'inserted' };
+    res.data = {message: 'inserted'};
     next();
   } catch (err) {
     next(err);
@@ -60,11 +60,11 @@ async function getFTCommitments(req, res, next) {
  * @param {*} res
  */
 async function updateFTCommitmentByCommitmentHash(req, res, next) {
-  const { commitmentHash } = req.params;
+  const {commitmentHash} = req.params;
   try {
     const ftCommitmentService = new FtCommitmentService(req.user.db);
     await ftCommitmentService.updateFTCommitmentByCommitmentHash(commitmentHash, req.body);
-    res.data = { message: 'updated' };
+    res.data = {message: 'updated'};
     next();
   } catch (err) {
     next(err);
@@ -121,7 +121,7 @@ async function insertFTCommitmentTransaction(req, res, next) {
   try {
     const ftCommitmentService = new FtCommitmentService(req.user.db);
     await ftCommitmentService.insertFTCommitmentTransaction(req.body);
-    res.data = { message: 'inserted' };
+    res.data = {message: 'inserted'};
     next();
   } catch (err) {
     next(err);

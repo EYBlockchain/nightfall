@@ -1,11 +1,11 @@
-import { exec } from 'child_process';
+import {exec} from 'child_process';
 import mongoose from 'mongoose';
 import config from 'config';
 import utils from 'zkp-utils';
 
-import { COLLECTIONS } from '../common/constants';
+import {COLLECTIONS} from '../common/constants';
 import dbConnections from '../common/dbConnections';
-import { userMapper } from '../mappers';
+import {userMapper} from '../mappers';
 
 const mongo = config.get('mongo');
 
@@ -41,7 +41,7 @@ export default class UserService {
     const secretKey = await utils.rndHex(32);
     const publicKey = utils.hash(secretKey);
 
-    const mappedData = userMapper({ ...data, secretKey, publicKey });
+    const mappedData = userMapper({...data, secretKey, publicKey});
 
     await this.db.addUser(data.name, data.password);
     await updateUserRole();
@@ -64,10 +64,10 @@ export default class UserService {
    * @param {object} privateAccountDetails - contains ethereum private account and password
    * @returns {string} a account
    */
-  async insertPrivateAccountHandler({ address, password }) {
+  async insertPrivateAccountHandler({address, password}) {
     const updateData = {
       $push: {
-        accounts: { address, password },
+        accounts: {address, password},
       },
     };
     return this.db.updateData(COLLECTIONS.USER, {}, updateData);
@@ -83,9 +83,11 @@ export default class UserService {
     if (!password) throw new Error('Password is empty');
 
     if (!dbConnections[name]) {
-      dbConnections[name] = await mongoose.createConnection(
+      dbConnections[
+        name
+      ] = await mongoose.createConnection(
         `mongodb://${name}:${password}@${mongo.host}:${mongo.port}/${mongo.databaseName}`,
-        { useNewUrlParser: true },
+        {useNewUrlParser: true},
       );
     }
     return dbConnections[name];
@@ -98,7 +100,7 @@ export default class UserService {
    * contractAddress - address of coinShield contract
    * @returns {Promise}
    */
-  selectFTShieldContractAddress({ contractAddress }) {
+  selectFTShieldContractAddress({contractAddress}) {
     return this.db.updateData(
       COLLECTIONS.USER,
       {},
@@ -116,7 +118,7 @@ export default class UserService {
    * contractAddress - address of coinShield contract
    * @returns {Promise}
    */
-  async addFTShieldContractInfo({ contractName, contractAddress, isSelected }) {
+  async addFTShieldContractInfo({contractName, contractAddress, isSelected}) {
     await this.db.updateData(
       COLLECTIONS.USER,
       {
@@ -128,7 +130,7 @@ export default class UserService {
         },
       },
     );
-    if (isSelected) await this.selectFTShieldContractAddress({ contractAddress });
+    if (isSelected) await this.selectFTShieldContractAddress({contractAddress});
   }
 
   /**
@@ -143,7 +145,7 @@ export default class UserService {
    */
   async updateFTShieldContractInfoByContractAddress(
     contractAddress,
-    { contractName, isSelected, isFTShieldPreviousSelected },
+    {contractName, isSelected, isFTShieldPreviousSelected},
   ) {
     await this.db.updateData(
       COLLECTIONS.USER,
@@ -158,9 +160,9 @@ export default class UserService {
         },
       },
     );
-    if (isSelected) await this.selectFTShieldContractAddress({ contractAddress });
+    if (isSelected) await this.selectFTShieldContractAddress({contractAddress});
     else if (isFTShieldPreviousSelected)
-      await this.selectFTShieldContractAddress({ contractAddress: null });
+      await this.selectFTShieldContractAddress({contractAddress: null});
   }
 
   /**
@@ -186,7 +188,7 @@ export default class UserService {
     });
 
     if (!toUpdate) return null;
-    await this.selectFTShieldContractAddress({ contractAddress: null });
+    await this.selectFTShieldContractAddress({contractAddress: null});
     return toUpdate;
   }
 
@@ -197,7 +199,7 @@ export default class UserService {
    * contractAddress - address of tokenShield contract
    * @returns {Promise}
    */
-  selectNFTShieldContractAddress({ contractAddress }) {
+  selectNFTShieldContractAddress({contractAddress}) {
     return this.db.updateData(
       COLLECTIONS.USER,
       {},
@@ -215,7 +217,7 @@ export default class UserService {
    * contractAddress - address of tokenShield contract
    * @returns {Promise}
    */
-  async addNFTShieldContractInfo({ contractName, contractAddress, isSelected }) {
+  async addNFTShieldContractInfo({contractName, contractAddress, isSelected}) {
     await this.db.updateData(
       COLLECTIONS.USER,
       {
@@ -227,7 +229,7 @@ export default class UserService {
         },
       },
     );
-    if (isSelected) await this.selectNFTShieldContractAddress({ contractAddress });
+    if (isSelected) await this.selectNFTShieldContractAddress({contractAddress});
   }
 
   /**
@@ -242,7 +244,7 @@ export default class UserService {
    */
   async updateNFTShieldContractInfoByContractAddress(
     contractAddress,
-    { contractName, isSelected, isNFTShieldPreviousSelected },
+    {contractName, isSelected, isNFTShieldPreviousSelected},
   ) {
     await this.db.updateData(
       COLLECTIONS.USER,
@@ -257,9 +259,9 @@ export default class UserService {
         },
       },
     );
-    if (isSelected) await this.selectNFTShieldContractAddress({ contractAddress });
+    if (isSelected) await this.selectNFTShieldContractAddress({contractAddress});
     else if (isNFTShieldPreviousSelected)
-      await this.selectNFTShieldContractAddress({ contractAddress: null });
+      await this.selectNFTShieldContractAddress({contractAddress: null});
   }
 
   /**
@@ -285,7 +287,7 @@ export default class UserService {
     });
 
     if (!toUpdate) return null;
-    await this.selectNFTShieldContractAddress({ contractAddress: null });
+    await this.selectNFTShieldContractAddress({contractAddress: null});
     return toUpdate;
   }
 }

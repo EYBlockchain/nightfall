@@ -1,5 +1,5 @@
-import { sendWhisperMessage } from './whisper';
-import { accounts, db, offchain, zkp } from '../rest';
+import {sendWhisperMessage} from './whisper';
+import {accounts, db, offchain, zkp} from '../rest';
 
 /**
  * This function will insert FT commitment in database
@@ -172,7 +172,7 @@ export async function mintFTCommitment(req, res, next) {
  * @param {*} res
  */
 export async function transferFTCommitment(req, res, next) {
-  const { receiver, inputCommitments } = req.body;
+  const {receiver, inputCommitments} = req.body;
   try {
     // Generate a new one-time-use Ethereum address for the sender to use
     const password = (req.user.address + Date.now()).toString();
@@ -186,7 +186,7 @@ export async function transferFTCommitment(req, res, next) {
     req.body.sender = {};
     req.body.sender.secretKey = (await db.fetchUser(req.user)).secretKey;
 
-    const { outputCommitments, txReceipt } = await zkp.transferFTCommitment({ address }, req.body);
+    const {outputCommitments, txReceipt} = await zkp.transferFTCommitment({address}, req.body);
 
     const [transferCommitment, changeCommitment] = outputCommitments;
     transferCommitment.owner = receiver;
@@ -196,15 +196,13 @@ export async function transferFTCommitment(req, res, next) {
 
     // update slected coin1 with tansferred data
     await db.updateFTCommitmentByCommitmentHash(req.user, inputCommitments[0].commitment, {
-      outputCommitments: [{ owner: receiver }],
+      outputCommitments: [{owner: receiver}],
       isTransferred: true,
     });
 
-    ({amount, salt, commitmentIndex, commitment} = req.body.secondFTCommitment);
-
     // update slected coin with tansferred data
     await db.updateFTCommitmentByCommitmentHash(req.user, inputCommitments[1].commitment, {
-      outputCommitments: [{ owner: receiver }],
+      outputCommitments: [{owner: receiver}],
       isTransferred: true,
     });
 
@@ -391,8 +389,8 @@ export async function simpleFTCommitmentBatchTransfer(req, res, next) {
       };
       selectedCommitmentValue = 0;
     }
-    const { outputCommitments: commitments, txReceipt } = await zkp.simpleFTCommitmentBatchTransfer(
-      { address },
+    const {outputCommitments: commitments, txReceipt} = await zkp.simpleFTCommitmentBatchTransfer(
+      {address},
       {
         inputCommitment,
         outputCommitments,

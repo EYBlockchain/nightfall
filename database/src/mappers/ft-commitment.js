@@ -20,7 +20,7 @@ export default function({
   if (!outputCommitments) {
     return flags;
   }
-  const [{ value, salt, commitment, commitmentIndex, owner }] = outputCommitments;
+  const [{value, salt, commitment, commitmentIndex, owner}] = outputCommitments;
   return {
     [value && 'value']: value,
     [salt && 'salt']: salt,
