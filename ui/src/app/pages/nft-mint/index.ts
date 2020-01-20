@@ -7,7 +7,7 @@ import NftService from '../../services/nft.service';
  * Mint public token component, which is used for rendering the page of mint ERC-721 token.
  */
 @Component({
-  selector: 'nft-mint',
+  selector: 'app-nft-mint',
   templateUrl: './index.html',
   providers: [NftService],
   styleUrls: ['./index.css']

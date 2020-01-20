@@ -10,7 +10,7 @@ import { UtilService } from '../../services/utils/util.service';
  * Componenet to create new accounts.
  */
 @Component({
-  selector: 'create-accounts',
+  selector: 'app-create-accounts',
   templateUrl: './index.html',
   providers: [ UserService, UtilService],
   styleUrls: ['./index.css']

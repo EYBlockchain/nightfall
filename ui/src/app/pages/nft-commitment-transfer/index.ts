@@ -10,7 +10,7 @@ import { NgSelectComponent } from '@ng-select/ng-select';
  *  Spend token component, which is used for rendering the page of transfer ERC-721 token commitment to the selected receipent.
  */
 @Component({
-  selector: 'nft-commitment-transfer',
+  selector: 'app-nft-commitment-transfer',
   templateUrl: './index.html',
   providers: [NftCommitmentService, UserService, UtilService],
   styleUrls: ['./index.css']
@@ -104,13 +104,8 @@ export default class NftCommitmentTransferComponent implements OnInit, AfterCont
 
     this.isRequesting = true;
     this.nftCommitmentService.transferNFTCommitment(
-      selectedCommitment.token_id,
-      selectedCommitment.token_uri,
-      selectedCommitment.shield_contract_address,
-      selectedCommitment.salt,
-      selectedCommitment.token_commitment,
+      selectedCommitment,
       this.receiverName,
-      selectedCommitment.token_commitment_index
     ).subscribe( data => {
         this.isRequesting = false;
         this.toastr.success('Transfer to Receiver ' + receiverName);

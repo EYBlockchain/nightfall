@@ -39,7 +39,7 @@ export default class NftService {
    * Method to initiate a HTTP request to transfer ERC-721 token.
    *
    * @param nftToken {Object} Selected ERC-721 token
-   * @param receiver {Object} receiver 
+   * @param receiver {Object} receiver
    */
   transferNFToken (nftToken: any, receiver: any) {
     const httpOptions = {

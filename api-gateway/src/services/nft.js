@@ -11,7 +11,7 @@ import { db, offchain, zkp } from '../rest';
     password: 'alicesPassword'
   }
  * req.body {
-    tokenURI: 'unique token URI',
+    tokenUri: 'unique token URI',
     tokenId: '0x1448d8ab4e0d610000000000000000000000000000000000000000000000000',
     shieldContractAddress: '0x04b95c76d5075620a655b707a7901462aea8656c',
     sender: {
@@ -73,10 +73,10 @@ export async function mintNFToken(req, res, next) {
     .toString(16)
     .padEnd(64, '0')}`; // create a random number, left-padded to 64 octets
 
-  const {tokenUri} = req.body;
+  const { tokenUri } = req.body;
   try {
-    res.data = await zkp.mintNFToken(req.user, {tokenUri, tokenId});
-    const {selectedNFTokenShield} = await db.fetchUser(req.user);
+    res.data = await zkp.mintNFToken(req.user, { tokenUri, tokenId });
+    const { selectedNFTokenShield } = await db.fetchUser(req.user);
 
     await db.insertNFToken(req.user, {
       tokenUri,
@@ -124,7 +124,7 @@ export async function transferNFToken(req, res, next) {
       isTransferred: true,
     });
 
-     const user = await db.fetchUser(req.user);
+    const user = await db.fetchUser(req.user);
     await sendWhisperMessage(user.shhIdentity, {
       tokenUri,
       tokenId,

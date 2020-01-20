@@ -9,7 +9,7 @@ import { NgSelectComponent } from '@ng-select/ng-select';
  *  Spend public token component, which is used for rendering the page of transfer ERC-721 token to the selected receipent.
  */
 @Component({
-  selector: 'nft-transfer',
+  selector: 'app-nft-transfer',
   templateUrl: './index.html',
   providers: [NftService, UserService],
   styleUrls: ['./index.css']
@@ -98,7 +98,7 @@ export default class NftTransferComponent implements OnInit, AfterContentInit {
     this.isRequesting = true;
     console.log('selectedToken', this.selectedToken);
     this.selectedToken = this.selectedTokenList[0];
-    const receiver = { 
+    const receiver = {
       name: this.receiverName
     };
     this.nftService.transferNFToken(this.selectedToken, receiver).subscribe( data => {

@@ -1,16 +1,16 @@
-import {Schema} from 'mongoose';
+import { Schema } from 'mongoose';
 
 export default new Schema(
   {
-    token_uri: {
+    tokenUri: {
       type: String,
       required: true,
     },
-    token_id: {
+    tokenId: {
       type: String,
       required: true,
     },
-    shield_contract_address: String,
+    shieldContractAddress: String,
     salt: {
       type: String,
       required: true,
@@ -20,30 +20,26 @@ export default new Schema(
       unique: true,
       required: true,
     },
-    commitment_index: {
+    commitmentIndex: {
       type: Number,
       required: true,
     },
 
     // receiver info
     owner: {
-      name: {
-        type: String,
-      },
-      public_key: {
-        type: String,
-      },
+      name: String,
+      publicKey: String,
     },
 
     // boolean stats
-    is_minted: Boolean,
-    is_transferred: Boolean,
-    is_burned: Boolean,
-    is_received: Boolean,
+    isMinted: Boolean,
+    isTransferred: Boolean,
+    isBurned: Boolean,
+    isReceived: Boolean,
 
     // boolean stats - correctness checks
-    token_commitment_reconciles: Boolean, // for a given A, pk, S and z, do we have that h(A,pk,S)=z?
-    token_commitment_exists_onchain: Boolean, // does z exist on-chain?
+    commitmentReconciles: Boolean, // for a given A, pk, S and z, do we have that h(A,pk,S)=z?
+    commitmentExistsOnchain: Boolean, // does z exist on-chain?
   },
-  {timestamps: {createdAt: 'created_at', updatedAt: 'updated_at'}},
+  { timestamps: true },
 );

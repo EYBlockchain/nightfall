@@ -1,7 +1,7 @@
 import config from 'config';
 import utils from '../zkp-utils';
 
-const {rndHex, leftPadHex} = utils;
+const { rndHex, leftPadHex } = utils;
 const LEAF_HASHLENGTH = config.get('LEAF_HASHLENGTH');
 
 const generateTokenID = async () => rndHex(32);
@@ -39,7 +39,7 @@ export default {
 
   // dependent data
   async erc721Commitment() {
-    const {alice, bob, erc721} = this;
+    const { alice, bob, erc721 } = this;
 
     erc721.tokenId = await erc721.tokenId;
 
@@ -71,7 +71,7 @@ export default {
 
   // dependent data
   async erc20Commitments() {
-    const {alice, bob, erc20} = this;
+    const { alice, bob, erc20 } = this;
 
     return {
       mint: [
@@ -124,7 +124,7 @@ export default {
   },
 
   async erc20CommitmentBatchTransfer() {
-    const {alice, bob} = this;
+    const { alice, bob } = this;
     return {
       mint: 40,
       get value() {

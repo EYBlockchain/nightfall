@@ -1,40 +1,31 @@
 export default function({
-  tokenURI,
-  tokenId,
-  salt,
-  shieldContractAddress,
-
-  commitment,
-  commitmentIndex,
-
-  owner,
-
   isMinted,
   isTransferred,
   isBurned,
   isReceived,
-
+  outputCommitments,
   zCorrect,
   zOnchainCorrect,
 }) {
+  const flags = {
+    [isMinted && 'isMinted']: isMinted,
+    [isTransferred && 'isTransferred']: isTransferred,
+    [isBurned && 'isBurned']: isBurned,
+    [isReceived && 'isReceived']: isReceived,
+  };
+  if (!outputCommitments) {
+    return flags;
+  }
+  const [{ tokenUri, tokenId, salt, commitment, commitmentIndex, owner }] = outputCommitments;
   return {
-    token_uri: tokenURI,
-    token_id: tokenId,
-    [shieldContractAddress ? 'shield_contract_address' : undefined]: shieldContractAddress,
-    salt,
-    commitment,
-    commitment_index: commitmentIndex,
-
-    [owner ? 'owner' : undefined]: owner,
-
-    [isMinted ? 'is_minted' : undefined]: isMinted,
-    [isTransferred ? 'is_transferred' : undefined]: isTransferred,
-    [isBurned ? 'is_burned' : undefined]: isBurned,
-    [isReceived ? 'is_received' : undefined]: isReceived,
-
-    [zCorrect || zCorrect === false ? 'token_commitment_reconciles' : undefined]: zCorrect,
-    [zOnchainCorrect || zOnchainCorrect === false
-      ? 'token_commitment_exists_onchain'
-      : undefined]: zOnchainCorrect,
+    [tokenUri && 'tokenUri']: tokenUri,
+    [tokenId && 'tokenId']: tokenId,
+    [salt && 'salt']: salt,
+    [commitment && 'commitment']: commitment,
+    [commitmentIndex !== undefined && 'commitmentIndex']: commitmentIndex,
+    owner,
+    ...flags,
+    [zCorrect !== undefined && 'commitmentReconciles']: zCorrect,
+    [zOnchainCorrect !== undefined && 'commitmentExistsOnchain']: zOnchainCorrect,
   };
 }

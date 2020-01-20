@@ -51,7 +51,7 @@ export const appRoutes: Routes = [
   { path: 'nft/transfer', component: NftTransferComponent , canActivate: [AuthService]},
   { path: 'nft/burn', component: NftBurnComponent , canActivate: [AuthService]},
   { path: 'nft/list', component: NftListComponent , canActivate: [AuthService]},
-  
+
   { path: 'ft-commitment/mint' , component: FtCommitmentMintComponent, canActivate: [AuthService] },
   { path: 'ft-commitment/transfer', component: FtCommitmentTrasnferComponent, canActivate: [AuthService] },
   { path: 'ft-commitment/batch-transfer', component: FtCommitmentBatchTrasnferComponent, canActivate: [AuthService] },

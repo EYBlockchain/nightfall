@@ -31,10 +31,10 @@
                 class="col-md-3 no-padding-left"
                 *ngFor="let transaction of transactions; let i = index"
               >
-                <div *ngIf="transaction.token_commitment" class="token-card">
-                  <p class="list-token header">{{ transaction.token_uri }}</p>
+                <div *ngIf="transaction.commitment" class="token-card">
+                  <p class="list-token header">{{ transaction.tokenUri }}</p>
                   <p class="list-token">
-                    Commitment : {{ transaction.token_commitment.slice(0, 8) }}...
+                    Commitment : {{ transaction.commitment.slice(0, 8) }}...
                   </p>
                 </div>
               </div>
