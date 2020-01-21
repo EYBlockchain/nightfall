@@ -85,6 +85,7 @@ export async function mintNFToken(req, res, next) {
       isMinted: true,
     });
 
+    res.data.tokenId = tokenId;
     next();
   } catch (err) {
     next(err);

@@ -158,7 +158,6 @@ export async function mintToken(req, res, next) {
       tokenUri: 'unique token name',
       salt: '0xe9a313c89c449af6e630c25ab3acc0fc3bab821638e0d55599b518',
       commitment: '0xca2c0c099289896be4d72c74f801bed6e4b2cd5297bfcf29325484',
-      receiver: 'bob',
       commitmentIndex: 0,
      }
    ],

@@ -1,10 +1,8 @@
 import config from 'config';
 import utils from '../zkp-utils';
 
-const { rndHex, leftPadHex } = utils;
+const { leftPadHex } = utils;
 const LEAF_HASHLENGTH = config.get('LEAF_HASHLENGTH');
-
-const generateTokenID = async () => rndHex(32);
 
 // test data.
 export default {
@@ -25,8 +23,7 @@ export default {
     },
   },
   erc721: {
-    tokenURI: 'one',
-    tokenId: generateTokenID(),
+    tokenUri: 'one',
   },
   erc20: {
     mint: 5,
@@ -40,12 +37,11 @@ export default {
   // dependent data
   async erc721Commitment() {
     const { alice, bob, erc721 } = this;
-
-    erc721.tokenId = await erc721.tokenId;
-
     return {
-      tokenURI: erc721.tokenURI,
-      tokenId: erc721.tokenId,
+      tokenUri: erc721.tokenUri,
+      get tokenId() {
+        return erc721.tokenId;
+      },
       mintCommitmentIndex: 0,
       transferCommitmentIndex: 1,
 
