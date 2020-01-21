@@ -26,7 +26,7 @@ const router = express.Router();
  */
 async function createWhisperKeyForAccount(req, res, next) {
   try {
-    const { address } = req.body;
+    const {address} = req.body;
     const id = {
       address,
     };
@@ -55,12 +55,12 @@ async function createWhisperKeyForAccount(req, res, next) {
  */
 async function getWhisperKeyFromShhId(req, res, next) {
   try {
-    const { shhIdentity } = req.query;
+    const {shhIdentity} = req.query;
     const id = {
       shhIdentity,
     };
     const whisperPublicKey = await getWhisperPublicKey(id);
-    res.data = { whisperPublicKey };
+    res.data = {whisperPublicKey};
     next();
   } catch (err) {
     next(err);
@@ -87,15 +87,15 @@ async function getWhisperKeyFromShhId(req, res, next) {
 
 async function subscribeTopic(req, res, next) {
   try {
-    const { shhIdentity, topic, jwtToken, sk_A: skA } = req.body;
-    const usrData = { jwtToken, skA };
+    const {shhIdentity, topic, jwtToken, sk_A: skA} = req.body;
+    const usrData = {jwtToken, skA};
     const idReceiver = {
       shhIdentity,
       topic,
     };
 
     await subscribeObject(idReceiver, topic, usrData, listeners);
-    res.data = { subscribed: true };
+    res.data = {subscribed: true};
     next();
   } catch (err) {
     next(err);
@@ -121,13 +121,13 @@ async function subscribeTopic(req, res, next) {
  */
 async function sendMessage(req, res, next) {
   try {
-    const { message, shhPkReceiver, shhIdentity } = req.body;
+    const {message, shhPkReceiver, shhIdentity} = req.body;
     const idSender = {
       shhIdentity,
     };
 
     await sendObject(message, idSender, shhPkReceiver);
-    res.data = { postMessage: true };
+    res.data = {postMessage: true};
     next();
   } catch (err) {
     next(err);

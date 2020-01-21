@@ -1,4 +1,4 @@
-import { NftService } from '../business';
+import {NftService} from '../business';
 
 /**
  * This function will add new ERC 721 token in db.
@@ -22,7 +22,7 @@ async function insertNFToken(req, res, next) {
   try {
     const nftService = new NftService(req.user.db);
     await nftService.addNFToken(req.body);
-    res.data = { message: 'inserted' };
+    res.data = {message: 'inserted'};
     next();
   } catch (err) {
     next(err);
@@ -49,11 +49,11 @@ async function insertNFToken(req, res, next) {
  * @param {*} res
  */
 async function updateNFTokenByTokenId(req, res, next) {
-  const { tokenId } = req.params;
+  const {tokenId} = req.params;
   try {
     const nftService = new NftService(req.user.db);
     await nftService.updateNFTokenByTokenId(tokenId, req.body);
-    res.data = { message: 'updated' };
+    res.data = {message: 'updated'};
     next();
   } catch (err) {
     next(err);

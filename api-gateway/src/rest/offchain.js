@@ -23,7 +23,7 @@ export default {
       url: `${url}/nameExists`,
       method: 'GET',
       json: true,
-      qs: { name },
+      qs: {name},
     };
     return requestWrapper(options);
   },
@@ -34,8 +34,8 @@ export default {
       url: `${url}/setNameToAccount`,
       method: 'POST',
       json: true,
-      headers: { address },
-      body: { name },
+      headers: {address},
+      body: {name},
     };
     return requestWrapper(options);
   },
@@ -46,7 +46,7 @@ export default {
       url: `${url}/setPublickeyToAddressInPKD`,
       method: 'POST',
       json: true,
-      headers: { address },
+      headers: {address},
       body,
     };
     return requestWrapper(options);
@@ -58,7 +58,7 @@ export default {
       url: `${url}/getAllRegisteredAddresses`,
       method: 'GET',
       json: true,
-      qs: { name },
+      qs: {name},
     };
     return requestWrapper(options);
   },
@@ -79,7 +79,7 @@ export default {
       url: `${url}/getWhisperKeyForAccount`,
       method: 'GET',
       json: true,
-      qs: { name },
+      qs: {name},
     };
     return requestWrapper(options);
   },
@@ -90,19 +90,19 @@ export default {
       url: `${url}/getZkpPublicKeyForAccount`,
       method: 'GET',
       json: true,
-      qs: { name },
+      qs: {name},
     };
     return requestWrapper(options);
   },
 
   // associate whisper key to geth account
-  setWhisperPK({ address }, whisperPk) {
+  setWhisperPK({address}, whisperPk) {
     const options = {
       url: `${url}/setWhisperKeyToAccount`,
       method: 'POST',
       json: true,
-      headers: { address },
-      body: { whisper_pk: whisperPk },
+      headers: {address},
+      body: {whisper_pk: whisperPk},
     };
     return requestWrapper(options);
   },

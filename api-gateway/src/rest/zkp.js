@@ -33,60 +33,60 @@ export default {
   },
 
   // mint non-fungible token commitment
-  mintToken({ address }, body) {
+  mintToken({address}, body) {
     const options = {
       url: `${url}/mintNFTCommitment`,
       method: 'POST',
       json: true,
-      headers: { address },
+      headers: {address},
       body,
     };
     return requestWrapper(options);
   },
 
   // transfer non-fungible token commitment
-  spendToken({ address }, body) {
+  spendToken({address}, body) {
     const options = {
       url: `${url}/transferNFTCommitment`,
       method: 'POST',
       json: true,
-      headers: { address },
+      headers: {address},
       body,
     };
     return requestWrapper(options);
   },
 
   // burn non-fungible token commitment
-  burnToken({ address }, body) {
+  burnToken({address}, body) {
     const options = {
       url: `${url}/burnNFTCommitment`,
       method: 'POST',
       json: true,
-      headers: { address },
+      headers: {address},
       body,
     };
     return requestWrapper(options);
   },
 
   // mint fungible token commitment
-  mintFTCommitment({ address }, body) {
+  mintFTCommitment({address}, body) {
     const options = {
       url: `${url}/mintFTCommitment`,
       method: 'POST',
       json: true,
-      headers: { address },
+      headers: {address},
       body,
     };
     return requestWrapper(options);
   },
 
   // transfer fungible token commitment
-  transferFTCommitment({ address }, body) {
+  transferFTCommitment({address}, body) {
     const options = {
       url: `${url}/transferFTCommitment`,
       method: 'POST',
       json: true,
-      headers: { address },
+      headers: {address},
       body,
     };
     return requestWrapper(options);
@@ -98,124 +98,124 @@ export default {
       url: `${url}/burnFTCommitment`,
       method: 'POST',
       json: true,
-      headers: { address },
+      headers: {address},
       body,
     };
     return requestWrapper(options);
   },
 
   // mint non-fungible token
-  mintNFToken({ address }, body) {
+  mintNFToken({address}, body) {
     const options = {
       url: `${url}/mintNFToken`,
       method: 'POST',
       json: true,
-      headers: { address },
+      headers: {address},
       body,
     };
     return requestWrapper(options);
   },
 
   // transfer non-fungible token
-  transferNFToken({ address }, body) {
+  transferNFToken({address}, body) {
     const options = {
       url: `${url}/transferNFToken`,
       method: 'POST',
       json: true,
-      headers: { address },
+      headers: {address},
       body,
     };
     return requestWrapper(options);
   },
 
   // burn non-fungible token
-  burnNFToken({ address }, body) {
+  burnNFToken({address}, body) {
     const options = {
       url: `${url}/burnNFToken`,
       method: 'POST',
       json: true,
-      headers: { address },
+      headers: {address},
       body,
     };
     return requestWrapper(options);
   },
 
   // get non-fungible token address
-  getNFTokenAddress({ address }) {
+  getNFTokenAddress({address}) {
     const options = {
       url: `${url}/getNFTokenContractAddress`,
       method: 'GET',
       json: true,
-      headers: { address },
+      headers: {address},
     };
     return requestWrapper(options);
   },
 
   // get non-fungible token information
-  getNFTokenInfo({ address }) {
+  getNFTokenInfo({address}) {
     const options = {
       url: `${url}/getNFTokenInfo`,
       method: 'GET',
       json: true,
-      headers: { address },
+      headers: {address},
     };
     return requestWrapper(options);
   },
 
   // mint fungible token
-  mintFToken({ address }, body) {
+  mintFToken({address}, body) {
     const options = {
       url: `${url}/mintFToken`,
       method: 'POST',
       json: true,
-      headers: { address },
+      headers: {address},
       body,
     };
     return requestWrapper(options);
   },
 
   // transfer fungible token
-  transferFToken({ address }, body) {
+  transferFToken({address}, body) {
     const options = {
       url: `${url}/transferFToken`,
       method: 'POST',
       json: true,
-      headers: { address },
+      headers: {address},
       body,
     };
     return requestWrapper(options);
   },
 
   // burn fungible token
-  burnFToken({ address }, body) {
+  burnFToken({address}, body) {
     const options = {
       url: `${url}/burnFToken`,
       method: 'POST',
       json: true,
-      headers: { address },
+      headers: {address},
       body,
     };
     return requestWrapper(options);
   },
 
   // get fungible token address
-  getFTokenAddress({ address }) {
+  getFTokenAddress({address}) {
     const options = {
       url: `${url}/getFTokenContractAddress`,
       method: 'GET',
       json: true,
-      headers: { address },
+      headers: {address},
     };
     return requestWrapper(options);
   },
 
   // get fungible token information
-  getFTokenInfo({ address }) {
+  getFTokenInfo({address}) {
     const options = {
       url: `${url}/getFTokenInfo`,
       method: 'GET',
       json: true,
-      headers: { address },
+      headers: {address},
     };
     return requestWrapper(options);
   },
@@ -245,79 +245,79 @@ export default {
   },
 
   // set new non-fungible commitment token shield for user address
-  setTokenShield({ address }, body) {
+  setTokenShield({address}, body) {
     const options = {
       url: `${url}/setNFTCommitmentShieldContractAddress`,
       method: 'POST',
       json: true,
-      headers: { address },
+      headers: {address},
       body,
     };
     return requestWrapper(options);
   },
 
   // get non-fungible commitment token shield address for user address
-  getNFTCommitmentShield({ address }) {
+  getNFTCommitmentShield({address}) {
     const options = {
       url: `${url}/getNFTCommitmentShieldContractAddress`,
       method: 'GET',
       json: true,
-      headers: { address },
+      headers: {address},
     };
     return requestWrapper(options);
   },
 
   // remove non-fungible commitment token shield address for user address
-  unSetTokenShield({ address }) {
+  unSetTokenShield({address}) {
     const options = {
       url: `${url}/removeNFTCommitmentshield`,
       method: 'DELETE',
       json: true,
-      headers: { address },
+      headers: {address},
     };
     return requestWrapper(options);
   },
   // set new fungible commitment token shield for user address
-  setFTCommitmentShield({ address }, body) {
+  setFTCommitmentShield({address}, body) {
     const options = {
       url: `${url}/setFTokenShieldContractAddress`,
       method: 'POST',
       json: true,
-      headers: { address },
+      headers: {address},
       body,
     };
     return requestWrapper(options);
   },
 
   // get fungible commitment token shield contract address for user address
-  getFTCommitmentShield({ address }) {
+  getFTCommitmentShield({address}) {
     const options = {
       url: `${url}/getFTokenShieldContractAddress`,
       method: 'GET',
       json: true,
-      headers: { address },
+      headers: {address},
     };
     return requestWrapper(options);
   },
 
   // remove fungible commitment token shield address for user address
-  unSetFTCommitmentShield({ address }) {
+  unSetFTCommitmentShield({address}) {
     const options = {
       url: `${url}/removeFTCommitmentshield`,
       method: 'DELETE',
       json: true,
-      headers: { address },
+      headers: {address},
     };
     return requestWrapper(options);
   },
 
   // bulk transfer fungible token commitment
-  simpleFTCommitmentBatchTransfer({ address }, body) {
+  simpleFTCommitmentBatchTransfer({address}, body) {
     const options = {
       url: `${url}/simpleFTCommitmentBatchTransfer`,
       method: 'POST',
       json: true,
-      headers: { address },
+      headers: {address},
       body,
     };
     return requestWrapper(options);

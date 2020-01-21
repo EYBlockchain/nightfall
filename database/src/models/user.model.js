@@ -1,17 +1,17 @@
-import { Schema } from 'mongoose';
+import {Schema} from 'mongoose';
 
 export default new Schema({
-  name: { type: String, required: true },
-  email: { type: String, required: true },
-  address: { type: String, requird: true },
-  publicKey: { type: String, requird: true },
-  secretKey: { type: String, requird: true },
-  shhIdentity: { type: String },
-  selectedFTokenShield: { type: String },
-  selectedNFTokenShield: { type: String },
+  name: {type: String, required: true},
+  email: {type: String, required: true},
+  address: {type: String, requird: true},
+  publicKey: {type: String, requird: true},
+  secretKey: {type: String, requird: true},
+  shhIdentity: {type: String},
+  selectedFTokenShield: {type: String},
+  selectedNFTokenShield: {type: String},
   fTokenShields: [
     {
-      contractName: { type: String },
+      contractName: {type: String},
       contractAddress: {
         type: String,
         trim: true,
@@ -22,7 +22,7 @@ export default new Schema({
   ],
   nfTokenShields: [
     {
-      contractName: { type: String },
+      contractName: {type: String},
       contractAddress: {
         type: String,
         trim: true,
@@ -33,8 +33,8 @@ export default new Schema({
   ],
   accounts: [
     {
-      address: { type: String },
-      password: { type: String },
+      address: {type: String},
+      password: {type: String},
     },
   ],
 });

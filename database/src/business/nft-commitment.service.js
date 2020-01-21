@@ -1,5 +1,5 @@
-import { COLLECTIONS } from '../common/constants';
-import { nftCommitmentMapper } from '../mappers';
+import {COLLECTIONS} from '../common/constants';
+import {nftCommitmentMapper} from '../mappers';
 import NftCommitmentTransactionService from './nft-commitment-transaction.service';
 
 export default class NftCommitmentService {
@@ -14,7 +14,7 @@ export default class NftCommitmentService {
    * @param {object} data
    */
   insertNFTCommitmentTransaction(data) {
-    const { isTransferred, isReceived, isBurned } = data;
+    const {isTransferred, isReceived, isBurned} = data;
 
     if (isReceived)
       return this.nftCommitmentTransactionService.insertTransaction({
@@ -62,9 +62,9 @@ export default class NftCommitmentService {
       COLLECTIONS.NFT_COMMITMENT,
       {
         tokenId,
-        isTransferred: { $exists: false },
+        isTransferred: {$exists: false},
       },
-      { $set: mappedData },
+      {$set: mappedData},
     );
   }
 
@@ -77,19 +77,19 @@ export default class NftCommitmentService {
   getNFTCommitments(pageination) {
     if (!pageination || !pageination.pageNo || !pageination.limit) {
       return this.db.getData(COLLECTIONS.NFT_COMMITMENT, {
-        isTransferred: { $exists: false },
-        isBurned: { $exists: false },
+        isTransferred: {$exists: false},
+        isBurned: {$exists: false},
       });
     }
-    const { pageNo, limit } = pageination;
+    const {pageNo, limit} = pageination;
     return this.db.getDbData(
       COLLECTIONS.NFT_COMMITMENT,
       {
-        isTransferred: { $exists: false },
-        isBurned: { $exists: false },
+        isTransferred: {$exists: false},
+        isBurned: {$exists: false},
       },
       undefined,
-      { createdAt: -1 },
+      {createdAt: -1},
       parseInt(pageNo, 10),
       parseInt(limit, 10),
     );

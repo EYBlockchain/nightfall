@@ -1,10 +1,8 @@
 import config from 'config';
 import utils from '../zkp-utils';
 
-const { rndHex, leftPadHex } = utils;
+const {leftPadHex} = utils;
 const LEAF_HASHLENGTH = config.get('LEAF_HASHLENGTH');
-
-const generateTokenID = async () => rndHex(32);
 
 // test data.
 export default {
@@ -25,8 +23,7 @@ export default {
     },
   },
   erc721: {
-    tokenURI: 'one',
-    tokenId: generateTokenID(),
+    tokenUri: 'one',
   },
   erc20: {
     mint: 5,
@@ -39,13 +36,12 @@ export default {
 
   // dependent data
   async erc721Commitment() {
-    const { alice, bob, erc721 } = this;
-
-    erc721.tokenId = await erc721.tokenId;
-
+    const {alice, bob, erc721} = this;
     return {
-      tokenURI: erc721.tokenURI,
-      tokenId: erc721.tokenId,
+      tokenUri: erc721.tokenUri,
+      get tokenId() {
+        return erc721.tokenId;
+      },
       mintCommitmentIndex: 0,
       transferCommitmentIndex: 1,
 
@@ -71,7 +67,7 @@ export default {
 
   // dependent data
   async erc20Commitments() {
-    const { alice, bob, erc20 } = this;
+    const {alice, bob, erc20} = this;
 
     return {
       mint: [
@@ -124,7 +120,7 @@ export default {
   },
 
   async erc20CommitmentBatchTransfer() {
-    const { alice, bob } = this;
+    const {alice, bob} = this;
     return {
       mint: 40,
       get value() {
@@ -141,7 +137,7 @@ export default {
       transferData: [
         {
           value: '0x00000000000000000000000000000002',
-          receiver: { name: bob.name },
+          receiver: {name: bob.name},
           commitmentIndex: 5,
           get commitment() {
             return utils.concatenateThenHash(
@@ -153,7 +149,7 @@ export default {
         },
         {
           value: '0x00000000000000000000000000000002',
-          receiver: { name: alice.name },
+          receiver: {name: alice.name},
           commitmentIndex: 6,
           get commitment() {
             return utils.concatenateThenHash(

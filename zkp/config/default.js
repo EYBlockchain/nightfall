@@ -1,4 +1,4 @@
-import { deferConfig as defer } from 'config/defer';
+import {deferConfig as defer} from 'config/defer';
 import zkpAppConfig from '../src/config';
 
 module.exports = {

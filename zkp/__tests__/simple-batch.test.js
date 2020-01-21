@@ -3,7 +3,7 @@
 import utils from '../src/zkpUtils';
 import bc from '../src/web3';
 import controller from '../src/f-token-controller';
-import { getVkId, getTruffleContractInstance } from '../src/contractUtils';
+import {getVkId, getTruffleContractInstance} from '../src/contractUtils';
 
 jest.setTimeout(7200000);
 
@@ -63,7 +63,7 @@ let Z_A_C;
 // storage for z indexes
 let zInd1;
 let zInd2;
-let commitments = [];
+let outputCommitments = [];
 let accounts;
 let fTokenShieldJson;
 let fTokenShieldAddress;
@@ -71,7 +71,7 @@ let fTokenShieldAddress;
 beforeAll(async () => {
   if (!(await bc.isConnected())) await bc.connect();
   accounts = await (await bc.connection()).eth.getAccounts();
-  const { contractJson, contractInstance } = await getTruffleContractInstance('FTokenShield');
+  const {contractJson, contractInstance} = await getTruffleContractInstance('FTokenShield');
   fTokenShieldAddress = contractInstance.address;
   fTokenShieldJson = contractJson;
   for (let i = 0; i < PROOF_LENGTH; i++) {
@@ -100,7 +100,7 @@ describe('f-token-controller.js tests', () => {
   });
 
   test('Should mint an ERC-20 commitment Z_A_C for Alice of value C', async () => {
-    const { commitment: zTest, commitmentIndex: zIndex } = await controller.mint(
+    const {commitment: zTest, commitmentIndex: zIndex} = await controller.mint(
       C,
       pkA,
       S_A_C,
@@ -123,10 +123,9 @@ describe('f-token-controller.js tests', () => {
   test('Should transfer ERC-20 commitments of various values to 19 receipients and get change', async () => {
     // the E's becomes Bobs'.
     const bal1 = await controller.getBalance(accounts[0]);
-    const inputCommitment = { value: C, salt: S_A_C, commitment: Z_A_C, commitmentIndex: zInd1 };
-    const outputCommitments = [];
+    const inputCommitment = {value: C, salt: S_A_C, commitment: Z_A_C, commitmentIndex: zInd1};
     for (let i = 0; i < E.length; i++) {
-      outputCommitments[i] = { value: E[i], salt: S_B_E[i] };
+      outputCommitments[i] = {value: E[i], salt: S_B_E[i]};
     }
 
     const response = await controller.simpleFungibleBatchTransfer(
@@ -147,8 +146,7 @@ describe('f-token-controller.js tests', () => {
       },
     );
 
-    zInd2 = parseInt(response.transferredCommitmentIndex, 10);
-    commitments = response.transferredCommitment;
+    zInd2 = parseInt(response.maxOutputCommitmentIndex, 10);
     const bal2 = await controller.getBalance(accounts[0]);
     const wei = parseInt(bal1, 10) - parseInt(bal2, 10);
     console.log('gas consumed was', wei / 20e9);
@@ -163,12 +161,22 @@ describe('f-token-controller.js tests', () => {
     const f = '0x00000000000000000000000000000003';
     const pkE = await utils.rndHex(32); // public key of Eve, who we transfer to
     const inputCommitments = [
-      { value: c, salt: S_B_E[18], commitment: commitments[18], commitmentIndex: zInd2 - 1 },
-      { value: d, salt: S_B_E[19], commitment: commitments[19], commitmentIndex: zInd2 },
+      {
+        value: c,
+        salt: S_B_E[18],
+        commitment: outputCommitments[18].commitment,
+        commitmentIndex: zInd2 - 1,
+      },
+      {
+        value: d,
+        salt: S_B_E[19],
+        commitment: outputCommitments[19].commitment,
+        commitmentIndex: zInd2,
+      },
     ];
-    const outputCommitments = [
-      { value: e, salt: await utils.rndHex(32) },
-      { value: f, salt: await utils.rndHex(32) },
+    outputCommitments = [
+      {value: e, salt: await utils.rndHex(32)},
+      {value: f, salt: await utils.rndHex(32)},
     ];
 
     await controller.transfer(

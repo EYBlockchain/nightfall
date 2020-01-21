@@ -1,4 +1,4 @@
-import { deferConfig as defer } from 'config/defer';
+import {deferConfig as defer} from 'config/defer';
 
 module.exports = {
   web3Host: process.env.BLOCKCHAIN_HOST,

@@ -32,7 +32,7 @@ export async function generateWhisperKeys(id) {
 
   wpk[shhIdentity] = await utils.rndHex(65); // save a corresponding random 'public key'\
   const returnPubKey = wpk[shhIdentity];
-  return { shhIdentity, returnPubKey };
+  return {shhIdentity, returnPubKey};
 }
 
 /**

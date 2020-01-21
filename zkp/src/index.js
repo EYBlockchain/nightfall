@@ -6,10 +6,10 @@
 
 import express from 'express';
 import bodyParser from 'body-parser';
-import { merkleTree } from '@eyblockchain/nightlite';
-import { ftCommitmentRoutes, ftRoutes, nftCommitmentRoutes, nftRoutes } from './routes';
+import {merkleTree} from '@eyblockchain/nightlite';
+import {ftCommitmentRoutes, ftRoutes, nftCommitmentRoutes, nftRoutes} from './routes';
 import vkController from './vk-controller'; // this import TRIGGERS the runController() script within.
-import { formatResponse, formatError, errorHandler } from './middlewares';
+import {formatResponse, formatError, errorHandler} from './middlewares';
 
 const app = express();
 
@@ -43,7 +43,7 @@ app.use('/', nftRoutes);
 app.route('/vk').post(async function runVkController(req, res, next) {
   try {
     await vkController.runController();
-    res.data = { message: 'vk loaded' };
+    res.data = {message: 'vk loaded'};
     next();
   } catch (err) {
     next(err);
@@ -55,11 +55,11 @@ app.use(formatResponse);
 app.use(function logError(err, req, res, next) {
   console.error(
     `${req.method}:${req.url}
-    ${JSON.stringify({ error: err.message })}
-    ${JSON.stringify({ errorStack: err.stack.split('\n') }, null, 1)}
-    ${JSON.stringify({ body: req.body })}
-    ${JSON.stringify({ params: req.params })}
-    ${JSON.stringify({ query: req.query })}
+    ${JSON.stringify({error: err.message})}
+    ${JSON.stringify({errorStack: err.stack.split('\n')}, null, 1)}
+    ${JSON.stringify({body: req.body})}
+    ${JSON.stringify({params: req.params})}
+    ${JSON.stringify({query: req.query})}
   `,
   );
   console.error(JSON.stringify(err, null, 2));

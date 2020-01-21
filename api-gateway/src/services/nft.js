@@ -1,5 +1,5 @@
-import { sendWhisperMessage } from './whisper';
-import { db, offchain, zkp } from '../rest';
+import {sendWhisperMessage} from './whisper';
+import {db, offchain, zkp} from '../rest';
 
 // ERC-721 token
 /**
@@ -73,10 +73,10 @@ export async function mintNFToken(req, res, next) {
     .toString(16)
     .padEnd(64, '0')}`; // create a random number, left-padded to 64 octets
 
-  const { tokenUri } = req.body;
+  const {tokenUri} = req.body;
   try {
-    res.data = await zkp.mintNFToken(req.user, { tokenUri, tokenId });
-    const { selectedNFTokenShield } = await db.fetchUser(req.user);
+    res.data = await zkp.mintNFToken(req.user, {tokenUri, tokenId});
+    const {selectedNFTokenShield} = await db.fetchUser(req.user);
 
     await db.insertNFToken(req.user, {
       tokenUri,
@@ -85,6 +85,7 @@ export async function mintNFToken(req, res, next) {
       isMinted: true,
     });
 
+    res.data.tokenId = tokenId;
     next();
   } catch (err) {
     next(err);
@@ -111,7 +112,7 @@ export async function mintNFToken(req, res, next) {
  * @param {*} res
  */
 export async function transferNFToken(req, res, next) {
-  const { tokenUri, tokenId, receiver, shieldContractAddress } = req.body;
+  const {tokenUri, tokenId, receiver, shieldContractAddress} = req.body;
   try {
     receiver.address = await offchain.getAddressFromName(receiver.name);
     res.data = await zkp.transferNFToken(req.user, req.body);
@@ -157,9 +158,9 @@ export async function transferNFToken(req, res, next) {
  * @param {*} res
  */
 export async function burnNFToken(req, res, next) {
-  const { tokenUri, tokenId, receiver, shieldContractAddress } = req.body;
+  const {tokenUri, tokenId, receiver, shieldContractAddress} = req.body;
   try {
-    res.data = await zkp.burnNFToken(req.user, { tokenId });
+    res.data = await zkp.burnNFToken(req.user, {tokenId});
 
     await db.updateNFTokenByTokenId(req.user, tokenId, {
       tokenUri,
