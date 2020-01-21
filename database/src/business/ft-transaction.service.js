@@ -9,7 +9,7 @@ export default class FtTransactionService {
    * This function add record in ft_transaction tables.
    * @param {Object} data
    * data = {
-   *  transaction_type
+   *  transactionType
    *  value,
    *  sender,
    *  receiver,

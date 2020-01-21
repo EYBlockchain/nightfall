@@ -9,8 +9,8 @@ export default class FtCommitmentTransactionService {
    * This function add record in ft_commitment_transaction tables.
    * @param {Object} data
    * data = {
-   *  transaction_type,
-   *  outgoing_commitments: [{
+   *  transactionType,
+   *  outputCommitments: [{
    *    value,
    *    salt,
    *    commitment,

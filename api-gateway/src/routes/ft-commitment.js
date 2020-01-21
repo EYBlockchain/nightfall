@@ -247,8 +247,8 @@ router.post('/insertFTCommitmentToDb', insertFTCommitmentToDb);
  *          "commitment":"0x33894fa46908748639356cad7e69a2962316f07a9fb711fc2a2997",
  *          "commitmentIndex":0,
  *          "isMinted":true,
- *          "created_at":"2019-10-03T05:14:55.570Z",
- *          "updated_at":"2019-10-03T05:14:55.570Z",
+ *          "createdAt":"2019-10-03T05:14:55.570Z",
+ *          "updatedAt":"2019-10-03T05:14:55.570Z",
  *        }
  *      ],
  *      "totalCount":1

@@ -215,9 +215,9 @@ router.post('/insertFTTransactionToDb', insertFTTransactionToDb);
  *        {
  *          "_id":"5d95825ff359c40039add23f",
  *          "value":"1000",
- *          "transaction_type":"minted",
- *          "created_at":"2019-10-03T05:08:47.675Z",
- *          "updated_at":"2019-10-03T05:08:47.675Z",
+ *          "transactionType":"minted",
+ *          "createdAt":"2019-10-03T05:08:47.675Z",
+ *          "updatedAt":"2019-10-03T05:08:47.675Z",
  *        }
  *      ],
  *      "totalCount":1

@@ -89,9 +89,9 @@ async function insertPrivateAccountHandler(req, res, next) {
  * this function is used to add ERC-20 Contract related information in user table, such as contract addresses,
  * account address to which user hold ERC-20 token and password of that account address used to unlock account.
  * req.body = {
+ *  contractName,
  *  contractAddress,
- *  accountAddress,
- *  accountPassword
+ *  isSelected,
  * }
  * @param {*} req
  * @param {*} res
@@ -111,9 +111,10 @@ async function addFTShieldContractInfo(req, res, next) {
  * this function is used to update ERC-20 Contract related information in user table, such as contract addresses,
  * account address to which user hold ERC-20 token and password of that account address used to unlock account.
  * req.body = {
- *  contractAddress,
- *  accountAddress,
- *  accountPassword
+ *  contractName - name of coinShield contract
+ *  contractAddress - address of coinShield contract
+ *  isSelected - set/unset conteract as selected contract
+ *  isFTShieldPreviousSelected - current state of contract; is selected one or not
  * }
  * @param {*} req
  * @param {*} res
@@ -155,9 +156,9 @@ async function deleteFTShieldContractInfoByContractAddress(req, res, next) {
  * this function is used to add ERC-721 contract related information in user table, such as contract addresses,
  * account address to which user hold ERC-721 token and password of that account address used to unlock account.
  * req.body = {
+ *  contractName,
  *  contractAddress,
- *  accountAddress,
- *  accountPassword
+ *  isSelected,
  * }
  * @param {*} req
  * @param {*} res
@@ -177,9 +178,10 @@ async function addNFTShieldContractInfo(req, res, next) {
  * this function is used to update ERC-721 Contract related information in user table, such as contract addresses,
  * account address to which user hold ERC-721 token and password of that account address used to unlock account.
  * req.body = {
- *  contractAddress,
- *  accountAddress,
- *  accountPassword
+ *  contractName - name of coinShield contract
+ *  contractAddress - address of coinShield contract
+ *  isSelected - set/unset conteract as selected contract
+ *  isNFTShieldPreviousSelected - current state of contract; is selected one or not
  * }
  * @param {*} req
  * @param {*} res

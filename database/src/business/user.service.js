@@ -237,7 +237,7 @@ export default class UserService {
    * contractName - name of tokenShield contract
    * contractAddress - address of tokenShield contract
    * isSelected - set/unset conteract as selected contract
-   * isTokenShieldPreviousSelected - current state of contract; is selected one or not
+   * isNFTShieldPreviousSelected - current state of contract; is selected one or not
    * @returns {Promise}
    */
   async updateNFTShieldContractInfoByContractAddress(

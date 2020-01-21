@@ -19,14 +19,14 @@ router.route('/checkCorrectnessForNFTCommitment').post(checkCorrectnessForNFTCom
  * @apiName  Mint a ERC-721 commitment
  * @apiGroup ERC-721 commitment
  *
- * @apiParam (Request body) {String} tokenURI URI of token.
+ * @apiParam (Request body) {String} tokenUri URI of token.
  * @apiParam (Request body) {String} tokenId unique ERC-721 token Id.
  * @apiParam (Request body) {String} salt Random generated Salt.
  *
  * @apiExample {js} Example usage:
  * const data = {
  *    outputCommitments: [{
- *      tokenURI: 'unique token name',
+ *      tokenUri: 'unique token name',
  *      tokenId: '0x1448d8ab4e0d610000000000000000000000000000000000000000000000000'
  *    }]
  * }
@@ -100,7 +100,7 @@ router.route('/transferNFTCommitment').post(transferToken);
  * @apiGroup ERC-721 commitment
  *
  * @apiParam (Request body) {String} tokenId Hex String of a non fungible token to burn.
- * @apiParam (Request body) {String} tokenURI URI of the non fungible token.
+ * @apiParam (Request body) {String} tokenUri URI of the non fungible token.
  * @apiParam (Request body) {String} salt Salt of the non fungible token.
  * @apiParam (Request body) {String} senderSecretKey Secret key of Transferror (Alice).
  * @apiParam (Request body) {String} commitment Token commitment of the non fungible token.
@@ -112,7 +112,7 @@ router.route('/transferNFTCommitment').post(transferToken);
  *    inputCommitments: [
  *    {
  *      tokenId: '0x1448d8ab4e0d610000000000000000000000000000000000000000000000000',
- *      tokenURI: 'unique token name',
+ *      tokenUri: 'unique token name',
  *      salt: '0xe9a313c89c449af6e630c25ab3acc0fc3bab821638e0d55599b518',
  *      senderSecretKey: '0xcf6267b9393a8187ab72bf095e9ffc34af1a5d3d069b9d26e21eac',
  *      commitment: '0xca2c0c099289896be4d72c74f801bed6e4b2cd5297bfcf29325484',
