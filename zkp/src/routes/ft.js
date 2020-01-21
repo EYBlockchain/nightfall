@@ -3,6 +3,14 @@ import fTokenController from '../f-token-controller';
 
 const router = Router();
 
+/**
+ * This function is to mint a fungible token
+ * req.body = {
+ *  value: 20,
+ * }
+ * @param {*} req
+ * @param {*} res
+ */
 async function mint(req, res, next) {
   const {value} = req.body;
   const {address} = req.headers;
@@ -16,6 +24,18 @@ async function mint(req, res, next) {
   }
 }
 
+/**
+ * This function is to transfer a fungible token to a receiver
+ * req.body = {
+ *  value: 20,
+ *  receiver: {
+ *    name: 'bob'
+ *    address: '0x3915e408fd5cff354fd73549d31a4bc66f7335db59bc4e84001473'
+ *  }
+ * }
+ * @param {*} req
+ * @param {*} res
+ */
 async function transfer(req, res, next) {
   const {value, receiver} = req.body;
   const {address} = req.headers;
@@ -29,6 +49,14 @@ async function transfer(req, res, next) {
   }
 }
 
+/**
+ * This function is to burn a fungible token
+ * req.body = {
+ *  value: 20,
+ * }
+ * @param {*} req
+ * @param {*} res
+ */
 async function burn(req, res, next) {
   const {value} = req.body;
   const {address} = req.headers;
@@ -42,6 +70,11 @@ async function burn(req, res, next) {
   }
 }
 
+/**
+ * This function is to retrieve address of a fungible token
+ * @param {*} req
+ * @param {*} res
+ */
 async function getAddress(req, res, next) {
   const {address} = req.headers;
 
@@ -56,6 +89,11 @@ async function getAddress(req, res, next) {
   }
 }
 
+/**
+ * This function is to retrieve information of a fungible token
+ * @param {*} req
+ * @param {*} res
+ */
 async function getInfo(req, res, next) {
   const {address} = req.headers;
 

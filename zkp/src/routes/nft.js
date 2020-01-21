@@ -2,7 +2,15 @@ import {Router} from 'express';
 import nfController from '../nf-token-controller';
 
 const router = Router();
-
+/**
+ * This function is to mint a non fungible token
+ * const data = {
+ *   tokenUri: 'unique token URI',
+ *   "tokenId":"0x1542f342b6220000000000000000000000000000000000000000000000000000"
+ * }
+ * @param {*} req
+ * @param {*} res
+ */
 async function mint(req, res, next) {
   const {address} = req.headers;
   const {tokenId, tokenUri} = req.body;
@@ -18,6 +26,19 @@ async function mint(req, res, next) {
   }
 }
 
+/**
+ * This function is to transfer a non fungible token to a reciever
+ * const data = {
+ *    tokenUri: "sample"
+ *    tokenId: "0x1542f342b6220000000000000000000000000000000000000000000000000000"
+ *    receiver: {
+ *      name: "bob",
+ *      address: "0x666fA6a40F7bc990De774857eCf35e3C82f07505"
+ *    }
+ * }
+ * @param {*} req
+ * @param {*} res
+ */
 async function transfer(req, res, next) {
   const {address} = req.headers;
   const {tokenId, receiver} = req.body;
@@ -33,6 +54,15 @@ async function transfer(req, res, next) {
   }
 }
 
+/**
+ * This function is to burn a non fungible token
+ * const data = {
+ *    tokenUri: "sample"
+ *    tokenId: "0x1542f342b6220000000000000000000000000000000000000000000000000000"
+ *  }
+ * @param {*} req
+ * @param {*} res
+ */
 async function burn(req, res, next) {
   const {address} = req.headers;
   const {tokenId} = req.body;
@@ -48,6 +78,11 @@ async function burn(req, res, next) {
   }
 }
 
+/**
+ * This function is to retrieve address of a non fungible token
+ * @param {*} req
+ * @param {*} res
+ */
 async function getAddress(req, res, next) {
   const {address} = req.headers;
 
@@ -62,6 +97,11 @@ async function getAddress(req, res, next) {
   }
 }
 
+/**
+ * This function is to retrieve information of a non fungible token
+ * @param {*} req
+ * @param {*} res
+ */
 async function getInfo(req, res, next) {
   const {address} = req.headers;
 

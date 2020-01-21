@@ -6,7 +6,19 @@ import nfController from '../nf-token-controller';
 import {getVkId, getTruffleContractInstance} from '../contractUtils';
 
 const router = Router();
-
+/**
+ * This function is to mint a non fungible token
+ * const data = {
+ *    tokenUri: 'unique token name',
+ *    tokenId: '0x1448d8ab4e0d610000000000000000000000000000000000000000000000000',
+ *    owner: {
+ *        name: 'alice',
+ *        publicKey: '0x4c45963a12f0dfa530285fde66ac235c8f8ddf8d178098cdb292ac', 
+ *    }
+ * }
+ * @param {*} req
+ * @param {*} res
+ */
 async function mint(req, res, next) {
   const {address} = req.headers;
   const {
@@ -49,6 +61,26 @@ async function mint(req, res, next) {
   }
 }
 
+/**
+ * This function is to transfer a non fungible token to a reciever
+ * const data = {
+      tokenId: '0x1448d8ab4e0d610000000000000000000000000000000000000000000000000',
+      tokenUri: 'unique token name',
+      salt: '0xe9a313c89c449af6e630c25ab3acc0fc3bab821638e0d55599b518',
+      commitment: '0xca2c0c099289896be4d72c74f801bed6e4b2cd5297bfcf29325484',
+      commitmentIndex: 0,
+      receiver: {
+        name: 'alice',
+        publicKey: '0x4c45963a12f0dfa530285fde66ac235c8f8ddf8d178098cdb292ac',
+      }
+      sender: {
+        name: 'bob',
+        secretKey: '0x2c45963a12f0dfa530285fde66ac235c8f8ddf8d178098cdb29233',
+     }
+ * }
+ * @param {*} req
+ * @param {*} res
+ */
 async function transfer(req, res, next) {
   const {
     tokenId,
@@ -99,6 +131,26 @@ async function transfer(req, res, next) {
   }
 }
 
+/**
+ * This function is to transfer a non fungible token to a reciever
+ * const data = {
+      tokenId: '0x1448d8ab4e0d610000000000000000000000000000000000000000000000000',
+      tokenUri: 'unique token name',
+      salt: '0xe9a313c89c449af6e630c25ab3acc0fc3bab821638e0d55599b518',
+      commitment: '0xca2c0c099289896be4d72c74f801bed6e4b2cd5297bfcf29325484',
+      commitmentIndex: 0,
+      receiver: {
+        name: 'alice',
+        address: '0x4c45963a12f0dfa530285fde66ac235c8f8ddf8d178098cdb292ac',
+      }
+      sender: {
+        name: 'bob',
+        secretKey: '0x2c45963a12f0dfa530285fde66ac235c8f8ddf8d178098cdb29233',
+     }
+ * }
+ * @param {*} req
+ * @param {*} res
+ */
 async function burn(req, res, next) {
   const {
     tokenId,

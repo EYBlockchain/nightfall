@@ -7,6 +7,18 @@ import {getVkId, getTruffleContractInstance} from '../contractUtils';
 
 const router = Router();
 
+/**
+ * This function is to mint a fungible token commitment
+ * req.body = {
+ *  value: 20,
+ *  owner: {
+ *    name: 'alice',
+ *    publicKey: '0x70dd53411043c9ff4711ba6b6c779cec028bd43e6f525a25af36b8'
+ *  }
+ * }
+ * @param {*} req
+ * @param {*} res
+ */
 async function mint(req, res, next) {
   const {address} = req.headers;
   const {value, owner} = req.body;
@@ -45,6 +57,29 @@ async function mint(req, res, next) {
   }
 }
 
+/**
+ * This function is to tramsfer a fungible token commitment to a receiver
+ * req.body = {
+ *  inputCommitments: [{
+ *      value: '0x00000000000000000000000000002710',
+ *      salt: '0x14de022c9b4a437b346f04646bd7809deb81c38288e9614478351d',
+ *      commitment: '0x39aaa6fe40c2106f49f72c67bc24d377e180baf3fe211c5c90e254',
+ *      commitmentIndex: 0,
+ *      owner,
+ *  }],
+ *  outputCommitments: [],
+ *  receiver: {
+ *    name: 'bob',
+ *    publicKey: '0x70dd53411043c9ff4711ba6b6c779cec028bd43e6f525a25af36b8'
+ *  }
+ *  sender: {
+ *    name: 'alice',
+ *    secretKey: '0x30dd53411043c9ff4711ba6b6c779cec028bd43e6f525a25af3603'
+ *  }
+ * }
+ * @param {*} req
+ * @param {*} res
+ */
 async function transfer(req, res, next) {
   const {address} = req.headers;
   const {inputCommitments, outputCommitments, receiver, sender} = req.body;
@@ -82,6 +117,25 @@ async function transfer(req, res, next) {
   }
 }
 
+/**
+ * This function is to burn a fungible token commitment
+ * req.body = {
+ *  value: 20,
+ *  salt: '0x14de022c9b4a437b346f04646bd7809deb81c38288e9614478351d',
+ *  commitment: '0x39aaa6fe40c2106f49f72c67bc24d377e180baf3fe211c5c90e254',
+ *  commitmentIndex: 0,
+ *  receiver: {
+ *    name: 'bob',
+ *    address: '0x70dd53411043c9ff4711ba6b6c779cec028bd43e6f525a25af36b8'
+ *  }
+ *  sender: {
+ *    name: 'alice',
+ *    secretKey: '0x30dd53411043c9ff4711ba6b6c779cec028bd43e6f525a25af3603'
+ *  }
+ * }
+ * @param {*} req
+ * @param {*} res
+ */
 async function burn(req, res, next) {
   const {value, salt, commitment, commitmentIndex, receiver, sender} = req.body;
   const {address} = req.headers;
@@ -187,6 +241,37 @@ async function unsetFTCommitmentShieldAddress(req, res, next) {
   }
 }
 
+/**
+ * This function will do batch fungible commitment transfer
+ * req.body {
+ *    inputCommitments: [{
+ *      value: "0x00000000000000000000000000000028",
+ *      salt: "0x75f9ceee5b886382c4fe81958da985cd812303b875210b9ca2d75378bb9bd801",
+ *      commitment: "0x00000000008ec724591fde260927e3fcf85f039de689f4198ee841fcb63b16ed",
+ *      commitmentIndex: 1,
+ *    }],
+ *    outputCommitments: [
+ *      {
+ *        "value": "0x00000000000000000000000000000002",
+ *        "receiver": {
+ *          name: "b",
+ *        }
+ *      },
+ *      {
+ *        "value": "0x00000000000000000000000000000002",
+ *        "receiver": {
+ *          name: "a",
+ *        }
+ *      }
+ *    ],
+ *  sender: {
+ *    name: 'alice',
+ *    secretKey: '0x30dd53411043c9ff4711ba6b6c779cec028bd43e6f525a25af3603'
+ *  }
+  }
+ * @param {*} req
+ * @param {*} res
+ */
 async function simpleFTCommitmentBatchTransfer(req, res, next) {
   const {address} = req.headers;
   const {inputCommitment, outputCommitments, sender} = req.body;
