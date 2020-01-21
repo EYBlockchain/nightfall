@@ -15,7 +15,7 @@ import {db, offchain, zkp} from '../rest';
     tokenId: '0x1448d8ab4e0d610000000000000000000000000000000000000000000000000',
     shieldContractAddress: '0x04b95c76d5075620a655b707a7901462aea8656c',
     sender: {
-      name: 'a',
+      name: 'alice',
       address: '0x04b95c76d5075620a655b707a7901462aea8656d',
     }
   }
@@ -43,6 +43,31 @@ export async function insertNFTToDb(req, res, next) {
     pageNo: 1,
     limit: 4
   }
+ *
+ * @apiSuccess (Success 200) {Array} data Array of NFT transactions.
+ *
+ * @apiSuccessExample {json} Success response:
+ * "data":{
+ *  "data":[{
+ *    "_id":"5e26d3a43754de00388a57e8",
+ *    "tokenUri":"sample",
+ *    "tokenId":"0x37b95da113e20000000000000000000000000000000000000000000000000000",
+ *    "transactionType":"shield",
+ *  },
+ *  {
+ *    "_id":"5e26d3203754de00388a57e4",
+ *    "tokenUri":"sample",
+ *    "tokenId":"0x37b95da113e20000000000000000000000000000000000000000000000000000",
+ *    "transactionType":"mint",
+ *  },
+ *  {
+ *   "receiver":{
+ *       "name":"bob",
+ *       "address":"0x666fA6a40F7bc990De774857eCf35e3C82f07505"
+ *    },
+ *  "totalCount":2
+ *  }
+ * }
  * @param {*} req
  * @param {*} res
  */
@@ -153,6 +178,10 @@ export async function transferNFToken(req, res, next) {
  * req.body {
     tokenId: '0xc3b53ccd640c680000000000000000000000000000000000000000000000000',
     tokenUri: 'unique token name',
+    shieldContractAddress: "0x432038accaf756a8936a7f067a8223c2d929d58f"
+    receiver: {
+      name: 'bob', 
+    }
   }
  * @param {*} req
  * @param {*} res
@@ -182,6 +211,18 @@ export async function burnNFToken(req, res, next) {
     limit: 5, // optionial
     pageNo: 1 // optionial
   }
+ * 
+ * @apiSuccess (Success 200) {Array} data Array of all non-fungible token from database.
+ *
+ * @apiSuccessExample {json} Success response:
+ * HTTPS 200 OK
+ * "data":[{
+ *    "_id":"5e26cc103754de00388a57dd",
+ *    "tokenUri":"sample",
+ *    "tokenId":"0x1542f342b6220000000000000000000000000000000000000000000000000000",
+ *    "isMinted":true,
+ * }]
+ * 
  * @param {*} req
  * @param {*} res
  */
@@ -201,7 +242,7 @@ export async function getNFTokens(req, res, next) {
 /**
  * This function will get the non-fungible token contract address from the
  * shield contract which is set by the user.
- * * @param {*} req
+ * @param {*} req
  * @param {*} res
  */
 export async function getNFTokenAddress(req, res, next) {
@@ -218,6 +259,16 @@ export async function getNFTokenAddress(req, res, next) {
  * Which will retrieve the balance, name and symbol of the non fungible token
  * @param {*} req
  * @param {*} res
+ * @apiSuccess (Success 200) {Object} data information of the non-fungible token.
+ * @apiSuccessExample {json} Success response:
+ * HTTPS 200 OK
+ *
+ * data":{
+ *    "balance":"1",
+ *    "nftName":"EYToken",
+ *    "nftSymbol":"EYT"
+ * }
+ *
  */
 export async function getNFTokenInfo(req, res, next) {
   try {

@@ -112,7 +112,7 @@ router.post('/deleteContractInfo', deleteContractInfo);
  *
  * @apiExample {js} Example usage:
  * const query = {
- *    name : "vishnu.ps"
+ *    name : "alice"
  * }
  * $http.get(url, data)
  *   .success((res, status) => doSomethingHere())

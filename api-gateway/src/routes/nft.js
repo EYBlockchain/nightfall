@@ -32,10 +32,11 @@ const router = express.Router();
  * @apiSuccess (Success 200) {String} message status message.
  *
  * @apiSuccessExample {json} Success response:
- *     HTTPS 200 OK
- *	  {
- *		"message":"NFT Mint Successful"
- *	  }
+ *  HTTPS 200 OK
+ *  data: {
+ *     "message":"NFT Mint Successful",
+ *     "tokenId":"0x1542f342b6220000000000000000000000000000000000000000000000000000"
+ *  }
  */
 router.route('/mintNFToken').post(mintNFToken);
 
@@ -52,13 +53,13 @@ router.route('/mintNFToken').post(mintNFToken);
  *
  * @apiExample {js} Example usage:
  * const data = {
- *    tokenId: '0xc3b53ccd640c680000000000000000000000000000000000000000000000000',
- *    tokenUri: 'unique token name',
+ *    tokenUri: "sample"
+ *    tokenId: "0x1542f342b6220000000000000000000000000000000000000000000000000000"
+ *    isMinted: true
  *    receiver: {
- *      name: 'bob',
+ *      name: "bob"
  *    }
  * }
- *
  * $http.post(url, data)
  *   .success((res, status) => doSomethingHere())
  *   .error((err, status) => doSomethingHere());
@@ -66,10 +67,10 @@ router.route('/mintNFToken').post(mintNFToken);
  * @apiSuccess (Success 200) {String} message status message.
  *
  * @apiSuccessExample {json} Success response:
- *     HTTPS 200 OK
- *	  {
- *		"message":"NFT Transfer Successful"
- *	  }
+ *  HTTPS 200 OK
+ *  "data":{
+ *      "message":"NFT Transfer Successful"
+ *  }
  */
 router.route('/transferNFToken').post(transferNFToken);
 
@@ -85,9 +86,18 @@ router.route('/transferNFToken').post(transferNFToken);
  *
  * @apiExample {js} Example usage:
  * const data = {
- *    tokenId: '0xc3b53ccd640c680000000000000000000000000000000000000000000000000',
- *    tokenUri: 'unique token name',
- *    contractAddress: 'Oxad23..'
+ *  receiver: {
+ *    name: "bob",
+ *    address: "0x666fA6a40F7bc990De774857eCf35e3C82f07505"
+ *  }
+ *  sender: {
+ *    address: "0x6baec85121ad0bd700c197668b2c30030e1ea0df",
+ *    name: "alice"
+ *  }
+ *  _id: "5e26d1983754de00388a57e0"
+ *  tokenUri: "sample"
+ *  tokenId: "0x1542f342b6220000000000000000000000000000000000000000000000000000"
+ *  isReceived: true
  * }
  *
  * $http.post(url, data)
@@ -97,7 +107,7 @@ router.route('/transferNFToken').post(transferNFToken);
  * @apiSuccess (Success 200) {String} message status message.
  *
  * @apiSuccessExample {json} Success response:
- *     HTTPS 200 OK
+ * HTTPS 200 OK
  *	  {
  *		"message":"NFT Burn Successful"
  *	  }
@@ -127,21 +137,13 @@ router.route('/burnNFToken').post(burnNFToken);
  * @apiSuccess (Success 200) {Array} totalCount Total no. of tokens.
  *
  * @apiSuccessExample {json} Success response:
- *     HTTPS 200 OK
+ * HTTPS 200 OK
  *    {
- *    "data":[
- *      {
- *        "is_shielded":false,
- *        "_id":"5ce25daa09416cc13c79b9f0",
- *        "token_uri":"one",
- *        "token_id":"0x57880c3b9cee300000000000000000000000000000000000000000000000000",
- *        "is_minted":true,
- *        "created_at":"2019-05-20T07:56:26.579Z",
- *        "updated_at":"2019-05-20T07:56:26.579Z",
- *        "__v":0
- *      }
- *    ],
- *    "totalCount":1
+ *      "data":[{
+ *          "tokenUri":"sample",
+ *          "tokenId":"0x37b95da113e20000000000000000000000000000000000000000000000000000",
+ *          "isMinted":true,
+ *       }]
  *    }
  */
 router.get('/getNFTokens', getNFTokens);
@@ -175,7 +177,7 @@ router.get('/getNFTokens', getNFTokens);
  * @apiSuccess (Success 200) {String} message status message.
  *
  * @apiSuccessExample {json} Success response:
- *     HTTPS 200 OK
+ * HTTPS 200 OK
  *    {
  *      message: 'inserted',
  *    }
@@ -206,19 +208,13 @@ router.post('/insertNFTToDb', insertNFTToDb);
  * @apiSuccess (Success 200) {Array} totalCount Total no. of token transactions in database.
  *
  * @apiSuccessExample {json} Success response:
- *     HTTPS 200 OK
+ * HTTPS 200 OK
  *    {
- *      "data":[
- *        {
- *          "_id":"5d951085f359c40039add23b",
- *          "tokenUri":"one",
- *          "tokenId":"0x119eda3adb1dab00000000000000000000000000000000000000000000000000",
- *          "type":"minted",
- *          "created_at":"2019-10-02T21:03:01.491Z",
- *          "updated_at":"2019-10-02T21:03:01.491Z",
- *          "__v":0
- *        }
- *      ],
+ *      "data":[{
+ *          "tokenUri":"sample",
+ *          "tokenId":"0x1542f342b6220000000000000000000000000000000000000000000000000000",
+ *          "transactionType":"mint",
+ *          }],
  *      "totalCount":1
  *      }
  *    }
@@ -245,7 +241,7 @@ router.route('/getNFTTransactions').get(getNFTTransactions);
  * @apiSuccess (Success 200) {Array} totalCount Total no. of tokens.
  *
  * @apiSuccessExample {json} Success response:
- *     HTTPS 200 OK
+ * HTTPS 200 OK
  *	  {
  *		"data":[
  *        {

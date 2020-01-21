@@ -178,6 +178,17 @@ export async function getFTokenAddress(req, res, next) {
 /**
  * This function will retrieve information of the fungible token.
  * Which will retrieve the balance, name and symbol of the fungible token
+ * @apiSuccess (Success 200) {Object} data information of the fungible token.
+ *
+ * @apiSuccessExample {json} Success response:
+ * HTTPS 200 OK
+ *
+ * data":{
+ *    "balance":"0",
+ *    "symbol":"OPS",
+ *    "name":"EY OpsCoin"
+ * }
+ *
  * @param {*} req
  * @param {*} res
  */

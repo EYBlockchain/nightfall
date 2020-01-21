@@ -252,6 +252,14 @@ export async function deleteContractInfo(req, res, next) {
 
 /**
  * This function will retrieve all the registered names.
+ * @apiSuccess (Success 200) {Array} Array of all registered names.
+ *
+ * @apiSuccessExample {json} Success response:
+ * HTTPS 200 OK
+ * "data":[
+ *    "alice",
+ *     "bob"
+ * ]
  * @param {*} req
  * @param {*} res
  */
@@ -266,6 +274,14 @@ export async function getAllRegisteredNames(req, res, next) {
 
 /**
  * This function will fetch token commitments counts from database
+ * @apiSuccess (Success 200) {Object} data count of ft and nft commitments.
+ *
+ * @apiSuccessExample {json} Success response:
+ * HTTPS 200 OK
+ * data:{
+ *    "nftCommitmentCount":0,
+ *    "ftCommitmentCount":0
+ * }
  * @param {*} req
  * @param {*} res
  */

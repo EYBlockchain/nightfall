@@ -3,8 +3,14 @@ import {NftCommitmentService} from '../business';
 /**
  * This function will add new private token in db.
  * req.body {
- *  tokenId: '0xa23..',
- *  tokenUri: 'table/t1',
+ *  outputCommitments: [{
+ *    shieldContractAddress: '0xE9A313C89C449AF6E630C25AB3ACC0FC3BAB821638E0D55599B518',
+ *    tokenUri: 'unique token name',
+ *    tokenId: '0x1448d8ab4e0d610000000000000000000000000000000000000000000000000',
+ *    owner: {
+ *        name: 'bob'
+ *    }
+ *  }],
  *  salt: '0xE9A313C89C449AF6E630C25AB3ACC0FC3BAB821638E0D55599B518',
  *  commitment: '0xca2c0c099289896be4d72c74f801bed6e4b2cd5297bfcf29325484',
  *  commitmentIndex: 0,
@@ -49,15 +55,14 @@ async function getNFTCommitments(req, res, next) {
 /**
  * This function will update a private token in db.
  * req.body {
- *  tokenId: '0xa23..',
- *  tokenUri: 'table/t1',
- *  salt: '0xE9A313C89C449AF6E630C25AB3ACC0FC3BAB821638E0D55599B518',
- *  commitment: '0xca2c0c099289896be4d72c74f801bed6e4b2cd5297bfcf29325484',
- *  commitmentIndex: 0,
- *  transferredSalt: '0xE9A313C89C449AF6E630C25AB3ACC0FC3BAB821638E0D55599B518',   [will be only present if is_transferred = true]
- *  transferredCommitment: '0xca2c0c099289896be4d72c74f801bed6e4b2cd5297bfcf29325484',   [will be only present if is_transferred = true]
- *  transferredCommitmentIndex: 1,                                                      [will be only present if is_transferred = true]
- *  receiver: 'bob',                                              [will be only present if is_transferred = true]
+ *  outputCommitments: [{
+ *    shieldContractAddress: '0xE9A313C89C449AF6E630C25AB3ACC0FC3BAB821638E0D55599B518',
+ *    tokenUri: 'unique token name',
+ *    tokenId: '0x1448d8ab4e0d610000000000000000000000000000000000000000000000000'
+ *    owner: {
+ *        name: 'bob'
+ *    }
+ *  }],
  *  isTransferred: true,
  *  isBurned: true
  * }
@@ -94,6 +99,29 @@ async function getNFTCommitmentTransactions(req, res, next) {
   }
 }
 
+/**
+ * This function will add nft commitment transaction in db.
+ * req.body {
+ *  outputCommitments: [{
+ *    shieldContractAddress: '0xE9A313C89C449AF6E630C25AB3ACC0FC3BAB821638E0D55599B518',
+ *    tokenUri: 'unique token name',
+ *    tokenId: '0x1448d8ab4e0d610000000000000000000000000000000000000000000000000',
+ *    owner: {
+ *        name: 'bob'
+ *    }
+ *  }],
+ *  sender: {
+ *    name: 'bob'
+ *  }
+ *  receiver: {
+ *    name: 'alice'
+ *  }
+ *  isBurned: true
+ * }
+ *
+ * @param {*} req
+ * @param {*} res
+ */
 async function insertNFTCommitmentTransaction(req, res, next) {
   try {
     const nftCommitmentService = new NftCommitmentService(req.user.db);

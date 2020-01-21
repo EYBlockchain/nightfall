@@ -26,7 +26,6 @@ router.route('/checkCorrectnessForNFTCommitment').post(checkCorrectnessForNFTCom
  * @apiExample {js} Example usage:
  * const data = {
  *    outputCommitments: [{
- *      shieldContractAddress: '0xE9A313C89C449AF6E630C25AB3ACC0FC3BAB821638E0D55599B518',
  *      tokenURI: 'unique token name',
  *      tokenId: '0x1448d8ab4e0d610000000000000000000000000000000000000000000000000'
  *    }]
@@ -60,18 +59,21 @@ router.route('/mintNFTCommitment').post(mintToken);
  *
  * @apiExample {js} Example usage:
  * const data = {
- *    inputCommitments: [
- *    {
- *    tokenId: '0x1448d8ab4e0d610000000000000000000000000000000000000000000000000',
- *    tokenURI: 'unique token name',
- *    salt: '0xe9a313c89c449af6e630c25ab3acc0fc3bab821638e0d55599b518',
- *    commitment: '0xca2c0c099289896be4d72c74f801bed6e4b2cd5297bfcf29325484',
- *    commitmentIndex: 0,
- *    }],
- *    receiver: {
- *      name: 'bob',
+ *  inputCommitments: [{
+ *    owner: {
+ *      name: "alice",
+ *      publicKey: "0xd1a1fc7064b0c0d4a071d295734d4210b63bd1396efd47d074ea5ac3b1ec98fb"
  *    }
- * }
+ *   tokenUri: "sample"
+ *   tokenId: "0x37b95da113e20000000000000000000000000000000000000000000000000000"
+ *   salt: "0x04a4d4f1bb2053e359c33ae835c180a434ac5fd25858b49098d3eb635fc989c4"
+ *   commitment: "0x1f1657d4e05a0e2a7099ff07530bce6a07099cb062b1e70dfe3066c24db691de"
+ *   commitmentIndex: 0
+ *   isMinted: true
+ *  }],
+ *  receiver: {
+ *    name: "bob"
+ *  }
  *
  * $http.post(url, data)
  *   .success((res, status) => doSomethingHere())
@@ -115,6 +117,10 @@ router.route('/transferNFTCommitment').post(transferToken);
  *      senderSecretKey: '0xcf6267b9393a8187ab72bf095e9ffc34af1a5d3d069b9d26e21eac',
  *      commitment: '0xca2c0c099289896be4d72c74f801bed6e4b2cd5297bfcf29325484',
  *      commitmentIndex: 0,
+ *      owner: {
+ *        name: "bob",
+ *        publicKey: "0xbcbcf73fd64ccae777d3324cbfa97ec38599ac412c6fb249abb0c98a23ac2d00"
+ *      }
  *    }],
  *   receiver: {
  *      name: 'bob',

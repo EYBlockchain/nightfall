@@ -16,15 +16,13 @@ import {accounts, db, offchain, zkp} from '../rest';
     commitment: '0xdd3434566',
     commitmentIndex: 1,
     isReceived: true,
-    zCorrect: true,
-    zOnchainCorrect: true,
   }
  * @param {*} req
  * @param {*} res
  */
 export async function insertNFTCommitmentToDb(req, res, next) {
   try {
-    res.data = await db.insertNFTCommitment(req.user, req.body);
+    res.data = await db.insertNFTCommitment(req.user, req.body); 
     next();
   } catch (err) {
     next(err);
@@ -68,6 +66,30 @@ export async function getNFTCommitments(req, res, next) {
     pageNo: 1,
     limit: 4
   }
+ * @apiSuccess (Success 200) {Object} data NFT commitment transactions from database.
+ * @apiSuccessExample {json} Success response:
+ *     HTTPS 200 OK
+ * data: {
+ * "data":[{
+ *    "outputCommitments":[{
+ *      "owner":{
+ *        "name":"alice",
+ *        "publicKey":"0xd1a1fc7064b0c0d4a071d295734d4210b63bd1396efd47d074ea5ac3b1ec98fb"
+ *      },
+ *      "_id":"5e26d3a43754de00388a57e7",
+ *      "tokenUri":"sample",
+ *      "tokenId":"0x37b95da113e20000000000000000000000000000000000000000000000000000",
+ *      "commitment":"0x1f1657d4e05a0e2a7099ff07530bce6a07099cb062b1e70dfe3066c24db691de",
+ *      "commitmentIndex":0,
+ *      "salt":"0x04a4d4f1bb2053e359c33ae835c180a434ac5fd25858b49098d3eb635fc989c4"
+ *      }
+ *    ],
+ *  "transactionType":"mint",
+ *  "inputCommitments":[],
+ *  }],
+ *  "totalCount":1
+ *  }
+ * }
  * @param {*} req
  * @param {*} res
  */
