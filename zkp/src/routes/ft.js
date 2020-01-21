@@ -1,11 +1,11 @@
-import { Router } from 'express';
+import {Router} from 'express';
 import fTokenController from '../f-token-controller';
 
 const router = Router();
 
 async function mint(req, res, next) {
-  const { value } = req.body;
-  const { address } = req.headers;
+  const {value} = req.body;
+  const {address} = req.headers;
 
   try {
     const status = await fTokenController.buyFToken(value, address);
@@ -17,8 +17,8 @@ async function mint(req, res, next) {
 }
 
 async function transfer(req, res, next) {
-  const { value, receiver } = req.body;
-  const { address } = req.headers;
+  const {value, receiver} = req.body;
+  const {address} = req.headers;
 
   try {
     const status = await fTokenController.transferFToken(value, address, receiver.address);
@@ -30,8 +30,8 @@ async function transfer(req, res, next) {
 }
 
 async function burn(req, res, next) {
-  const { value } = req.body;
-  const { address } = req.headers;
+  const {value} = req.body;
+  const {address} = req.headers;
 
   try {
     const status = await fTokenController.burnFToken(value, address);
@@ -43,7 +43,7 @@ async function burn(req, res, next) {
 }
 
 async function getAddress(req, res, next) {
-  const { address } = req.headers;
+  const {address} = req.headers;
 
   try {
     const ftAddress = await fTokenController.getFTAddress(address);
@@ -57,11 +57,11 @@ async function getAddress(req, res, next) {
 }
 
 async function getInfo(req, res, next) {
-  const { address } = req.headers;
+  const {address} = req.headers;
 
   try {
     const balance = await fTokenController.getBalance(address);
-    const { symbol, name } = await fTokenController.getTokenInfo(address);
+    const {symbol, name} = await fTokenController.getTokenInfo(address);
     res.data = {
       balance,
       symbol,

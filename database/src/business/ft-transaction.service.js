@@ -11,7 +11,6 @@ export default class FtTransactionService {
    * data = {
    *  transaction_type
    *  value,
-   *  shield_contract_address,
    *  sender,
    *  receiver,
    * }

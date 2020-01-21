@@ -8,11 +8,12 @@ import {FtService} from '../business';
  *  receiver: {
  *   name: "Bob",
  *   address: "0xb0b",
- *  }
+ *  },
  *  sender: {
  *   name: "Alice",
  *   address: "0xb0b",
- *  }
+ *  },
+ *  isMinted: true,
  * }
  * @param {*} req
  * @param {*} res

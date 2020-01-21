@@ -10,6 +10,10 @@ export default class FtService {
    * This function insert ERC-20 (ft) transaction
    * in ft_transction collection
    * @param {object} data
+   *  value,
+   *  sender: {name: 'bob', address: "0xa2e35bc06bf76fba17210f5b7f59c1b37fe48f66"},
+   *  receiver: {name: 'alice', address: "0xa2e35bc06bf76fba17210f5b7f59c1b37fe48f22"},,
+   * }
    */
   insertFTokenTransaction(data) {
     const {isReceived, isTransferred, isBurned} = data;

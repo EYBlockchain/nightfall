@@ -50,7 +50,9 @@ router.route('/mintFToken').post(mintFToken);
  * @apiExample {js} Example usage:
  * const data = {
  *   "value": 20,
- *   "receiver": {name": "Bob"}
+ *   "receiver": {
+ *      name": "Bob"
+ *   }
  * }
  *
  * $http.post(url, data)
@@ -134,11 +136,11 @@ router.route('/getFTokenContractAddress').get(getFTokenAddress);
  *  HTTPS 200 OK
  *	 {
  *	   "data":
- *        {
- *          "balance": 0,
- *          "symbol" : 0,
- *          "name" : "samplecoin",
- *        }
+ *     {
+ *        "balance":"0",
+ *        "nftName":"EYToken",
+ *        "nftSymbol":"EYT",
+ *     }
  *	 }
  */
 router.route('/getFTokenInfo').get(getFTokenInfo);

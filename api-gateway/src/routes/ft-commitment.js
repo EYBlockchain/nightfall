@@ -37,11 +37,11 @@ router.route('/checkCorrectnessForFTCommitment').post(checkCorrectnessForFTCommi
  *
  * @apiSuccessExample {json} Success response:
  *     HTTPS 200 OK
- *	  {
- *		"commitment":"0x3915e408fd5cff354fd73549d31a4bc66f7335db59bc4e84001473",
- *		"commitmentIndex":"0",
- *    "salt": "0x14de022c9b4a437b346f04646bd7809deb81c38288e9614478351d",
- *	  }
+ *    {
+ *    "commitment":"0x70bae19c32ea6e30bf9953c954df271474f86fc9a21589c3422fea314f43f6aa",
+ *    "commitmentIndex":0,
+ *    "salt":"0xc3b5b05920e17e3afe63efa2d18b3c5b1e2036659f891e69c513adf61a5d42f3"
+ *    }
  */
 router.route('/mintFTCommitment').post(mintFTCommitment);
 
@@ -58,28 +58,48 @@ router.route('/mintFTCommitment').post(mintFTCommitment);
  * @apiExample {js} Example usage:
  * const data = {
  *  inputCommitments: [
- *    {
- *      value: '0x00000000000000000000000000002710',
- *      salt: '0x14de022c9b4a437b346f04646bd7809deb81c38288e9614478351d',
- *      commitment: '0x39aaa6fe40c2106f49f72c67bc24d377e180baf3fe211c5c90e254',
- *      commitment_index: 0,
- *      owner,
- *    },
- *    {
- *      value: '0x00000000000000000000000000001388',
- *      salt: '0x14de022c9b4a437b346f04646bd7809deb81c38288e9614478351d',
- *      commitment: '0x39aaa6fe40c2106f49f72c67bc24d377e180baf3fe211c5c90e254',
- *      commitment_index: 1,
- *      owner,
- *    },
+ *  {
+ *      owner:{
+ *        name: "alice"
+ *        publicKey: "0x3960975fbb1bf5469c8ec68ec9a77a80eeb64656624512d53f48ce9c3127d2f0"
+ *      }
+ *      _id: "5e254ebb415c6b0039a057b1"
+ *      value: "0x0000000000000000000000000000000a"
+ *      salt: "0xc3b5b05920e17e3afe63efa2d18b3c5b1e2036659f891e69c513adf61a5d42f3"
+ *      commitment: "0x70bae19c32ea6e30bf9953c954df271474f86fc9a21589c3422fea314f43f6aa"
+ *      commitmentIndex: 0
+ *      isMinted: true
+ *      createdAt: "2020-01-20T06:54:51.537Z"
+ *      updatedAt: "2020-01-20T06:54:51.537Z"
+ *      __v: 0
+ *      selected: false
+ *      id: 0
+ *  },
+ *  {
+ *    owner:{
+ *      name: "alice"
+ *      publicKey: "0x3960975fbb1bf5469c8ec68ec9a77a80eeb64656624512d53f48ce9c3127d2f0"
+ *    }
+ *    _id: "5e254f7b415c6b0039a057b4"
+ *    value: "0x0000000000000000000000000000000f"
+ *    salt: "0x50dd62ef0dd2be23a4d4efbf7fe49b21f05445cf574cfdc7f270c54865027dbe"
+ *    commitment: "0x6cfd9a8a222ee5794cdacd25bb77fa5034127576503fce7aa208715ec9868dc4"
+ *    commitmentIndex: 1
+ *    isMinted: true
+ *    createdAt: "2020-01-20T06:58:03.187Z"
+ *    updatedAt: "2020-01-20T06:58:03.187Z"
+ *    __v: 0
+ *    selected: false
+ *    id: 1
+ *   },
  *  ],
  *  outputCommitments: [
- *    {
- *      value: '0x00000000000000000000000000001770',
- *    },
- *    {
- *      value: '0x00000000000000000000000000002328',
- *    }
+ *  {
+ *    value: '0x00000000000000000000000000001770',
+ *  },
+ *  {
+ *    value: '0x00000000000000000000000000002328',
+ *   }
  *  ],
  *  receiver: {
  *    name: 'Bob'
@@ -93,36 +113,32 @@ router.route('/mintFTCommitment').post(mintFTCommitment);
  *
  * @apiSuccessExample {json} Success response:
  *     HTTPS 200 OK
- *    [
+ * data: [
+ * {
+ *     "value": "0x00000000000000000000000000000014",
+ *     "salt": "0x5e785f9470d92cde5c2c4c0aacf235f58087da8c9264530ea2074e8125dfcfe1",
+ *     "commitment": "0x7a6bca440eb1022f0f9e387bea0a648092b94cbaf130c915402ed8ad3c191595",
+ *     "commitmentIndex": 2,
+ *     "owner":
  *     {
- *       "value":"0x00000000000000000000000000000002",
- *       "receiver":{
- *          "name":"b",
- *          "publicKey":"0xea6eabb8e7b17615d841c8ac12dfecd919cad7d40b1cb0be568e00d180350835"
- *       },
- *       "salt":"0xe1c8478eee576a419ebde9df31b9acadc990c1a1d2910394de86a17c6246a901",
- *       "commitment":"0x5e84e824bbaedad48c257f46f7f0fc50936faf848c83895f745a46c996e03dab",
- *       "commitmentIndex":1,
- *       "owner":{
- *          "name":"b",
- *          "publicKey":"0xea6eabb8e7b17615d841c8ac12dfecd919cad7d40b1cb0be568e00d180350835"
- *       }
- *     },
- *     {
- *      "value":"0x00000000000000000000000000000001",
- *      "receiver":{
- *        "name":"a",
- *        "publicKey":"0xa87e22f2053c33656374077f2dec067a4494c75813778dd7459e79d1c5ba8b64"
- *      },
- *      "salt":"0x40fb7ce1b35f3df2e93fb3f7b773e3b3a10bb17f664015e2a6d2e80b23909383",
- *      "commitment":"0x71b6ae5d150dcf22570a0e524d96bc42d3ff44d1d841056f1ce7b33a47f07197",
- *      "commitmentIndex":2,
- *      "owner":{
- *        "name":"a",
- *        "publicKey":"0xa87e22f2053c33656374077f2dec067a4494c75813778dd7459e79d1c5ba8b64"
- *      }
+ *         "name": "bob",
+ *         "publicKey": "0xf7a4e1ae3290ffa5030c455cfae7f7d49c23c7969a72b5d2013f23ecab22b0e1"
  *    }
- *   ]
+ * },
+ * {
+ *   "value": "0x00000000000000000000000000000005",
+ *   "salt": "0x70e1e9ca79f6f3eff36a7e8dbee5758a8250290981f184b0d0b9deafc5ee191c",
+ *   "commitment": "0x518ec4e8ac78cfdff5145ba7f6effceaace77d08789282d73e6cd2d521db3557",
+ *   "commitmentIndex": 3,
+ *   "owner":
+ *   {
+ *       "address": "0xa2e35bc06bf76fba17210f5b7f59c1b37fe48f66",
+ *        "name": "alice",
+ *       "publicKey": "0x3960975fbb1bf5469c8ec68ec9a77a80eeb64656624512d53f48ce9c3127d2f0",
+ *       "password": ""
+ *   }
+ * }
+ * ]
  */
 router.route('/transferFTCommitment').post(transferFTCommitment);
 
@@ -143,12 +159,24 @@ router.route('/transferFTCommitment').post(transferFTCommitment);
  * @apiExample {js} Example usage:
  * const data = {
  *  inputCommitments: [
+ *  {
+ *    "owner":
  *    {
- *      value: '0x00000000000000000000000000000001',
- *      salt: '0xa31adb1074f977413fddd3953e333529a3494e110251368cc823fb',
- *      commitment: '0x1ec4a9b406fd3d79a01360ccd14c8530443ea9869f8e9560dafa56',
- *      commitmentIndex: 0,
+ *      "name": "bob",
+ *       "publicKey": "0xf7a4e1ae3290ffa5030c455cfae7f7d49c23c7969a72b5d2013f23ecab22b0e1"
  *    }
+ *  _id: "5e2550c2415c6b0039a057bd"
+ *  value: "0x00000000000000000000000000000005"
+ *  salt: "0x70e1e9ca79f6f3eff36a7e8dbee5758a8250290981f184b0d0b9deafc5ee191c"
+ *  commitment: "0x518ec4e8ac78cfdff5145ba7f6effceaace77d08789282d73e6cd2d521db3557"
+ *  commitmentIndex: 3
+ *  isChange: true
+ *  createdAt: "2020-01-20T07:03:30.062Z"
+ *  updatedAt: "2020-01-20T07:03:30.062Z"
+ *  __v: 0
+ *  selected: false
+ *  id: 0
+ *  }
  *  ],
  *  receiver: {
  *    name: 'bob'
@@ -275,21 +303,34 @@ router.get('/getFTCommitments', getFTCommitments);
  *     HTTPS 200 OK
  *    {
  *      "data":[
+ *      {
+ *        "_id":"5e255a5a415c6b0039a057c7",
+ *        "outputCommitments":[
  *        {
- *         "_id":"5d9583cff359c40039add241",
- *         "value":"0x00000000000000000000000000000002",
- *         "salt":"0xdba2b9fd61a7a5ff60cc6d025777b736aa1bf74e1fdcb90ee34b33",
- *         "commitment":"0x33894fa46908748639356cad7e69a2962316f07a9fb711fc2a2997",
- *         "commitmentIndex":0,
- *         "type":"minted",
- *         "used_ft_commitments":[],
- *         "created_at":"2019-10-03T05:14:55.574Z",
- *         "updated_at":"2019-10-03T05:14:55.574Z",
+ *          "owner":{
+ *            "name":"alice",
+ *            "publicKey":"0x3960975fbb1bf5469c8ec68ec9a77a80eeb64656624512d53f48ce9c3127d2f0"
+ *          },
+ *        "_id":"5e255a5a415c6b0039a057c8",
+ *        "value":"0x00000000000000000000000000000005",
+ *        "commitment":"0xf1528faf7a55ee9367c661c9e1183b742cbf5aff153d6aab589be0c59f50ab59",
+ *        "commitmentIndex":4,
+ *        "salt":"0xf2e46ea363a2d95723a356acf4a2f3b9c65615ee6049028f0b3990bbacfe0e95"
  *        }
- *      ],
- *      "totalCount":1
- *      }
- *    }
+ *        ],
+ *        "transactionType":"mint",
+ *        "inputCommitments":[],
+ *        "createdAt":"2020-01-20T07:44:26.697Z",
+ *        "updatedAt":"2020-01-20T07:44:26.697Z","__v":0
+ *        },{
+ *        "sender":{
+ *          "name":"alice",
+ *          "publicKey":"0x3960975fbb1bf5469c8ec68ec9a77a80eeb64656624512d53f48ce9c3127d2f0"
+ *        },
+ *        "receiver":{
+ *          "name":"alice"
+ *        },
+ *      }     
  */
 router.route('/getFTCommitmentTransactions').get(getFTCommitmentTransactions);
 
@@ -305,11 +346,22 @@ router.route('/getFTCommitmentTransactions').get(getFTCommitmentTransactions);
  *
  * @apiExample {js} Example usage:
  * const data = {
+ *  owner: {
+ *    name: "alice"
+ *    publicKey: "0x3960975fbb1bf5469c8ec68ec9a77a80eeb64656624512d53f48ce9c3127d2f0"
+ *  },
  *  inputCommitments: [{
- *    value: "0x00000000000000000000000000000028",
- *    salt: "0x75f9ceee5b886382c4fe81958da985cd812303b875210b9ca2d75378bb9bd801",
- *    commitment: "0x00000000008ec724591fde260927e3fcf85f039de689f4198ee841fcb63b16ed",
- *    commitmentIndex: 1,
+ *    _id: "5e255a5a415c6b0039a057c6"
+ *    value: "0x00000000000000000000000000000005"
+ *    salt: "0xf2e46ea363a2d95723a356acf4a2f3b9c65615ee6049028f0b3990bbacfe0e95"
+ *    commitment: "0xf1528faf7a55ee9367c661c9e1183b742cbf5aff153d6aab589be0c59f50ab59"
+ *    commitmentIndex: 4
+ *    isMinted: true
+ *    createdAt: "2020-01-20T07:44:26.693Z"
+ *    updatedAt: "2020-01-20T07:44:26.693Z"
+ *    __v: 0
+ *    selected: false
+ *    id: 0
  *  }],
  *  outputCommitments: [
  *    {
@@ -334,36 +386,36 @@ router.route('/getFTCommitmentTransactions').get(getFTCommitmentTransactions);
  *
  * @apiSuccessExample {json} Success response:
  *     HTTPS 200 OK
- *    [
- *     {
- *       "value":"0x00000000000000000000000000000002",
- *       "receiver":{
- *          "name":"b",
- *          "publicKey":"0xea6eabb8e7b17615d841c8ac12dfecd919cad7d40b1cb0be568e00d180350835"
- *       },
- *       "salt":"0xe1c8478eee576a419ebde9df31b9acadc990c1a1d2910394de86a17c6246a901",
- *       "commitment":"0x5e84e824bbaedad48c257f46f7f0fc50936faf848c83895f745a46c996e03dab",
- *       "commitmentIndex":1,
- *       "owner":{
- *          "name":"b",
- *          "publicKey":"0xea6eabb8e7b17615d841c8ac12dfecd919cad7d40b1cb0be568e00d180350835"
- *       }
- *     },
- *     {
- *      "value":"0x00000000000000000000000000000003",
- *      "receiver":{
- *        "name":"a",
- *        "publicKey":"0xa87e22f2053c33656374077f2dec067a4494c75813778dd7459e79d1c5ba8b64"
+ * data: [
+ *    {
+ *      "value":"0x00000000000000000000000000000001",
+ *      "receiver":
+ *       {
+ *          "name":"alice",
+ *          "publicKey":"0x3960975fbb1bf5469c8ec68ec9a77a80eeb64656624512d53f48ce9c3127d2f0"
+ *        },
+ *      "salt":"0x35889aa7956840fed7065c96820ec20ca8bf1c3a98a453c74710c1dce44fd0f6",
+ *      "commitment":"0xdd673ce343f933092d8deee54be179f67b916567a34f1e476df6a3b767cc7d23",
+ *      "commitmentIndex":26,
+ *      "owner":
+ *      {
+ *        "name":"alice",
+ *        "publicKey":"0x3960975fbb1bf5469c8ec68ec9a77a80eeb64656624512d53f48ce9c3127d2f0"}
  *      },
- *      "salt":"0x40fb7ce1b35f3df2e93fb3f7b773e3b3a10bb17f664015e2a6d2e80b23909383",
- *      "commitment":"0x71b6ae5d150dcf22570a0e524d96bc42d3ff44d1d841056f1ce7b33a47f07197",
- *      "commitmentIndex":2,
- *      "owner":{
- *         "name":"a",
- *         "publicKey":"0xa87e22f2053c33656374077f2dec067a4494c75813778dd7459e79d1c5ba8b64"
- *      }
- *    }
- *   ]
+ *      {
+ *      "value":"0x00000000000000000000000000000002",
+ *      "receiver":{
+ *          "name":"bob",
+ *          "publicKey":"0xf7a4e1ae3290ffa5030c455cfae7f7d49c23c7969a72b5d2013f23ecab22b0e1"
+ *       },
+ *       "salt":"0xd525f4a31e3fd9cb1d924c70162272699e4482b3d519ab1597999cf1796e230a",
+ *       "commitment":"0xdadbc2a90b75b2782c7f3507e4cddd2875460d64f540db0eed536bac413bcfcc",
+ *       "commitmentIndex":27,
+ *        "owner":{
+ *            "name":"liju",
+ *            "publicKey":"0xf7a4e1ae3290ffa5030c455cfae7f7d49c23c7969a72b5d2013f23ecab22b0e1"}
+ *       }
+ *  ]
  */
 router.post('/simpleFTCommitmentBatchTransfer', simpleFTCommitmentBatchTransfer);
 
