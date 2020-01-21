@@ -1,4 +1,4 @@
-import { db, offchain } from '../rest';
+import {db, offchain} from '../rest';
 
 const topicForCoinToken = '0xeca7945f';
 
@@ -48,11 +48,11 @@ export async function setWhisperIdentityAndSubscribe(userData) {
   const userAddress = {
     address: userData.address,
   };
-  const { shhIdentity } = await offchain.generateShhIdentity(userAddress);
-  await db.updateUser(userData, { shhIdentity });
+  const {shhIdentity} = await offchain.generateShhIdentity(userAddress);
+  await db.updateUser(userData, {shhIdentity});
 
-  const { whisperPublicKey } = await offchain.getWhisperPublicKey({ shhIdentity });
-  await offchain.setWhisperPK({ address: userAddress.address }, whisperPublicKey);
+  const {whisperPublicKey} = await offchain.getWhisperPublicKey({shhIdentity});
+  await offchain.setWhisperPK({address: userAddress.address}, whisperPublicKey);
   const subscribeDetails = {
     shhIdentity,
     topic: topicForCoinToken,

@@ -23,7 +23,7 @@ Let's inspect the nft-mint folder:
 `cd nft-mint`  
 `ls`
 
-If you've newly cloned the Nightfall repository, you'll only see one file: `nft-mint.code`.  
+If you've newly cloned the Nightfall repository, you'll only see one file: `nft-mint.code`.
 
 Now we can run ZoKrates.
 

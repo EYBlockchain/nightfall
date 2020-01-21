@@ -25,12 +25,12 @@ async function checkNameExistence(req, res, next) {
 }
 
 async function assignNameToAccount(req, res, next) {
-  const { name } = req.body;
-  const { address } = req.headers;
+  const {name} = req.body;
+  const {address} = req.headers;
 
   try {
     await setName(name, address);
-    res.data = { message: 'Name Added.' };
+    res.data = {message: 'Name Added.'};
     next();
   } catch (err) {
     next(err);
@@ -38,7 +38,7 @@ async function assignNameToAccount(req, res, next) {
 }
 
 async function getNameForAccount(req, res, next) {
-  const { address } = req.headers;
+  const {address} = req.headers;
 
   try {
     res.data = await getNameFromAddress(address);
@@ -49,12 +49,12 @@ async function getNameForAccount(req, res, next) {
 }
 
 async function assignZkpPublicKeyToAccount(req, res, next) {
-  const { publicKey } = req.body;
-  const { address } = req.headers;
+  const {publicKey} = req.body;
+  const {address} = req.headers;
 
   try {
     await setZkpPublicKey(publicKey, address);
-    res.data = { message: 'Keys Added.' };
+    res.data = {message: 'Keys Added.'};
     next();
   } catch (err) {
     next(err);
@@ -62,7 +62,7 @@ async function assignZkpPublicKeyToAccount(req, res, next) {
 }
 
 async function getZkpPublicKeyForAccountByName(req, res, next) {
-  const { name } = req.query;
+  const {name} = req.query;
 
   try {
     res.data = await getZkpPublicKeyFromName(name);
@@ -73,12 +73,12 @@ async function getZkpPublicKeyForAccountByName(req, res, next) {
 }
 
 async function assignWhisperKeyToAccount(req, res, next) {
-  const { whisper_pk: whisperPk } = req.body;
-  const { address } = req.headers;
+  const {whisper_pk: whisperPk} = req.body;
+  const {address} = req.headers;
 
   try {
     await setWhisperPublicKey(whisperPk, address);
-    res.data = { message: 'Keys Added.' };
+    res.data = {message: 'Keys Added.'};
     next();
   } catch (err) {
     next(err);
@@ -86,7 +86,7 @@ async function assignWhisperKeyToAccount(req, res, next) {
 }
 
 async function getWhisperKeyForAccountByName(req, res, next) {
-  const { name } = req.query;
+  const {name} = req.query;
 
   try {
     res.data = await getWhisperPublicKeyFromName(name);
@@ -97,7 +97,7 @@ async function getWhisperKeyForAccountByName(req, res, next) {
 }
 
 async function getAllRegisteredAddresses(req, res, next) {
-  const { name } = req.query;
+  const {name} = req.query;
   try {
     res.data = await getAddressFromName(name);
     next();

@@ -7,9 +7,9 @@ rest api calls, and the heavy-lifitng token-zkp.js and zokrates.js.  It exists s
 
 import fs from 'fs';
 import config from 'config';
-import { vks } from '@eyblockchain/nightlite';
+import {vks} from '@eyblockchain/nightlite';
 import Web3 from './web3';
-import { getTruffleContractInstance } from './contractUtils';
+import {getTruffleContractInstance} from './contractUtils';
 
 const web3 = Web3.connection();
 
@@ -21,10 +21,9 @@ async function initializeVks() {
   const account = accounts[0];
 
   // Get Verifier
-  const {
-    contractJson: verifierJson,
-    contractInstance: verifier,
-  } = await getTruffleContractInstance('Verifier');
+  const {contractJson: verifierJson, contractInstance: verifier} = await getTruffleContractInstance(
+    'Verifier',
+  );
   const {
     contractJson: verifierRegistryJson,
     contractInstance: verifierRegistry,
@@ -102,8 +101,8 @@ async function initializeVks() {
     });
   });
 
-  const { contractInstance: nfTokenShield } = await getTruffleContractInstance('NFTokenShield');
-  const { contractInstance: fTokenShield } = await getTruffleContractInstance('FTokenShield');
+  const {contractInstance: nfTokenShield} = await getTruffleContractInstance('NFTokenShield');
+  const {contractInstance: fTokenShield} = await getTruffleContractInstance('FTokenShield');
 
   // Set these vkIds for the shield contracts.
   console.log('Setting vkIds within nfTokenShield');

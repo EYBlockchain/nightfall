@@ -1,5 +1,5 @@
-import { UserService } from '../business';
-import { setDB } from '../middlewares';
+import {UserService} from '../business';
+import {setDB} from '../middlewares';
 
 /**
  * This function will create or get mongo db connection
@@ -11,7 +11,7 @@ import { setDB } from '../middlewares';
  * @param {*} res
  */
 async function configureDBconnection(req, res, next) {
-  const { name, password } = req.body;
+  const {name, password} = req.body;
   try {
     const connection = await UserService.setDBconnection(name, password);
     req.user.connection = connection;
@@ -58,7 +58,7 @@ async function updateUser(req, res, next) {
   const userService = new UserService(req.user.db);
   try {
     await userService.updateUser(req.body);
-    res.data = { message: 'user informantion updated' };
+    res.data = {message: 'user informantion updated'};
     next();
   } catch (err) {
     next(err);
@@ -100,7 +100,7 @@ async function addFTShieldContractInfo(req, res, next) {
   const userService = new UserService(req.user.db);
   try {
     await userService.addFTShieldContractInfo(req.body);
-    res.data = { message: 'Contract Information Inserted' };
+    res.data = {message: 'Contract Information Inserted'};
     next();
   } catch (err) {
     next(err);
@@ -119,11 +119,11 @@ async function addFTShieldContractInfo(req, res, next) {
  * @param {*} res
  */
 async function updateFTShieldContractInfoByContractAddress(req, res, next) {
-  const { address } = req.params;
+  const {address} = req.params;
   const userService = new UserService(req.user.db);
   try {
     await userService.updateFTShieldContractInfoByContractAddress(address, req.body);
-    res.data = { message: 'Contract Information Updated' };
+    res.data = {message: 'Contract Information Updated'};
     next();
   } catch (err) {
     next(err);
@@ -144,7 +144,7 @@ async function deleteFTShieldContractInfoByContractAddress(req, res, next) {
     const status = await userService.deleteFTShieldContractInfoByContractAddress(
       req.params.address,
     );
-    res.data = { message: 'Contract Information Removed', status };
+    res.data = {message: 'Contract Information Removed', status};
     next();
   } catch (err) {
     next(err);
@@ -166,7 +166,7 @@ async function addNFTShieldContractInfo(req, res, next) {
   const userService = new UserService(req.user.db);
   try {
     await userService.addNFTShieldContractInfo(req.body);
-    res.data = { message: 'Contract Information Inserted' };
+    res.data = {message: 'Contract Information Inserted'};
     next();
   } catch (err) {
     next(err);
@@ -185,11 +185,11 @@ async function addNFTShieldContractInfo(req, res, next) {
  * @param {*} res
  */
 async function updateNFTShieldContractInfoByContractAddress(req, res, next) {
-  const { address } = req.params;
+  const {address} = req.params;
   const userService = new UserService(req.user.db);
   try {
     await userService.updateNFTShieldContractInfoByContractAddress(address, req.body);
-    res.data = { message: 'Contract Information Updated' };
+    res.data = {message: 'Contract Information Updated'};
     next();
   } catch (err) {
     next(err);
@@ -210,7 +210,7 @@ async function deleteNFTShieldContractInfoByContractAddress(req, res, next) {
     const status = await userService.deleteNFTShieldContractInfoByContractAddress(
       req.params.address,
     );
-    res.data = { message: 'Contract Information Removed', status };
+    res.data = {message: 'Contract Information Removed', status};
     next();
   } catch (err) {
     next(err);

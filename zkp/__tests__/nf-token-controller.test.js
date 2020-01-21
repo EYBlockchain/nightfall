@@ -3,7 +3,7 @@
 import utils from '../src/zkpUtils';
 import bc from '../src/web3';
 import controller from '../src/nf-token-controller';
-import { getVkId, getTruffleContractInstance } from '../src/contractUtils';
+import {getVkId, getTruffleContractInstance} from '../src/contractUtils';
 
 jest.setTimeout(7200000);
 
@@ -33,7 +33,7 @@ let nfTokenShieldAddress;
 beforeAll(async () => {
   if (!(await bc.isConnected())) await bc.connect();
   accounts = await (await bc.connection()).eth.getAccounts();
-  const { contractJson, contractInstance } = await getTruffleContractInstance('NFTokenShield');
+  const {contractJson, contractInstance} = await getTruffleContractInstance('NFTokenShield');
   nfTokenShieldAddress = contractInstance.address;
   nfTokenShieldJson = contractJson;
   A = await utils.rndHex(32);
@@ -85,7 +85,7 @@ describe('nf-token-controller.js tests', () => {
   });
 
   test('Should mint an ERC 721 commitment for Alice for asset A  (Z_A_A)', async () => {
-    const { commitment: zTest, commitmentIndex: zIndex } = await controller.mint(
+    const {commitment: zTest, commitmentIndex: zIndex} = await controller.mint(
       A,
       pkA,
       S_A_A,
@@ -106,7 +106,7 @@ describe('nf-token-controller.js tests', () => {
   });
 
   test('Should mint an ERC 721 commitment for Alice for asset G (Z_A_G)', async () => {
-    const { commitment: zTest, commitmentIndex: zIndex } = await controller.mint(
+    const {commitment: zTest, commitmentIndex: zIndex} = await controller.mint(
       G,
       pkA,
       S_A_G,
@@ -127,7 +127,7 @@ describe('nf-token-controller.js tests', () => {
   });
 
   test('Should transfer the ERC 721 commitment Z_A_A from Alice to Bob, creating Z_B_A', async () => {
-    const { outputCommitment } = await controller.transfer(
+    const {outputCommitment} = await controller.transfer(
       A,
       pkB,
       S_A_A,
@@ -151,7 +151,7 @@ describe('nf-token-controller.js tests', () => {
   });
 
   test('Should transfer the ERC 721 commitment Z_A_G from Alice to Bob, creating Z_B_G', async () => {
-    const { outputCommitment } = await controller.transfer(
+    const {outputCommitment} = await controller.transfer(
       G,
       pkB,
       S_A_G,

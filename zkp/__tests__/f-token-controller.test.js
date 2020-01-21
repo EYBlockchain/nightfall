@@ -4,7 +4,7 @@ import bc from '../src/web3';
 
 import utils from '../src/zkpUtils';
 import controller from '../src/f-token-controller';
-import { getVkId, getTruffleContractInstance } from '../src/contractUtils';
+import {getVkId, getTruffleContractInstance} from '../src/contractUtils';
 
 jest.setTimeout(7200000);
 
@@ -44,7 +44,7 @@ let fTokenShieldAddress;
 beforeAll(async () => {
   if (!(await bc.isConnected())) await bc.connect();
   accounts = await (await bc.connection()).eth.getAccounts();
-  const { contractJson, contractInstance } = await getTruffleContractInstance('FTokenShield');
+  const {contractJson, contractInstance} = await getTruffleContractInstance('FTokenShield');
   fTokenShieldAddress = contractInstance.address;
   fTokenShieldJson = contractJson;
   // blockchainOptions = { account, fTokenShieldJson, fTokenShieldAddress };
@@ -102,14 +102,14 @@ describe('f-token-controller.js tests', () => {
   });
 
   test('Should get the ERC-20 metadata', async () => {
-    const { symbol, name } = await controller.getTokenInfo(accounts[0]);
+    const {symbol, name} = await controller.getTokenInfo(accounts[0]);
     expect('OPS').toEqual(symbol);
     expect('EY OpsCoin').toEqual(name);
   });
 
   test('Should mint an ERC-20 commitment Z_A_C for Alice for asset C', async () => {
     console.log('Alices account ', (await controller.getBalance(accounts[0])).toNumber());
-    const { commitment: zTest, commitmentIndex: zIndex } = await controller.mint(
+    const {commitment: zTest, commitmentIndex: zIndex} = await controller.mint(
       C,
       pkA,
       S_A_C,
@@ -131,7 +131,7 @@ describe('f-token-controller.js tests', () => {
   });
 
   test('Should mint another ERC-20 commitment Z_A_D for Alice for asset D', async () => {
-    const { commitment: zTest, commitmentIndex: zIndex } = await controller.mint(
+    const {commitment: zTest, commitmentIndex: zIndex} = await controller.mint(
       D,
       pkA,
       S_A_D,
@@ -155,10 +155,13 @@ describe('f-token-controller.js tests', () => {
   test('Should transfer a ERC-20 commitment to Bob (two coins get nullified, two created; one coin goes to Bob, the other goes back to Alice as change)', async () => {
     // E becomes Bob's, F is change returned to Alice
     const inputCommitments = [
-      { value: C, salt: S_A_C, commitment: Z_A_C, commitmentIndex: zInd1 },
-      { value: D, salt: S_A_D, commitment: Z_A_D, commitmentIndex: zInd2 },
+      {value: C, salt: S_A_C, commitment: Z_A_C, commitmentIndex: zInd1},
+      {value: D, salt: S_A_D, commitment: Z_A_D, commitmentIndex: zInd2},
     ];
-    const outputCommitments = [{ value: E, salt: sAToBE }, { value: F, salt: sAToAF }];
+    const outputCommitments = [
+      {value: E, salt: sAToBE},
+      {value: F, salt: sAToAF},
+    ];
     await controller.transfer(
       inputCommitments,
       outputCommitments,
@@ -180,7 +183,7 @@ describe('f-token-controller.js tests', () => {
   });
 
   test('Should mint another ERC-20 commitment Z_B_G for Bob for asset G', async () => {
-    const { commitment: zTest, commitmentIndex: zIndex } = await controller.mint(
+    const {commitment: zTest, commitmentIndex: zIndex} = await controller.mint(
       G,
       pkB,
       S_B_G,
@@ -203,10 +206,13 @@ describe('f-token-controller.js tests', () => {
   test('Should transfer an ERC-20 commitment to Eve', async () => {
     // H becomes Eve's, I is change returned to Bob
     const inputCommitments = [
-      { value: E, salt: sAToBE, commitment: Z_B_E, commitmentIndex: zInd1 + 2 },
-      { value: G, salt: S_B_G, commitment: Z_B_G, commitmentIndex: zInd3 },
+      {value: E, salt: sAToBE, commitment: Z_B_E, commitmentIndex: zInd1 + 2},
+      {value: G, salt: S_B_G, commitment: Z_B_G, commitmentIndex: zInd3},
     ];
-    const outputCommitments = [{ value: H, salt: sBToEH }, { value: I, salt: sBToBI }];
+    const outputCommitments = [
+      {value: H, salt: sBToEH},
+      {value: I, salt: sBToBI},
+    ];
 
     await controller.transfer(
       inputCommitments,

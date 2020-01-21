@@ -1,4 +1,4 @@
-export default function({ name, email, address, shhIdentity, secretKey, publicKey }) {
+export default function({name, email, address, shhIdentity, secretKey, publicKey}) {
   return {
     [name ? 'name' : undefined]: name,
     [email ? 'email' : undefined]: email,

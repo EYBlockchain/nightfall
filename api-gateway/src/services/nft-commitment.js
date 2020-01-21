@@ -1,5 +1,5 @@
-import { sendWhisperMessage } from './whisper';
-import { accounts, db, offchain, zkp } from '../rest';
+import {sendWhisperMessage} from './whisper';
+import {accounts, db, offchain, zkp} from '../rest';
 
 /**
  * This function will insert NFT commitment in database
@@ -177,8 +177,8 @@ export async function transferToken(req, res, next) {
     // Generate a new one-time-use Ethereum address for the sender to use
     const password = (req.user.address + Date.now()).toString();
     const address = (await accounts.createAccount(password)).data;
-    await db.updateUserWithPrivateAccount(req.user, { address, password });
-    await accounts.unlockAccount({ address, password });
+    await db.updateUserWithPrivateAccount(req.user, {address, password});
+    await accounts.unlockAccount({address, password});
 
     // get logged in user's secretKey.
     const user = await db.fetchUser(req.user);
@@ -190,7 +190,7 @@ export async function transferToken(req, res, next) {
     // Nullify the sender's 'token commitment' within the shield contract.
     // Add a new token commitment to the shield contract to represent that the token is now owned by the receiver.
     const data = await zkp.spendToken(
-      { address },
+      {address},
       {
         ...inputCommitment,
         sender: {
@@ -204,7 +204,7 @@ export async function transferToken(req, res, next) {
 
     // Update the sender's token db.
     await db.updateNFTCommitmentByTokenId(req.user, inputCommitment.tokenId, {
-      outputCommitments: [{ owner: receiver }],
+      outputCommitments: [{owner: receiver}],
       isTransferred: true,
     });
 
@@ -301,7 +301,7 @@ export async function burnToken(req, res, next) {
       isBurned: true,
     });
 
-    const { tokenUri, tokenId, shieldContractAddress } = inputCommitment;
+    const {tokenUri, tokenId, shieldContractAddress} = inputCommitment;
     await sendWhisperMessage(user.shhIdentity, {
       tokenUri,
       tokenId,
@@ -312,7 +312,7 @@ export async function burnToken(req, res, next) {
       for: 'NFTToken',
     }); // send nft token data to BOB side
 
-    res.data = { message: 'burn successful' };
+    res.data = {message: 'burn successful'};
     next();
   } catch (err) {
     next(err);

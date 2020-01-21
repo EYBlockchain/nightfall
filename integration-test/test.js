@@ -1,6 +1,6 @@
 /* eslint-disable camelcase, func-names */
 
-import { expect } from 'chai';
+import {expect} from 'chai';
 import request from 'superagent';
 import prefix from 'superagent-prefix';
 import config from 'config';
@@ -9,7 +9,7 @@ import testData from './testData';
 const apiServerURL = config.get('apiServerURL');
 
 // independent test data.
-const { alice, bob, erc20 } = testData;
+const {alice, bob, erc20} = testData;
 
 // dependent test data. which need to be configured.
 let erc721;
@@ -20,7 +20,7 @@ let erc20CommitmentBatchTransfer;
 describe('****** Integration Test ******\n', function() {
   before(async function() {
     await testData.configureDependentTestData();
-    ({ erc721, erc721Commitment, erc20Commitments, erc20CommitmentBatchTransfer } = testData);
+    ({erc721, erc721Commitment, erc20Commitments, erc20CommitmentBatchTransfer} = testData);
   });
   /*
    *  Step 1.
@@ -152,16 +152,18 @@ describe('****** Integration Test ******\n', function() {
        * Mint ERC-721 token commitment.
        */
       it('Mint ERC-721 token commitment', function(done) {
-        const { tokenUri, tokenId } = erc721Commitment;
+        const {tokenUri, tokenId} = erc721Commitment;
         request
           .post('/mintNFTCommitment')
           .use(prefix(apiServerURL))
-          .send({ outputCommitments: [
-            {
-              tokenUri,
-              tokenId,
-            }
-          ]})
+          .send({
+            outputCommitments: [
+              {
+                tokenUri,
+                tokenId,
+              },
+            ],
+          })
           .set('Accept', 'application/json')
           .set('Authorization', alice.token)
           .end((err, res) => {
@@ -182,7 +184,7 @@ describe('****** Integration Test ******\n', function() {
        * Transfer ERC-721 Commitment.
        */
       it('Transfer ERC-721 Commitment to Bob', function(done) {
-        const { tokenId, tokenUri, salt, mintCommitment, mintCommitmentIndex } = erc721Commitment;
+        const {tokenId, tokenUri, salt, mintCommitment, mintCommitmentIndex} = erc721Commitment;
         request
           .post('/transferNFTCommitment')
           .use(prefix(apiServerURL))
@@ -228,7 +230,13 @@ describe('****** Integration Test ******\n', function() {
        * Burn ERC-721 Commitment.
        */
       it('Burn ERC-721 Commitment', function(done) {
-        const { tokenId, tokenUri, transferredSalt, transferCommitment, transferCommitmentIndex } = erc721Commitment;
+        const {
+          tokenId,
+          tokenUri,
+          transferredSalt,
+          transferCommitment,
+          transferCommitmentIndex,
+        } = erc721Commitment;
         request
           .post('/burnNFTCommitment')
           .use(prefix(apiServerURL))
@@ -240,7 +248,7 @@ describe('****** Integration Test ******\n', function() {
                 salt: transferredSalt,
                 commitment: transferCommitment,
                 commitmentIndex: transferCommitmentIndex,
-              }
+              },
             ],
             receiver: {
               name: bob.name,
@@ -255,7 +263,7 @@ describe('****** Integration Test ******\n', function() {
 
             return done();
           });
-      }); 
+      });
       /*
        * Step 7.
        * Tranfer ERC-721 Token.
@@ -349,7 +357,7 @@ describe('****** Integration Test ******\n', function() {
         request
           .post('/mintFTCommitment')
           .use(prefix(apiServerURL))
-          .send({ outputCommitments: [erc20Commitments.mint[0]] })
+          .send({outputCommitments: [erc20Commitments.mint[0]]})
           .set('Accept', 'application/json')
           .set('Authorization', alice.token)
           .end((err, res) => {
@@ -374,7 +382,7 @@ describe('****** Integration Test ******\n', function() {
         request
           .post('/mintFTCommitment')
           .use(prefix(apiServerURL))
-          .send({ outputCommitments: [erc20Commitments.mint[1]] })
+          .send({outputCommitments: [erc20Commitments.mint[1]]})
           .set('Accept', 'application/json')
           .set('Authorization', alice.token)
           .end((err, res) => {
@@ -403,7 +411,7 @@ describe('****** Integration Test ******\n', function() {
           .send({
             inputCommitments: erc20Commitments.mint,
             outputCommitments: [erc20Commitments.transfer, erc20Commitments.change],
-            receiver: { name: bob.name },
+            receiver: {name: bob.name},
           })
           .set('Accept', 'application/json')
           .set('Authorization', alice.token)
@@ -589,13 +597,7 @@ describe('****** Integration Test ******\n', function() {
      * Transfer ERC-20 Commitment.
      */
     it(`ERC-20 Commitment Batch transfer ERC-20 Commitment to users`, function(done) {
-      const {
-        value,
-        salt,
-        commitment,
-        commitmentIndex,
-        transferData,
-      } = erc20CommitmentBatchTransfer;
+      const {value, salt, commitment, commitmentIndex, transferData} = erc20CommitmentBatchTransfer;
       request
         .post('/simpleFTCommitmentBatchTransfer')
         .use(prefix(apiServerURL))

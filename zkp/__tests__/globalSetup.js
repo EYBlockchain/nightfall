@@ -1,4 +1,4 @@
-import { merkleTree } from '@eyblockchain/nightlite';
+import {merkleTree} from '@eyblockchain/nightlite';
 import bc from '../src/web3';
 import vk from '../src/vk-controller';
 

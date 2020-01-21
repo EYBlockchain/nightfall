@@ -22,7 +22,7 @@ export async function getVkId(actionName) {
       else resolve(data);
     }),
   );
-  const { vkId } = vkIds[actionName];
+  const {vkId} = vkIds[actionName];
   return vkId;
 }
 
@@ -35,11 +35,11 @@ export async function getTruffleContractInstance(contractName) {
   contractInstance.setProvider(web3);
   const deployed = await contractInstance.deployed();
 
-  return { contractInstance: deployed, contractJson };
+  return {contractInstance: deployed, contractJson};
 }
 
 export async function getContractAddress(contractName) {
-  const { contractInstance } = await getTruffleContractInstance(contractName);
+  const {contractInstance} = await getTruffleContractInstance(contractName);
   return contractInstance.address;
 }
 
@@ -68,6 +68,6 @@ export async function getWeb3ContractInstance(contractName, deployedAddress) {
 
 export async function getContractBytecode(contractName) {
   const contractInterface = await getContractInterface(contractName);
-  const { bytecode } = contractInterface;
+  const {bytecode} = contractInterface;
   return bytecode;
 }

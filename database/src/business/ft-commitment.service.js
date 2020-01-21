@@ -1,5 +1,5 @@
-import { COLLECTIONS } from '../common/constants';
-import { ftCommitmentMapper } from '../mappers';
+import {COLLECTIONS} from '../common/constants';
+import {ftCommitmentMapper} from '../mappers';
 import FtCommitmentTransactionService from './ft-commitment-transaction.service';
 
 export default class FtCommitmentService {
@@ -14,7 +14,7 @@ export default class FtCommitmentService {
    * @param {object} data
    */
   insertFTCommitmentTransaction(data) {
-    const { isTransferred, isReceived, isChange, isBurned, isBatchTransferred } = data;
+    const {isTransferred, isReceived, isChange, isBurned, isBatchTransferred} = data;
 
     if (isReceived)
       return this.ftCommitmentTransactionService.insertTransaction({
@@ -62,10 +62,10 @@ export default class FtCommitmentService {
       COLLECTIONS.FT_COMMITMENT,
       {
         commitment: commitmentHash,
-        isTransferred: { $exists: false },
-        isBatchTransferred: { $exists: false },
+        isTransferred: {$exists: false},
+        isBatchTransferred: {$exists: false},
       },
-      { $set: mappedData },
+      {$set: mappedData},
     );
   }
 
@@ -78,21 +78,21 @@ export default class FtCommitmentService {
   getFTCommitments(pageination) {
     if (!pageination || !pageination.pageNo || !pageination.limit) {
       return this.db.getData(COLLECTIONS.FT_COMMITMENT, {
-        isTransferred: { $exists: false },
-        isBatchTransferred: { $exists: false },
-        isBurned: { $exists: false },
+        isTransferred: {$exists: false},
+        isBatchTransferred: {$exists: false},
+        isBurned: {$exists: false},
       });
     }
-    const { pageNo, limit } = pageination;
+    const {pageNo, limit} = pageination;
     return this.db.getDbData(
       COLLECTIONS.FT_COMMITMENT,
       {
-        isTransferred: { $exists: false },
-        isBatchTransferred: { $exists: false },
-        isBurned: { $exists: false },
+        isTransferred: {$exists: false},
+        isBatchTransferred: {$exists: false},
+        isBurned: {$exists: false},
       },
       undefined,
-      { createdAt: -1 },
+      {createdAt: -1},
       parseInt(pageNo, 10),
       parseInt(limit, 10),
     );

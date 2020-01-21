@@ -1,4 +1,4 @@
-import { COLLECTIONS } from '../common/constants';
+import {COLLECTIONS} from '../common/constants';
 
 export default class FtCommitmentTransactionService {
   constructor(_db) {
@@ -29,12 +29,12 @@ export default class FtCommitmentTransactionService {
    * @param {object} query
    */
   getTransactions(query) {
-    const { pageNo, limit } = query;
+    const {pageNo, limit} = query;
     return this.db.getDbData(
       COLLECTIONS.FT_COMMITMENT_TRANSACTION,
       {},
       undefined,
-      { createdAt: -1 },
+      {createdAt: -1},
       parseInt(pageNo, 10),
       parseInt(limit, 10),
     );
