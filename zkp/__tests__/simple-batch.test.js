@@ -63,7 +63,7 @@ let Z_A_C;
 // storage for z indexes
 let zInd1;
 let zInd2;
-let commitments = [];
+let outputCommitments = [];
 let accounts;
 let fTokenShieldJson;
 let fTokenShieldAddress;
@@ -124,7 +124,6 @@ describe('f-token-controller.js tests', () => {
     // the E's becomes Bobs'.
     const bal1 = await controller.getBalance(accounts[0]);
     const inputCommitment = { value: C, salt: S_A_C, commitment: Z_A_C, commitmentIndex: zInd1 };
-    const outputCommitments = [];
     for (let i = 0; i < E.length; i++) {
       outputCommitments[i] = { value: E[i], salt: S_B_E[i] };
     }
@@ -147,8 +146,7 @@ describe('f-token-controller.js tests', () => {
       },
     );
 
-    zInd2 = parseInt(response.transferredCommitmentIndex, 10);
-    commitments = response.transferredCommitment;
+    zInd2 = parseInt(response.maxOutputCommitmentIndex, 10);
     const bal2 = await controller.getBalance(accounts[0]);
     const wei = parseInt(bal1, 10) - parseInt(bal2, 10);
     console.log('gas consumed was', wei / 20e9);
@@ -163,10 +161,20 @@ describe('f-token-controller.js tests', () => {
     const f = '0x00000000000000000000000000000003';
     const pkE = await utils.rndHex(32); // public key of Eve, who we transfer to
     const inputCommitments = [
-      { value: c, salt: S_B_E[18], commitment: commitments[18], commitmentIndex: zInd2 - 1 },
-      { value: d, salt: S_B_E[19], commitment: commitments[19], commitmentIndex: zInd2 },
+      {
+        value: c,
+        salt: S_B_E[18],
+        commitment: outputCommitments[18].commitment,
+        commitmentIndex: zInd2 - 1,
+      },
+      {
+        value: d,
+        salt: S_B_E[19],
+        commitment: outputCommitments[19].commitment,
+        commitmentIndex: zInd2,
+      },
     ];
-    const outputCommitments = [
+    outputCommitments = [
       { value: e, salt: await utils.rndHex(32) },
       { value: f, salt: await utils.rndHex(32) },
     ];
