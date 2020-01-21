@@ -22,17 +22,13 @@ export default class NftCommitmentService {
    *
    * @param token {String} Amount to mint
    */
-  mintNFTCommitment(token: any) {
+  mintNFTCommitment({ tokenUri, tokenId, shieldContractAddress }) {
     const httpOptions = {
       headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
     };
-    
+
     const body = {
-      outputCommitments: [{
-        tokenURI: token.token_uri,
-        tokenId: token.token_id,
-        shieldContractAddress: token.shield_contract_address
-      }],
+      outputCommitments: [{ tokenUri, tokenId, shieldContractAddress }],
     };
     const url = config.apiGateway.root + 'mintNFTCommitment';
 
@@ -52,21 +48,14 @@ export default class NftCommitmentService {
  * @param name {String} Rceiver name
  * @param commitmentIndex {String} Token commitment index
  */
-  transferNFTCommitment(tokenId: string, tokenURI: string, shieldContractAddress: string, salt: string, commitment: string, name: string, commitmentIndex: number) {
+  transferNFTCommitment(commitment, name: string) {
     const httpOptions = {
       headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
     };
 
     const body = {
-      inputCommitments: [{      
-        tokenId,
-        tokenURI,
-        shieldContractAddress,
-        salt,
-        commitment,
-        commitmentIndex
-      }],
-      receiver:{
+      inputCommitments: [commitment],
+      receiver: {
         name,
       },
     };
@@ -87,20 +76,13 @@ export default class NftCommitmentService {
    * @param commitmentIndex {String} Token commitment index
    * @param receiver {String} Token reciever name
    */
-  burnNFTCommitment(tokenId: string, tokenURI: string, shieldContractAddress: string, salt: string, commitment: string, commitmentIndex: number, name: string) {
+  burnNFTCommitment(commitment, name: string) {
     const httpOptions = {
       headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
     };
     const body = {
-      inputCommitments:[{
-        tokenId,
-        tokenURI,
-        shieldContractAddress,
-        salt,
-        commitment,
-        commitmentIndex,
-      }],
-      receiver:{
+      inputCommitments: [commitment],
+      receiver: {
         name,
       }
     };

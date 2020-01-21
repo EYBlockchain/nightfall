@@ -129,7 +129,6 @@ export class UserAccountsComponent extends Config implements OnInit {
   formatDataSource({ fTokenShields, nfTokenShields, selectedFTokenShield, selectedNFTokenShield  }) {
     const formatedData = [];
     nfTokenShields.map((item) => {
-      console.log('nfTokenShields', item)
       const token721 =   {
             contractAdd: item.contractAddress,
             contractName: item.contractName,
@@ -139,7 +138,6 @@ export class UserAccountsComponent extends Config implements OnInit {
         formatedData.push(token721);
     });
     fTokenShields.map((item) => {
-      console.log('fTokenShields', item)
       const token20 =   {
             contractAdd: item.contractAddress,
             contractName: item.contractName,

@@ -21,12 +21,8 @@ export default new Schema(
     },
 
     owner: {
-      name: {
-        type: String,
-      },
-      publicKey: {
-        type: String,
-      },
+      name: String,
+      publicKey: String,
     },
 
     // boolean stats

@@ -8,7 +8,7 @@ import { NgSelectComponent } from '@ng-select/ng-select';
  * Burn non-fungible token component, which is used for rendering the page of burn ERC-721 token.
  */
 @Component({
-  selector: 'nft-burn',
+  selector: 'app-nft-burn',
   templateUrl: './index.html',
   providers: [NftService],
   styleUrls: ['./index.css']

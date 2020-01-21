@@ -6,7 +6,7 @@ import { ToastrService } from 'ngx-toastr';
  * Component for listing all ERC-721 tokens
  */
 @Component({
-  selector: 'nft-list',
+  selector: 'app-nft-list',
   templateUrl: './index.html',
   styleUrls: ['./index.css'],
   providers: [NftService],

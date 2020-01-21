@@ -1,5 +1,5 @@
-import {whisperTransaction} from './whisper';
-import {accounts, db, offchain, zkp} from '../rest';
+import { sendWhisperMessage } from './whisper';
+import { accounts, db, offchain, zkp } from '../rest';
 
 /**
  * This function will insert NFT commitment in database
@@ -101,7 +101,7 @@ export async function checkCorrectnessForNFTCommitment(req, res, next) {
  * req.body {
     outputCommitments: [{
       shieldContractAddress: '0xE9A313C89C449AF6E630C25AB3ACC0FC3BAB821638E0D55599B518',
-      tokenURI: 'unique token name',
+      tokenUri: 'unique token name',
       tokenId: '0x1448d8ab4e0d610000000000000000000000000000000000000000000000000'
     }],
   }
@@ -121,10 +121,12 @@ export async function mintToken(req, res, next) {
 
     // add the new token commitment (and details of its hash preimage) to the token db.
     await db.insertNFTCommitment(req.user, {
-      salt: data.salt,
-      commitment: data.commitment,
-      commitmentIndex: parseInt(data.commitmentIndex, 16),
-      ...outputCommitment,
+      outputCommitments: [
+        {
+          ...outputCommitment,
+          ...data,
+        },
+      ],
       isMinted: true,
     });
 
@@ -153,7 +155,7 @@ export async function mintToken(req, res, next) {
    inputCommitments: [
      {
       tokenId: '0x1448d8ab4e0d610000000000000000000000000000000000000000000000000',
-      tokenURI: 'unique token name',
+      tokenUri: 'unique token name',
       salt: '0xe9a313c89c449af6e630c25ab3acc0fc3bab821638e0d55599b518',
       commitment: '0xca2c0c099289896be4d72c74f801bed6e4b2cd5297bfcf29325484',
       receiver: 'bob',
@@ -170,55 +172,70 @@ export async function mintToken(req, res, next) {
 export async function transferToken(req, res, next) {
   const {
     inputCommitments: [inputCommitment],
+    receiver,
   } = req.body;
   try {
     // Generate a new one-time-use Ethereum address for the sender to use
     const password = (req.user.address + Date.now()).toString();
     const address = (await accounts.createAccount(password)).data;
-    await db.updateUserWithPrivateAccount(req.user, {address, password});
-    await accounts.unlockAccount({address, password});
+    await db.updateUserWithPrivateAccount(req.user, { address, password });
+    await accounts.unlockAccount({ address, password });
 
     // get logged in user's secretKey.
     const user = await db.fetchUser(req.user);
 
     // Fetch the receiver's publicKey from the PKD by passing their username
-    const receiverPublicKey = await offchain.getZkpPublicKeyFromName(req.body.receiver.name);
+    receiver.publicKey = await offchain.getZkpPublicKeyFromName(receiver.name);
 
     // Transfer the token under zero-knowledge:
     // Nullify the sender's 'token commitment' within the shield contract.
     // Add a new token commitment to the shield contract to represent that the token is now owned by the receiver.
     const data = await zkp.spendToken(
-      {address},
+      { address },
       {
         ...inputCommitment,
         sender: {
           secretKey: user.secretKey,
         },
-        receiverPublicKey,
+        receiver,
       },
     );
 
     data.commitmentIndex = parseInt(data.commitmentIndex, 16);
 
     // Update the sender's token db.
-    await db.updateNFTCommitmentByTokenId(req.user, req.body.tokenId, {
-      ...inputCommitment,
-      ...data,
-      receiver: req.body.receiver.name,
+    await db.updateNFTCommitmentByTokenId(req.user, inputCommitment.tokenId, {
+      outputCommitments: [{ owner: receiver }],
       isTransferred: true,
     });
-    const {tokenURI, tokenId, shieldContractAddress} = inputCommitment;
+
+    await db.insertNFTCommitmentTransaction(req.user, {
+      inputCommitments: [inputCommitment],
+      outputCommitments: [
+        {
+          ...inputCommitment,
+          ...data,
+          owner: receiver,
+        },
+      ],
+      receiver,
+      sender: req.user,
+      isTransferred: true,
+    });
+
     // Send details of the newly-created token commitment to Bob (the receiver) via Whisper.
-    await whisperTransaction(req, {
-      tokenURI,
-      tokenId,
-      shieldContractAddress,
-      salt: data.salt,
-      commitment: data.commitment,
-      commitmentIndex: parseInt(data.commitmentIndex, 16),
+    await sendWhisperMessage(user.shhIdentity, {
+      outputCommitments: [
+        {
+          ...inputCommitment,
+          ...data,
+          owner: receiver,
+        },
+      ],
       blockNumber: data.txReceipt.receipt.blockNumber,
-      receiver: req.body.receiver,
-      receiverPublicKey,
+      receiver,
+      sender: req.user,
+      isReceived: true,
       for: 'NFTCommitment',
     });
 
@@ -241,7 +258,7 @@ export async function transferToken(req, res, next) {
    inputCommitments: [
    {
       tokenId: '0x1448d8ab4e0d610000000000000000000000000000000000000000000000000',
-      tokenURI: 'unique token name',
+      tokenUri: 'unique token name',
       salt: '0xf4c7028d78d140333a36381540e70e6210895a994429fb0483fb91',
       commitment: '0xe0e327cee19c16949a829977a1e3a36b92c2ef22b735b6d7af6c33',
       commitmentIndex: 1,
@@ -259,7 +276,7 @@ export async function burnToken(req, res, next) {
     inputCommitments: [inputCommitment],
   } = req.body;
   try {
-    receiver.address = await offchain.getAddressFromName(req.body.receiver.name || req.user.name);
+    receiver.address = await offchain.getAddressFromName(receiver.name);
 
     // get logged in user.
     const user = await db.fetchUser(req.user);
@@ -275,35 +292,28 @@ export async function burnToken(req, res, next) {
     });
 
     await db.updateNFTCommitmentByTokenId(req.user, inputCommitment.tokenId, {
-      ...inputCommitment,
-      receiver: req.body.receiver.name || req.user.name,
       isBurned: true,
     });
-    const {tokenURI, tokenId, shieldContractAddress} = inputCommitment;
-    if (req.body.receiver.name) {
-      // Send details of the token to the receiver via Whisper
-      await whisperTransaction(req, {
-        tokenURI,
-        tokenId,
-        shieldContractAddress,
-        receiver: req.body.receiver.name, // this will change when payTo will be a user other than burner himself.
-        sender: req.user.name,
-        senderAddress: req.user.address,
-        blockNumber: res.data.txReceipt.receipt.blockNumber,
-        for: 'NFTToken',
-      });
-    } else {
-      await db.insertNFToken(req.user, {
-        tokenURI,
-        tokenId,
-        shieldContractAddress,
-        sender: req.user.name,
-        senderAddress: req.user.address,
-        isReceived: true,
-      });
-    }
 
-    res.data = {message: 'burn successful'};
+    await db.insertNFTCommitmentTransaction(req.user, {
+      inputCommitments: [inputCommitment],
+      receiver,
+      sender: req.user,
+      isBurned: true,
+    });
+
+    const { tokenUri, tokenId, shieldContractAddress } = inputCommitment;
+    await sendWhisperMessage(user.shhIdentity, {
+      tokenUri,
+      tokenId,
+      shieldContractAddress,
+      receiver,
+      sender: req.user,
+      isReceived: true,
+      for: 'NFTToken',
+    }); // send nft token data to BOB side
+
+    res.data = { message: 'burn successful' };
     next();
   } catch (err) {
     next(err);

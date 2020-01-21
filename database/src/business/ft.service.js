@@ -16,7 +16,7 @@ export default class FtService {
    * }
    */
   insertFTokenTransaction(data) {
-    const {isReceived, isTransferred, isBurned} = data;
+    const { isReceived, isTransferred, isBurned } = data;
 
     if (isReceived)
       return this.ftTransactionService.insertTransaction({

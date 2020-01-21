@@ -10,7 +10,7 @@ import { NgSelectComponent } from '@ng-select/ng-select';
  *  Mint token component, which is used for rendering the page of Mint ERC-721 token commitment.
  */
 @Component({
-  selector: 'ft-commitment-mint',
+  selector: 'app-nft-commitment-mint',
   templateUrl: './index.html',
   providers: [NftCommitmentService, NftService, UtilService],
   styleUrls: ['./index.css']

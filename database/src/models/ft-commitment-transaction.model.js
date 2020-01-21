@@ -28,12 +28,8 @@ export default new Schema(
           required: true,
         },
         owner: {
-          name: {
-            type: String,
-          },
-          publicKey: {
-            type: String,
-          },
+          name: String,
+          publicKey: String,
         },
       },
     ],
@@ -58,31 +54,20 @@ export default new Schema(
           required: true,
         },
         owner: {
-          name: {
-            type: String,
-          },
-          publicKey: {
-            type: String,
-          },
+          name: String,
+          publicKey: String,
         },
       },
     ],
 
     sender: {
-      publicKey: {
-        type: String,
-      },
-      name: {
-        type: String,
-      },
+      publicKey: String,
+      name: String,
     },
     receiver: {
-      publicKey: {
-        type: String,
-      },
-      name: {
-        type: String,
-      },
+      publicKey: String,
+      name: String,
+      address: String,
     },
   },
   { timestamps: true },

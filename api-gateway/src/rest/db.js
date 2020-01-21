@@ -40,7 +40,7 @@ export default {
   },
 
   // fetch logged in user info from. user collection
-  fetchUser({name}) {
+  fetchUser({ name }) {
     const options = {
       url: `${url}/users/${name}`,
       method: 'GET',
@@ -50,7 +50,7 @@ export default {
   },
 
   // update user info in user collection
-  updateUser({name}, body) {
+  updateUser({ name }, body) {
     const options = {
       url: `${url}/users/${name}`,
       method: 'PATCH',
@@ -61,7 +61,7 @@ export default {
   },
 
   // insert new fungible token shield contract info for user in user collection
-  addFTShieldContractInfo({name}, body) {
+  addFTShieldContractInfo({ name }, body) {
     const options = {
       url: `${url}/users/${name}/ft-shield-contracts`,
       method: 'POST',
@@ -72,7 +72,7 @@ export default {
   },
 
   // insert new token shield contract info for user in user collection
-  addNFTShieldContractInfo({name}, body) {
+  addNFTShieldContractInfo({ name }, body) {
     const options = {
       url: `${url}/users/${name}/nft-shield-contracts`,
       method: 'POST',
@@ -83,7 +83,7 @@ export default {
   },
 
   // update fungible token shield contract info for user in user collection
-  updateFTShieldContractInfoByContractAddress({name}, contractAdress, body) {
+  updateFTShieldContractInfoByContractAddress({ name }, contractAdress, body) {
     const options = {
       url: `${url}/users/${name}/ft-shield-contracts/${contractAdress}`,
       method: 'PUT',
@@ -94,7 +94,7 @@ export default {
   },
 
   // update token shield contract info for user in user collection
-  updateNFTShieldContractInfoByContractAddress({name}, contractAdress, body) {
+  updateNFTShieldContractInfoByContractAddress({ name }, contractAdress, body) {
     const options = {
       url: `${url}/users/${name}/nft-shield-contracts/${contractAdress}`,
       method: 'PUT',
@@ -105,7 +105,7 @@ export default {
   },
 
   // delete fungible token shield contract info for user from user collection
-  deleteFTShieldContractInfoByContractAddress({name}, contractAdress) {
+  deleteFTShieldContractInfoByContractAddress({ name }, contractAdress) {
     const options = {
       url: `${url}/users/${name}/ft-shield-contracts/${contractAdress}`,
       method: 'DELETE',
@@ -115,7 +115,7 @@ export default {
   },
 
   // delete token shield contract info for user from user collection
-  deleteNFTShieldContractInfoByContractAddress({name}, contractAdress) {
+  deleteNFTShieldContractInfoByContractAddress({ name }, contractAdress) {
     const options = {
       url: `${url}/users/${name}/nft-shield-contracts/${contractAdress}`,
       method: 'DELETE',
@@ -125,7 +125,7 @@ export default {
   },
 
   // add anonymous one time used account to user collection
-  updateUserWithPrivateAccount({name}, body) {
+  updateUserWithPrivateAccount({ name }, body) {
     const options = {
       url: `${url}/users/${name}/private-accounts`,
       method: 'POST',
@@ -136,179 +136,191 @@ export default {
   },
 
   // insert non-fungible token info in nft collection
-  insertNFToken({name}, body) {
+  insertNFToken({ name }, body) {
     const options = {
       url: `${url}/nfts`,
       method: 'POST',
       json: true,
-      headers: {loggedInUsername: name},
+      headers: { loggedInUsername: name },
       body,
     };
     return requestWrapper(options);
   },
 
   // update non-fungible token info in nft collection
-  updateNFTokenByTokenId({name}, tokenId, body) {
+  updateNFTokenByTokenId({ name }, tokenId, body) {
     const options = {
       url: `${url}/nfts/${tokenId}`,
       method: 'PATCH',
       json: true,
-      headers: {loggedInUsername: name},
+      headers: { loggedInUsername: name },
       body,
     };
     return requestWrapper(options);
   },
 
   // fetch non-fungible tokens
-  getNFTokens({name}, qs) {
+  getNFTokens({ name }, qs) {
     const options = {
       url: `${url}/nfts`,
       method: 'GET',
       json: true,
-      headers: {loggedInUsername: name},
+      headers: { loggedInUsername: name },
       qs,
     };
     return requestWrapper(options);
   },
 
   // fetch NFT transactions
-  getNFTTransactions({name}, qs) {
+  getNFTTransactions({ name }, qs) {
     const options = {
       url: `${url}/nfts/transactions`,
       method: 'GET',
       json: true,
-      headers: {loggedInUsername: name},
+      headers: { loggedInUsername: name },
       qs,
     };
     return requestWrapper(options);
   },
 
   // insert non-fungible token commitment info in nft_commitment collection
-  insertNFTCommitment({name}, body) {
+  insertNFTCommitment({ name }, body) {
     const options = {
       url: `${url}/nft-commitments`,
       method: 'POST',
       json: true,
-      headers: {loggedInUsername: name},
+      headers: { loggedInUsername: name },
       body,
     };
     return requestWrapper(options);
   },
 
   // update non-fungible token commitment info in nft_commitment collection
-  updateNFTCommitmentByTokenId({name}, tokenId, body) {
+  updateNFTCommitmentByTokenId({ name }, tokenId, body) {
     const options = {
       url: `${url}/nft-commitments/${tokenId}`,
       method: 'PATCH',
       json: true,
-      headers: {loggedInUsername: name},
+      headers: { loggedInUsername: name },
       body,
     };
     return requestWrapper(options);
   },
 
   // fetch NFT commitments
-  getNFTCommitments({name}, qs) {
+  getNFTCommitments({ name }, qs) {
     const options = {
       url: `${url}/nft-commitments`,
       method: 'GET',
       json: true,
-      headers: {loggedInUsername: name},
+      headers: { loggedInUsername: name },
       qs,
     };
     return requestWrapper(options);
   },
 
+  // insert non fungible token commitment transaction info in commitment_transaction collection
+  insertNFTCommitmentTransaction({ name }, body) {
+    const options = {
+      url: `${url}/nft-commitments/transactions`,
+      method: 'POST',
+      json: true,
+      headers: { loggedInUsername: name },
+      body,
+    };
+    return requestWrapper(options);
+  },
+
   // fetch NFT commitment transactions
-  getNFTCommitmentTransactions({name}, qs) {
+  getNFTCommitmentTransactions({ name }, qs) {
     const options = {
       url: `${url}/nft-commitments/transactions`,
       method: 'GET',
       json: true,
-      headers: {loggedInUsername: name},
+      headers: { loggedInUsername: name },
       qs,
     };
     return requestWrapper(options);
   },
 
   // insert fungible token trantion info in ft_transaction collection
-  insertFTTransaction({name}, body) {
+  insertFTTransaction({ name }, body) {
     const options = {
       url: `${url}/fts/transactions`,
       method: 'POST',
       json: true,
-      headers: {loggedInUsername: name},
+      headers: { loggedInUsername: name },
       body,
     };
     return requestWrapper(options);
   },
 
   // fetch FT transactions
-  getFTTransactions({name}, qs) {
+  getFTTransactions({ name }, qs) {
     const options = {
       url: `${url}/fts/transactions`,
       method: 'GET',
       json: true,
-      headers: {loggedInUsername: name},
+      headers: { loggedInUsername: name },
       qs,
     };
     return requestWrapper(options);
   },
 
   // insert fungible token commitment info in ft_commitment collection
-  insertFTCommitment({name}, body) {
+  insertFTCommitment({ name }, body) {
     const options = {
       url: `${url}/ft-commitments`,
       method: 'POST',
       json: true,
-      headers: {loggedInUsername: name},
+      headers: { loggedInUsername: name },
       body,
     };
     return requestWrapper(options);
   },
 
   // update fungible token commitment info in ft_commitment collection
-  updateFTCommitmentByCommitmentHash({name}, commitmentHash, body) {
+  updateFTCommitmentByCommitmentHash({ name }, commitmentHash, body) {
     const options = {
       url: `${url}/ft-commitments/${commitmentHash}`,
       method: 'PATCH',
       json: true,
-      headers: {loggedInUsername: name},
+      headers: { loggedInUsername: name },
       body,
     };
     return requestWrapper(options);
   },
 
   // fetch FT Commitments
-  getFTCommitments({name}) {
+  getFTCommitments({ name }) {
     const options = {
       url: `${url}/ft-commitments`,
       method: 'GET',
       json: true,
-      headers: {loggedInUsername: name},
+      headers: { loggedInUsername: name },
     };
     return requestWrapper(options);
   },
 
   // insert fungible token commitment transaction info in ft_commitment_transaction collection
-  insertFTCommitmentTransaction({name}, body) {
+  insertFTCommitmentTransaction({ name }, body) {
     const options = {
       url: `${url}/ft-commitments/transactions`,
       method: 'POST',
       json: true,
-      headers: {loggedInUsername: name},
+      headers: { loggedInUsername: name },
       body,
     };
     return requestWrapper(options);
   },
 
   // fetch FT Commitments transactions
-  getFTCommitmentTransactions({name}, qs) {
+  getFTCommitmentTransactions({ name }, qs) {
     const options = {
       url: `${url}/ft-commitments/transactions`,
       method: 'GET',
       json: true,
-      headers: {loggedInUsername: name},
+      headers: { loggedInUsername: name },
       qs,
     };
     return requestWrapper(options);

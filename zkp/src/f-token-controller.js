@@ -13,13 +13,13 @@ import jsonfile from 'jsonfile';
 // eslint-disable-next-line import/extensions
 import zokrates from '@eyblockchain/zokrates.js';
 import fs from 'fs';
-import {merkleTree} from '@eyblockchain/nightlite';
+import { merkleTree } from '@eyblockchain/nightlite';
 import utils from './zkpUtils';
 import zkp from './f-token-zkp';
 import formatInputsForZkSnark from './format-inputs';
 import Element from './Element';
 import Web3 from './web3';
-import {getTruffleContractInstance} from './contractUtils';
+import { getTruffleContractInstance } from './contractUtils';
 
 const FTokenShield = contract(jsonfile.readFileSync('./build/contracts/FTokenShield.json'));
 FTokenShield.setProvider(Web3.connect());
@@ -152,12 +152,12 @@ async function getTokenInfo(address) {
   const fToken = await FToken.at(await fTokenShieldInstance.getFToken.call());
   const symbol = await fToken.symbol.call();
   const name = await fToken.name.call();
-  return {symbol, name};
+  return { symbol, name };
 }
 
 function gasUsedStats(txReceipt, functionName) {
   console.group(`\nGas used in ${functionName}:`);
-  const {gasUsed} = txReceipt.receipt;
+  const { gasUsed } = txReceipt.receipt;
   const gasUsedLog = txReceipt.logs.filter(log => {
     return log.event === 'GasUsed';
   });
@@ -187,7 +187,7 @@ function gasUsedStats(txReceipt, functionName) {
  * @returns {Number} commitmentIndex
  */
 async function mint(amount, ownerPublicKey, salt, vkId, blockchainOptions, zokratesOptions) {
-  const {fTokenShieldJson, fTokenShieldAddress} = blockchainOptions;
+  const { fTokenShieldJson, fTokenShieldAddress } = blockchainOptions;
   const account = utils.ensure0x(blockchainOptions.account);
 
   const {
@@ -266,7 +266,7 @@ async function mint(amount, ownerPublicKey, salt, vkId, blockchainOptions, zokra
     fileName: proofName,
   });
 
-  let {proof} = JSON.parse(fs.readFileSync(`${outputDirectory}/${proofName}`));
+  let { proof } = JSON.parse(fs.readFileSync(`${outputDirectory}/${proofName}`));
 
   proof = Object.values(proof);
   // convert to flattened array:
@@ -277,7 +277,7 @@ async function mint(amount, ownerPublicKey, salt, vkId, blockchainOptions, zokra
 
   // Approve fTokenShieldInstance to take tokens from minter's account.
   // TODO: Make this more generic, getTruffleContractInstance will not be part of nightfall-sdk.
-  const {contractInstance: fToken} = await getTruffleContractInstance('FToken');
+  const { contractInstance: fToken } = await getTruffleContractInstance('FToken');
   await fToken.approve(fTokenShieldInstance.address, parseInt(amount, 16), {
     from: account,
     gas: 4000000,
@@ -314,7 +314,7 @@ async function mint(amount, ownerPublicKey, salt, vkId, blockchainOptions, zokra
   console.log('Mint output: [zA, zAIndex]:', commitment, commitmentIndex.toString());
   console.log('MINT COMPLETE\n');
   console.groupEnd();
-  return {commitment, commitmentIndex};
+  return { commitment, commitmentIndex };
 }
 
 /**
@@ -340,7 +340,7 @@ async function transfer(
   blockchainOptions,
   zokratesOptions,
 ) {
-  const {fTokenShieldJson, fTokenShieldAddress} = blockchainOptions;
+  const { fTokenShieldJson, fTokenShieldAddress } = blockchainOptions;
   const account = utils.ensure0x(blockchainOptions.account);
 
   const {
@@ -595,7 +595,7 @@ async function transfer(
     fileName: proofName,
   });
 
-  let {proof} = JSON.parse(fs.readFileSync(`${outputDirectory}/${proofName}`));
+  let { proof } = JSON.parse(fs.readFileSync(`${outputDirectory}/${proofName}`));
 
   proof = Object.values(proof);
   // convert to flattened array:
@@ -677,7 +677,7 @@ async function simpleFungibleBatchTransfer(
   blockchainOptions,
   zokratesOptions,
 ) {
-  const {fTokenShieldJson, fTokenShieldAddress} = blockchainOptions;
+  const { fTokenShieldJson, fTokenShieldAddress } = blockchainOptions;
   const account = utils.ensure0x(blockchainOptions.account);
 
   const {
@@ -787,7 +787,7 @@ async function simpleFungibleBatchTransfer(
     fileName: proofName,
   });
 
-  let {proof} = JSON.parse(fs.readFileSync(`${outputDirectory}/${proofName}`));
+  let { proof } = JSON.parse(fs.readFileSync(`${outputDirectory}/${proofName}`));
 
   proof = Object.values(proof);
   // convert to flattened array:
@@ -862,7 +862,7 @@ async function burn(
   blockchainOptions,
   zokratesOptions,
 ) {
-  const {fTokenShieldJson, fTokenShieldAddress, tokenReceiver: _payTo} = blockchainOptions;
+  const { fTokenShieldJson, fTokenShieldAddress, tokenReceiver: _payTo } = blockchainOptions;
 
   const account = utils.ensure0x(blockchainOptions.account);
 
@@ -968,7 +968,7 @@ async function burn(
     fileName: proofName,
   });
 
-  let {proof} = JSON.parse(fs.readFileSync(`${outputDirectory}/${proofName}`));
+  let { proof } = JSON.parse(fs.readFileSync(`${outputDirectory}/${proofName}`));
 
   proof = Object.values(proof);
   // convert to flattened array:
@@ -1010,7 +1010,7 @@ async function burn(
   console.log('BURN COMPLETE\n');
   console.groupEnd();
 
-  return {z_C: commitment, z_C_index: commitmentIndex, txReceipt};
+  return { z_C: commitment, z_C_index: commitmentIndex, txReceipt };
 }
 
 async function checkCorrectness(

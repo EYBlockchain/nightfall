@@ -1,19 +1,19 @@
-import {Schema} from 'mongoose';
+import { Schema } from 'mongoose';
 
 export default new Schema(
   {
-    transaction_type: {
+    transactionType: {
       type: String,
       enum: ['mint', 'transfer_outgoing', 'transfer_incoming', 'burn'],
       required: true,
     },
-    input_commitments: [
+    inputCommitments: [
       {
-        token_uri: {
+        tokenUri: {
           type: String,
           required: true,
         },
-        token_id: {
+        tokenId: {
           type: String,
           required: true,
         },
@@ -26,28 +26,24 @@ export default new Schema(
           index: true,
           required: true,
         },
-        commitment_index: {
+        commitmentIndex: {
           type: Number,
           required: true,
         },
         owner: {
-          name: {
-            type: String,
-          },
-          public_key: {
-            type: String,
-          },
+          name: String,
+          publicKey: String,
         },
       },
     ],
 
-    output_commitments: [
+    outputCommitments: [
       {
-        token_uri: {
+        tokenUri: {
           type: String,
           required: true,
         },
-        token_id: {
+        tokenId: {
           type: String,
           required: true,
         },
@@ -60,34 +56,29 @@ export default new Schema(
           index: true,
           required: true,
         },
-        commitment_index: {
+        commitmentIndex: {
           type: Number,
           required: true,
         },
         owner: {
-          name: {
-            type: String,
-          },
-          public_key: {
-            type: String,
-          },
+          name: String,
+          publicKey: String,
         },
       },
     ],
 
     sender: {
-      public_key: {
-        type: String,
-      },
-      name: {
-        type: String,
-      },
+      publicKey: String,
+      name: String,
+    },
+
+    receiver: {
+      publicKey: String,
+      name: String,
+      address: String,
     },
   },
   {
-    timestamps: {
-      createdAt: 'created_at',
-      updatedAt: 'updated_at',
-    },
+    timestamps: true,
   },
 );

@@ -6,7 +6,7 @@ import { ToastrService } from 'ngx-toastr';
  * Component for listing all ERC-721 token commitments
  */
 @Component({
-  selector: 'nft-commitment-list',
+  selector: 'app-nft-commitment-list',
   templateUrl: './index.html',
   styleUrls: ['./index.css'],
   providers: [NftCommitmentService],

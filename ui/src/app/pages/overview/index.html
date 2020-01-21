@@ -136,7 +136,7 @@
                 </thead>
                 <tbody>
                   <tr *ngFor="let transaction of nftTransactions">
-                    <td>{{ transaction.transactionType.toUpperCase() }}</td>
+                    <td>{{ utilService.replaceUnderscores(transaction.transactionType) }}</td>
                     <td [title]="transaction.tokenId">
                       {{ transaction.tokenId.slice(0, 20) }}....
                     </td>
@@ -186,18 +186,44 @@
                     <th>URI</th>
                     <th>Date</th>
                     <th>Send To</th>
+                    <th>Received From</th>
                   </tr>
                 </thead>
                 <tbody>
-                  <tr *ngFor="let transaction of nftCommitmentTransactions">
-                    <td>{{ transaction_type.toUpperCase() }}</td>
-                    <td [title]="transaction.token_id">
-                      {{ transaction.token_id.slice(0, 20) }}....
-                    </td>
-                    <td>{{ transaction.token_uri }}</td>
-                    <td>{{ transaction.created_at | date: 'dd/MM/yyyy hh:mm:ss a' }}</td>
-                    <td>{{ transaction.receiver || transaction.receiver_name ? (transaction.receiver || transaction.receiver_name) : '' }}</td>
-                  </tr>
+                  <ng-container *ngFor="let transaction of nftCommitmentTransactions">
+                    <tr *ngIf="transaction.transactionType === 'mint'">
+                      <td>{{ utilService.replaceUnderscores(transaction.transactionType) }}</td>
+                      <td [title]="transaction.outputCommitments[0].tokenId">{{ transaction.outputCommitments[0].tokenId.slice(0, 20) }}....</td>
+                      <td>{{ transaction.outputCommitments[0].tokenUri }}</td>
+                      <td>{{ transaction.createdAt | date: 'dd/MM/yyyy hh:mm:ss a' }}</td>
+                      <td></td>
+                      <td></td>
+                    </tr>
+                    <tr *ngIf="transaction.transactionType === 'transfer_outgoing'">
+                      <td>{{ utilService.replaceUnderscores(transaction.transactionType) }}</td>
+                      <td [title]="transaction.outputCommitments[0].tokenId">{{ transaction.outputCommitments[0].tokenId.slice(0, 20) }}....</td>
+                      <td>{{ transaction.outputCommitments[0].tokenUri }}</td>
+                      <td>{{ transaction.createdAt | date: 'dd/MM/yyyy hh:mm:ss a' }}</td>
+                      <td>{{ transaction.receiver.name }}</td>
+                      <td></td>
+                    </tr>
+                    <tr *ngIf="transaction.transactionType === 'transfer_incoming'">
+                      <td>{{ utilService.replaceUnderscores(transaction.transactionType) }}</td>
+                      <td [title]="transaction.outputCommitments[0].tokenId">{{ transaction.outputCommitments[0].tokenId.slice(0, 20) }}....</td>
+                      <td>{{ transaction.outputCommitments[0].tokenUri }}</td>
+                      <td>{{ transaction.createdAt | date: 'dd/MM/yyyy hh:mm:ss a' }}</td>
+                      <td></td>
+                      <td>{{ transaction.sender.name }}</td>
+                    </tr>
+                    <tr *ngIf="transaction.transactionType === 'burn'">
+                      <td>{{ utilService.replaceUnderscores(transaction.transactionType) }}</td>
+                      <td [title]="transaction.inputCommitments[0].tokenId">{{ transaction.inputCommitments[0].tokenId.slice(0, 20) }}....</td>
+                      <td>{{ transaction.inputCommitments[0].tokenUri }}</td>
+                      <td>{{ transaction.createdAt | date: 'dd/MM/yyyy hh:mm:ss a' }}</td>
+                      <td>{{ transaction.receiver.name }}</td>
+                      <td></td>
+                    </tr>
+                  </ng-container>
                 </tbody>
               </table>
               <ngb-pagination

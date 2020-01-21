@@ -1,5 +1,4 @@
-import {COLLECTIONS} from '../common/constants';
-import {nftMapper} from '../mappers';
+import { COLLECTIONS } from '../common/constants';
 import NftTransactionService from './nft-transaction.service';
 
 export default class NftService {
@@ -15,7 +14,7 @@ export default class NftService {
    * @param {object} data
    */
   async addNFToken(data) {
-    const {isReceived} = data;
+    const { isReceived } = data;
 
     await this.db.saveData(COLLECTIONS.NFT, data);
 
@@ -38,16 +37,16 @@ export default class NftService {
    * @param {object} data
    */
   async updateNFTokenByTokenId(tokenId, data) {
-    const {isBurned, isShielded} = data;
+    const { isBurned, isShielded } = data;
 
     await this.db.updateData(
       COLLECTIONS.NFT,
       {
         tokenId,
-        isTransferred: {$exists: false},
-        isShielded: {$exists: false},
+        isTransferred: { $exists: false },
+        isShielded: { $exists: false },
       },
-      {$set: data},
+      { $set: data },
     );
 
     if (isBurned)
@@ -76,21 +75,21 @@ export default class NftService {
   getNFTokens(query) {
     if (!query || !query.pageNo || !query.limit) {
       return this.db.getData(COLLECTIONS.NFT, {
-        isTransferred: {$exists: false},
-        isBurned: {$exists: false},
-        isShielded: {$exists: false},
+        isTransferred: { $exists: false },
+        isBurned: { $exists: false },
+        isShielded: { $exists: false },
       });
     }
-    const {pageNo, limit} = query;
+    const { pageNo, limit } = query;
     return this.db.getDbData(
       COLLECTIONS.NFT,
       {
-        isTransferred: {$exists: false},
-        isBurned: {$exists: false},
-        isShielded: {$exists: false},
+        isTransferred: { $exists: false },
+        isBurned: { $exists: false },
+        isShielded: { $exists: false },
       },
       undefined,
-      {createdAt: -1},
+      { createdAt: -1 },
       parseInt(pageNo, 10),
       parseInt(limit, 10),
     );
