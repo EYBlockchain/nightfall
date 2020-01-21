@@ -12,7 +12,7 @@ export default class NftTransactionService {
    *  tokenUri,
    *  tokenId,
    *  shieldcontractAddress,
-   *  transactiontype,
+   *  transactionType,
    *  sender: {
    *    name,
    *    address,
