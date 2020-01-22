@@ -18,26 +18,6 @@ export async function sendWhisperMessage(senderShhIdentity, dataToSend) {
   await offchain.sendMessage(details);
 }
 
-/**
- * This function will send whisper message
- * @param {Object} reqObj
- * @param {Object} dataToSend
- */
-export async function whisperTransaction(req, dataToSend) {
-  // getIdentity from local db
-  const receiverName = req.body.receiver.name || req.body.payTo || dataToSend.receiver;
-
-  const user = await db.fetchUser(req.user);
-  // PKD to get the whisperPK using name "eg: bob"
-  const shhPkReceiver = await offchain.getWhisperPK(receiverName);
-  const details = {
-    message: dataToSend,
-    shhIdentity: user.shhIdentity,
-    shhPkReceiver,
-  };
-  await offchain.sendMessage(details);
-}
-
 // user auth
 /**
  * This function assign new set of whisper keys to logged in user
