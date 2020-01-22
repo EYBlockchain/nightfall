@@ -176,7 +176,7 @@ export async function updateContractInfo(req, res, next) {
       const { contractName, contractAddress, isSelected } = ftCommitmentShield;
 
       const isFTShieldPreviousSelected =
-        user.selected_ftoken_shield_contract === ftCommitmentShield.contractAddress;
+        user.selectedFTokenShield === ftCommitmentShield.contractAddress;
 
       await db.updateFTShieldContractInfoByContractAddress(req.user, contractAddress, {
         contractName,
@@ -194,7 +194,7 @@ export async function updateContractInfo(req, res, next) {
       const { contractName, contractAddress, isSelected } = nftCommitmentShield;
 
       const isNFTShieldPreviousSelected =
-        user.selected_nftoken_shield_contract === nftCommitmentShield.contractAddress;
+        user.selectedNFTokenShield === nftCommitmentShield.contractAddress;
 
       await db.updateNFTShieldContractInfoByContractAddress(req.user, contractAddress, {
         contractName,

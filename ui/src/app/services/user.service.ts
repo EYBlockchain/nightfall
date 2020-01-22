@@ -207,14 +207,14 @@ export default class UserService {
     const url = config.apiGateway.root + 'updateContractInfo';
     const body = {};
     if (account.coinShield) {
-      body['coinShield'] = {
+      body['ftCommitmentShield'] = {
         contractAddress: account.contractAdd,
         contractName: account.contractName,
         isSelected: account.selection
       };
 
     } else if (account.tokenShield) {
-      body['tokenShield'] = {
+      body['nftCommitmentShield'] = {
         contractAddress: account.contractAdd,
         contractName: account.contractName,
         isSelected: account.selection

@@ -157,8 +157,8 @@ router.route('/getAllRegisteredNames').get(getAllRegisteredNames);
  *      "address" : "0x47b5b425eb00bb002e77814e3fa0edcc35f02774",
  *      "secretKey" : "0x39c45c2c0117aa7473a112bebe6a5f263ece7cec3d95fc580d6c47",
  *      "publicKey" : "0x8a187d107cfaa07492faec946ffde448fe166820865dd6a437b5c4",
- *      "ftokenshield_contracts" : [ ],
- *      "nftokenshield_contracts" : [ ],
+ *      "fTokenShields" : [ ],
+ *      "nfTokenShields" : [ ],
  *      "accounts" : [ ],
  *    }
  */
