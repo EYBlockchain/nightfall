@@ -3,7 +3,7 @@
 import utils from '../src/zkpUtils';
 import bc from '../src/web3';
 import controller from '../src/f-token-controller';
-import {getVkId, getTruffleContractInstance} from '../src/contractUtils';
+import { getVkId, getTruffleContractInstance } from '../src/contractUtils';
 
 jest.setTimeout(7200000);
 
@@ -71,7 +71,7 @@ let fTokenShieldAddress;
 beforeAll(async () => {
   if (!(await bc.isConnected())) await bc.connect();
   accounts = await (await bc.connection()).eth.getAccounts();
-  const {contractJson, contractInstance} = await getTruffleContractInstance('FTokenShield');
+  const { contractJson, contractInstance } = await getTruffleContractInstance('FTokenShield');
   fTokenShieldAddress = contractInstance.address;
   fTokenShieldJson = contractJson;
   for (let i = 0; i < PROOF_LENGTH; i++) {
@@ -100,7 +100,7 @@ describe('f-token-controller.js tests', () => {
   });
 
   test('Should mint an ERC-20 commitment Z_A_C for Alice of value C', async () => {
-    const {commitment: zTest, commitmentIndex: zIndex} = await controller.mint(
+    const { commitment: zTest, commitmentIndex: zIndex } = await controller.mint(
       C,
       pkA,
       S_A_C,
@@ -123,9 +123,9 @@ describe('f-token-controller.js tests', () => {
   test('Should transfer ERC-20 commitments of various values to 19 receipients and get change', async () => {
     // the E's becomes Bobs'.
     const bal1 = await controller.getBalance(accounts[0]);
-    const inputCommitment = {value: C, salt: S_A_C, commitment: Z_A_C, commitmentIndex: zInd1};
+    const inputCommitment = { value: C, salt: S_A_C, commitment: Z_A_C, commitmentIndex: zInd1 };
     for (let i = 0; i < E.length; i++) {
-      outputCommitments[i] = {value: E[i], salt: S_B_E[i]};
+      outputCommitments[i] = { value: E[i], salt: S_B_E[i] };
     }
 
     const response = await controller.simpleFungibleBatchTransfer(
@@ -175,8 +175,8 @@ describe('f-token-controller.js tests', () => {
       },
     ];
     outputCommitments = [
-      {value: e, salt: await utils.rndHex(32)},
-      {value: f, salt: await utils.rndHex(32)},
+      { value: e, salt: await utils.rndHex(32) },
+      { value: f, salt: await utils.rndHex(32) },
     ];
 
     await controller.transfer(

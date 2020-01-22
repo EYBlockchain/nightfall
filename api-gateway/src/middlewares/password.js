@@ -19,9 +19,9 @@ export function decryptPassword(passwordHash) {
 
 export async function unlockAccount(req, res, next) {
   if (!req.user) return next();
-  const {address, password} = req.user;
+  const { address, password } = req.user;
   try {
-    await accounts.unlockAccount({address, password});
+    await accounts.unlockAccount({ address, password });
   } catch (error) {
     return next(error);
   }

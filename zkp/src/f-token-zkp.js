@@ -7,7 +7,7 @@ before it will work. This version works by transforming an existing commitment t
 new one, which enables sending of arbritrary amounts. The code also talks directly to Verifier.
 */
 
-import {merkleTree} from '@eyblockchain/nightlite';
+import { merkleTree } from '@eyblockchain/nightlite';
 import utils from './zkpUtils';
 
 /**
@@ -33,7 +33,7 @@ async function checkCorrectness(
   );
   console.log('commitment:', commitment);
   console.log('commitmentIndex:', commitmentIndex);
-  const {contractName} = fTokenShield.constructor._json; // eslint-disable-line no-underscore-dangle
+  const { contractName } = fTokenShield.constructor._json; // eslint-disable-line no-underscore-dangle
 
   // query the merkle-tree microservice until it's filtered the blockNumber we wish to query:
   await merkleTree.waitForBlockNumber(contractName, blockNumber);

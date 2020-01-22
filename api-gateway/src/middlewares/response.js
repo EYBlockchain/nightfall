@@ -1,5 +1,5 @@
 export function formatResponse(req, res) {
-  const {data} = res;
+  const { data } = res;
   if (!data) {
     return res.sendStatus(404);
   }

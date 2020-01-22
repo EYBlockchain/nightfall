@@ -1,4 +1,4 @@
-import {createLogger, format, transports} from 'winston';
+import { createLogger, format, transports } from 'winston';
 import mongoose from 'mongoose';
 import config from 'config';
 

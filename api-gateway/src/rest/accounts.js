@@ -23,7 +23,7 @@ export default {
       url: `${url}/createAccount`,
       method: 'POST',
       json: true,
-      body: {password},
+      body: { password },
     };
     return requestWrapper(options);
   },

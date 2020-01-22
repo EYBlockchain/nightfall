@@ -1,8 +1,8 @@
-import express, {Router} from 'express';
+import express, { Router } from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import logger from './logger';
-import {setDB, dbConnection, formatResponse, formatError, errorHandler} from './middlewares';
+import { setDB, dbConnection, formatResponse, formatError, errorHandler } from './middlewares';
 import configureRoutesToPraseParams, {
   initializeNftRoutes,
   initializeNftCommitmentRoutes,
@@ -16,7 +16,7 @@ const router = Router();
 
 app.use(cors());
 
-app.use(bodyParser.urlencoded({extended: false}));
+app.use(bodyParser.urlencoded({ extended: false }));
 
 app.use(bodyParser.json());
 
@@ -37,11 +37,11 @@ app.use(formatResponse);
 app.use(function logError(err, req, res, next) {
   logger.error(
     `${req.method}:${req.url}
-    ${JSON.stringify({error: err.message})}
-    ${JSON.stringify({errorStack: err.stack.split('\n')}, null, 1)}
-    ${JSON.stringify({body: req.body})}
-    ${JSON.stringify({params: req.params})}
-    ${JSON.stringify({query: req.query})}
+    ${JSON.stringify({ error: err.message })}
+    ${JSON.stringify({ errorStack: err.stack.split('\n') }, null, 1)}
+    ${JSON.stringify({ body: req.body })}
+    ${JSON.stringify({ params: req.params })}
+    ${JSON.stringify({ query: req.query })}
   `,
   );
   next(err);

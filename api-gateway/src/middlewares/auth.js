@@ -1,11 +1,11 @@
 import jwt from 'jsonwebtoken';
-import {encryptPassword, decryptPassword} from './password';
+import { encryptPassword, decryptPassword } from './password';
 
 const noAuthRoutes = ['/login', 'createAccount'];
 const JWT_SECRET = 'secret';
 
 export function createToken(data, password) {
-  const jwtData = {...data, password: encryptPassword(password)};
+  const jwtData = { ...data, password: encryptPassword(password) };
   // delete all secret info user info before creating jwt token.
   delete jwtData.secretKey;
   delete jwtData.shhIdentity;

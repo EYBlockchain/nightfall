@@ -1,4 +1,4 @@
-import {Router} from 'express';
+import { Router } from 'express';
 import nfController from '../nf-token-controller';
 
 const router = Router();
@@ -12,8 +12,8 @@ const router = Router();
  * @param {*} res
  */
 async function mint(req, res, next) {
-  const {address} = req.headers;
-  const {tokenId, tokenUri} = req.body;
+  const { address } = req.headers;
+  const { tokenId, tokenUri } = req.body;
 
   try {
     await nfController.mintNFToken(tokenId, tokenUri, address);
@@ -40,8 +40,8 @@ async function mint(req, res, next) {
  * @param {*} res
  */
 async function transfer(req, res, next) {
-  const {address} = req.headers;
-  const {tokenId, receiver} = req.body;
+  const { address } = req.headers;
+  const { tokenId, receiver } = req.body;
 
   try {
     await nfController.transferNFToken(tokenId, address, receiver.address);
@@ -64,8 +64,8 @@ async function transfer(req, res, next) {
  * @param {*} res
  */
 async function burn(req, res, next) {
-  const {address} = req.headers;
-  const {tokenId} = req.body;
+  const { address } = req.headers;
+  const { tokenId } = req.body;
 
   try {
     await nfController.burnNFToken(tokenId, address);
@@ -84,7 +84,7 @@ async function burn(req, res, next) {
  * @param {*} res
  */
 async function getAddress(req, res, next) {
-  const {address} = req.headers;
+  const { address } = req.headers;
 
   try {
     const nftAddress = await nfController.getNFTAddress(address);
@@ -103,7 +103,7 @@ async function getAddress(req, res, next) {
  * @param {*} res
  */
 async function getInfo(req, res, next) {
-  const {address} = req.headers;
+  const { address } = req.headers;
 
   try {
     const balance = await nfController.getBalance(address);

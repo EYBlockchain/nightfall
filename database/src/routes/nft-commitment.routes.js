@@ -1,4 +1,4 @@
-import {NftCommitmentService} from '../business';
+import { NftCommitmentService } from '../business';
 
 /**
  * This function will add new private token in db.
@@ -26,7 +26,7 @@ async function insertNFTCommitment(req, res, next) {
   try {
     const nftCommitmentService = new NftCommitmentService(req.user.db);
     await nftCommitmentService.insertNFTCommitment(req.body);
-    res.data = {message: 'inserted'};
+    res.data = { message: 'inserted' };
     next();
   } catch (err) {
     next(err);
@@ -72,11 +72,11 @@ async function getNFTCommitments(req, res, next) {
  * @param {*} res
  */
 async function updateNFTCommitmentByTokenId(req, res, next) {
-  const {tokenId} = req.params;
+  const { tokenId } = req.params;
   const nftCommitmentService = new NftCommitmentService(req.user.db);
   try {
     await nftCommitmentService.updateNFTCommitmentByTokenId(tokenId, req.body);
-    res.data = {message: 'updated'};
+    res.data = { message: 'updated' };
     next();
   } catch (err) {
     next(err);
@@ -126,7 +126,7 @@ async function insertNFTCommitmentTransaction(req, res, next) {
   try {
     const nftCommitmentService = new NftCommitmentService(req.user.db);
     await nftCommitmentService.insertNFTCommitmentTransaction(req.body);
-    res.data = {message: 'inserted'};
+    res.data = { message: 'inserted' };
     next();
   } catch (err) {
     next(err);

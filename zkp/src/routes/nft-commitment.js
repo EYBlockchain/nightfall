@@ -1,9 +1,9 @@
 /* eslint-disable camelcase */
 
-import {Router} from 'express';
+import { Router } from 'express';
 import utils from '../zkpUtils';
 import nfController from '../nf-token-controller';
-import {getVkId, getTruffleContractInstance} from '../contractUtils';
+import { getVkId, getTruffleContractInstance } from '../contractUtils';
 
 const router = Router();
 /**
@@ -13,17 +13,17 @@ const router = Router();
  *    tokenId: '0x1448d8ab4e0d610000000000000000000000000000000000000000000000000',
  *    owner: {
  *        name: 'alice',
- *        publicKey: '0x4c45963a12f0dfa530285fde66ac235c8f8ddf8d178098cdb292ac', 
+ *        publicKey: '0x4c45963a12f0dfa530285fde66ac235c8f8ddf8d178098cdb292ac',
  *    }
  * }
  * @param {*} req
  * @param {*} res
  */
 async function mint(req, res, next) {
-  const {address} = req.headers;
+  const { address } = req.headers;
   const {
     tokenId,
-    owner: {publicKey},
+    owner: { publicKey },
   } = req.body;
   const salt = await utils.rndHex(32);
   const vkId = await getVkId('MintNFToken');
@@ -33,7 +33,7 @@ async function mint(req, res, next) {
   } = await getTruffleContractInstance('NFTokenShield');
 
   try {
-    const {commitment, commitmentIndex} = await nfController.mint(
+    const { commitment, commitmentIndex } = await nfController.mint(
       tokenId,
       publicKey,
       salt,
@@ -91,7 +91,7 @@ async function transfer(req, res, next) {
     commitmentIndex,
   } = req.body;
   const newCommitmentSalt = await utils.rndHex(32);
-  const {address} = req.headers;
+  const { address } = req.headers;
   const vkId = await getVkId('TransferNFToken');
   const {
     contractJson: nfTokenShieldJson,
@@ -99,7 +99,7 @@ async function transfer(req, res, next) {
   } = await getTruffleContractInstance('NFTokenShield');
 
   try {
-    const {outputCommitment, outputCommitmentIndex, txReceipt} = await nfController.transfer(
+    const { outputCommitment, outputCommitmentIndex, txReceipt } = await nfController.transfer(
       tokenId,
       receiver.publicKey,
       originalCommitmentSalt,
@@ -158,9 +158,9 @@ async function burn(req, res, next) {
     sender,
     commitment,
     commitmentIndex,
-    receiver: {address: tokenReceiver},
+    receiver: { address: tokenReceiver },
   } = req.body;
-  const {address} = req.headers;
+  const { address } = req.headers;
   const vkId = await getVkId('BurnNFToken');
   const {
     contractJson: nfTokenShieldJson,
@@ -168,7 +168,7 @@ async function burn(req, res, next) {
   } = await getTruffleContractInstance('NFTokenShield');
 
   try {
-    const {txReceipt} = await nfController.burn(
+    const { txReceipt } = await nfController.burn(
       tokenId,
       sender.secretKey,
       salt,
@@ -201,8 +201,8 @@ async function checkCorrectness(req, res, next) {
   console.log('\nzkp/src/routes/nft-commitment', '\n/checkCorrectness', '\nreq.body', req.body);
 
   try {
-    const {address} = req.headers;
-    const {tokenId, publicKey, salt, commitment, commitmentIndex, blockNumber} = req.body;
+    const { address } = req.headers;
+    const { tokenId, publicKey, salt, commitment, commitmentIndex, blockNumber } = req.body;
 
     const results = await nfController.checkCorrectness(
       tokenId,
@@ -221,8 +221,8 @@ async function checkCorrectness(req, res, next) {
 }
 
 async function setNFTCommitmentShieldAddress(req, res, next) {
-  const {address} = req.headers;
-  const {nftCommitmentShield} = req.body;
+  const { address } = req.headers;
+  const { nftCommitmentShield } = req.body;
 
   try {
     await nfController.setShield(nftCommitmentShield, address);
@@ -237,7 +237,7 @@ async function setNFTCommitmentShieldAddress(req, res, next) {
 }
 
 async function getNFTCommitmentShieldAddress(req, res, next) {
-  const {address} = req.headers;
+  const { address } = req.headers;
 
   try {
     const shieldAddress = await nfController.getShieldAddress(address);
@@ -253,7 +253,7 @@ async function getNFTCommitmentShieldAddress(req, res, next) {
 }
 
 async function unsetNFTCommitmentShieldAddress(req, res, next) {
-  const {address} = req.headers;
+  const { address } = req.headers;
 
   try {
     nfController.unSetShield(address);

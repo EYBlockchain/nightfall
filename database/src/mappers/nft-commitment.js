@@ -16,7 +16,7 @@ export default function({
   if (!outputCommitments) {
     return flags;
   }
-  const [{tokenUri, tokenId, salt, commitment, commitmentIndex, owner}] = outputCommitments;
+  const [{ tokenUri, tokenId, salt, commitment, commitmentIndex, owner }] = outputCommitments;
   return {
     [tokenUri && 'tokenUri']: tokenUri,
     [tokenId && 'tokenId']: tokenId,

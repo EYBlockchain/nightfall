@@ -1,5 +1,5 @@
 export function formatResponse(req, res, next) {
-  const {data} = res;
+  const { data } = res;
   if (data === undefined) {
     const err = new Error('Url Not Found');
     err.status = 404;

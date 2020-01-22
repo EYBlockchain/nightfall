@@ -1,4 +1,4 @@
-import {Schema} from 'mongoose';
+import { Schema } from 'mongoose';
 
 export default new Schema(
   {
@@ -28,5 +28,5 @@ export default new Schema(
       address: String,
     },
   },
-  {timestamps: true},
+  { timestamps: true },
 );

@@ -4,11 +4,11 @@
 @desc Run from within nightfall/zkp/code
 */
 
-import {argv} from 'yargs';
+import { argv } from 'yargs';
 import fs from 'fs';
 import path from 'path';
 import inquirer from 'inquirer';
-import {generateZokratesFiles} from '@eyblockchain/nightlite';
+import { generateZokratesFiles } from '@eyblockchain/nightlite';
 
 const isDirectory = source => fs.lstatSync(source).isDirectory();
 const getDirectories = source =>
@@ -23,7 +23,7 @@ const getDirectories = source =>
  */
 async function main() {
   // -f being the name of the .code file (i.e., 'ft-mint')
-  const {f} = argv;
+  const { f } = argv;
 
   if (!f) {
     console.log(

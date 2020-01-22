@@ -10,7 +10,7 @@ Ethereum and Zokrates
 const BI = require('big-integer');
 const hexToBinary = require('hex-to-binary');
 const crypto = require('crypto');
-const {Buffer} = require('safe-buffer');
+const { Buffer } = require('safe-buffer');
 
 const inputsHashLength = 32;
 

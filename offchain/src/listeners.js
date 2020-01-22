@@ -1,22 +1,22 @@
 import apiGateway from './rest/api-gateway';
 
-async function insertNFTToDb(data, {jwtToken}) {
+async function insertNFTToDb(data, { jwtToken }) {
   console.log('\noffchain/src/listeners.js', 'insertNFTToDb', '\ndata', data);
 
-  await apiGateway.insertNFTToDb({authorization: jwtToken}, data);
+  await apiGateway.insertNFTToDb({ authorization: jwtToken }, data);
 }
 
-async function insertFTTransactionToDb(data, {jwtToken}) {
+async function insertFTTransactionToDb(data, { jwtToken }) {
   console.log('\noffchain/src/listeners.js', 'insertFTTransactionToDb', '\ndata', data);
 
-  await apiGateway.insertFTTransactionToDb({authorization: jwtToken}, data);
+  await apiGateway.insertFTTransactionToDb({ authorization: jwtToken }, data);
 }
 
-async function insertNFTCommitmentToDb(data, {jwtToken}) {
+async function insertNFTCommitmentToDb(data, { jwtToken }) {
   console.log('\noffchain/src/listeners.js', '\ninsertNFTCommitmentToDb', '\ndata', data);
 
-  const {blockNumber, outputCommitments} = data;
-  const [{tokenId, salt, owner, commitment, commitmentIndex}] = outputCommitments;
+  const { blockNumber, outputCommitments } = data;
+  const [{ tokenId, salt, owner, commitment, commitmentIndex }] = outputCommitments;
 
   const correctnessChecks = await apiGateway.checkCorrectnessForNFTCommitment(
     {
@@ -39,19 +39,19 @@ async function insertNFTCommitmentToDb(data, {jwtToken}) {
     correctnessChecks,
   );
 
-  const {zCorrect, zOnchainCorrect} = correctnessChecks.data;
+  const { zCorrect, zOnchainCorrect } = correctnessChecks.data;
 
   await apiGateway.insertNFTCommitmentToDb(
-    {authorization: jwtToken},
-    {...data, zCorrect, zOnchainCorrect},
+    { authorization: jwtToken },
+    { ...data, zCorrect, zOnchainCorrect },
   );
 }
 
-async function insertFTCommitmentToDb(data, {jwtToken}) {
+async function insertFTCommitmentToDb(data, { jwtToken }) {
   console.log('\noffchain/src/listeners.js', '\ninsertFTCommitmentToDb', '\ndata', data);
 
-  const {blockNumber, outputCommitments} = data;
-  const [{value, salt, owner, commitment, commitmentIndex}] = outputCommitments;
+  const { blockNumber, outputCommitments } = data;
+  const [{ value, salt, owner, commitment, commitmentIndex }] = outputCommitments;
 
   const correctnessChecks = await apiGateway.checkCorrectnessForFTCommitment(
     {
@@ -74,11 +74,11 @@ async function insertFTCommitmentToDb(data, {jwtToken}) {
     correctnessChecks,
   );
 
-  const {zCorrect, zOnchainCorrect} = correctnessChecks.data;
+  const { zCorrect, zOnchainCorrect } = correctnessChecks.data;
 
   await apiGateway.insertFTCommitmentToDb(
-    {authorization: jwtToken},
-    {...data, zCorrect, zOnchainCorrect},
+    { authorization: jwtToken },
+    { ...data, zCorrect, zOnchainCorrect },
   );
 }
 

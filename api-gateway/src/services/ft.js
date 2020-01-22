@@ -1,5 +1,5 @@
-import {sendWhisperMessage} from './whisper';
-import {db, offchain, zkp} from '../rest';
+import { sendWhisperMessage } from './whisper';
+import { db, offchain, zkp } from '../rest';
 
 // ERC-20 token
 /**
@@ -78,7 +78,7 @@ export async function mintFToken(req, res, next) {
       isMinted: true,
     });
 
-    res.data = {message: 'Mint Successful'};
+    res.data = { message: 'Mint Successful' };
     next();
   } catch (err) {
     next(err);
@@ -97,7 +97,7 @@ export async function mintFToken(req, res, next) {
  * @param {*} res
 */
 export async function transferFToken(req, res, next) {
-  const {receiver, value} = req.body;
+  const { receiver, value } = req.body;
 
   try {
     receiver.address = await offchain.getAddressFromName(receiver.name);
@@ -123,7 +123,7 @@ export async function transferFToken(req, res, next) {
       for: 'FToken',
     }); // send ft token data to BOB side
 
-    res.data = {message: 'transfer Successful'};
+    res.data = { message: 'transfer Successful' };
     next();
   } catch (err) {
     next(err);
@@ -150,7 +150,7 @@ export async function burnFToken(req, res, next) {
       isBurned: true,
     });
 
-    res.data = {message: 'Burn Successful'};
+    res.data = { message: 'Burn Successful' };
     next();
   } catch (err) {
     next(err);

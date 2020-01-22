@@ -1,5 +1,5 @@
 import config from 'config';
-import {COLLECTIONS} from '../common/constants';
+import { COLLECTIONS } from '../common/constants';
 import {
   UserSchema,
   nftSchema,
@@ -22,7 +22,7 @@ export default class DB {
   }
 
   createTablesForUser() {
-    const {username, database} = this;
+    const { username, database } = this;
     this.Models = {
       user: database.model(`${username}_${COLLECTIONS.USER}`, UserSchema),
       nft: database.model(`${username}_${COLLECTIONS.NFT}`, nftSchema),
@@ -75,7 +75,7 @@ export default class DB {
   async getDbData(
     modelName,
     query,
-    projection = {path: '', select: ''},
+    projection = { path: '', select: '' },
     sort = {},
     pageNo = 1,
     limit = 5,
@@ -93,7 +93,7 @@ export default class DB {
         .find(query)
         .countDocuments()
         .exec();
-      return Promise.resolve({data, totalCount});
+      return Promise.resolve({ data, totalCount });
     } catch (e) {
       return Promise.reject(e);
     }
@@ -117,7 +117,7 @@ export default class DB {
       }
 
       const data = await mQuery.exec();
-      return Promise.resolve({data});
+      return Promise.resolve({ data });
     } catch (e) {
       return Promise.reject(e);
     }
@@ -147,7 +147,7 @@ export default class DB {
     }
   }
 
-  async updateData(modelName, condition, updateData, options = {upsert: true}) {
+  async updateData(modelName, condition, updateData, options = { upsert: true }) {
     try {
       const model = this.Models[modelName];
       const data = await model.updateOne(condition, updateData, options);
@@ -160,7 +160,7 @@ export default class DB {
   async aggregation(modelName, condition, projection, options) {
     try {
       const model = this.Models[modelName];
-      const pipeline = [{$match: condition}];
+      const pipeline = [{ $match: condition }];
 
       if (projection) pipeline.push(projection);
 

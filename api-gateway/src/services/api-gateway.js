@@ -1,6 +1,6 @@
-import {setWhisperIdentityAndSubscribe} from './whisper';
-import {accounts, db, offchain, zkp} from '../rest';
-import {createToken} from '../middlewares'; /* Authorization filter used to verify Role of the user */
+import { setWhisperIdentityAndSubscribe } from './whisper';
+import { accounts, db, offchain, zkp } from '../rest';
+import { createToken } from '../middlewares'; /* Authorization filter used to verify Role of the user */
 
 /**
  * This function is used to login to the application
@@ -12,11 +12,11 @@ import {createToken} from '../middlewares'; /* Authorization filter used to veri
  * @param {*} res
  */
 export async function loginHandler(req, res, next) {
-  const {name, password} = req.body;
+  const { name, password } = req.body;
 
   try {
-    const data = await db.configureDBconnection({name, password});
-    await accounts.unlockAccount({address: data.address, password});
+    const data = await db.configureDBconnection({ name, password });
+    await accounts.unlockAccount({ address: data.address, password });
     // get jwt token
     const token = createToken(data, password);
 
@@ -28,7 +28,7 @@ export async function loginHandler(req, res, next) {
     };
     await setWhisperIdentityAndSubscribe(userData);
 
-    res.data = {...data, token};
+    res.data = { ...data, token };
     next();
   } catch (err) {
     next(err);
@@ -46,7 +46,7 @@ export async function loginHandler(req, res, next) {
  * @param {*} res
  */
 export async function createAccountHandler(req, res, next) {
-  const {password, name} = req.body;
+  const { password, name } = req.body;
   try {
     const status = await offchain.isNameInUse(name);
     if (status) throw Error('Name already in use');
@@ -60,7 +60,7 @@ export async function createAccountHandler(req, res, next) {
       shhIdentity,
     });
 
-    await accounts.unlockAccount({address, password});
+    await accounts.unlockAccount({ address, password });
 
     await offchain.setName(address, name);
     await offchain.setZkpPublicKey(address, {
@@ -101,11 +101,11 @@ export async function loadVks(req, res, next) {
 function setShieldContract(user, contractAddress) {
   return new Promise(function setShieldDetails(resolve) {
     zkp
-      .setTokenShield(user, {nftCommitmentShield: contractAddress})
+      .setTokenShield(user, { nftCommitmentShield: contractAddress })
       .then(() => resolve('nft'))
       .catch(() => zkp.unSetTokenShield(user));
     zkp
-      .setFTCommitmentShield(user, {ftCommitmentShield: contractAddress})
+      .setFTCommitmentShield(user, { ftCommitmentShield: contractAddress })
       .then(() => resolve('ft'))
       .catch(() => zkp.unSetFTCommitmentShield(user));
   });
@@ -121,7 +121,7 @@ function setShieldContract(user, contractAddress) {
  * @param {*} res
 */
 export async function addContractInfo(req, res, next) {
-  const {contractAddress, contractName, isSelected} = req.body;
+  const { contractAddress, contractName, isSelected } = req.body;
 
   try {
     const type = await setShieldContract(req.user, contractAddress);
@@ -138,7 +138,7 @@ export async function addContractInfo(req, res, next) {
         isSelected,
       });
 
-    res.data = {message: `Added of type ${type}`};
+    res.data = { message: `Added of type ${type}` };
     next();
   } catch (err) {
     next(err);
@@ -166,14 +166,14 @@ export async function addContractInfo(req, res, next) {
  * @param {*} res
 */
 export async function updateContractInfo(req, res, next) {
-  const {nftCommitmentShield, ftCommitmentShield} = req.body;
+  const { nftCommitmentShield, ftCommitmentShield } = req.body;
 
   try {
     const user = await db.fetchUser(req.user);
 
     // if update ftCommitmentShield data
     if (ftCommitmentShield) {
-      const {contractName, contractAddress, isSelected} = ftCommitmentShield;
+      const { contractName, contractAddress, isSelected } = ftCommitmentShield;
 
       const isFTShieldPreviousSelected =
         user.selected_ftoken_shield_contract === ftCommitmentShield.contractAddress;
@@ -185,13 +185,13 @@ export async function updateContractInfo(req, res, next) {
       });
 
       if (isSelected)
-        await zkp.setFTCommitmentShield(req.user, {ftCommitmentShield: contractAddress});
+        await zkp.setFTCommitmentShield(req.user, { ftCommitmentShield: contractAddress });
       else if (isFTShieldPreviousSelected) await zkp.unSetFTCommitmentShield(req.user);
     }
 
     // if update nftCommitmentShield data
     if (nftCommitmentShield) {
-      const {contractName, contractAddress, isSelected} = nftCommitmentShield;
+      const { contractName, contractAddress, isSelected } = nftCommitmentShield;
 
       const isNFTShieldPreviousSelected =
         user.selected_nftoken_shield_contract === nftCommitmentShield.contractAddress;
@@ -202,11 +202,11 @@ export async function updateContractInfo(req, res, next) {
         isNFTShieldPreviousSelected,
       });
 
-      if (isSelected) await zkp.setTokenShield(req.user, {nftCommitmentShield: contractAddress});
+      if (isSelected) await zkp.setTokenShield(req.user, { nftCommitmentShield: contractAddress });
       else if (isNFTShieldPreviousSelected) await zkp.unSetTokenShield(req.user);
     }
 
-    res.data = {message: 'Contract Address updated'};
+    res.data = { message: 'Contract Address updated' };
     next();
   } catch (err) {
     next(err);
@@ -225,7 +225,7 @@ export async function updateContractInfo(req, res, next) {
  * @param {*} res
 */
 export async function deleteContractInfo(req, res, next) {
-  const {query} = req;
+  const { query } = req;
 
   try {
     if (query.coin_shield) {
@@ -243,7 +243,7 @@ export async function deleteContractInfo(req, res, next) {
       if (data.status) await zkp.unSetTokenShield(req.user);
     }
 
-    res.data = {message: 'Contract Address Removed'};
+    res.data = { message: 'Contract Address Removed' };
     next();
   } catch (err) {
     next(err);

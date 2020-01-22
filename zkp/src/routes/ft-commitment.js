@@ -1,9 +1,9 @@
 /* eslint-disable camelcase */
 
-import {Router} from 'express';
+import { Router } from 'express';
 import utils from '../zkpUtils';
 import fTokenController from '../f-token-controller';
-import {getVkId, getTruffleContractInstance} from '../contractUtils';
+import { getVkId, getTruffleContractInstance } from '../contractUtils';
 
 const router = Router();
 
@@ -20,8 +20,8 @@ const router = Router();
  * @param {*} res
  */
 async function mint(req, res, next) {
-  const {address} = req.headers;
-  const {value, owner} = req.body;
+  const { address } = req.headers;
+  const { value, owner } = req.body;
   const salt = await utils.rndHex(32);
   const vkId = await getVkId('MintFToken');
   const {
@@ -30,7 +30,7 @@ async function mint(req, res, next) {
   } = await getTruffleContractInstance('FTokenShield');
 
   try {
-    const {commitment, commitmentIndex} = await fTokenController.mint(
+    const { commitment, commitmentIndex } = await fTokenController.mint(
       value,
       owner.publicKey,
       salt,
@@ -81,8 +81,8 @@ async function mint(req, res, next) {
  * @param {*} res
  */
 async function transfer(req, res, next) {
-  const {address} = req.headers;
-  const {inputCommitments, outputCommitments, receiver, sender} = req.body;
+  const { address } = req.headers;
+  const { inputCommitments, outputCommitments, receiver, sender } = req.body;
   const vkId = await getVkId('TransferFToken');
   const {
     contractJson: fTokenShieldJson,
@@ -93,7 +93,7 @@ async function transfer(req, res, next) {
   outputCommitments[1].salt = await utils.rndHex(32);
 
   try {
-    const {txReceipt} = await fTokenController.transfer(
+    const { txReceipt } = await fTokenController.transfer(
       inputCommitments,
       outputCommitments,
       receiver.publicKey,
@@ -110,7 +110,7 @@ async function transfer(req, res, next) {
         pkPath: `${process.cwd()}/code/gm17/ft-transfer/proving.key`,
       },
     );
-    res.data = {outputCommitments, txReceipt};
+    res.data = { outputCommitments, txReceipt };
     next();
   } catch (err) {
     next(err);
@@ -137,8 +137,8 @@ async function transfer(req, res, next) {
  * @param {*} res
  */
 async function burn(req, res, next) {
-  const {value, salt, commitment, commitmentIndex, receiver, sender} = req.body;
-  const {address} = req.headers;
+  const { value, salt, commitment, commitmentIndex, receiver, sender } = req.body;
+  const { address } = req.headers;
   const vkId = await getVkId('BurnFToken');
   const {
     contractJson: fTokenShieldJson,
@@ -165,7 +165,7 @@ async function burn(req, res, next) {
         pkPath: `${process.cwd()}/code/gm17/ft-burn/proving.key`,
       },
     );
-    res.data = {message: 'Burn successful'};
+    res.data = { message: 'Burn successful' };
     next();
   } catch (err) {
     next(err);
@@ -176,8 +176,8 @@ async function checkCorrectness(req, res, next) {
   console.log('\nzkp/src/routes/ft-commitment', '\n/checkCorrectness', '\nreq.body', req.body);
 
   try {
-    const {address} = req.headers;
-    const {value, salt, pk, commitment, commitmentIndex, blockNumber} = req.body;
+    const { address } = req.headers;
+    const { value, salt, pk, commitment, commitmentIndex, blockNumber } = req.body;
 
     const results = await fTokenController.checkCorrectness(
       value,
@@ -196,8 +196,8 @@ async function checkCorrectness(req, res, next) {
 }
 
 async function setFTCommitmentShieldAddress(req, res, next) {
-  const {address} = req.headers;
-  const {ftCommitmentShield} = req.body;
+  const { address } = req.headers;
+  const { ftCommitmentShield } = req.body;
 
   try {
     await fTokenController.setShield(ftCommitmentShield, address);
@@ -212,11 +212,11 @@ async function setFTCommitmentShieldAddress(req, res, next) {
 }
 
 async function getFTCommitmentShieldAddress(req, res, next) {
-  const {address} = req.headers;
+  const { address } = req.headers;
 
   try {
     const shieldAddress = await fTokenController.getShieldAddress(address);
-    const {name} = await fTokenController.getTokenInfo(address);
+    const { name } = await fTokenController.getTokenInfo(address);
     res.data = {
       shieldAddress,
       name,
@@ -228,7 +228,7 @@ async function getFTCommitmentShieldAddress(req, res, next) {
 }
 
 async function unsetFTCommitmentShieldAddress(req, res, next) {
-  const {address} = req.headers;
+  const { address } = req.headers;
 
   try {
     fTokenController.unSetShield(address);
@@ -273,8 +273,8 @@ async function unsetFTCommitmentShieldAddress(req, res, next) {
  * @param {*} res
  */
 async function simpleFTCommitmentBatchTransfer(req, res, next) {
-  const {address} = req.headers;
-  const {inputCommitment, outputCommitments, sender} = req.body;
+  const { address } = req.headers;
+  const { inputCommitment, outputCommitments, sender } = req.body;
   const {
     contractJson: fTokenShieldJson,
     contractInstance: fTokenShield,

@@ -1,5 +1,5 @@
 import express from 'express';
-import {getShieldAddresses} from '../services/shield';
+import { getShieldAddresses } from '../services/shield';
 
 const router = express.Router();
 

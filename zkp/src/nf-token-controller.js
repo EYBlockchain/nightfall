@@ -13,13 +13,13 @@ import config from 'config';
 // eslint-disable-next-line import/extensions
 import zokrates from '@eyblockchain/zokrates.js';
 import fs from 'fs';
-import {merkleTree} from '@eyblockchain/nightlite';
+import { merkleTree } from '@eyblockchain/nightlite';
 import utils from './zkpUtils';
 import zkp from './nf-token-zkp';
 import formatInputsForZkSnark from './format-inputs';
 import Element from './Element';
 import Web3 from './web3';
-import {getTruffleContractInstance} from './contractUtils';
+import { getTruffleContractInstance } from './contractUtils';
 
 const NFTokenShield = contract(jsonfile.readFileSync('./build/contracts/NFTokenShield.json'));
 
@@ -179,7 +179,7 @@ async function getApproved(tokenID, address) {
 
 function gasUsedStats(txReceipt, functionName) {
   console.group(`\nGas used in ${functionName}:`);
-  const {gasUsed} = txReceipt.receipt;
+  const { gasUsed } = txReceipt.receipt;
   const gasUsedLog = txReceipt.logs.filter(log => {
     return log.event === 'GasUsed';
   });
@@ -216,7 +216,7 @@ function gasUsedStats(txReceipt, functionName) {
  * @returns {Number} commitmentIndex - the index of the token within the Merkle Tree.  This is required for later transfers/joins so that Alice knows which 'chunks' of the Merkle Tree she needs to 'get' from the NFTokenShield contract in order to calculate a path.
  */
 async function mint(tokenId, ownerPublicKey, salt, vkId, blockchainOptions, zokratesOptions) {
-  const {nfTokenShieldJson, nfTokenShieldAddress} = blockchainOptions;
+  const { nfTokenShieldJson, nfTokenShieldAddress } = blockchainOptions;
   const account = utils.ensure0x(blockchainOptions.account);
 
   const {
@@ -286,7 +286,7 @@ async function mint(tokenId, ownerPublicKey, salt, vkId, blockchainOptions, zokr
     fileName: proofName,
   });
 
-  let {proof} = JSON.parse(fs.readFileSync(`${outputDirectory}/${proofName}`));
+  let { proof } = JSON.parse(fs.readFileSync(`${outputDirectory}/${proofName}`));
 
   proof = Object.values(proof);
   // convert to flattened array:
@@ -300,7 +300,7 @@ async function mint(tokenId, ownerPublicKey, salt, vkId, blockchainOptions, zokr
   console.log('Check that a registry has actually been registered:', registry);
 
   // Add nfTokenShield as an approver for the token transfer
-  const {contractInstance: nfToken} = await getTruffleContractInstance('NFTokenMetadata');
+  const { contractInstance: nfToken } = await getTruffleContractInstance('NFTokenMetadata');
   await nfToken.approve(nfTokenShieldAddress, tokenId, {
     from: account,
     gas: 4000000,
@@ -345,7 +345,7 @@ async function mint(tokenId, ownerPublicKey, salt, vkId, blockchainOptions, zokr
   console.log('MINT COMPLETE\n');
   console.groupEnd();
 
-  return {commitment, commitmentIndex};
+  return { commitment, commitmentIndex };
 }
 
 /**
@@ -378,7 +378,7 @@ async function transfer(
   blockchainOptions,
   zokratesOptions,
 ) {
-  const {nfTokenShieldJson, nfTokenShieldAddress} = blockchainOptions;
+  const { nfTokenShieldJson, nfTokenShieldAddress } = blockchainOptions;
   const account = utils.ensure0x(blockchainOptions.account);
 
   const {
@@ -497,7 +497,7 @@ async function transfer(
     fileName: proofName,
   });
 
-  let {proof} = JSON.parse(fs.readFileSync(`${outputDirectory}/${proofName}`));
+  let { proof } = JSON.parse(fs.readFileSync(`${outputDirectory}/${proofName}`));
 
   proof = Object.values(proof);
   // convert to flattened array:
@@ -570,7 +570,7 @@ async function burn(
   blockchainOptions,
   zokratesOptions,
 ) {
-  const {nfTokenShieldJson, nfTokenShieldAddress, tokenReceiver: payTo} = blockchainOptions;
+  const { nfTokenShieldJson, nfTokenShieldAddress, tokenReceiver: payTo } = blockchainOptions;
 
   const account = utils.ensure0x(blockchainOptions.account);
 
@@ -667,7 +667,7 @@ async function burn(
     fileName: proofName,
   });
 
-  let {proof} = JSON.parse(fs.readFileSync(`${outputDirectory}/${proofName}`));
+  let { proof } = JSON.parse(fs.readFileSync(`${outputDirectory}/${proofName}`));
 
   proof = Object.values(proof);
   // convert to flattened array:
@@ -705,7 +705,7 @@ async function burn(
 
   console.log('BURN COMPLETE\n');
   console.groupEnd();
-  return {txReceipt};
+  return { txReceipt };
 }
 
 async function checkCorrectness(

@@ -90,7 +90,7 @@ async function subscribeObject(idReceiver, topic = TRANSFER_TOPIC, userData, lis
     topics: [topic], // this identifies the topic
   });
   subscription.on('data', msg => {
-    const decodedMsg = {...msg, payload: decodeMessage(msg.payload)};
+    const decodedMsg = { ...msg, payload: decodeMessage(msg.payload) };
     listener(decodedMsg, userData);
   });
   return subscription;
