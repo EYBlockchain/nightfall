@@ -139,7 +139,7 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD=admin
       - MONGO_INITDB_DATABASE=nightfall
     volumes:
-      - ./database/docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+      - ./database/docker-entrypoint-initdb.d/01_setup_admin_user.js:/docker-entrypoint-initdb.d/01_setup_admin_user.js
       - mongo-nightfall-volume:/data/db
     networks:
       - nightfall_network
@@ -222,7 +222,7 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD=admin
       - MONGO_INITDB_DATABASE=merkle_tree
     volumes:
-      - ./docker-entrypoint-initdb.d:/docker-entrypoint-initdb.d
+      - ./database/docker-entrypoint-initdb.d/02_setup_admin_user.js:/docker-entrypoint-initdb.d/02_setup_admin_user.js
       - mongo-merkle-tree-volume:/data/db
     networks:
       - nightfall_network
