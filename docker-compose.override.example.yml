@@ -1,0 +1,33 @@
+version: '3.5'
+
+# This is just an example. Mount points, etc, might differ depending on 
+
+merkle-tree:
+    build: 
+      context: ./../timber/merkle-tree
+      dockerfile: dev.Dockerfile
+    restart: on-failure
+    depends_on:
+      - mongo-merkle-tree
+      - ganache
+    volumes:
+      - ./config/merkle-tree:/app/config # mount point might be different if configuring from another application
+      - ./zkp/contracts/:/app/contracts:consistent # required if deploying contracts from within this service (if CONTRACT_LOCATION = 'default')
+      - ./zkp/build/:/app/build:consistent # required if CONTRACT_LOCATION = 'default'
+    ports:
+      - "9000:80"
+    environment:
+      BLOCKCHAIN_HOST: ws://ganache
+      BLOCKCHAIN_PORT: 8545
+      CONTRACT_LOCATION: 'default' # Where to find the contractInstances?
+      # Specify one of:
+      # - 'remote' (to GET them from a remote microservice); or
+      # - 'mongodb' (to get them from mongodb); or
+      # - 'default' (to get them from the app/build/ folder)
+      MONGO_HOST: mongodb://mongo-merkle-tree
+      MONGO_PORT: 27017
+      MONGO_NAME: merkle_tree
+      MONGO_USERNAME: admin
+      MONGO_PASSWORD: admin
+    networks:
+      - nightfall_network
