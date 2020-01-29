@@ -291,11 +291,7 @@ async function simpleFTCommitmentBatchTransfer(req, res, next) {
   }
 
   try {
-    const {
-      maxOutputCommitmentIndex,
-      txReceipt,
-    } = await erc20.simpleFungibleBatchTransfer(
-
+    const { maxOutputCommitmentIndex, txReceipt } = await erc20.simpleFungibleBatchTransfer(
       inputCommitment,
       outputCommitments,
       receiversPublicKeys,
