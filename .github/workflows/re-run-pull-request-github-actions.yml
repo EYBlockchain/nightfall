@@ -54,7 +54,7 @@ jobs:
               const {data: createdCommit} = await github.git.createCommit({
                 owner,
                 repo,
-                message: "tigger github actions",
+                message: "trigger github actions",
                 tree: commitData.commit.tree.sha,
                 parents: [commitData.sha],
                 commiter: context.payload.pusher,
