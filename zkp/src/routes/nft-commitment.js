@@ -1,5 +1,3 @@
-/* eslint-disable camelcase */
-
 import { Router } from 'express';
 import { erc721 } from '@eyblockchain/nightlite';
 import utils from '../zkpUtils';
