@@ -1,5 +1,6 @@
 /* eslint-disable import/no-unresolved */
 
+import { erc20 } from '@eyblockchain/nightlite';
 import utils from '../src/zkpUtils';
 import bc from '../src/web3';
 import controller from '../src/f-token-controller';
@@ -100,7 +101,7 @@ describe('f-token-controller.js tests', () => {
   });
 
   test('Should mint an ERC-20 commitment Z_A_C for Alice of value C', async () => {
-    const { commitment: zTest, commitmentIndex: zIndex } = await controller.mint(
+    const { commitment: zTest, commitmentIndex: zIndex } = await erc20.mint(
       C,
       pkA,
       S_A_C,
@@ -129,7 +130,7 @@ describe('f-token-controller.js tests', () => {
       outputCommitments[i] = { value: E[i], salt: S_B_E[i] };
     }
 
-    const response = await controller.simpleFungibleBatchTransfer(
+    const response = await erc20.simpleFungibleBatchTransfer(
       inputCommitment,
       outputCommitments,
       pkB,
@@ -171,7 +172,7 @@ describe('f-token-controller.js tests', () => {
       { value: f, salt: await utils.rndHex(32) },
     ];
 
-    await controller.transfer(
+    await erc20.transfer(
       inputCommitments,
       outputCommitments,
       pkE,

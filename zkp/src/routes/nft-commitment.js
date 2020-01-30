@@ -1,6 +1,7 @@
 /* eslint-disable camelcase */
 
 import { Router } from 'express';
+import { erc721 } from '@eyblockchain/nightlite';
 import utils from '../zkpUtils';
 import nfController from '../nf-token-controller';
 import { getVkId, getTruffleContractInstance } from '../contractUtils';
@@ -18,7 +19,7 @@ async function mint(req, res, next) {
   } = await getTruffleContractInstance('NFTokenShield');
 
   try {
-    const { commitment, commitmentIndex } = await nfController.mint(
+    const { commitment, commitmentIndex } = await erc721.mint(
       tokenId,
       ownerPublicKey,
       salt,
@@ -64,7 +65,7 @@ async function transfer(req, res, next) {
   } = await getTruffleContractInstance('NFTokenShield');
 
   try {
-    const { outputCommitment, outputCommitmentIndex, txReceipt } = await nfController.transfer(
+    const { outputCommitment, outputCommitmentIndex, txReceipt } = await erc721.transfer(
       tokenId,
       receiverPublicKey,
       originalCommitmentSalt,
@@ -106,7 +107,7 @@ async function burn(req, res, next) {
   } = await getTruffleContractInstance('NFTokenShield');
 
   try {
-    const { txReceipt } = await nfController.burn(
+    const { txReceipt } = await erc721.burn(
       tokenId,
       secretKey,
       salt,

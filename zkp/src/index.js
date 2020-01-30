@@ -6,7 +6,7 @@
 
 import express from 'express';
 import bodyParser from 'body-parser';
-import { merkleTree } from '@eyblockchain/nightlite';
+import { merkleTree, provider } from '@eyblockchain/nightlite';
 import { ftCommitmentRoutes, ftRoutes, nftCommitmentRoutes, nftRoutes } from './routes';
 import vkController from './vk-controller'; // this import TRIGGERS the runController() script within.
 import { formatResponse, formatError, errorHandler } from './middlewares';
@@ -39,6 +39,8 @@ app.use('/', nftCommitmentRoutes);
 app.use('/', ftCommitmentRoutes);
 app.use('/', ftRoutes);
 app.use('/', nftRoutes);
+
+provider.connect();
 
 app.route('/vk').post(async function runVkController(req, res, next) {
   try {

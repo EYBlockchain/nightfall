@@ -1,5 +1,6 @@
 /* eslint-disable import/no-unresolved */
 
+import { erc721 } from '@eyblockchain/nightlite';
 import utils from '../src/zkpUtils';
 import bc from '../src/web3';
 import controller from '../src/nf-token-controller';
@@ -85,7 +86,7 @@ describe('nf-token-controller.js tests', () => {
   });
 
   test('Should mint an ERC 721 commitment for Alice for asset A  (Z_A_A)', async () => {
-    const { commitment: zTest, commitmentIndex: zIndex } = await controller.mint(
+    const { commitment: zTest, commitmentIndex: zIndex } = await erc721.mint(
       A,
       pkA,
       S_A_A,
@@ -106,7 +107,7 @@ describe('nf-token-controller.js tests', () => {
   });
 
   test('Should mint an ERC 721 commitment for Alice for asset G (Z_A_G)', async () => {
-    const { commitment: zTest, commitmentIndex: zIndex } = await controller.mint(
+    const { commitment: zTest, commitmentIndex: zIndex } = await erc721.mint(
       G,
       pkA,
       S_A_G,
@@ -127,7 +128,7 @@ describe('nf-token-controller.js tests', () => {
   });
 
   test('Should transfer the ERC 721 commitment Z_A_A from Alice to Bob, creating Z_B_A', async () => {
-    const { outputCommitment } = await controller.transfer(
+    const { outputCommitment } = await erc721.transfer(
       A,
       pkB,
       S_A_A,
@@ -151,7 +152,7 @@ describe('nf-token-controller.js tests', () => {
   });
 
   test('Should transfer the ERC 721 commitment Z_A_G from Alice to Bob, creating Z_B_G', async () => {
-    const { outputCommitment } = await controller.transfer(
+    const { outputCommitment } = await erc721.transfer(
       G,
       pkB,
       S_A_G,
@@ -175,7 +176,7 @@ describe('nf-token-controller.js tests', () => {
   });
 
   test('Should burn the ERC 721 commitment for Bob for asset Z_B_A to return A ERC-721 Token', async () => {
-    await controller.burn(
+    await erc721.burn(
       A,
       skB,
       sAToBA,

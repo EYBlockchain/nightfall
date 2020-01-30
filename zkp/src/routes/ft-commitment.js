@@ -1,6 +1,7 @@
 /* eslint-disable camelcase */
 
 import { Router } from 'express';
+import { erc20 } from '@eyblockchain/nightlite';
 import utils from '../zkpUtils';
 import fTokenController from '../f-token-controller';
 import { getVkId, getTruffleContractInstance } from '../contractUtils';
@@ -18,7 +19,7 @@ async function mint(req, res, next) {
   } = await getTruffleContractInstance('FTokenShield');
 
   try {
-    const { commitment, commitmentIndex } = await fTokenController.mint(
+    const { commitment, commitmentIndex } = await erc20.mint(
       value,
       owner.publicKey,
       salt,
@@ -58,7 +59,7 @@ async function transfer(req, res, next) {
   outputCommitments[1].salt = await utils.rndHex(32);
 
   try {
-    const { txReceipt } = await fTokenController.transfer(
+    const { txReceipt } = await erc20.transfer(
       inputCommitments,
       outputCommitments,
       receiver.publicKey,
@@ -92,7 +93,7 @@ async function burn(req, res, next) {
   } = await getTruffleContractInstance('FTokenShield');
 
   try {
-    await fTokenController.burn(
+    await erc20.burn(
       value,
       sender.secretKey,
       salt,
@@ -205,7 +206,7 @@ async function simpleFTCommitmentBatchTransfer(req, res, next) {
   }
 
   try {
-    const { z_E, z_E_index, txReceipt } = await fTokenController.simpleFungibleBatchTransfer(
+    const { z_E, z_E_index, txReceipt } = await erc20.simpleFungibleBatchTransfer(
       inputCommitment,
       outputCommitments,
       receiversPublicKeys,
