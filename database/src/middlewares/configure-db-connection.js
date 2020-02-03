@@ -1,22 +1,30 @@
-import dbConnections from '../common/dbConnections';
+import { dbConnections, userDBs } from '../common/dbConnections';
+import DB from '../mongodb/db';
 
 export default async function(req, res, next) {
+  const name =
+    req.body.name || // while signup and login
+    req.username || // all users routes except signup
+    req.headers.loggedinusername;
+
   req.user = {};
+
   try {
     // signup need admin privalage as it create user sepcific tables.
     if (req.path === '/users' && req.method === 'POST') {
-      req.user.connection = dbConnections.admin;
+      userDBs[name] = new DB(dbConnections.admin, name);
+      req.user.db = userDBs[name];
       return next();
     }
 
     if (req.path === '/db-connection' && req.method === 'POST') {
+      if (!userDBs[name]) userDBs[name] = new DB(dbConnections.admin, name);
       return next();
     }
 
-    const name = req.headers.loggedinusername || req.username;
     if (name) {
       if (!dbConnections[name]) next(new Error('user never loggedIn in'));
-      req.user.connection = dbConnections[name];
+      req.user.db = userDBs[name];
       return next();
     }
     throw new Error('DB connection assign failed');

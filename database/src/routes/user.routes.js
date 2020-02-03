@@ -1,5 +1,4 @@
 import { UserService } from '../business';
-import { setDB } from '../middlewares';
 
 /**
  * This function will create or get mongo db connection
@@ -13,8 +12,7 @@ import { setDB } from '../middlewares';
 async function configureDBconnection(req, res, next) {
   const { name, password } = req.body;
   try {
-    const connection = await UserService.setDBconnection(name, password);
-    req.user.connection = connection;
+    req.user.db = await UserService.createDBconnection(name, password);
     next();
   } catch (err) {
     next(err);
@@ -220,7 +218,7 @@ async function deleteNFTShieldContractInfoByContractAddress(req, res, next) {
 }
 
 export default function(router) {
-  router.post('/db-connection', configureDBconnection, setDB, getUser);
+  router.post('/db-connection', configureDBconnection, getUser);
 
   router.post('/users', createUser);
 

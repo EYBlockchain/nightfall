@@ -2,7 +2,7 @@ import express, { Router } from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import logger from './logger';
-import { setDB, dbConnection, formatResponse, formatError, errorHandler } from './middlewares';
+import { dbConnection, formatResponse, formatError, errorHandler } from './middlewares';
 import configureRoutesToPraseParams, {
   initializeNftRoutes,
   initializeNftCommitmentRoutes,
@@ -23,7 +23,6 @@ app.use(bodyParser.json());
 configureRoutesToPraseParams(app);
 
 app.use(dbConnection);
-app.use(setDB);
 app.use(router);
 
 initializeNftRoutes(router);

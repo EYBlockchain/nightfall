@@ -4,7 +4,7 @@ import config from 'config';
 import utils from 'zkp-utils';
 
 import { COLLECTIONS } from '../common/constants';
-import dbConnections from '../common/dbConnections';
+import { dbConnections, userDBs } from '../common/dbConnections';
 import { userMapper } from '../mappers';
 
 const mongo = config.get('mongo');
@@ -79,16 +79,19 @@ export default class UserService {
    * @param {string} password - user password
    * @returns {object} mongo db connection
    */
-  static async setDBconnection(name, password) {
+  static async createDBconnection(name, password) {
     if (!password) throw new Error('Password is empty');
 
     if (!dbConnections[name]) {
-      dbConnections[name] = await mongoose.createConnection(
+      const connection = await mongoose.createConnection(
         `mongodb://${name}:${password}@${mongo.host}:${mongo.port}/${mongo.databaseName}`,
         { useNewUrlParser: true },
       );
+      dbConnections[name] = connection;
+      userDBs[name].database = connection;
     }
-    return dbConnections[name];
+    // userDb[name] is an object created when we registered a new user
+    return userDBs[name];
   }
 
   /**

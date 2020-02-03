@@ -52,12 +52,10 @@ export async function createAccountHandler(req, res, next) {
     if (status) throw Error('Name already in use');
 
     const address = (await accounts.createAccount(password)).data;
-    const shhIdentity = '';
 
     const data = await db.createUser({
       ...req.body,
       address,
-      shhIdentity,
     });
 
     await accounts.unlockAccount({ address, password });
