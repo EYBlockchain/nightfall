@@ -5,17 +5,8 @@
 */
 
 import { argv } from 'yargs';
-import fs from 'fs';
-import path from 'path';
 import inquirer from 'inquirer';
 import { generateZokratesFiles } from '@eyblockchain/nightlite';
-
-const isDirectory = source => fs.lstatSync(source).isDirectory();
-const getDirectories = source =>
-  fs
-    .readdirSync(source)
-    .map(name => path.join(source, name))
-    .filter(isDirectory);
 
 /**
  * Trusted setup for Nightfall. Either compiles all directories in /code/gm17, or a single directory using the -f flag.
@@ -42,20 +33,16 @@ async function main() {
     if (carryOn.continue !== 'y') return;
 
     try {
-      // Array of all directories in the above directory.
-      const codeDirectories = getDirectories(`${process.cwd()}/code/gm17`);
-
-      // The files don't compile correctly when we Promise.all these, so we're doing sequentially.
-      // Maybe too much processing.
-      for (let j = 0; j < codeDirectories.length; j += 1) {
-        // eslint-disable-next-line no-await-in-loop
-        await generateZokratesFiles(codeDirectories[j]);
-      }
+      await generateZokratesFiles(`${process.cwd()}/code/gm17`);
     } catch (err) {
       throw new Error(`Trusted setup failed: ${err}`);
     }
   } else {
-    await generateZokratesFiles(`${process.cwd()}/code/${f}`);
+    try {
+      await generateZokratesFiles(`${process.cwd()}/code/gm17`, f);
+    } catch (err) {
+      throw new Error(`Trusted setup failed: ${err}`);
+    }
   }
 }
 
