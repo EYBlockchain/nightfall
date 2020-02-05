@@ -48,7 +48,6 @@ module.exports = {
       burn: './code/gm17/ft-burn/ft-burn-vk.json',
     },
   },
-<<<<<<< HEAD:zkp/config/default.js
 
   GASPRICE: 20000000000,
 
@@ -65,8 +64,6 @@ module.exports = {
   },
 
   POLLING_FREQUENCY: 6000, // How many milliseconds to wait between each poll
-=======
->>>>>>> perf: remove verifier registry & vkid's:zkp/src/config.js
 
   zkpCodeVolume: process.env.ZKP_CODE_VOLUME,
 };
