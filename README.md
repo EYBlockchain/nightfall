@@ -90,6 +90,14 @@ Next pull a compatible Docker image of ZoKrates
 docker pull zokrates/zokrates:0.5.1
 ```
 
+### Github Configuration
+
+In order to use Nightfall, you will need to be logged into the Github package registry. To do this, you will need to [generate a Github Personal Access Token](https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line). Make sure that the token you generate has at minimum `read: packages` and `repo` permissions.
+
+After you've done that, log in to the Github package registry by running
+
+`docker login -u <your-username> -p <the-token-you-just-generated> docker.pkg.github.com`
+
 Next we have to generate the keys and constraint files for Zero Knowledge Proofs ([read more](./zkp/code/README-trusted-setup.md)), this is about 7GB and depends on randomness for security. This step can take a while, depending on your hardware. Before you start, check once more that you have provisioned enough memory for Docker, as described above:
 
 ```sh
@@ -103,14 +111,6 @@ Please be patient - you can check progress in the terminal window and by using `
 You just created all the files needed to generate zk-SNARKs. The proving keys, verifying keys and constraint files will allow you to create hidden tokens, move them under zero knowledge and then recover them — both for fungible (ERC-20) and non-fungible (ERC-721) tokens.
 
 ### Starting Nightfall
-
-### Github Configuration
-
-In order to use Nightfall, you will need to be logged into the Github package registry. To do this, you will need to [generate a Github Personal Access Token](https://help.github.com/en/github/authenticating-to-github/creating-a-personal-access-token-for-the-command-line). Make sure that the token you generate has at minimum `read: packages` and `repo` permissions.
-
-After you've done that, log in to the Github package registry by running
-
-`docker login -u <your-username> -p <the-token-you-just-generated> docker.pkg.github.com`
 
 #### Re-installation
 
