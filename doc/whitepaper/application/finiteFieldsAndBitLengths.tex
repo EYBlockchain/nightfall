@@ -2,7 +2,7 @@
 \label{sec:finiteFieldsAndBitLengths}
 
 \noindent
-For those who go through the Nightfall code, you mght realise there are many number conversions being made in the zkp microservice. In particular, there are frequently conversions and restrictions to $216$-bit ($27$-byte) values in much of today's Nightfall code. These conversions are a consequence of working with zk-SNARKs.\\
+For those who go through the Nightfall code, you might realise there are many number conversions being made in the zkp microservice. In particular, there are frequently conversions and restrictions to $216$-bit ($27$-byte) values in much of today's Nightfall code. These conversions are a consequence of working with zk-SNARKs.\\
 \\
 Like many cryptographic protocols, zk-SNARKs make use of representing numbers as points on an elliptic curve. In doing so, the results of our computations become quite difficult to `unravel' -- that is, given an output, it becomes computationally infeasible for someone to determine the inputs. However, it also restricts the mathematics we can do. This is a gross oversimplification of why elliptic curves are used, but let's talk about them.\\
 \\
