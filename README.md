@@ -37,12 +37,6 @@ These instructions give the most direct path to a working Nightfall setup. The a
 compute-intensive and so a high-end processor is preferred. Depending on your machine, setup can
 take one to several hours.
 
-### Truffle
-
-If you are familiar with [Truffle](https://github.com/trufflesuite/truffle#readme) and would like a
-Truffle-specific way to get started, check out the
-[Nightfall Truffle Box](https://github.com/truffle-box/nightfall-box#nightfall-truffle-box).
-
 ### Supported hardware & prerequisites
 
 Mac and Linux machines with at least 16GB of memory and 10GB of disk space are supported.
