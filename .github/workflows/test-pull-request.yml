@@ -32,9 +32,9 @@ jobs:
         run: |
           sudo usermod -a -G sudo runner
           sudo swapoff -a
-          sudo fallocate -l 12G /swapfile
-          sudo mkswap /swapfile
-          sudo swapon /swapfile
+          sudo fallocate -l 12G /mnt/swapfile
+          sudo mkswap /mnt/swapfile
+          sudo swapon /mnt/swapfile
           swapon --show
           grep SwapTotal /proc/meminfo
       - name: Build docker images
@@ -72,9 +72,9 @@ jobs:
         run: |
           sudo usermod -a -G sudo runner
           sudo swapoff -a
-          sudo fallocate -l 12G /swapfile
-          sudo mkswap /swapfile
-          sudo swapon /swapfile
+          sudo fallocate -l 12G /mnt/swapfile
+          sudo mkswap /mnt/swapfile
+          sudo swapon /mnt/swapfile
           swapon --show
           grep SwapTotal /proc/meminfo
       - name: Build docker images
@@ -85,8 +85,6 @@ jobs:
           npm run setupAll
       - name: Remove ZoKrates Containers
         run: |
-          sudo mv zkp/code/gm17 /mnt/gm17
-          sudo ln -s /mnt/gm17 zkp/code/gm17
           docker stop $(docker ps -a -q)
           docker rm $(docker ps -a -q)
       - name: Run integration test
