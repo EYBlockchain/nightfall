@@ -4,16 +4,16 @@ import { erc20 } from '@eyblockchain/nightlite';
 import utils from '../src/zkpUtils';
 import bc from '../src/web3';
 import controller from '../src/f-token-controller';
-import { getTruffleContractInstance } from '../src/contractUtils';
+import { getTruffleContractInstance, getContractAddress } from '../src/contractUtils';
 
 jest.setTimeout(7200000);
 
 const PROOF_LENGTH = 20;
-const C = '0x00000000000000000000000000000028'; // 128 bits = 16 bytes = 32 chars
-const E = new Array(20).fill('0x00000000000000000000000000000002');
-const skA = '0x0000000000111111111111111111111111111111111111111111111111112111';
+const inputAmount = '0x00000000000000000000000000000028'; // 128 bits = 16 bytes = 32 chars
+const outputAmounts = new Array(20).fill('0x00000000000000000000000000000002');
+const secretKeyA = '0x0000000000111111111111111111111111111111111111111111111111112111';
 // we could generate these but it's nice to have them fixed in case later testing
-const skB = [
+const receiverSecretKeys = [
   '0x0000000000111111111111111111111111111111111111111111111111111100',
   '0x0000000000111111111111111111111111111111111111111111111111111101',
   '0x0000000000111111111111111111111111111111111111111111111111111102',
@@ -35,7 +35,7 @@ const skB = [
   '0x0000000000111111111111111111111111111111111111111111111111111118',
   '0x0000000000111111111111111111111111111111111111111111111111111118', // deliberately the same as the last one - to enable a transfer test
 ];
-const S_B_E = [
+const outputCommitmentSalts = [
   '0x0000000000211111111111111111111111111111111111111111111111111100',
   '0x0000000000211111111111111111111111111111111111111111111111111101',
   '0x0000000000211111111111111111111111111111111111111111111111111102',
@@ -57,10 +57,10 @@ const S_B_E = [
   '0x0000000000211111111111111111111111111111111111111111111111111118',
   '0x0000000000211111111111111111111111111111111111111111111111111119',
 ];
-let S_A_C;
-let pkA;
-let pkB = [];
-let Z_A_C;
+let inputCommitmentSalt;
+let publicKeyAlice;
+const outputPublicKeys = [];
+let inputCommitmentId;
 // storage for z indexes
 let zInd1;
 let zInd2;
@@ -68,20 +68,32 @@ let outputCommitments = [];
 let accounts;
 let fTokenShieldJson;
 let fTokenShieldAddress;
+let erc20Address;
 
 beforeAll(async () => {
   if (!(await bc.isConnected())) await bc.connect();
   accounts = await (await bc.connection()).eth.getAccounts();
+
   const { contractJson, contractInstance } = await getTruffleContractInstance('FTokenShield');
   fTokenShieldAddress = contractInstance.address;
   fTokenShieldJson = contractJson;
+
+  erc20Address = await getContractAddress('FToken');
+  const erc20AddressPadded = `0x${utils.strip0x(erc20Address).padStart(64, '0')}`;
+
   for (let i = 0; i < PROOF_LENGTH; i++) {
-    pkB[i] = utils.strip0x(utils.hash(skB[i]));
+    outputPublicKeys[i] = utils.strip0x(utils.hash(receiverSecretKeys[i]));
   }
-  pkB = await Promise.all(pkB);
-  S_A_C = await utils.rndHex(32);
-  pkA = utils.strip0x(utils.hash(skA));
-  Z_A_C = utils.concatenateThenHash(C, pkA, S_A_C);
+
+  publicKeyAlice = utils.strip0x(utils.hash(secretKeyA));
+
+  inputCommitmentSalt = await utils.rndHex(32);
+  inputCommitmentId = utils.concatenateThenHash(
+    erc20AddressPadded,
+    inputAmount,
+    publicKeyAlice,
+    inputCommitmentSalt,
+  );
 });
 
 // eslint-disable-next-line no-undef
@@ -102,10 +114,11 @@ describe('f-token-controller.js tests', () => {
 
   test('Should mint an ERC-20 commitment Z_A_C for Alice of value C', async () => {
     const { commitment: zTest, commitmentIndex: zIndex } = await erc20.mint(
-      C,
-      pkA,
-      S_A_C,
+      inputAmount,
+      publicKeyAlice,
+      inputCommitmentSalt,
       {
+        erc20Address,
         account: accounts[0],
         fTokenShieldJson,
         fTokenShieldAddress,
@@ -117,23 +130,29 @@ describe('f-token-controller.js tests', () => {
       },
     );
     zInd1 = parseInt(zIndex, 10);
-    expect(Z_A_C).toEqual(zTest);
+    expect(inputCommitmentId).toEqual(zTest);
   });
 
   test('Should transfer ERC-20 commitments of various values to 19 receipients and get change', async () => {
     // the E's becomes Bobs'.
     const bal1 = await controller.getBalance(accounts[0]);
-    const inputCommitment = { value: C, salt: S_A_C, commitment: Z_A_C, commitmentIndex: zInd1 };
-    for (let i = 0; i < E.length; i++) {
-      outputCommitments[i] = { value: E[i], salt: S_B_E[i] };
+    const inputCommitment = {
+      value: inputAmount,
+      salt: inputCommitmentSalt,
+      commitment: inputCommitmentId,
+      commitmentIndex: zInd1,
+    };
+    for (let i = 0; i < outputAmounts.length; i++) {
+      outputCommitments[i] = { value: outputAmounts[i], salt: outputCommitmentSalts[i] };
     }
 
     const response = await erc20.simpleFungibleBatchTransfer(
       inputCommitment,
       outputCommitments,
-      pkB,
-      skA,
+      outputPublicKeys,
+      secretKeyA,
       {
+        erc20Address,
         account: accounts[0],
         fTokenShieldJson,
         fTokenShieldAddress,
@@ -162,13 +181,13 @@ describe('f-token-controller.js tests', () => {
     const inputCommitments = [
       {
         value: c,
-        salt: S_B_E[18],
+        salt: outputCommitmentSalts[18],
         commitment: outputCommitments[18].commitment,
         commitmentIndex: zInd2 - 1,
       },
       {
         value: d,
-        salt: S_B_E[19],
+        salt: outputCommitmentSalts[19],
         commitment: outputCommitments[19].commitment,
         commitmentIndex: zInd2,
       },
@@ -182,8 +201,9 @@ describe('f-token-controller.js tests', () => {
       inputCommitments,
       outputCommitments,
       pkE,
-      skB[18],
+      receiverSecretKeys[18],
       {
+        erc20Address,
         account: accounts[0],
         fTokenShieldJson,
         fTokenShieldAddress,
