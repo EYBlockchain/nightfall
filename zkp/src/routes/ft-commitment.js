@@ -2,7 +2,7 @@ import { Router } from 'express';
 import { erc20 } from '@eyblockchain/nightlite';
 import utils from '../zkpUtils';
 import fTokenController from '../f-token-controller';
-import { getTruffleContractInstance } from '../contractUtils';
+import { getTruffleContractInstance, getContractAddress } from '../contractUtils';
 
 const router = Router();
 
@@ -26,6 +26,7 @@ async function mint(req, res, next) {
     contractJson: fTokenShieldJson,
     contractInstance: fTokenShield,
   } = await getTruffleContractInstance('FTokenShield');
+  const erc20Address = await getContractAddress('FToken');
 
   try {
     const { commitment, commitmentIndex } = await erc20.mint(
@@ -33,6 +34,7 @@ async function mint(req, res, next) {
       owner.publicKey,
       salt,
       {
+        erc20Address,
         fTokenShieldJson,
         fTokenShieldAddress: fTokenShield.address,
         account: address,
@@ -84,6 +86,7 @@ async function transfer(req, res, next) {
     contractJson: fTokenShieldJson,
     contractInstance: fTokenShield,
   } = await getTruffleContractInstance('FTokenShield');
+  const erc20Address = await getContractAddress('FToken');
 
   outputCommitments[0].salt = await utils.rndHex(32);
   outputCommitments[1].salt = await utils.rndHex(32);
@@ -95,6 +98,7 @@ async function transfer(req, res, next) {
       receiver.publicKey,
       sender.secretKey,
       {
+        erc20Address,
         fTokenShieldJson,
         fTokenShieldAddress: fTokenShield.address,
         account: address,
@@ -138,6 +142,7 @@ async function burn(req, res, next) {
     contractJson: fTokenShieldJson,
     contractInstance: fTokenShield,
   } = await getTruffleContractInstance('FTokenShield');
+  const erc20Address = await getContractAddress('FToken');
 
   try {
     await erc20.burn(
@@ -147,6 +152,7 @@ async function burn(req, res, next) {
       commitment,
       commitmentIndex,
       {
+        erc20Address,
         fTokenShieldJson,
         fTokenShieldAddress: fTokenShield.address,
         account: address,
@@ -170,11 +176,13 @@ async function checkCorrectness(req, res, next) {
 
   try {
     const { address } = req.headers;
-    const { value, salt, pk, commitment, commitmentIndex, blockNumber } = req.body;
+    const { value, salt, publicKey, commitment, commitmentIndex, blockNumber } = req.body;
+    const erc20Address = await getContractAddress('FToken');
 
     const results = await fTokenController.checkCorrectness(
+      erc20Address,
       value,
-      pk,
+      publicKey,
       salt,
       commitment,
       commitmentIndex,
@@ -272,6 +280,8 @@ async function simpleFTCommitmentBatchTransfer(req, res, next) {
     contractJson: fTokenShieldJson,
     contractInstance: fTokenShield,
   } = await getTruffleContractInstance('FTokenShield');
+  const erc20Address = await getContractAddress('FToken');
+
   const receiversPublicKeys = [];
 
   if (!outputCommitments || outputCommitments.length !== 20) throw new Error('Invalid data input');
@@ -289,6 +299,7 @@ async function simpleFTCommitmentBatchTransfer(req, res, next) {
       receiversPublicKeys,
       sender.secretKey,
       {
+        erc20Address,
         account: address,
         fTokenShieldJson,
         fTokenShieldAddress: fTokenShield.address,
@@ -302,8 +313,8 @@ async function simpleFTCommitmentBatchTransfer(req, res, next) {
 
     let lastCommitmentIndex = parseInt(maxOutputCommitmentIndex, 10);
 
-    outputCommitments.forEach((transferCommitment, indx) => {
-      outputCommitments[indx].commitmentIndex =
+    outputCommitments.forEach((transferCommitment, index) => {
+      outputCommitments[index].commitmentIndex =
         lastCommitmentIndex - (outputCommitments.length - 1);
       lastCommitmentIndex += 1;
     });
