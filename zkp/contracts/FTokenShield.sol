@@ -29,21 +29,18 @@ contract FTokenShield is Ownable, MerkleTree {
 
   // CONTRACT INSTANCES:
   Verifier_Interface private verifier; // the verification smart contract
-  ERC20Interface private fToken; // the  ERC-20 token contract
 
   // PRIVATE TRANSACTIONS' PUBLIC STATES:
   mapping(bytes32 => bytes32) public nullifiers; // store nullifiers of spent commitments
   mapping(bytes32 => bytes32) public roots; // holds each root we've calculated so that we can pull the one relevant to the prover
-  bytes32 public latestRoot; // holds the index for the latest root so that the prover can provide it later and this contract can look up the relevant root
-
-  // VERIFICATION KEY STORAGE:
   mapping(uint => uint256[]) public vks; // mapped to by an enum uint(TransactionTypes):
 
+  bytes32 public latestRoot; // holds the index for the latest root so that the prover can provide it later and this contract can look up the relevant root
+
   // FUNCTIONS:
-  constructor(address _verifier, address _fToken) public {
+  constructor(address _verifier) public {
       _owner = msg.sender;
       verifier = Verifier_Interface(_verifier);
-      fToken = ERC20Interface(_fToken);
   }
 
   /**
@@ -69,13 +66,6 @@ contract FTokenShield is Ownable, MerkleTree {
   }
 
   /**
-  returns the ERC-20 contract address that this shield contract is calling
-  */
-  function getFToken() public view returns (address) {
-    return address(fToken);
-  }
-
-  /**
   Stores verification keys (for the 'mint', 'transfer' and 'burn' computations).
   */
   function registerVerificationKey(uint256[] calldata _vk, TransactionTypes _txType) external onlyOwner {
@@ -88,14 +78,19 @@ contract FTokenShield is Ownable, MerkleTree {
   /**
   The mint function accepts fungible tokens from the specified fToken ERC-20 contract and creates the same amount as a commitment.
   */
-  function mint(uint256[] calldata _proof, uint256[] calldata _inputs, uint128 _value, bytes32 _commitment) external {
-
+  function mint(
+      bytes32 tokenContractAddress, // Take in as bytes32 for consistent hashing
+      uint256[] calldata _proof,
+      uint256[] calldata _inputs,
+      uint128 _value,
+      bytes32 _commitment
+    ) external {
       // gas measurement:
       uint256 gasCheckpoint = gasleft();
 
       // Check that the publicInputHash equals the hash of the 'public inputs':
       bytes31 publicInputHash = bytes31(bytes32(_inputs[0]) << 8);
-      bytes31 publicInputHashCheck = bytes31(sha256(abi.encodePacked(uint128(_value), _commitment)) << 8); // Note that we force the _value to be left-padded with zeros to fill 128-bits, so as to match the padding in the hash calculation performed within the zokrates proof.
+      bytes31 publicInputHashCheck = bytes31(sha256(abi.encodePacked(tokenContractAddress, uint128(_value), _commitment)) << 8); // Note that we force the _value to be left-padded with zeros to fill 128-bits, so as to match the padding in the hash calculation performed within the zokrates proof.
       require(publicInputHashCheck == publicInputHash, "publicInputHash cannot be reconciled");
 
       // gas measurement:
@@ -115,18 +110,27 @@ contract FTokenShield is Ownable, MerkleTree {
       roots[latestRoot] = latestRoot; // and save the new root to the list of roots
 
       // Finally, transfer the fTokens from the sender to this contract
-      bool transferCheck = fToken.transferFrom(msg.sender, address(this), _value);
+
+      // Need to cast from bytes32 to address.
+      ERC20Interface tokenContract = ERC20Interface(address(uint160(uint256(tokenContractAddress))));
+      bool transferCheck = tokenContract.transferFrom(msg.sender, address(this), _value);
       require(transferCheck, "Commitment cannot be minted");
 
-      // gas measurement:
-      gasUsedByShieldContract = gasUsedByShieldContract + gasCheckpoint - gasleft();
       emit GasUsed(gasUsedByShieldContract, gasUsedByVerifierContract);
   }
 
   /**
   The transfer function transfers a commitment to a new owner
   */
-  function transfer(uint256[] calldata _proof, uint256[] calldata _inputs, bytes32 _root, bytes32 _nullifierC, bytes32 _nullifierD, bytes32 _commitmentE, bytes32 _commitmentF) external {
+  function transfer(
+      uint256[] calldata _proof,
+      uint256[] calldata _inputs,
+      bytes32 _root,
+      bytes32 _nullifierC,
+      bytes32 _nullifierD,
+      bytes32 _commitmentE,
+      bytes32 _commitmentF
+    ) external {
 
       // gas measurement:
       uint256[3] memory gasUsed; // array needed to stay below local stack limit
@@ -177,7 +181,13 @@ contract FTokenShield is Ownable, MerkleTree {
   /**
   The transfer function transfers 20 commitments to new owners
   */
-  function simpleBatchTransfer(uint256[] calldata _proof, uint256[] calldata _inputs, bytes32 _root, bytes32 _nullifier, bytes32[] calldata _commitments) external {
+  function simpleBatchTransfer(
+      uint256[] calldata _proof,
+      uint256[] calldata _inputs,
+      bytes32 _root,
+      bytes32 _nullifier,
+      bytes32[] calldata _commitments
+    ) external {
 
       // gas measurement:
       uint256 gasCheckpoint = gasleft();
@@ -216,14 +226,22 @@ contract FTokenShield is Ownable, MerkleTree {
       emit GasUsed(gasUsedByShieldContract, gasUsedByVerifierContract);
   }
 
-  function burn(uint256[] calldata _proof, uint256[] calldata _inputs, bytes32 _root, bytes32 _nullifier, uint128 _value, uint256 _payTo) external {
+  function burn(
+      bytes32 tokenContractAddress,
+      uint256[] calldata _proof,
+      uint256[] calldata _inputs,
+      bytes32 _root,
+      bytes32 _nullifier,
+      uint128 _value,
+      uint256 _payTo
+    ) external {
 
       // gas measurement:
       uint256 gasCheckpoint = gasleft();
 
       // Check that the publicInputHash equals the hash of the 'public inputs':
       bytes31 publicInputHash = bytes31(bytes32(_inputs[0]) << 8);
-      bytes31 publicInputHashCheck = bytes31(sha256(abi.encodePacked(_root, _nullifier, uint128(_value), _payTo)) << 8); // Note that although _payTo represents an address, we have declared it as a uint256. This is because we want it to be abi-encoded as a bytes32 (left-padded with zeros) so as to match the padding in the hash calculation performed within the zokrates proof. Similarly, we force the _value to be left-padded with zeros to fill 128-bits.
+      bytes31 publicInputHashCheck = bytes31(sha256(abi.encodePacked(tokenContractAddress, _root, _nullifier, uint128(_value), _payTo)) << 8); // Note that although _payTo represents an address, we have declared it as a uint256. This is because we want it to be abi-encoded as a bytes32 (left-padded with zeros) so as to match the padding in the hash calculation performed within the zokrates proof. Similarly, we force the _value to be left-padded with zeros to fill 128-bits.
       require(publicInputHashCheck == publicInputHash, "publicInputHash cannot be reconciled");
 
       // gas measurement:
@@ -243,10 +261,10 @@ contract FTokenShield is Ownable, MerkleTree {
       require(nullifiers[_nullifier]==0, "The commitment being spent has already been nullified!");
 
       nullifiers[_nullifier] = _nullifier; // add the nullifier to the list of nullifiers
-
-      //Finally, transfer the fungible tokens from this contract to the nominated address
-      address payToAddress = address(_payTo); // we passed _payTo as a uint256, to ensure the packing was correct within the sha256() above
-      bool transferCheck = fToken.transfer(payToAddress, _value);
+      
+      // Need to cast from bytes32 to address.
+      ERC20Interface tokenContract = ERC20Interface(address(uint160(uint256(tokenContractAddress))));
+      bool transferCheck = tokenContract.transfer(address(_payTo), _value);
       require(transferCheck, "Commitment cannot be burned");
 
       emit Burn(_nullifier);

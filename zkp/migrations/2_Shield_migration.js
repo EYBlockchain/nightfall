@@ -20,6 +20,6 @@ module.exports = function(deployer) {
 
     await deployer.deploy(FToken);
 
-    await deployer.deploy(FTokenShield, Verifier.address, FToken.address);
+    await deployer.deploy(FTokenShield, Verifier.address);
   });
 };
