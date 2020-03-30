@@ -172,16 +172,31 @@ export default class FtCommitmentBatchTrasnferComponent implements OnInit , Afte
     }
     this.isRequesting = true;
     const [commitment] = this.selectedCommitmentList;
-    // const transactionId = this.batchTransactions['id'];
+
     this.ftCommitmentService.transferFTBatchCommitment(
       this.selectedCommitmentList[0],
       this.transferData,
     ).subscribe( data => {
         this.isRequesting = false;
-        this.toastr.success('Transferred to selected receivers');
-        transactions.splice(commitment.id, 1);
-        this.getFTCommitments();
-        this.router.navigate(['/overview'], { queryParams: { selectedTab: 'ft-batch-commitment' } });
+
+        this.toastr.info(`Transferring to selected receivers`, null, {
+          positionClass: 'toast-top-right',
+          closeButton: false,
+        });
+
+        while (this.transferDetails.length !== 0) {
+          this.transferDetails.removeAt(0);
+        }
+        this.transferDetails.push(this.createItemFormGroup());
+
+        transactions.splice(transactions.indexOf(commitment), 1);
+        this.transactions = [ ...this.transactions ];
+        this.selectedCommitmentList = [];
+
+        if (!transactions.length) {
+          this.router.navigate(['/overview'], { queryParams: { selectedTab: 'ft-batch-commitment' } });
+        }
+
       }, ({error}) => {
         this.isRequesting = false;
         if (error.error && error.error.message) {

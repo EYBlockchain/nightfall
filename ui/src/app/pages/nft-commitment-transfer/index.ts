@@ -93,7 +93,6 @@ export default class NftCommitmentTransferComponent implements OnInit, AfterCont
   initiateSpend () {
     const {
       receiverName,
-      index,
       transactions
     } = this;
     const selectedCommitment = this.selectedCommitmentList[0];
@@ -108,10 +107,22 @@ export default class NftCommitmentTransferComponent implements OnInit, AfterCont
       this.receiverName,
     ).subscribe( data => {
         this.isRequesting = false;
-        this.toastr.success('Transfer to Receiver ' + receiverName);
-        transactions.splice(Number(index), 1);
-        this.selectedCommitment = undefined;
-        this.router.navigate(['/overview'], { queryParams: { selectedTab: 'nft-commitment' } });
+
+        this.toastr.info(`Transferring to ${receiverName}.`, null, {
+          positionClass: 'toast-top-right',
+          closeButton: false,
+          timeOut: 6000,
+        });
+
+        transactions.splice(transactions.indexOf(selectedCommitment), 1);
+        this.transactions = [ ...this.transactions ];
+
+        this.selectedCommitmentList = [];
+        this.receiverName = null;
+
+        if (!transactions.length) {
+          this.router.navigate(['/overview'], { queryParams: { selectedTab: 'nft-commitment' } });
+        }
       }, error => {
         this.isRequesting = false;
         this.toastr.error('Please try again', 'Error');

@@ -135,6 +135,11 @@ export async function mintToken(req, res, next) {
     outputCommitments: [outputCommitment],
   } = req.body;
   outputCommitment.owner = req.user;
+
+  if (!process.env.NODE_ENV) {
+    res.send();
+  }
+
   try {
     // mint a private 'token commitment' within the shield contract to represent the public NFToken with the specified tokenId
     const data = await zkp.mintToken(req.user, outputCommitment);
@@ -195,6 +200,11 @@ export async function transferToken(req, res, next) {
     inputCommitments: [inputCommitment],
     receiver,
   } = req.body;
+
+  if (!process.env.NODE_ENV) {
+    res.send();
+  }
+
   try {
     // Generate a new one-time-use Ethereum address for the sender to use
     const password = (req.user.address + Date.now()).toString();
@@ -296,6 +306,11 @@ export async function burnToken(req, res, next) {
     receiver,
     inputCommitments: [inputCommitment],
   } = req.body;
+
+  if (!process.env.NODE_ENV) {
+    res.send();
+  }
+
   try {
     receiver.address = await offchain.getAddressFromName(receiver.name);
 

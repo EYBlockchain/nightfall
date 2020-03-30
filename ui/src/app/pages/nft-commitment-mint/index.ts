@@ -77,10 +77,20 @@ export default class NftCommitmentMintComponent implements OnInit, AfterContentI
       this.isRequesting = true;
       this.selectedCommitment = this.selectedCommitmentList[0];
       this.nftCommitmentService.mintNFTCommitment(this.selectedCommitment).subscribe(tokenDetails => {
-        console.log('Token Minted is ' + tokenDetails['data']['commitment']);
         this.isRequesting = false;
-        this.toastr.success('Token Minted is ' + tokenDetails['data']['commitment'].slice(0, 20) + '...');
-        this.router.navigate(['/overview'], { queryParams: { selectedTab: 'nft-commitment' } });
+        this.toastr.info('Minting.', null, {
+          positionClass: 'toast-top-right',
+          closeButton: false,
+          timeOut: 6000,
+        });
+
+        this.selectedCommitmentList = [];
+        this.tokenList.splice(this.tokenList.indexOf(this.selectedCommitment), 1);
+        this.tokenList = [ ...this.tokenList ];
+
+        if (!this.tokenList.length) {
+          this.router.navigate(['/overview'], { queryParams: { selectedTab: 'nft-commitment' } });
+        }
       }, error => {
         this.isRequesting = false;
         this.toastr.error('Please try again', 'Error');

@@ -28,6 +28,7 @@ services:
       - offchain
       - zkp
       - database
+      - rabbitmq
     volumes:
       - ./api-gateway/src:/app/src
       - ./api-gateway/config:/app/config
@@ -101,6 +102,8 @@ services:
       context: ./ui
       dockerfile: Dockerfile
     restart: on-failure
+    depends_on:
+      - rabbitmq
     volumes:
       - ./ui/src:/app/src
       - ./ui/angular.json:/app/angular.json
@@ -229,6 +232,15 @@ services:
     volumes:
       - ./database/docker-entrypoint-initdb.d/02_setup_admin_user.js:/docker-entrypoint-initdb.d/02_setup_admin_user.js
       - mongo-merkle-tree-volume:/data/db
+    networks:
+      - nightfall_network
+
+  rabbitmq:
+    image: rabbitmq
+    volumes:
+      - ./rabbitmq-enabled-plugins:/etc/rabbitmq/enabled_plugins
+    ports:
+      - '15674:15674'
     networks:
       - nightfall_network
 

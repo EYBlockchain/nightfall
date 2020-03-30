@@ -1,12 +1,22 @@
-export function formatResponse(req, res) {
+import rabbitmq from '../rabbitmq';
+
+export function formatResponse(req, res, next) {
   const { data } = res;
   if (!data) {
-    return res.sendStatus(404);
+    res.sendStatus(404);
   }
-  return res.status(200).send({
-    error: null,
-    data,
-  });
+  try {
+    res.status(200).send({
+      error: null,
+      data,
+    });
+  } catch (err) {
+    rabbitmq.sendMessage(req.user.name, {
+      type: req.path,
+      ...data,
+    });
+  }
+  return next();
 }
 
 export function formatError(err, req, res, next) {
@@ -19,9 +29,16 @@ export function formatError(err, req, res, next) {
 }
 
 export function errorHandler(err, req, res, next) {
-  res.status(err.status || 500).send({
-    error: err,
-    data: null,
-  });
+  try {
+    res.status(500).send({
+      error: err,
+      data: null,
+    });
+  } catch (_err) {
+    rabbitmq.sendMessage(req.user.name, {
+      type: req.path,
+      error: err,
+    });
+  }
   next(err);
 }

@@ -89,8 +89,13 @@ export default class FtCommitmentMintComponent implements OnInit {
     console.log('Hexstring::', hexString);
     this.ftCommitmentService.mintFTCommitment(hexString).subscribe(tokenDetails => {
       this.isRequesting = false;
-      this.toastr.success('ft-commitment Minted is ' + tokenDetails['data']['commitment']);
-      this.router.navigate(['/overview'], { queryParams: { selectedTab: 'ft-commitment' } });
+      this.toastr.info('Minting.', null, {
+        positionClass: 'toast-top-right',
+        closeButton: false,
+        timeOut: 6000,
+      });
+      this.createForm();
+      // this.router.navigate(['/overview'], { queryParams: { selectedTab: 'ft-commitment' } });
     }, error => {
         this.isRequesting = false;
         this.toastr.error('Please try again', 'Error');

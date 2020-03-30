@@ -109,6 +109,11 @@ export async function mintFTCommitment(req, res, next) {
     outputCommitments: [outputCommitment],
   } = req.body;
   outputCommitment.owner = req.user;
+
+  if (!process.env.NODE_ENV) {
+    res.send();
+  }
+
   try {
     const data = await zkp.mintFTCommitment(req.user, outputCommitment);
 
@@ -173,6 +178,11 @@ export async function mintFTCommitment(req, res, next) {
  */
 export async function transferFTCommitment(req, res, next) {
   const { receiver, inputCommitments } = req.body;
+
+  if (!process.env.NODE_ENV) {
+    res.send();
+  }
+
   try {
     // Generate a new one-time-use Ethereum address for the sender to use
     const password = (req.user.address + Date.now()).toString();
@@ -265,6 +275,11 @@ export async function burnFTCommitment(req, res, next) {
     receiver,
     inputCommitments: [commitment],
   } = req.body;
+
+  if (!process.env.NODE_ENV) {
+    res.send();
+  }
+
   try {
     receiver.address = await offchain.getAddressFromName(receiver.name);
     const user = await db.fetchUser(req.user);
@@ -345,6 +360,11 @@ export async function simpleFTCommitmentBatchTransfer(req, res, next) {
     inputCommitments: [inputCommitment],
     outputCommitments,
   } = req.body;
+
+  if (!process.env.NODE_ENV) {
+    res.send();
+  }
+
   let selectedCommitmentValue = Number(inputCommitment.value); // amount of selected commitment
 
   try {

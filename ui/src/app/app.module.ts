@@ -1,3 +1,6 @@
+import { InjectableRxStompConfig, RxStompService, rxStompServiceFactory } from '@stomp/ng2-stompjs';
+
+import { myRxStompConfig } from './rx-stomp.config';
 import { SpinnerComponent } from './shared/spinner/spinner.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -114,6 +117,15 @@ import { AppAutoFocusDirective } from './shared/autofocus.directive';
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
       multi: true
+    },
+    {
+      provide: InjectableRxStompConfig,
+      useValue: myRxStompConfig
+    },
+    {
+      provide: RxStompService,
+      useFactory: rxStompServiceFactory,
+      deps: [InjectableRxStompConfig]
     },
     AuthService,
     SimpleGlobal
