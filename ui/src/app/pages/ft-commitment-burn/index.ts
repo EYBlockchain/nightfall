@@ -119,10 +119,7 @@ export default class FtCommitmentBurnComponent implements OnInit , AfterContentI
     this.isRequesting = true;
     this.ftCommitmentService.burnFTCommitment(commitment, this.receiverName).subscribe( data => {
         this.isRequesting = false;
-        this.toastr.info(`Burning.`, null, {
-          positionClass: 'toast-top-right',
-          closeButton: false,
-        });
+        this.toastr.info(`Burning.`);
         transactions.splice(transactions.indexOf(commitment), 1);
         this.transactions = [ ...this.transactions ];
         this.selectedCommitmentList = [];

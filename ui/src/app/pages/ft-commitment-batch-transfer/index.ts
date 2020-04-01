@@ -179,10 +179,7 @@ export default class FtCommitmentBatchTrasnferComponent implements OnInit , Afte
     ).subscribe( data => {
         this.isRequesting = false;
 
-        this.toastr.info(`Transferring to selected receivers`, null, {
-          positionClass: 'toast-top-right',
-          closeButton: false,
-        });
+        this.toastr.info(`Transferring to selected receivers`);
 
         while (this.transferDetails.length !== 0) {
           this.transferDetails.removeAt(0);

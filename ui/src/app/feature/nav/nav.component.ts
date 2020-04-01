@@ -55,9 +55,7 @@ export class NavComponent implements OnInit, OnDestroy {
   parseDataAndShowToaster(data) {
     const placeholder = `Something went wrong.`;
     const toasterSettings = {
-      positionClass: 'toast-top-right',
-      closeButton: false,
-      disableTimeOut: true,
+      timeOut: 10000,
     };
 
     switch (data.type) {

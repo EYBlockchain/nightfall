@@ -78,11 +78,7 @@ export default class NftCommitmentMintComponent implements OnInit, AfterContentI
       this.selectedCommitment = this.selectedCommitmentList[0];
       this.nftCommitmentService.mintNFTCommitment(this.selectedCommitment).subscribe(tokenDetails => {
         this.isRequesting = false;
-        this.toastr.info('Minting.', null, {
-          positionClass: 'toast-top-right',
-          closeButton: false,
-          timeOut: 6000,
-        });
+        this.toastr.info('Minting.');
 
         this.selectedCommitmentList = [];
         this.tokenList.splice(this.tokenList.indexOf(this.selectedCommitment), 1);

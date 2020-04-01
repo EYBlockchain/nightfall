@@ -132,6 +132,15 @@ export async function mintFTCommitment(req, res, next) {
     res.data = data;
     next();
   } catch (err) {
+    await db.insertFTCommitmentTransaction(req.user, {
+      outputCommitments: [
+        {
+          ...outputCommitment,
+        },
+      ],
+      isMinted: true,
+      isFailed: true,
+    });
     next(err);
   }
 }
@@ -248,6 +257,12 @@ export async function transferFTCommitment(req, res, next) {
     res.data = outputCommitments;
     next();
   } catch (err) {
+    await db.insertFTCommitmentTransaction(req.user, {
+      ...req.body,
+      sender: req.user,
+      isTransferred: true,
+      isFailed: true,
+    });
     next(err);
   }
 }
@@ -315,6 +330,13 @@ export async function burnFTCommitment(req, res, next) {
 
     next();
   } catch (err) {
+    await db.insertFTCommitmentTransaction(req.user, {
+      inputCommitments: [commitment],
+      receiver,
+      sender: req.user,
+      isBurned: true,
+      isFailed: true,
+    });
     next(err);
   }
 }
@@ -360,6 +382,8 @@ export async function simpleFTCommitmentBatchTransfer(req, res, next) {
     inputCommitments: [inputCommitment],
     outputCommitments,
   } = req.body;
+
+  const reqBodyOutCommitments = [...outputCommitments];
 
   if (!process.env.NODE_ENV) {
     res.send();
@@ -447,6 +471,13 @@ export async function simpleFTCommitmentBatchTransfer(req, res, next) {
     res.data = commitments;
     next();
   } catch (err) {
+    await db.insertFTCommitmentTransaction(req.user, {
+      inputCommitments: [inputCommitment],
+      outputCommitments: reqBodyOutCommitments,
+      sender: req.user,
+      isBatchTransferred: true,
+      isFailed: true,
+    });
     next(err);
   }
 }

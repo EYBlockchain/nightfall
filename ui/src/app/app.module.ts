@@ -103,9 +103,8 @@ import { AppAutoFocusDirective } from './shared/autofocus.directive';
       appRoutes // <-- debugging purposes only
     ),
     ToastrModule.forRoot({
-      positionClass: 'toast-top-center',
-      timeOut: 2000,
-      closeButton: true,
+      positionClass: 'toast-top-right',
+      timeOut: 6000,
       tapToDismiss: true
     }),
     NgSelectModule

@@ -158,11 +158,7 @@ export default class FtCommitmentTrasnferComponent implements OnInit , AfterCont
       this.receiverName
     ).subscribe( data => {
         this.isRequesting = false;
-        this.toastr.info(`Transferring to ${this.receiverName}.`, null, {
-          positionClass: 'toast-top-right',
-          closeButton: false,
-          timeOut: 6000,
-        });
+        this.toastr.info(`Transferring to ${this.receiverName}.`);
         transactions.splice(transactions.indexOf(commitment1), 1);
         transactions.splice(transactions.indexOf(commitment2), 1);
         this.transactions = [ ...this.transactions ];

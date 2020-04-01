@@ -95,11 +95,7 @@ export default class NftCommitmentBurnComponent implements OnInit, AfterContentI
       this.receiverName,
     ).subscribe( data => {
         this.isRequesting = false;
-        this.toastr.info(`Burning.`, null, {
-          positionClass: 'toast-top-right',
-          closeButton: false,
-          timeOut: 6000,
-        });
+        this.toastr.info(`Burning.`);
 
         transactions.splice(transactions.indexOf(selectedCommitment), 1);
         this.transactions = [ ...this.transactions ];

@@ -166,6 +166,15 @@ export async function mintToken(req, res, next) {
     res.data = data;
     next();
   } catch (err) {
+    await db.insertNFTCommitmentTransaction(req.user, {
+      outputCommitments: [
+        {
+          ...outputCommitment,
+        },
+      ],
+      isMinted: true,
+      isFailed: true,
+    });
     next(err);
   }
 }
@@ -273,6 +282,18 @@ export async function transferToken(req, res, next) {
     res.data = data;
     next();
   } catch (err) {
+    await db.insertNFTCommitmentTransaction(req.user, {
+      inputCommitments: [inputCommitment],
+      outputCommitments: [
+        {
+          ...inputCommitment,
+        },
+      ],
+      receiver,
+      sender: req.user,
+      isTransferred: true,
+      isFailed: true,
+    });
     next(err);
   }
 }
@@ -352,6 +373,13 @@ export async function burnToken(req, res, next) {
     res.data = { message: 'burn successful' };
     next();
   } catch (err) {
+    await db.insertNFTCommitmentTransaction(req.user, {
+      inputCommitments: [inputCommitment],
+      receiver,
+      sender: req.user,
+      isBurned: true,
+      isFailed: true,
+    });
     next(err);
   }
 }

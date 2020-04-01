@@ -108,11 +108,7 @@ export default class NftCommitmentTransferComponent implements OnInit, AfterCont
     ).subscribe( data => {
         this.isRequesting = false;
 
-        this.toastr.info(`Transferring to ${receiverName}.`, null, {
-          positionClass: 'toast-top-right',
-          closeButton: false,
-          timeOut: 6000,
-        });
+        this.toastr.info(`Transferring to ${receiverName}.`);
 
         transactions.splice(transactions.indexOf(selectedCommitment), 1);
         this.transactions = [ ...this.transactions ];
