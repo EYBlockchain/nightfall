@@ -104,6 +104,18 @@ export default {
     return requestWrapper(options);
   },
 
+  // consolidation transfer fungible token commitment
+  consolidationTransfer({ address }, body) {
+    const options = {
+      url: `${url}/consolidationTransfer`,
+      method: 'POST',
+      json: true,
+      headers: { address },
+      body,
+    };
+    return requestWrapper(options);
+  },
+
   // mint non-fungible token
   mintNFToken({ address }, body) {
     const options = {

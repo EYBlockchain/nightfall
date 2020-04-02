@@ -8,6 +8,7 @@ import {
   getFTCommitments,
   getFTCommitmentTransactions,
   simpleFTCommitmentBatchTransfer,
+  consolidationTransfer,
 } from '../services/ft-commitment';
 
 const router = express.Router();
@@ -389,5 +390,28 @@ router.route('/getFTCommitmentTransactions').get(getFTCommitmentTransactions);
  *  ]
  */
 router.post('/simpleFTCommitmentBatchTransfer', simpleFTCommitmentBatchTransfer);
+
+/**
+ * @api {post} /consolidationTransfer consolidation Transfer for ERC-20 commitment
+ * @apiVersion 1.0.0
+ * @apiName  Consolidation Transfer ERC-20 commitment
+ * @apiGroup ERC-20 commitment
+ *
+ * @apiParam (Request body) {Object} inputCommitments array of selected commitments.
+ * @apiParam (Request body) {Object} outputCommitment array of Hex String of value.
+ * @apiParam (Request body) {Object} receiver object with key name of receiver.
+ * @apiParam (Request body) {Object} sender object with key name of sender.
+ *
+ * @apiExample {js} Example usage:
+ *
+ * $http.post(url, data)
+ *   .success((res, status) => doSomethingHere())
+ *   .error((err, status) => doSomethingHere());
+ *
+ *
+ * @apiSuccessExample {json} Success response:
+ *     HTTPS 200 OK
+ */
+router.post('/consolidationTransfer', consolidationTransfer);
 
 export default router;

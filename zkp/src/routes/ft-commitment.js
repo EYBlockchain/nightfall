@@ -329,6 +329,99 @@ async function simpleFTCommitmentBatchTransfer(req, res, next) {
   }
 }
 
+/** This function is to tramsfer a fungible token commitment to a receiver
+ * req.body = {
+ *  inputCommitments: [{
+ *      value: '0x00000000000000000000000000002710',
+ *      salt: '0x14de022c9b4a437b346f04646bd7809deb81c38288e9614478351d',
+ *      commitment: '0x39aaa6fe40c2106f49f72c67bc24d377e180baf3fe211c5c90e254',
+ *      commitmentIndex: 0,
+ *      owner,
+ *  }],
+ *  outputCommitments: [],
+ *  receiver: {
+ *    name: 'bob',
+ *    publicKey: '0x70dd53411043c9ff4711ba6b6c779cec028bd43e6f525a25af36b8'
+ *  }
+ *  sender: {
+ *    name: 'alice',
+ *    secretKey: '0x30dd53411043c9ff4711ba6b6c779cec028bd43e6f525a25af3603'
+ *  }
+ * }
+ * @param {*} req
+ * @param {*} res
+ */
+async function consolidationTransfer(req, res, next) {
+  const { address } = req.headers;
+  const { inputCommitments, outputCommitment, receiver, sender } = req.body;
+  const {
+    contractJson: fTokenShieldJson,
+    contractInstance: fTokenShield,
+  } = await getTruffleContractInstance('FTokenShield');
+  const erc20Address = await getContractAddress('FToken');
+  const erc20AddressPadded = `0x${utils.strip0x(erc20Address).padStart(64, '0')}`;
+
+  if (!inputCommitments) throw new Error('Invalid data input');
+
+  outputCommitment.salt = await utils.rndHex(32);
+
+  for (const data of inputCommitments) {
+    /* eslint-disable no-await-in-loop */
+    data.salt = await utils.rndHex(32);
+    data.commitment = await utils.concatenateThenHash(
+      erc20AddressPadded,
+      data.value,
+      receiver.publicKey,
+      data.salt,
+    );
+  }
+
+  console.log(
+    `************************************** zkp/src/routes/ft-commitment.js consolidationTransfer outputCommitment: ${JSON.stringify(
+      outputCommitment,
+    )}`,
+  );
+  console.log(
+    `************************************** zkp/src/routes/ft-commitment.js consolidationTransfer inputCommitments: ${JSON.stringify(
+      inputCommitments,
+    )}`,
+  );
+  try {
+    const {
+      outputCommitment: consolidatedCommitment,
+      txReceipt,
+    } = await erc20.consolidationTransfer(
+      inputCommitments,
+      outputCommitment,
+      receiver.publicKey,
+      sender.secretKey,
+      {
+        erc20Address,
+        account: address,
+        fTokenShieldJson,
+        fTokenShieldAddress: fTokenShield.address,
+      },
+      {
+        codePath: `${process.cwd()}/code/gm17/ft-consolidation-transfer/out`,
+        outputDirectory: `${process.cwd()}/code/gm17/ft-consolidation-transfer`,
+        pkPath: `${process.cwd()}/code/gm17/ft-consolidation-transfer/proving.key`,
+      },
+    );
+    console.log(
+      `************************************** zkp/src/routes/ft-commitment.js consolidationTransfer res.data: ${JSON.stringify(
+        res.data,
+      )}`,
+    );
+    res.data = {
+      consolidatedCommitment,
+      txReceipt,
+    };
+    next();
+  } catch (err) {
+    next(err);
+  }
+}
+
 router.post('/mintFTCommitment', mint);
 router.post('/transferFTCommitment', transfer);
 router.post('/burnFTCommitment', burn);
@@ -337,5 +430,6 @@ router.post('/setFTokenShieldContractAddress', setFTCommitmentShieldAddress);
 router.get('/getFTokenShieldContractAddress', getFTCommitmentShieldAddress);
 router.delete('/removeFTCommitmentshield', unsetFTCommitmentShieldAddress);
 router.post('/simpleFTCommitmentBatchTransfer', simpleFTCommitmentBatchTransfer);
+router.post('/consolidationTransfer', consolidationTransfer);
 
 export default router;

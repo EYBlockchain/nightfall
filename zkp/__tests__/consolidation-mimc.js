@@ -65,7 +65,7 @@ let pkB = [];
 let Z_A_C;
 // storage for z indexes
 let zInd1;
-// let zInd2;
+let zInd2;
 const outputCommitments = [];
 let accounts;
 let fTokenShieldJson;
@@ -160,7 +160,7 @@ if (process.env.HASH_TYPE === 'mimc') {
         },
       );
 
-      // zInd2 = parseInt(response.maxOutputCommitmentIndex, 10);
+      zInd2 = parseInt(response.maxOutputCommitmentIndex, 10);
       outputCommitments.commitment = response.outputCommitments.commitment;
       const bal2 = await controller.getBalance(accounts[0]);
       const wei = parseInt(bal1, 10) - parseInt(bal2, 10);
@@ -169,39 +169,40 @@ if (process.env.HASH_TYPE === 'mimc') {
       console.log('approx per transaction cost in USD @$200/ETH was', (wei * 200e-18) / 20);
     });
 
-    // test('Should consolidate the 20 commitments just created', async () => {
-    //   const pkE = await utils.rndHex(32); // public key of Eve, who we transfer to
-    //   const inputCommitments = [];
-    //   for (let i = 0; i < E.length; i++) {
-    //     inputCommitments[i] = {
-    //       value: E[i],
-    //       salt: S_B_E[i],
-    //       commitment: outputCommitments[i].commitment,
-    //       commitmentIndex: zInd2 - E.length + i + 1,
-    //     };
-    //   }
-    //   const outputCommitment = { value: C, salt: await utils.rndHex(32) };
-
-    //   const response = await erc20.consolidationTransfer(
-    //     inputCommitments,
-    //     outputCommitment,
-    //     pkE,
-    //     skB[0],
-    //     {
-    //       erc20Address,
-    //       account: accounts[0],
-    //       fTokenShieldJson,
-    //       fTokenShieldAddress,
-    //     },
-    //     {
-    //       codePath: `${process.cwd()}/code/gm17/ft-consolidation-transfer/out`,
-    //       outputDirectory: `${process.cwd()}/code/gm17/ft-consolidation-transfer`,
-    //       pkPath: `${process.cwd()}/code/gm17/ft-consolidation-transfer/proving.key`,
-    //     },
-    //   );
-    //   const consolidatedCommitment = response.outputCommitment;
-    //   console.log('Output commitment:', consolidatedCommitment.commitment);
-    // });
+    test('Should consolidate the 20 commitments just created', async () => {
+      const pkE = await utils.rndHex(32); // public key of Eve, who we transfer to
+      const inputCommitments = [];
+      for (let i = 0; i < E.length; i++) {
+        inputCommitments[i] = {
+          value: E[i],
+          salt: S_B_E[i],
+          commitment: outputCommitments[i].commitment,
+          commitmentIndex: zInd2 - E.length + i + 1,
+        };
+      }
+      const outputCommitment = { value: C, salt: await utils.rndHex(32) };
+      console.log(`********************** inputCommitments : ${JSON.stringify(inputCommitments)}`);
+      console.log(`********************** outputCommitment : ${JSON.stringify(outputCommitment)}`);
+      const response = await erc20.consolidationTransfer(
+        inputCommitments,
+        outputCommitment,
+        pkE,
+        skB[0],
+        {
+          erc20Address,
+          account: accounts[0],
+          fTokenShieldJson,
+          fTokenShieldAddress,
+        },
+        {
+          codePath: `${process.cwd()}/code/gm17/ft-consolidation-transfer/out`,
+          outputDirectory: `${process.cwd()}/code/gm17/ft-consolidation-transfer`,
+          pkPath: `${process.cwd()}/code/gm17/ft-consolidation-transfer/proving.key`,
+        },
+      );
+      const consolidatedCommitment = response.outputCommitment;
+      console.log('Output commitment:', consolidatedCommitment.commitment);
+    });
   });
 } else {
   describe('Consolidation MIMC test disabled', () => {

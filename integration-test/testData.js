@@ -172,6 +172,62 @@ export default {
     };
   },
 
+  async erc20ConsolidationCommitment() {
+    const { alice, bob, erc20 } = this;
+
+    return {
+      mint: [
+        {
+          value: leftPadHex(erc20.toBeMintedAsCommitment[0], 32),
+          commitmentIndex: 0,
+          get commitment() {
+            return utils.concatenateThenHash(
+              `0x${utils.strip0x(this.address).padStart(64, '0')}`,
+              this.value,
+              alice.pk,
+              this.salt === undefined ? '0x0' : this.salt, // salt - set at erc-20 commitment mint (step 10)
+            );
+          },
+        },
+        {
+          value: leftPadHex(erc20.toBeMintedAsCommitment[1], 32),
+          commitmentIndex: 1,
+          get commitment() {
+            return utils.concatenateThenHash(
+              `0x${utils.strip0x(this.address).padStart(64, '0')}`,
+              this.value,
+              alice.pk,
+              this.salt === undefined ? '0x0' : this.salt, // S_A - set at erc-20 commitment mint (step 11)
+            );
+          },
+        },
+      ],
+      transfer: {
+        value: leftPadHex(5, 32),
+        commitmentIndex: 2,
+        get commitment() {
+          return utils.concatenateThenHash(
+            `0x${utils.strip0x(this.address).padStart(64, '0')}`,
+            this.value,
+            bob.pk,
+            this.salt === undefined ? '0x0' : this.salt, // S_E - set at erc-20 commitment transfer (step 12)
+          );
+        },
+      },
+      change: {
+        value: leftPadHex(erc20.change, 32),
+        commitmentIndex: 3,
+        get commitment() {
+          return utils.concatenateThenHash(
+            `0x${utils.strip0x(this.address).padStart(64, '0')}`,
+            this.value,
+            alice.pk,
+            this.salt === undefined ? '0x0' : this.salt, // S_F - set at erc-20 commitment transfer (step 12)
+          );
+        },
+      },
+    };
+  },
   /*
    *  This function will configure dependent test data.
    */
@@ -179,5 +235,6 @@ export default {
     this.erc721Commitment = await this.erc721Commitment();
     this.erc20Commitments = await this.erc20Commitments();
     this.erc20CommitmentBatchTransfer = await this.erc20CommitmentBatchTransfer();
+    this.erc20ConsolidationCommitment = await this.erc20ConsolidationCommitment();
   },
 };
