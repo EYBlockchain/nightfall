@@ -16,7 +16,7 @@ import { NgSelectComponent } from '@ng-select/ng-select';
   styleUrls: ['./index.css']
 })
 
-export default class FtCommitmentTrasnferComponent implements OnInit , AfterContentInit {
+export default class FtCommitmentConsolidationTrasnferComponent implements OnInit , AfterContentInit {
 
   /**
    *  To store ERC-20 token commitment transaction objects
@@ -151,11 +151,12 @@ export default class FtCommitmentTrasnferComponent implements OnInit , AfterCont
     let returnValue = Number(commitment1['value']) + Number(commitment2['value']);
     returnValue -= transferValue;
     console.log('RETURNVALUE', returnValue, transferValue, this.toHex(returnValue), this.toHex(transferValue));
+    const receiver = { name: this.receiverName };
     debugger;
-    this.ftCommitmentService.transferFTCommitment(
+    this.ftCommitmentService.consolidationFTCommitmentTransfer(
       [commitment1, commitment2],
-      [{value: this.toHex(transferValue)}, {value: this.toHex(returnValue)}],
-      this.receiverName
+      {value: this.toHex(transferValue)},
+      receiver
     ).subscribe( data => {
         this.isRequesting = false;
         this.toastr.success('Transfer to Receiver ' + this.receiverName);

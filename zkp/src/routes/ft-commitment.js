@@ -329,7 +329,7 @@ async function simpleFTCommitmentBatchTransfer(req, res, next) {
   }
 }
 
-/** This function is to tramsfer a fungible token commitment to a receiver
+/** This function is to tramsfer a fungible token commitment to a receiver.
  * req.body = {
  *  inputCommitments: [{
  *      value: '0x00000000000000000000000000002710',
@@ -359,21 +359,17 @@ async function consolidationTransfer(req, res, next) {
     contractInstance: fTokenShield,
   } = await getTruffleContractInstance('FTokenShield');
   const erc20Address = await getContractAddress('FToken');
-  const erc20AddressPadded = `0x${utils.strip0x(erc20Address).padStart(64, '0')}`;
 
   if (!inputCommitments) throw new Error('Invalid data input');
 
   outputCommitment.salt = await utils.rndHex(32);
 
-  for (const data of inputCommitments) {
-    /* eslint-disable no-await-in-loop */
-    data.salt = await utils.rndHex(32);
-    data.commitment = await utils.concatenateThenHash(
-      erc20AddressPadded,
-      data.value,
-      receiver.publicKey,
-      data.salt,
-    );
+  for (let i = inputCommitments.length; i < 20; i++) {
+    const zeroCommitment = 0;
+    inputCommitments[i] = {
+      value: `0x${zeroCommitment.toString(16).padStart(32, 0)}`,
+      salt: await utils.rndHex(32),
+    };
   }
 
   console.log(

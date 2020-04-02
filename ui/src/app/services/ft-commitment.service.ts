@@ -99,6 +99,30 @@ export default class FtCommitmentService {
       .pipe(tap(data => console.log(data)));
   }
 
+    /**
+   *
+   * Method to initiate a HTTP request for consolidation transfer of ERC-20 token commitments.
+   *
+   * @param inputCommitments {Object} selected commitments
+   * @param outputCommitment {Object} values array of transferred and change
+   * @param receiver {String} receiver 
+   */
+  consolidationFTCommitmentTransfer (inputCommitments, outputCommitment, receiver) {
+    const httpOptions = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+    };
+    const body = {
+      inputCommitments,
+      outputCommitment,
+      receiver,
+    };
+
+    const url = config.apiGateway.root + 'consolidationTransfer';
+    return this.http
+      .post(url, body, httpOptions)
+      .pipe(tap(data => console.log(data)));
+  }
+
   /**
    *
    * Method to initiate a HTTP request to transfer ERC-20 token batch commitments.

@@ -480,13 +480,7 @@ export async function consolidationTransfer(req, res, next) {
     req.body.sender = {};
     req.body.sender.secretKey = (await db.fetchUser(req.user)).secretKey;
     console.log(`We are inside the destiny`);
-    for (let i = inputCommitments.length; i < 20; i++) {
-      const zeroCommitment = 0;
-      inputCommitments[i] = {
-        value: `0x${zeroCommitment.toString(16).padStart(32, 0)}`,
-        commitmentIndex: i,
-      };
-    }
+
     console.log(`********************* Let see the input commitments :`, inputCommitments);
     const {
       consolidatedCommitment: outputCommitments,
