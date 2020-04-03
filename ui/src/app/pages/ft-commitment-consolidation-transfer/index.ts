@@ -132,10 +132,10 @@ export default class FtCommitmentConsolidationTrasnferComponent implements OnIni
   initiateTransfer () {
     const count = this.selectedCommitmentList.length;
     console.log('count', count, this.selectedCommitmentList);
-    if (!count || count !== 2) {
+    /* if (!count || count !== 2) {
       this.toastr.error('Invalid commitment Selection.');
       return;
-    }
+    } */
     const [commitment1, commitment2] = this.selectedCommitmentList;
     const {
       transferValue,
@@ -154,7 +154,7 @@ export default class FtCommitmentConsolidationTrasnferComponent implements OnIni
     const receiver = { name: this.receiverName };
     debugger;
     this.ftCommitmentService.consolidationFTCommitmentTransfer(
-      [commitment1, commitment2],
+      this.selectedCommitmentList,
       {value: this.toHex(transferValue)},
       receiver
     ).subscribe( data => {

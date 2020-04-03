@@ -440,26 +440,6 @@ export async function simpleFTCommitmentBatchTransfer(req, res, next) {
     password: 'alicesPassword'
   }
  * req.body {
-    inputCommitments: [{
-      value: "0x00000000000000000000000000000028",
-      salt: "0x75f9ceee5b886382c4fe81958da985cd812303b875210b9ca2d75378bb9bd801",
-      commitment: "0x00000000008ec724591fde260927e3fcf85f039de689f4198ee841fcb63b16ed",
-      commitmentIndex: 1,
-    }],
-    outputCommitments: [
-      {
-        "value": "0x00000000000000000000000000000002",
-        "receiver": {
-          name: "b",
-        }
-      },
-      {
-        "value": "0x00000000000000000000000000000002",
-        "receiver": {
-          name: "a",
-        }
-      }
-    ]
   }
  * @param {*} req
  * @param {*} res
@@ -479,60 +459,39 @@ export async function consolidationTransfer(req, res, next) {
     // get logged in user's secretKey.
     req.body.sender = {};
     req.body.sender.secretKey = (await db.fetchUser(req.user)).secretKey;
-    console.log(`We are inside the destiny`);
 
-    console.log(`********************* Let see the input commitments :`, inputCommitments);
-    const {
-      consolidatedCommitment: outputCommitments,
-      txReceipt,
-    } = await zkp.consolidationTransfer({ address }, req.body);
-    console.log(`*********************************** zkp.consolidationTransfer done 
-    ${outputCommitments}`);
+    const { consolidatedCommitment: outputCommitment, txReceipt } = await zkp.consolidationTransfer(
+      { address },
+      req.body,
+    );
+    console.log(`************************* outputCommitment ${JSON.stringify(outputCommitment)}`);
 
-    const [transferCommitment, changeCommitment] = outputCommitments;
+    const transferCommitment = outputCommitment;
     transferCommitment.owner = receiver;
     transferCommitment.commitmentIndex = parseInt(transferCommitment.commitmentIndex, 16);
-    changeCommitment.owner = req.user;
-    changeCommitment.commitmentIndex = parseInt(changeCommitment.commitmentIndex, 16);
 
-    for (const [inputCommitment] of inputCommitments.entries()) {
-      console.log(
-        `*********************************** inside loop ${JSON.stringify(inputCommitment)} `,
-      );
+    for (const inputCommitment of inputCommitments) {
       // update slected coin1 with tansferred data
-      const response = await db.updateFTCommitmentByCommitmentHash(
-        req.user,
-        inputCommitment.commitment,
-        {
-          outputCommitments: [{ owner: receiver }],
-          isTransferred: true,
-        },
-      );
-      console.log(`*********************************** ${response}`);
+      await db.updateFTCommitmentByCommitmentHash(req.user, inputCommitment.commitment, {
+        outputCommitment: [{ owner: receiver }],
+        isTransferred: true,
+      });
     }
 
     await db.insertFTCommitmentTransaction(req.user, {
       inputCommitments,
-      outputCommitments,
+      outputCommitment,
       receiver,
       sender: req.user,
       isTransferred: true,
     });
-
-    // add change to user database
-    if (parseInt(changeCommitment.value, 16)) {
-      await db.insertFTCommitment(req.user, {
-        outputCommitments: [changeCommitment],
-        isChange: true,
-      });
-    }
 
     const user = await db.fetchUser(req.user);
     // note:
     // E is the value transferred to the receiver
     // F is the value returned as 'change' to the sender
     await sendWhisperMessage(user.shhIdentity, {
-      outputCommitments: [transferCommitment],
+      outputCommitment: [transferCommitment],
       blockNumber: txReceipt.receipt.blockNumber,
       receiver,
       sender: req.user,
@@ -540,7 +499,7 @@ export async function consolidationTransfer(req, res, next) {
       for: 'FTCommitment',
     });
 
-    res.data = outputCommitments;
+    res.data = outputCommitment;
     next();
   } catch (err) {
     next(err);

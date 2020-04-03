@@ -242,7 +242,6 @@ describe('****** Integration Test ******\n', function() {
             if (err) return done(err);
 
             const outputCommitments = res.body.data;
-            console.log(`************************${JSON.stringify(outputCommitments)}`);
             erc20ConsolidationCommitment.transfer.salt = outputCommitments.salt; // set Salt from response to calculate and verify commitment.
             erc20ConsolidationCommitment.transfer.address = erc20Address;
             expect(1).to.be.equal(1);

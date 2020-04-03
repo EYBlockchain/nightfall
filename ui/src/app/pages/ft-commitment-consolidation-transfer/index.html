@@ -35,7 +35,7 @@
               [loading]="loading"
               [multiple]="true"
               [(ngModel)]="selectedCommitmentList"
-              [maxSelectedItems]="2"
+              [maxSelectedItems]="20"
               [searchFn]="customSearchFn"
               placeholder="Select Commitments"
               style="width:50%;"
@@ -98,7 +98,7 @@
               [disabled]="
                 !transactions ||
                 !transactions.length ||
-                !(selectedCommitmentList.length == 2) ||
+                !(selectedCommitmentList.length == 20) ||
                 !transferValue ||
                 !receiverName
               "

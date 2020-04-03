@@ -359,16 +359,26 @@ async function consolidationTransfer(req, res, next) {
     contractInstance: fTokenShield,
   } = await getTruffleContractInstance('FTokenShield');
   const erc20Address = await getContractAddress('FToken');
-
+  const erc20AddressPadded = `0x${utils.strip0x(erc20Address).padStart(64, '0')}`;
+  const zeroCommitment = 0;
+  const zeroSalt = await utils.rndHex(32);
+  const zeroCommitmentAmount = `0x${zeroCommitment.toString(16).padStart(32, 0)}`;
+  const zeroCommitmentValue = await utils.concatenateThenHash(
+    erc20AddressPadded,
+    zeroCommitmentAmount,
+    receiver.publicKey,
+    zeroSalt,
+  );
   if (!inputCommitments) throw new Error('Invalid data input');
 
   outputCommitment.salt = await utils.rndHex(32);
 
   for (let i = inputCommitments.length; i < 20; i++) {
-    const zeroCommitment = 0;
     inputCommitments[i] = {
-      value: `0x${zeroCommitment.toString(16).padStart(32, 0)}`,
-      salt: await utils.rndHex(32),
+      value: zeroCommitmentAmount,
+      salt: zeroSalt,
+      commitmentIndex: i,
+      commitment: zeroCommitmentValue,
     };
   }
 
@@ -409,6 +419,7 @@ async function consolidationTransfer(req, res, next) {
       )}`,
     );
     res.data = {
+      inputCommitments,
       consolidatedCommitment,
       txReceipt,
     };
