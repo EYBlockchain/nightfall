@@ -28,7 +28,6 @@ services:
       - offchain
       - zkp
       - database
-      - rabbitmq
     volumes:
       - ./api-gateway/src:/app/src
       - ./api-gateway/config:/app/config
@@ -86,6 +85,7 @@ services:
       - ./zkp/__tests__:/app/__tests__
       - ./zkp/config:/app/config
       - /var/run/docker.sock:/var/run/docker.sock
+      - /dev:/dev # only for github actions
     environment:
       HASH_TYPE: 'sha' #override this with docker-compose.override.mimc
       BLOCKCHAIN_HOST: ws://ganache

@@ -41,5 +41,10 @@ printf "${GREEN}*** Deploying all contracts ***${NC}\n"
 docker-compose run --rm truffle-offchain migrate --reset --network=default
 docker-compose run --rm truffle-zkp migrate --reset --network=default
 
+printf "${GREEN}*** Launching RabbitMQ container ***${NC}\n"
+docker-compose up --build -d rabbitmq
+
+sleep 3
+
 printf "${GREEN}*** Launching containerized microservices ***${NC}\n"
 docker-compose up --build
