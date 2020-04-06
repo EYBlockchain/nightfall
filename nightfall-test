@@ -51,10 +51,6 @@ npm run test || isTestFailed=true
 printf "${GREEN}*** List all containers with their Ips ***${NC}\n"
 docker inspect -f '{{.Name}} {{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $(docker-compose ps -q)
 
-printf  "${GREEN}*** Delete zkp and offchain contract's build folder ***${NC}\n"
-rm -dr zkp/build/
-rm -dr offchain/build/
-
 printf "${GREEN}*** Cleaning up all containers ***${NC}\n"
 docker-compose down -v || {
   # delay need as waiting time so all container are properly done
@@ -73,6 +69,17 @@ docker-compose down -v || {
 	printf "${GREEN}*** Remove the merkle tree's mongo volume ***${NC}\n"
   docker volume rm nightfall_mongo-merkle-tree-volume
 }
+
+printf  "${GREEN}*** Delete zkp and offchain contract's build folder ***${NC}\n"
+rm -dr zkp/build/
+rm -dr offchain/build/
+
+if [[ -f ./zkp/code/gm17/ft-consolidation-transfer/proving.key && -f ./zkp/code/gm17/ft-consolidation-transfer/verification.key ]]
+then
+  printf "${GREEN}*** Remove empty zkp solidity file created from volume ***${NC}\n"
+  rm zkp/contracts/MiMC.sol zkp/contracts/MerkleTree.sol
+fi
+
 
 if $isTestFailed
 then
