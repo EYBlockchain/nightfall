@@ -482,7 +482,7 @@ export async function consolidationTransfer(req, res, next) {
       outputCommitments: [outputCommitments],
       receiver,
       sender: req.user,
-      isConsolidationTransferred: true,
+      isTransferred: true,
     });
 
     const user = await db.fetchUser(req.user);
@@ -499,7 +499,6 @@ export async function consolidationTransfer(req, res, next) {
     res.data = outputCommitments;
     next();
   } catch (err) {
-    console.log(`Error in services/ft-commitment ${err}`);
     next(err);
   }
 }
