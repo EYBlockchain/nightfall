@@ -460,38 +460,35 @@ export async function consolidationTransfer(req, res, next) {
     req.body.sender = {};
     req.body.sender.secretKey = (await db.fetchUser(req.user)).secretKey;
 
-    const { consolidatedCommitment: outputCommitment, txReceipt } = await zkp.consolidationTransfer(
-      { address },
-      req.body,
-    );
-    console.log(`************************* outputCommitment ${JSON.stringify(outputCommitment)}`);
+    const {
+      consolidatedCommitment: outputCommitments,
+      txReceipt,
+    } = await zkp.consolidationTransfer({ address }, req.body);
 
-    const transferCommitment = outputCommitment;
+    const transferCommitment = outputCommitments;
     transferCommitment.owner = receiver;
     transferCommitment.commitmentIndex = parseInt(transferCommitment.commitmentIndex, 16);
 
     for (const inputCommitment of inputCommitments) {
       // update slected coin1 with tansferred data
       await db.updateFTCommitmentByCommitmentHash(req.user, inputCommitment.commitment, {
-        outputCommitment: [{ owner: receiver }],
+        outputCommitments: [{ owner: receiver }],
         isTransferred: true,
       });
     }
 
     await db.insertFTCommitmentTransaction(req.user, {
       inputCommitments,
-      outputCommitment,
+      outputCommitments: [outputCommitments],
       receiver,
       sender: req.user,
-      isTransferred: true,
+      isConsolidationTransferred: true,
     });
 
     const user = await db.fetchUser(req.user);
-    // note:
-    // E is the value transferred to the receiver
-    // F is the value returned as 'change' to the sender
+
     await sendWhisperMessage(user.shhIdentity, {
-      outputCommitment: [transferCommitment],
+      outputCommitments: [transferCommitment],
       blockNumber: txReceipt.receipt.blockNumber,
       receiver,
       sender: req.user,
@@ -499,9 +496,10 @@ export async function consolidationTransfer(req, res, next) {
       for: 'FTCommitment',
     });
 
-    res.data = outputCommitment;
+    res.data = outputCommitments;
     next();
   } catch (err) {
+    console.log(`Error in services/ft-commitment ${err}`);
     next(err);
   }
 }

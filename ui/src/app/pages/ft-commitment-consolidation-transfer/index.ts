@@ -132,36 +132,26 @@ export default class FtCommitmentConsolidationTrasnferComponent implements OnIni
   initiateTransfer () {
     const count = this.selectedCommitmentList.length;
     console.log('count', count, this.selectedCommitmentList);
-    /* if (!count || count !== 2) {
+    if (!count || count !== 20) {
       this.toastr.error('Invalid commitment Selection.');
       return;
-    } */
-    const [commitment1, commitment2] = this.selectedCommitmentList;
-    const {
-      transferValue,
-      transactions
-    } = this;
+    } 
 
-    if (!transferValue || !this.receiverName) {
+    if (!this.receiverName) {
       this.toastr.error('All fields are mandatory');
       return;
     }
 
     this.isRequesting = true;
-    let returnValue = Number(commitment1['value']) + Number(commitment2['value']);
-    returnValue -= transferValue;
-    console.log('RETURNVALUE', returnValue, transferValue, this.toHex(returnValue), this.toHex(transferValue));
     const receiver = { name: this.receiverName };
     debugger;
     this.ftCommitmentService.consolidationFTCommitmentTransfer(
       this.selectedCommitmentList,
-      {value: this.toHex(transferValue)},
-      receiver
+      {value: this.toHex(this.transferValue)},
+      receiver,
     ).subscribe( data => {
         this.isRequesting = false;
-        this.toastr.success('Transfer to Receiver ' + this.receiverName);
-        transactions.splice(Number(commitment1['id']), 1);
-        transactions.splice(Number(commitment2['id']) - 1, 1);
+        this.toastr.success('Transferred fungible token commitments to '+this.receiverName, 'Success');
         this.getFTCommitments();
         this.router.navigate(['/overview'], { queryParams: { selectedTab: 'ft-commitment' } });
       }, error => {
@@ -209,6 +199,19 @@ export default class FtCommitmentConsolidationTrasnferComponent implements OnIni
     }
     const hexValue = (num).toString(16);
     return '0x' + hexValue.padStart(32, '0');
+  }
+
+  /**
+   * Method to sum total number of tokens selected for transactions
+   *
+   */
+  getTotalTransferValue() {
+    let total = 0;
+    this.selectedCommitmentList.map(item => {
+    total += this.utilService.convertToNumber(item.value);
+    });
+    this.transferValue = total;
+    return total;
   }
 
 }

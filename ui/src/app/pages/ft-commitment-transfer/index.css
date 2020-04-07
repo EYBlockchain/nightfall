@@ -1,0 +1,25 @@
+nav.mt-4{
+    clear: both;
+}
+
+ol.breadcrumb{
+    width: 80%;
+    float: left;
+}
+
+.consolidation-transfer{
+    margin-bottom: 5px;
+    vertical-align: middle;
+    padding: 10px;
+}
+
+.btn-outline-dark {
+    color: #343a40;
+    background-color: transparent;
+    background-image: none;
+    border: 1px solid #343a40;
+}
+.btn-outline-dark:hover{
+    background-color: #343a40;
+    color: #ffffff
+}

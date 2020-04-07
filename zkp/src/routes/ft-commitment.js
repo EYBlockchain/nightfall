@@ -332,13 +332,29 @@ async function simpleFTCommitmentBatchTransfer(req, res, next) {
 /** This function is to tramsfer a fungible token commitment to a receiver.
  * req.body = {
  *  inputCommitments: [{
- *      value: '0x00000000000000000000000000002710',
+ *      value: '0x00000000000000000000000000000001',
  *      salt: '0x14de022c9b4a437b346f04646bd7809deb81c38288e9614478351d',
  *      commitment: '0x39aaa6fe40c2106f49f72c67bc24d377e180baf3fe211c5c90e254',
  *      commitmentIndex: 0,
  *      owner,
- *  }],
- *  outputCommitments: [],
+ *  },
+ * {
+ *      value: '0x00000000000000000000000000000002',
+ *      salt: '0x14de022c9b4a437b346f04646bd7809deb81c38288e96144784219',
+ *      commitment: '0x39aaa6fe40c2106f49f72c67bc24d377e180baf3fe211c5c90e975',
+ *      commitmentIndex: 1,
+ *      owner,
+ *  },
+ * {
+ *      value: '0x00000000000000000000000000000003',
+ *      salt: '0x14de022c9b4a437b346f04646bd7809deb81c38288e96144784208d',
+ *      commitment: '0x39aaa6fe40c2106f49f72c67bc24d377e180baf3fe211c5c90e91a',
+ *      commitmentIndex: 2,
+ *      owner,
+ *  },
+ * {...},
+ * ],
+ *  outputCommitment: {},
  *  receiver: {
  *    name: 'bob',
  *    publicKey: '0x70dd53411043c9ff4711ba6b6c779cec028bd43e6f525a25af36b8'
@@ -359,39 +375,11 @@ async function consolidationTransfer(req, res, next) {
     contractInstance: fTokenShield,
   } = await getTruffleContractInstance('FTokenShield');
   const erc20Address = await getContractAddress('FToken');
-  const erc20AddressPadded = `0x${utils.strip0x(erc20Address).padStart(64, '0')}`;
-  const zeroCommitment = 0;
-  const zeroSalt = await utils.rndHex(32);
-  const zeroCommitmentAmount = `0x${zeroCommitment.toString(16).padStart(32, 0)}`;
-  const zeroCommitmentValue = await utils.concatenateThenHash(
-    erc20AddressPadded,
-    zeroCommitmentAmount,
-    receiver.publicKey,
-    zeroSalt,
-  );
+
   if (!inputCommitments) throw new Error('Invalid data input');
 
   outputCommitment.salt = await utils.rndHex(32);
 
-  for (let i = inputCommitments.length; i < 20; i++) {
-    inputCommitments[i] = {
-      value: zeroCommitmentAmount,
-      salt: zeroSalt,
-      commitmentIndex: i,
-      commitment: zeroCommitmentValue,
-    };
-  }
-
-  console.log(
-    `************************************** zkp/src/routes/ft-commitment.js consolidationTransfer outputCommitment: ${JSON.stringify(
-      outputCommitment,
-    )}`,
-  );
-  console.log(
-    `************************************** zkp/src/routes/ft-commitment.js consolidationTransfer inputCommitments: ${JSON.stringify(
-      inputCommitments,
-    )}`,
-  );
   try {
     const {
       outputCommitment: consolidatedCommitment,
@@ -413,11 +401,7 @@ async function consolidationTransfer(req, res, next) {
         pkPath: `${process.cwd()}/code/gm17/ft-consolidation-transfer/proving.key`,
       },
     );
-    console.log(
-      `************************************** zkp/src/routes/ft-commitment.js consolidationTransfer res.data: ${JSON.stringify(
-        res.data,
-      )}`,
-    );
+
     res.data = {
       inputCommitments,
       consolidatedCommitment,

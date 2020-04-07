@@ -404,6 +404,49 @@ router.post('/simpleFTCommitmentBatchTransfer', simpleFTCommitmentBatchTransfer)
  *
  * @apiExample {js} Example usage:
  *
+ * const data: {
+ *  receiver: {name: "a"},
+ *  inputCommitments: [
+ *  {
+ *    owner: {
+ *      name: "a"
+ *      publicKey: "0x4dcdd089a4afba3c5f779dd97ec3d95e72c5c0da0cadc427fc9a5641a427698f"
+ *    },
+ *    _id: "5e8c03a7d9431f0039852781"
+ *    value: "0x00000000000000000000000000000001"
+ *    salt: "0x9780b5a4d7b6b0a1561d29486de67b5f0b6bef4816d1a330a96b0a67a7b2595e"
+ *    commitment: "0xd3d39059076b90db1f26324e5690cd974cf46f6727d3ce9e8adc206508e2abf5"
+ *    commitmentIndex: 0
+ *    isMinted: true
+ *  },
+ *  {
+ *    owner: {
+ *      name: "a"
+ *      publicKey: "0x4dcdd089a4afba3c5f779dd97ec3d95e72c5c0da0cadc427fc9a5641a427698f"
+ *    },
+ *    _id: "5e8c03bed9431f0039852784
+ *    value: "0x00000000000000000000000000000001"
+ *    salt: "0x59538e9d0b2ebb9da1cedf6713730195b898d369fc74ead3633d2bbc22f605ed"
+ *    commitment: "0xb85bf44d9e18820c19f5b1319b0ab24ffbe9ad524a5bb60cb1f438f9f39b18d3"
+ *    commitmentIndex: 1
+ *    isMinted: true
+ *  },
+ *  {
+ *    owner: {
+ *      name: "a"
+ *      publicKey: "0x4dcdd089a4afba3c5f779dd97ec3d95e72c5c0da0cadc427fc9a5641a427698f"
+ *    },
+ *    _id: "5e8c03bed9431f0039852784
+ *    value: "0x00000000000000000000000000000001"
+ *    salt: "0x2e3d5c27bb97d50b304a34a04451756fc3dca4b38b2c831a16c33aabb9676952"
+ *    commitment: "0xc925442eb33a92105b090c42cdfb62893968a2601e425cfdd4f2ee19387c67e9"
+ *    commitmentIndex: 2
+ *    isMinted: true
+ *  },
+ *  ...
+ * ],
+ * }
+ *
  * $http.post(url, data)
  *   .success((res, status) => doSomethingHere())
  *   .error((err, status) => doSomethingHere());
@@ -411,6 +454,12 @@ router.post('/simpleFTCommitmentBatchTransfer', simpleFTCommitmentBatchTransfer)
  *
  * @apiSuccessExample {json} Success response:
  *     HTTPS 200 OK
+ * data : {
+ *    "value":"0x00000000000000000000000000000014",
+ *    "salt":"0xce4f2a50b07c92b0c12fbf738cd8090ca898c5956f2de14f04c7f6ee6a46bdc7",
+ *    "commitment":"0xbb51e94ff3a0ef1e6198195b3b412fe0def4d234ff5916ca953d521f84eea613",
+ *    "commitmentIndex":null
+ * }
  */
 router.post('/consolidationTransfer', consolidationTransfer);
 
