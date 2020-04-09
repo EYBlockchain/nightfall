@@ -454,12 +454,18 @@ router.post('/simpleFTCommitmentBatchTransfer', simpleFTCommitmentBatchTransfer)
  *
  * @apiSuccessExample {json} Success response:
  *     HTTPS 200 OK
- * data : {
+ * data :
+ * {
  *    "value":"0x00000000000000000000000000000014",
  *    "salt":"0xce4f2a50b07c92b0c12fbf738cd8090ca898c5956f2de14f04c7f6ee6a46bdc7",
  *    "commitment":"0xbb51e94ff3a0ef1e6198195b3b412fe0def4d234ff5916ca953d521f84eea613",
- *    "commitmentIndex":null
- * }
+ *    "commitmentIndex": 32
+ *    "owner":
+ *    {
+ *        "name": "b",
+ *        "publicKey": "0xb30f3e92f24d08a94cee52a0b4703fbdff096856376b66741a30da5538c80271"
+ *     }
+ *  }
  */
 router.post('/consolidationTransfer', consolidationTransfer);
 

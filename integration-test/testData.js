@@ -33,6 +33,14 @@ export default {
       return this.toBeMintedAsCommitment.reduce((a, b) => a + b, -this.transfer);
     },
   },
+  erc20Consolidation: {
+    mint: 20,
+    toBeMintedAsCommitment: [1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+    transfer: 20,
+    get change() {
+      return this.toBeMintedAsCommitment.reduce((a, b) => a + b, -this.transfer);
+    },
+  },
 
   // dependent data
   async erc721Commitment() {
@@ -125,6 +133,267 @@ export default {
     };
   },
 
+  async erc20ConsolidationCommitment() {
+    const { alice, bob, erc20Consolidation } = this;
+
+    return {
+      mint: [
+        {
+          value: leftPadHex(erc20Consolidation.toBeMintedAsCommitment[0], 32),
+          commitmentIndex: 4,
+          get commitment() {
+            return utils.concatenateThenHash(
+              `0x${utils.strip0x(this.address).padStart(64, '0')}`,
+              this.value,
+              alice.pk,
+              this.salt === undefined ? '0x0' : this.salt, // salt - set at erc-20 commitment mint (step 10)
+            );
+          },
+        },
+        {
+          value: leftPadHex(erc20Consolidation.toBeMintedAsCommitment[1], 32),
+          commitmentIndex: 5,
+          get commitment() {
+            return utils.concatenateThenHash(
+              `0x${utils.strip0x(this.address).padStart(64, '0')}`,
+              this.value,
+              alice.pk,
+              this.salt === undefined ? '0x0' : this.salt, // S_A - set at erc-20 commitment mint (step 11)
+            );
+          },
+        },
+        {
+          value: leftPadHex(erc20Consolidation.toBeMintedAsCommitment[2], 32),
+          commitmentIndex: 6,
+          get commitment() {
+            return utils.concatenateThenHash(
+              `0x${utils.strip0x(this.address).padStart(64, '0')}`,
+              this.value,
+              alice.pk,
+              this.salt === undefined ? '0x0' : this.salt, // salt - set at erc-20 commitment mint (step 10)
+            );
+          },
+        },
+        {
+          value: leftPadHex(erc20Consolidation.toBeMintedAsCommitment[3], 32),
+          commitmentIndex: 7,
+          get commitment() {
+            return utils.concatenateThenHash(
+              `0x${utils.strip0x(this.address).padStart(64, '0')}`,
+              this.value,
+              alice.pk,
+              this.salt === undefined ? '0x0' : this.salt, // S_A - set at erc-20 commitment mint (step 11)
+            );
+          },
+        },
+        {
+          value: leftPadHex(erc20Consolidation.toBeMintedAsCommitment[4], 32),
+          commitmentIndex: 8,
+          get commitment() {
+            return utils.concatenateThenHash(
+              `0x${utils.strip0x(this.address).padStart(64, '0')}`,
+              this.value,
+              alice.pk,
+              this.salt === undefined ? '0x0' : this.salt, // salt - set at erc-20 commitment mint (step 10)
+            );
+          },
+        },
+        {
+          value: leftPadHex(erc20Consolidation.toBeMintedAsCommitment[5], 32),
+          commitmentIndex: 9,
+          get commitment() {
+            return utils.concatenateThenHash(
+              `0x${utils.strip0x(this.address).padStart(64, '0')}`,
+              this.value,
+              alice.pk,
+              this.salt === undefined ? '0x0' : this.salt, // S_A - set at erc-20 commitment mint (step 11)
+            );
+          },
+        },
+        {
+          value: leftPadHex(erc20Consolidation.toBeMintedAsCommitment[6], 32),
+          commitmentIndex: 10,
+          get commitment() {
+            return utils.concatenateThenHash(
+              `0x${utils.strip0x(this.address).padStart(64, '0')}`,
+              this.value,
+              alice.pk,
+              this.salt === undefined ? '0x0' : this.salt, // salt - set at erc-20 commitment mint (step 10)
+            );
+          },
+        },
+        {
+          value: leftPadHex(erc20Consolidation.toBeMintedAsCommitment[7], 32),
+          commitmentIndex: 11,
+          get commitment() {
+            return utils.concatenateThenHash(
+              `0x${utils.strip0x(this.address).padStart(64, '0')}`,
+              this.value,
+              alice.pk,
+              this.salt === undefined ? '0x0' : this.salt, // S_A - set at erc-20 commitment mint (step 11)
+            );
+          },
+        },
+        {
+          value: leftPadHex(erc20Consolidation.toBeMintedAsCommitment[8], 32),
+          commitmentIndex: 12,
+          get commitment() {
+            return utils.concatenateThenHash(
+              `0x${utils.strip0x(this.address).padStart(64, '0')}`,
+              this.value,
+              alice.pk,
+              this.salt === undefined ? '0x0' : this.salt, // salt - set at erc-20 commitment mint (step 10)
+            );
+          },
+        },
+        {
+          value: leftPadHex(erc20Consolidation.toBeMintedAsCommitment[9], 32),
+          commitmentIndex: 13,
+          get commitment() {
+            return utils.concatenateThenHash(
+              `0x${utils.strip0x(this.address).padStart(64, '0')}`,
+              this.value,
+              alice.pk,
+              this.salt === undefined ? '0x0' : this.salt, // S_A - set at erc-20 commitment mint (step 11)
+            );
+          },
+        },
+        {
+          value: leftPadHex(erc20Consolidation.toBeMintedAsCommitment[10], 32),
+          commitmentIndex: 14,
+          get commitment() {
+            return utils.concatenateThenHash(
+              `0x${utils.strip0x(this.address).padStart(64, '0')}`,
+              this.value,
+              alice.pk,
+              this.salt === undefined ? '0x0' : this.salt, // salt - set at erc-20 commitment mint (step 10)
+            );
+          },
+        },
+        {
+          value: leftPadHex(erc20Consolidation.toBeMintedAsCommitment[11], 32),
+          commitmentIndex: 15,
+          get commitment() {
+            return utils.concatenateThenHash(
+              `0x${utils.strip0x(this.address).padStart(64, '0')}`,
+              this.value,
+              alice.pk,
+              this.salt === undefined ? '0x0' : this.salt, // S_A - set at erc-20 commitment mint (step 11)
+            );
+          },
+        },
+        {
+          value: leftPadHex(erc20Consolidation.toBeMintedAsCommitment[12], 32),
+          commitmentIndex: 16,
+          get commitment() {
+            return utils.concatenateThenHash(
+              `0x${utils.strip0x(this.address).padStart(64, '0')}`,
+              this.value,
+              alice.pk,
+              this.salt === undefined ? '0x0' : this.salt, // salt - set at erc-20 commitment mint (step 10)
+            );
+          },
+        },
+        {
+          value: leftPadHex(erc20Consolidation.toBeMintedAsCommitment[13], 32),
+          commitmentIndex: 17,
+          get commitment() {
+            return utils.concatenateThenHash(
+              `0x${utils.strip0x(this.address).padStart(64, '0')}`,
+              this.value,
+              alice.pk,
+              this.salt === undefined ? '0x0' : this.salt, // S_A - set at erc-20 commitment mint (step 11)
+            );
+          },
+        },
+        {
+          value: leftPadHex(erc20Consolidation.toBeMintedAsCommitment[14], 32),
+          commitmentIndex: 18,
+          get commitment() {
+            return utils.concatenateThenHash(
+              `0x${utils.strip0x(this.address).padStart(64, '0')}`,
+              this.value,
+              alice.pk,
+              this.salt === undefined ? '0x0' : this.salt, // salt - set at erc-20 commitment mint (step 10)
+            );
+          },
+        },
+        {
+          value: leftPadHex(erc20Consolidation.toBeMintedAsCommitment[15], 32),
+          commitmentIndex: 19,
+          get commitment() {
+            return utils.concatenateThenHash(
+              `0x${utils.strip0x(this.address).padStart(64, '0')}`,
+              this.value,
+              alice.pk,
+              this.salt === undefined ? '0x0' : this.salt, // S_A - set at erc-20 commitment mint (step 11)
+            );
+          },
+        },
+        {
+          value: leftPadHex(erc20Consolidation.toBeMintedAsCommitment[16], 32),
+          commitmentIndex: 20,
+          get commitment() {
+            return utils.concatenateThenHash(
+              `0x${utils.strip0x(this.address).padStart(64, '0')}`,
+              this.value,
+              alice.pk,
+              this.salt === undefined ? '0x0' : this.salt, // salt - set at erc-20 commitment mint (step 10)
+            );
+          },
+        },
+        {
+          value: leftPadHex(erc20Consolidation.toBeMintedAsCommitment[17], 32),
+          commitmentIndex: 21,
+          get commitment() {
+            return utils.concatenateThenHash(
+              `0x${utils.strip0x(this.address).padStart(64, '0')}`,
+              this.value,
+              alice.pk,
+              this.salt === undefined ? '0x0' : this.salt, // S_A - set at erc-20 commitment mint (step 11)
+            );
+          },
+        },
+        {
+          value: leftPadHex(erc20Consolidation.toBeMintedAsCommitment[18], 32),
+          commitmentIndex: 22,
+          get commitment() {
+            return utils.concatenateThenHash(
+              `0x${utils.strip0x(this.address).padStart(64, '0')}`,
+              this.value,
+              alice.pk,
+              this.salt === undefined ? '0x0' : this.salt, // salt - set at erc-20 commitment mint (step 10)
+            );
+          },
+        },
+        {
+          value: leftPadHex(erc20Consolidation.toBeMintedAsCommitment[19], 32),
+          commitmentIndex: 23,
+          get commitment() {
+            return utils.concatenateThenHash(
+              `0x${utils.strip0x(this.address).padStart(64, '0')}`,
+              this.value,
+              alice.pk,
+              this.salt === undefined ? '0x0' : this.salt, // S_A - set at erc-20 commitment mint (step 11)
+            );
+          },
+        },
+      ],
+      transfer: {
+        value: '0x00000000000000000000000000000014',
+        commitmentIndex: 24,
+        get commitment() {
+          return utils.concatenateThenHash(
+            `0x${utils.strip0x(this.address).padStart(64, '0')}`,
+            this.value,
+            bob.pk,
+            this.salt === undefined ? '0x0' : this.salt, // S_E - set at erc-20 commitment transfer (step 12)
+          );
+        },
+      },
+    };
+  },
+
   async erc20CommitmentBatchTransfer() {
     const { alice, bob } = this;
     return {
@@ -140,7 +409,7 @@ export default {
           this.salt === undefined ? '0x0' : this.salt, // S_A - set at erc-20 commitment mint (step 18)
         );
       },
-      commitmentIndex: 4,
+      commitmentIndex: 26,
       transferData: [
         {
           value: '0x00000000000000000000000000000002',
@@ -158,7 +427,7 @@ export default {
         {
           value: '0x00000000000000000000000000000002',
           receiver: { name: alice.name },
-          commitmentIndex: 6,
+          commitmentIndex: 27,
           get commitment() {
             return utils.concatenateThenHash(
               `0x${utils.strip0x(this.address).padStart(64, '0')}`,
@@ -169,63 +438,6 @@ export default {
           },
         },
       ],
-    };
-  },
-
-  async erc20ConsolidationCommitment() {
-    const { alice, bob, erc20 } = this;
-
-    return {
-      mint: [
-        {
-          value: leftPadHex(erc20.toBeMintedAsCommitment[0], 32),
-          commitmentIndex: 0,
-          get commitment() {
-            return utils.concatenateThenHash(
-              `0x${utils.strip0x(this.address).padStart(64, '0')}`,
-              this.value,
-              alice.pk,
-              this.salt === undefined ? '0x0' : this.salt, // salt - set at erc-20 commitment mint (step 10)
-            );
-          },
-        },
-        {
-          value: leftPadHex(erc20.toBeMintedAsCommitment[1], 32),
-          commitmentIndex: 1,
-          get commitment() {
-            return utils.concatenateThenHash(
-              `0x${utils.strip0x(this.address).padStart(64, '0')}`,
-              this.value,
-              alice.pk,
-              this.salt === undefined ? '0x0' : this.salt, // S_A - set at erc-20 commitment mint (step 11)
-            );
-          },
-        },
-      ],
-      transfer: {
-        value: leftPadHex(5, 32),
-        commitmentIndex: 2,
-        get commitment() {
-          return utils.concatenateThenHash(
-            `0x${utils.strip0x(this.address).padStart(64, '0')}`,
-            this.value,
-            bob.pk,
-            this.salt === undefined ? '0x0' : this.salt, // S_E - set at erc-20 commitment transfer (step 12)
-          );
-        },
-      },
-      change: {
-        value: leftPadHex(erc20.change, 32),
-        commitmentIndex: 3,
-        get commitment() {
-          return utils.concatenateThenHash(
-            `0x${utils.strip0x(this.address).padStart(64, '0')}`,
-            this.value,
-            alice.pk,
-            this.salt === undefined ? '0x0' : this.salt, // S_F - set at erc-20 commitment transfer (step 12)
-          );
-        },
-      },
     };
   },
   /*

@@ -329,7 +329,7 @@ async function simpleFTCommitmentBatchTransfer(req, res, next) {
   }
 }
 
-/** This function is to tramsfer a fungible token commitment to a receiver.
+/** This function is to tramsfer a fungible token commitment to a receiver
  * req.body = {
  *  inputCommitments: [{
  *      value: '0x00000000000000000000000000000001',
@@ -354,7 +354,9 @@ async function simpleFTCommitmentBatchTransfer(req, res, next) {
  *  },
  * {...},
  * ],
- *  outputCommitment: {},
+ *  outputCommitment: {
+ *    value: "0x00000000000000000000000000000014"
+ *  },
  *  receiver: {
  *    name: 'bob',
  *    publicKey: '0x70dd53411043c9ff4711ba6b6c779cec028bd43e6f525a25af36b8'
