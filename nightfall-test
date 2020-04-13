@@ -36,7 +36,7 @@ printf "${GREEN}*** Saving the test logs to nightfall_test.log file ***${NC}\n"
 docker-compose logs -f &> nightfall_test.log &disown
 
 # delay needed to ensure all container are in running state.
-sleep 20
+sleep 40
 
 # RUN test suits and remove test containers
 printf "${GREEN}*** Run Integration test ***${NC}\n"

@@ -41,6 +41,7 @@
     "core-js": "^2.4.1",
     "font-awesome": "^4.7.0",
     "jquery": "^3.3.1",
+    "minimist": ">=1.2.3",
     "ng2-completer": "^2.0.8",
     "ng2-simple-global": "^1.2.5",
     "ng2-smart-table": "^1.4.0",
