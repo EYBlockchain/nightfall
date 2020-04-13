@@ -27,7 +27,7 @@ async function insertNFTCommitmentToDb(data, { jwtToken }) {
       publicKey: owner.publicKey,
       salt,
       commitment,
-      commitmentIndex,
+      commitmentIndex: commitmentIndex.toString(16),
       blockNumber,
     },
   );
@@ -62,7 +62,7 @@ async function insertFTCommitmentToDb(data, { jwtToken }) {
       salt,
       publicKey: owner.publicKey,
       commitment,
-      commitmentIndex,
+      commitmentIndex: commitmentIndex.toString(16),
       blockNumber,
     },
   );
