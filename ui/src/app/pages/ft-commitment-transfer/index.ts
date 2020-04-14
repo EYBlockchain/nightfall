@@ -151,7 +151,6 @@ export default class FtCommitmentTrasnferComponent implements OnInit , AfterCont
     let returnValue = Number(commitment1['value']) + Number(commitment2['value']);
     returnValue -= transferValue;
     console.log('RETURNVALUE', returnValue, transferValue, this.toHex(returnValue), this.toHex(transferValue));
-    debugger;
     this.ftCommitmentService.transferFTCommitment(
       [commitment1, commitment2],
       [{value: this.toHex(transferValue)}, {value: this.toHex(returnValue)}],

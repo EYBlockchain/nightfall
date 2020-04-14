@@ -129,7 +129,7 @@ export default class FtCommitmentConsolidationTrasnferComponent implements OnIni
   /**
    * Method to transfer two ERC-20 token commitement to selected user.
    */
-  initiateTransfer () {
+  initiateConsolidationTransfer () {
     const count = this.selectedCommitmentList.length;
     console.log('count', count, this.selectedCommitmentList);
     if (!count || count !== 20) {
@@ -144,7 +144,6 @@ export default class FtCommitmentConsolidationTrasnferComponent implements OnIni
 
     this.isRequesting = true;
     const receiver = { name: this.receiverName };
-    debugger;
     this.ftCommitmentService.consolidationFTCommitmentTransfer(
       this.selectedCommitmentList,
       {value: this.toHex(this.transferValue)},
