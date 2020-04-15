@@ -409,12 +409,12 @@ export default {
           this.salt === undefined ? '0x0' : this.salt, // S_A - set at erc-20 commitment mint (step 18)
         );
       },
-      commitmentIndex: 26,
+      commitmentIndex: 25,
       transferData: [
         {
           value: '0x00000000000000000000000000000002',
           receiver: { name: bob.name },
-          commitmentIndex: 5,
+          commitmentIndex: 26,
           get commitment() {
             return utils.concatenateThenHash(
               `0x${utils.strip0x(this.address).padStart(64, '0')}`,
