@@ -135,7 +135,6 @@ export async function mintFTCommitment(req, res, next) {
     res.data = data;
     next();
   } catch (err) {
-
     // insert failed transaction into db.
     await db.insertFTCommitmentTransaction(req.user, {
       outputCommitments: [
@@ -265,7 +264,6 @@ export async function transferFTCommitment(req, res, next) {
     res.data = outputCommitments;
     next();
   } catch (err) {
-
     // insert failed transaction into db.
     await db.insertFTCommitmentTransaction(req.user, {
       ...req.body,
@@ -343,7 +341,6 @@ export async function burnFTCommitment(req, res, next) {
 
     next();
   } catch (err) {
-
     // insert failed transaction into db.
     await db.insertFTCommitmentTransaction(req.user, {
       inputCommitments: [commitment],
@@ -489,7 +486,6 @@ export async function simpleFTCommitmentBatchTransfer(req, res, next) {
     res.data = commitments;
     next();
   } catch (err) {
-
     // insert failed transaction into db.
     await db.insertFTCommitmentTransaction(req.user, {
       inputCommitments: [inputCommitment],

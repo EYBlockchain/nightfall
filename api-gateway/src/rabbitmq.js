@@ -14,7 +14,7 @@ export default {
        * Producer and Consumer
        * api-gateway microserive is the only Producer, also
        * UI microservice is the only Consumer
-      */
+       */
       this.channel = await this.connection.createChannel();
     } catch (err) {
       logger.error('Rabbitmq connect error: ', err);
@@ -30,7 +30,7 @@ export default {
   /*
    * function not in use.
    * Consumer: receive message from a queue
-  */
+   */
   async receiveMessage(queue) {
     await this.channel.assertQueue(queue);
     this.channel.consume(queue, message => console.log(queue, message.content.toString()));
@@ -39,7 +39,7 @@ export default {
   /*
    * function not in use.
    * close the channel and server connection.
-  */
+   */
   async close() {
     await this.channel.close();
     await this.connection.close();
