@@ -43,6 +43,8 @@ services:
       OFFCHAIN_PORT: 80
       ZKP_HOST: http://zkp
       ZKP_PORT: 80
+      RABBITMQ_HOST: amqp://rabbitmq
+      RABBITMQ_PORT: 5672
     networks:
       - nightfall_network
 
