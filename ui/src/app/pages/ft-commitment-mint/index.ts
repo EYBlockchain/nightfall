@@ -91,7 +91,6 @@ export default class FtCommitmentMintComponent implements OnInit {
       this.isRequesting = false;
       this.toastr.info('Minting.');
       this.createForm();
-      // this.router.navigate(['/overview'], { queryParams: { selectedTab: 'ft-commitment' } });
     }, error => {
         this.isRequesting = false;
         this.toastr.error('Please try again', 'Error');

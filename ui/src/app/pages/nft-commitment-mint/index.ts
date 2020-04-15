@@ -80,10 +80,12 @@ export default class NftCommitmentMintComponent implements OnInit, AfterContentI
         this.isRequesting = false;
         this.toastr.info('Minting.');
 
+        // delete used non-fungible token from token list
         this.selectedCommitmentList = [];
         this.tokenList.splice(this.tokenList.indexOf(this.selectedCommitment), 1);
         this.tokenList = [ ...this.tokenList ];
 
+        // navigate to overview page if no more non-fungible token left
         if (!this.tokenList.length) {
           this.router.navigate(['/overview'], { queryParams: { selectedTab: 'nft-commitment' } });
         }

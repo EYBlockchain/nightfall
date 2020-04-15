@@ -159,14 +159,18 @@ export default class FtCommitmentTrasnferComponent implements OnInit , AfterCont
     ).subscribe( data => {
         this.isRequesting = false;
         this.toastr.info(`Transferring to ${this.receiverName}.`);
+
+        // delete used commitments from commitment list
         transactions.splice(transactions.indexOf(commitment1), 1);
         transactions.splice(transactions.indexOf(commitment2), 1);
         this.transactions = [ ...this.transactions ];
 
+        // reset the form
         this.selectedCommitmentList = [];
         this.transferValue = null;
         this.receiverName = null;
 
+        // navigate to overview page if no more commitment left
         if (!transactions.length) {
           this.router.navigate(['/overview'], { queryParams: { selectedTab: 'ft-commitment' } });
         }

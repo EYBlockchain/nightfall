@@ -1,8 +1,8 @@
 import { InjectableRxStompConfig } from '@stomp/ng2-stompjs';
+import { config } from './shared/config';
 
 export const myRxStompConfig: InjectableRxStompConfig = {
-  // Which server?
-  brokerURL: 'ws://localhost:15674/ws',
+  brokerURL: config.rabbitmq.root,
 
   // How often to heartbeat?
   // Interval in milliseconds, set to 0 to disable

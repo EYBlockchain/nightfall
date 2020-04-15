@@ -120,11 +120,16 @@ export default class FtCommitmentBurnComponent implements OnInit , AfterContentI
     this.ftCommitmentService.burnFTCommitment(commitment, this.receiverName).subscribe( data => {
         this.isRequesting = false;
         this.toastr.info(`Burning.`);
+
+        // delete used commitment from commitment list
         transactions.splice(transactions.indexOf(commitment), 1);
         this.transactions = [ ...this.transactions ];
+
+        // reset the form
         this.selectedCommitmentList = [];
         this.receiverName = null;
 
+        // navigate to overview page if no more commitment left
         if (!transactions.length) {
           this.router.navigate(['/overview'], { queryParams: { selectedTab: 'ft-commitment' } });
         }

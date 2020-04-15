@@ -110,6 +110,9 @@ export async function mintFTCommitment(req, res, next) {
   } = req.body;
   outputCommitment.owner = req.user;
 
+  // send empty response if NODE_ENV is not set
+  // this is case where we want implement RabbitMQ
+  // NODE_ENV is only set to value 'test' at time integration test suit run.
   if (!process.env.NODE_ENV) {
     res.send();
   }
@@ -132,6 +135,8 @@ export async function mintFTCommitment(req, res, next) {
     res.data = data;
     next();
   } catch (err) {
+
+    // insert failed transaction into db.
     await db.insertFTCommitmentTransaction(req.user, {
       outputCommitments: [
         {
@@ -188,6 +193,9 @@ export async function mintFTCommitment(req, res, next) {
 export async function transferFTCommitment(req, res, next) {
   const { receiver, inputCommitments } = req.body;
 
+  // send empty response if NODE_ENV is not set
+  // this is case where we want implement RabbitMQ
+  // NODE_ENV is only set to value 'test' at time integration test suit run.
   if (!process.env.NODE_ENV) {
     res.send();
   }
@@ -257,6 +265,8 @@ export async function transferFTCommitment(req, res, next) {
     res.data = outputCommitments;
     next();
   } catch (err) {
+
+    // insert failed transaction into db.
     await db.insertFTCommitmentTransaction(req.user, {
       ...req.body,
       sender: req.user,
@@ -291,6 +301,9 @@ export async function burnFTCommitment(req, res, next) {
     inputCommitments: [commitment],
   } = req.body;
 
+  // send empty response if NODE_ENV is not set
+  // this is case where we want implement RabbitMQ
+  // NODE_ENV is only set to value 'test' at time integration test suit run.
   if (!process.env.NODE_ENV) {
     res.send();
   }
@@ -330,6 +343,8 @@ export async function burnFTCommitment(req, res, next) {
 
     next();
   } catch (err) {
+
+    // insert failed transaction into db.
     await db.insertFTCommitmentTransaction(req.user, {
       inputCommitments: [commitment],
       receiver,
@@ -385,6 +400,9 @@ export async function simpleFTCommitmentBatchTransfer(req, res, next) {
 
   const reqBodyOutCommitments = [...outputCommitments];
 
+  // send empty response if NODE_ENV is not set
+  // this is case where we want implement RabbitMQ
+  // NODE_ENV is only set to value 'test' at time integration test suit run.
   if (!process.env.NODE_ENV) {
     res.send();
   }
@@ -471,6 +489,8 @@ export async function simpleFTCommitmentBatchTransfer(req, res, next) {
     res.data = commitments;
     next();
   } catch (err) {
+
+    // insert failed transaction into db.
     await db.insertFTCommitmentTransaction(req.user, {
       inputCommitments: [inputCommitment],
       outputCommitments: reqBodyOutCommitments,

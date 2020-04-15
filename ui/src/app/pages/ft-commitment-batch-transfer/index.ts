@@ -181,15 +181,18 @@ export default class FtCommitmentBatchTrasnferComponent implements OnInit , Afte
 
         this.toastr.info(`Transferring to selected receivers`);
 
+        // reset the form
         while (this.transferDetails.length !== 0) {
           this.transferDetails.removeAt(0);
         }
         this.transferDetails.push(this.createItemFormGroup());
 
+        // delete used commitment from commitment list
         transactions.splice(transactions.indexOf(commitment), 1);
         this.transactions = [ ...this.transactions ];
         this.selectedCommitmentList = [];
 
+        // navigate to overview page if no more commitment left
         if (!transactions.length) {
           this.router.navigate(['/overview'], { queryParams: { selectedTab: 'ft-batch-commitment' } });
         }
