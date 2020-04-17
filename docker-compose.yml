@@ -43,6 +43,8 @@ services:
       OFFCHAIN_PORT: 80
       ZKP_HOST: http://zkp
       ZKP_PORT: 80
+      RABBITMQ_HOST: amqp://rabbitmq
+      RABBITMQ_PORT: 5672
     networks:
       - nightfall_network
 
@@ -85,6 +87,7 @@ services:
       - ./zkp/__tests__:/app/__tests__
       - ./zkp/config:/app/config
       - /var/run/docker.sock:/var/run/docker.sock
+      - /dev:/dev # only for github actions
     environment:
       HASH_TYPE: 'sha' #override this with docker-compose.override.mimc
       BLOCKCHAIN_HOST: ws://ganache
@@ -101,6 +104,8 @@ services:
       context: ./ui
       dockerfile: Dockerfile
     restart: on-failure
+    depends_on:
+      - rabbitmq
     volumes:
       - ./ui/src:/app/src
       - ./ui/angular.json:/app/angular.json
@@ -229,6 +234,15 @@ services:
     volumes:
       - ./database/docker-entrypoint-initdb.d/02_setup_admin_user.js:/docker-entrypoint-initdb.d/02_setup_admin_user.js
       - mongo-merkle-tree-volume:/data/db
+    networks:
+      - nightfall_network
+
+  rabbitmq:
+    image: rabbitmq
+    volumes:
+      - ./rabbitmq-enabled-plugins:/etc/rabbitmq/enabled_plugins
+    ports:
+      - '15674:15674'
     networks:
       - nightfall_network
 

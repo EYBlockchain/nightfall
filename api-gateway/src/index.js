@@ -9,6 +9,7 @@ import express from 'express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import logger from './logger';
+import rabbitmq from './rabbitmq';
 import {
   rootRouter,
   nftCommitmentRoutes,
@@ -65,8 +66,9 @@ process.on('unhandledRejection', (reason, p) => {
   logger.error('Unhandled Rejection at:', p, 'reason:', reason);
 });
 
-const server = app.listen(80, '0.0.0.0', () =>
-  logger.info('API-Gateway API server running on port 80'),
-);
+const server = app.listen(80, '0.0.0.0', () => {
+  setTimeout(() => rabbitmq.connect(), 10000);
+  logger.info('API-Gateway API server running on port 80');
+});
 
 server.setTimeout(120 * 60 * 1000);

@@ -95,10 +95,20 @@ export default class NftCommitmentBurnComponent implements OnInit, AfterContentI
       this.receiverName,
     ).subscribe( data => {
         this.isRequesting = false;
-        this.toastr.success('Token burned successfully.');
-        transactions.splice(Number(index), 1);
-        this.selectedCommitment = undefined;
-        this.router.navigate(['/overview'], { queryParams: { selectedTab: 'nft-commitment' } });
+        this.toastr.info(`Burning.`);
+
+        // delete used commitment from commitment list
+        transactions.splice(transactions.indexOf(selectedCommitment), 1);
+        this.transactions = [ ...this.transactions ];
+
+        // reset the form
+        this.selectedCommitmentList = [];
+        this.receiverName = null;
+
+        // navigate to overview page if no more commitment left
+        if (!transactions.length) {
+          this.router.navigate(['/overview'], { queryParams: { selectedTab: 'nft-commitment' } });
+        }
       }, error => {
         this.isRequesting = false;
         this.toastr.error('Please try again', 'Error');

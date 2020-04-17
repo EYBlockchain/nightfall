@@ -47,23 +47,13 @@ export default new Schema(
           type: String,
           required: true,
         },
-        salt: {
-          type: String,
-          required: true,
-        },
-        commitment: {
-          type: String,
-          index: true,
-          required: true,
-        },
-        commitmentIndex: {
-          type: Number,
-          required: true,
-        },
         owner: {
           name: String,
           publicKey: String,
         },
+        salt: String,
+        commitment: String,
+        commitmentIndex: Number,
       },
     ],
 
@@ -76,6 +66,10 @@ export default new Schema(
       publicKey: String,
       name: String,
       address: String,
+    },
+    isFailed: {
+      type: Boolean,
+      default: false,
     },
   },
   {

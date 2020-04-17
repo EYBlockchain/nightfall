@@ -13,6 +13,9 @@ docker-compose down -v || true
 printf "${GREEN}*** Pull zokrates docker image ***${NC}\n"
 docker pull zokrates/zokrates:0.5.1
 
+printf "${GREEN}*** docker-compose Build ***${NC}\n"
+docker-compose build
+
 printf "${GREEN}*** Install node modules dependencies of nightfall ***${NC}\n"
 npm ci
 
@@ -29,14 +32,20 @@ docker-compose run --rm truffle-offchain migrate --reset --network=default
 docker-compose run --rm truffle-zkp migrate --reset --network=default
 
 printf "${GREEN}*** Launching containerized microservices ***${NC}\n"
-docker-compose up -d mongo-nightfall accounts offchain zkp database api-gateway mongo-merkle-tree merkle-tree
+if [[ -f ./zkp/code/gm17/ft-consolidation-transfer/proving.key && -f ./zkp/code/gm17/ft-consolidation-transfer/verification.key ]]
+then
+  docker-compose -f docker-compose.yml -f docker-compose.override.yml -f ./integration-test/docker-compose.test.yml up -d api-gateway
+else
+  docker-compose -f docker-compose.yml -f ./integration-test/docker-compose.test.yml up -d api-gateway
+fi
+
 
 # save all test logs to a file in background
 printf "${GREEN}*** Saving the test logs to nightfall_test.log file ***${NC}\n"
 docker-compose logs -f &> nightfall_test.log &disown
 
 # delay needed to ensure all container are in running state.
-sleep 20
+sleep 40
 
 # RUN test suits and remove test containers
 printf "${GREEN}*** Run Integration test ***${NC}\n"
@@ -63,6 +72,16 @@ docker-compose down -v || {
 	printf "${GREEN}*** Remove the merkle tree's mongo volume ***${NC}\n"
   docker volume rm nightfall_mongo-merkle-tree-volume
 }
+
+printf  "${GREEN}*** Delete zkp and offchain contract's build folder ***${NC}\n"
+rm -dr zkp/build/ || true
+rm -dr offchain/build/ || true
+
+if [[ -f ./zkp/code/gm17/ft-consolidation-transfer/proving.key && -f ./zkp/code/gm17/ft-consolidation-transfer/verification.key ]]
+then
+  printf "${GREEN}*** Remove empty zkp solidity file created from volume ***${NC}\n"
+  rm zkp/contracts/MiMC.sol zkp/contracts/MerkleTree.sol || true
+fi
 
 if $isTestFailed
 then

@@ -29,6 +29,9 @@ docker-compose down -v || {
 printf "${GREEN}*** Pull zokrates docker image ***${NC}\n"
 docker pull zokrates/zokrates:0.5.1
 
+printf "${GREEN}*** docker-compose Build ***${NC}\n"
+docker-compose build
+
 printf "${GREEN}*** Installing zkp-util dependencies"
 pushd zkp-utils
 npm ci
@@ -41,5 +44,10 @@ printf "${GREEN}*** Deploying all contracts ***${NC}\n"
 docker-compose run --rm truffle-offchain migrate --reset --network=default
 docker-compose run --rm truffle-zkp migrate --reset --network=default
 
+printf "${GREEN}*** Launching RabbitMQ container ***${NC}\n"
+docker-compose up -d rabbitmq
+
+sleep 3
+
 printf "${GREEN}*** Launching containerized microservices ***${NC}\n"
-docker-compose up --build
+docker-compose up

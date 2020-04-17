@@ -7,5 +7,6 @@
  */
 export const environment = {
   production: false,
-  url: 'http://localhost:8001/'
+  api_server_url: 'http://localhost:8001/',
+  rabbitmq_server_url: 'ws://localhost:15674/ws'
 };

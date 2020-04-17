@@ -38,15 +38,13 @@ jobs:
           sudo mkswap /mnt/swapfile
           sudo swapon /mnt/swapfile
       - name: Build docker images
-        run: docker-compose build
+        run: docker-compose build truffle-zkp zkp
       - name: Generate the keys and constraint files for Zero Knowledge Proofs
         run: |
           chmod -R 777 zkp/code/
           npm run setupAll
       - name: Remove containers
-        run: |
-          docker stop $(docker ps -aq)
-          docker rm $(docker ps -aq)
+        run: docker-compose down -v
       - name: Deploy zkp contracts
         run: |
           docker-compose run --rm truffle-zkp compile --all
@@ -76,15 +74,13 @@ jobs:
       - name: Rename mimc docker-compose yml file
         run: mv docker-compose.override.mimc.yml docker-compose.override.yml
       - name: Build docker images
-        run: docker-compose build
+        run: docker-compose build truffle-zkp zkp
       - name: Generate the keys and constraint files for Zero Knowledge Proofs
         run: |
           chmod -R 777 zkp/code/
           npm run setupAll-mimc
       - name: Remove containers
-        run: |
-          docker stop $(docker ps -aq)
-          docker rm $(docker ps -aq)
+        run: docker-compose down -v
       - name: Deploy zkp contracts
         run: |
           docker-compose run --rm truffle-zkp compile --all
@@ -111,16 +107,17 @@ jobs:
           sudo fallocate -l 12G /mnt/swapfile
           sudo mkswap /mnt/swapfile
           sudo swapon /mnt/swapfile
-      - name: Build docker images
-        run: docker-compose build
       - name: Generate the keys and constraint files for Zero Knowledge Proofs
         run: |
           chmod -R 777 zkp/code/
           npm run setupAll
       - name: Remove containers
+        run: docker-compose down -v
+      - name: Move ft-batch-transfer to make space
         run: |
-          docker stop $(docker ps -aq)
-          docker rm $(docker ps -aq)
+          sudo mv zkp/code/gm17/ft-batch-transfer /dev/ft-batch-transfer
+          sudo ln -s /dev/ft-batch-transfer zkp/code/gm17/ft-batch-transfer
+          df -h
       - name: Run integration test
         run: ./nightfall-test
       - name: If integration test failed, upload logs files as artifacts
@@ -151,16 +148,17 @@ jobs:
           sudo swapon /mnt/swapfile
       - name: Rename mimc docker-compose yml file
         run: mv docker-compose.override.mimc.yml docker-compose.override.yml
-      - name: Build docker images
-        run: docker-compose build
       - name: Generate the keys and constraint files for Zero Knowledge Proofs
         run: |
           chmod -R 777 zkp/code/
           npm run setupAll-mimc
       - name: Remove containers
+        run: docker-compose down -v
+      - name: Move ft-batch-transfer to make space
         run: |
-          docker stop $(docker ps -aq)
-          docker rm $(docker ps -aq)
+          sudo mv zkp/code/gm17/ft-batch-transfer /dev/ft-batch-transfer
+          sudo ln -s /dev/ft-batch-transfer zkp/code/gm17/ft-batch-transfer
+          df -h
       - name: Run integration test
         run: ./nightfall-test
       - name: If integration test failed, upload logs files as artifacts

@@ -1,3 +1,6 @@
+import { InjectableRxStompConfig, RxStompService, rxStompServiceFactory } from '@stomp/ng2-stompjs';
+
+import { myRxStompConfig } from './rx-stomp.config';
 import { SpinnerComponent } from './shared/spinner/spinner.component';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -102,9 +105,8 @@ import { AppAutoFocusDirective } from './shared/autofocus.directive';
       appRoutes // <-- debugging purposes only
     ),
     ToastrModule.forRoot({
-      positionClass: 'toast-top-center',
-      timeOut: 2000,
-      closeButton: true,
+      positionClass: 'toast-top-right',
+      timeOut: 6000,
       tapToDismiss: true
     }),
     NgSelectModule
@@ -116,6 +118,15 @@ import { AppAutoFocusDirective } from './shared/autofocus.directive';
       provide: HTTP_INTERCEPTORS,
       useClass: TokenInterceptor,
       multi: true
+    },
+    {
+      provide: InjectableRxStompConfig,
+      useValue: myRxStompConfig
+    },
+    {
+      provide: RxStompService,
+      useFactory: rxStompServiceFactory,
+      deps: [InjectableRxStompConfig]
     },
     AuthService,
     SimpleGlobal
