@@ -588,9 +588,6 @@ describe('****** Integration Test ******\n', function() {
           .set('Authorization', alice.token);
         erc20Address = erc20AddressResponse.body.data.ftAddress;
         erc20ConsolidationCommitment.erc20Address = erc20Address;
-        console.log(
-          `******************************************* ${JSON.stringify(erc20AddressResponse)}`,
-        );
         let res;
         try {
           res = await request
@@ -622,7 +619,6 @@ describe('****** Integration Test ******\n', function() {
           .set('Accept', 'application/json')
           .set('Authorization', alice.token)
           .end((err, res) => {
-            console.log(`****************************** res: ${JSON.stringify(res)}`);
             if (err) return done(err);
             expect(res).to.have.nested.property('body.data.salt');
             expect(res).to.have.nested.property('body.data.commitment');
@@ -1231,10 +1227,10 @@ describe('****** Integration Test ******\n', function() {
             erc20ConsolidationCommitment.transfer.salt = outputCommitment.salt; // set Salt from response to calculate and verify commitment.
             erc20ConsolidationCommitment.transfer.address = erc20Address;
             expect(res.body.data.commitment).to.be.equal(
-              erc20ConsolidationCommitment.transferData[0].commitment,
+              erc20ConsolidationCommitment.transferData.commitment,
             );
             expect(res.body.data.commitmentIndex).to.be.equal(
-              erc20ConsolidationCommitment.transferData[0].commitmentIndex,
+              erc20ConsolidationCommitment.transferData.commitmentIndex,
             );
             return done();
           });
