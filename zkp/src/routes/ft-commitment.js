@@ -366,6 +366,44 @@ async function simpleFTCommitmentBatchTransfer(req, res, next) {
  *    secretKey: '0x30dd53411043c9ff4711ba6b6c779cec028bd43e6f525a25af3603'
  *  }
  * }
+ *
+ * res.data: {
+ * consolidatedCommitment:  {
+ *    "value":"0x00000000000000000000000000000014",
+ *    "salt":"0xce4f2a50b07c92b0c12fbf738cd8090ca898c5956f2de14f04c7f6ee6a46bdc7",
+ *    "commitment":"0xbb51e94ff3a0ef1e6198195b3b412fe0def4d234ff5916ca953d521f84eea613",
+ *    "commitmentIndex": 32
+ *    "owner":
+ *    {
+ *        "name": "b",
+ *        "publicKey": "0xb30f3e92f24d08a94cee52a0b4703fbdff096856376b66741a30da5538c80271"
+ *     }
+ *  }
+ *  inputCommitments: [{
+ *      value: '0x00000000000000000000000000000001',
+ *      salt: '0x14de022c9b4a437b346f04646bd7809deb81c38288e9614478351d',
+ *      commitment: '0x39aaa6fe40c2106f49f72c67bc24d377e180baf3fe211c5c90e254',
+ *      commitmentIndex: 0,
+ *      owner,
+ *  },
+ * {
+ *      value: '0x00000000000000000000000000000002',
+ *      salt: '0x14de022c9b4a437b346f04646bd7809deb81c38288e96144784219',
+ *      commitment: '0x39aaa6fe40c2106f49f72c67bc24d377e180baf3fe211c5c90e975',
+ *      commitmentIndex: 1,
+ *      owner,
+ *  },
+ * {
+ *      value: '0x00000000000000000000000000000003',
+ *      salt: '0x14de022c9b4a437b346f04646bd7809deb81c38288e96144784208d',
+ *      commitment: '0x39aaa6fe40c2106f49f72c67bc24d377e180baf3fe211c5c90e91a',
+ *      commitmentIndex: 2,
+ *      owner,
+ *  },
+ * {...},
+ * ],
+ * txReceipt: {}5
+ * }
  * @param {*} req
  * @param {*} res
  */

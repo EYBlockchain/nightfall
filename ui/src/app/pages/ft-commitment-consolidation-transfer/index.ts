@@ -133,12 +133,12 @@ export default class FtCommitmentConsolidationTrasnferComponent implements OnIni
     const count = this.selectedCommitmentList.length;
     console.log('count', count, this.selectedCommitmentList);
     if (!count || count !== 20) {
-      this.toastr.error('Invalid commitment Selection.');
+      this.toastr.warning('Invalid commitment Selection.', 'Warning');
       return;
     } 
 
     if (!this.receiverName) {
-      this.toastr.error('All fields are mandatory');
+      this.toastr.warning('All fields are mandatory', 'Warning');
       return;
     }
 

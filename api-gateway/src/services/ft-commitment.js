@@ -501,11 +501,11 @@ export async function simpleFTCommitmentBatchTransfer(req, res, next) {
 /**
  * This function will do consolidated fungible commitment transfer
  * req.user {
-    address: '0x3bd5ae4b9ae233843d9ccd30b16d3dbc0acc5b7f',
-    name: 'alice',
-    publicKey: '0x70dd53411043c9ff4711ba6b6c779cec028bd43e6f525a25af36b8',
-    password: 'alicesPassword'
-  }
+ * address: '0x3bd5ae4b9ae233843d9ccd30b16d3dbc0acc5b7f',
+ * name: 'alice',
+ * publicKey: '0x70dd53411043c9ff4711ba6b6c779cec028bd43e6f525a25af36b8',
+ * password: 'alicesPassword'
+ * }
  * req.body {
  *  receiver: {name: "a"},
  *  inputCommitments: [

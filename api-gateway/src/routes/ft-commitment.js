@@ -451,9 +451,13 @@ router.post('/simpleFTCommitmentBatchTransfer', simpleFTCommitmentBatchTransfer)
  *   .success((res, status) => doSomethingHere())
  *   .error((err, status) => doSomethingHere());
  *
- *
+ * @apiSuccess (Success 200) {Number} value value to be transferred.
+ * @apiSuccess (Success 200) {String} salt genearted salt to mint commitment.
+ * @apiSuccess (Success 200) {Object} owner Owner object with name and publickey.
+ * @apiSuccess (Success 200) {Number} commitmentIndex commitment index value from blockchain.
+ * @apiSuccess (Success 200) {String} commitment commitment number.
  * @apiSuccessExample {json} Success response:
- *     HTTPS 200 OK
+ * HTTPS 200 OK
  * data :
  * {
  *    "value":"0x00000000000000000000000000000014",
