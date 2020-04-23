@@ -117,6 +117,8 @@ contract FTokenShield is Ownable, MerkleTree {
       bool transferCheck = tokenContract.transferFrom(msg.sender, address(this), _value);
       require(transferCheck, "Commitment cannot be minted");
 
+      // gas measurement:
+      gasUsedByShieldContract = gasUsedByShieldContract + gasCheckpoint - gasleft();
       emit GasUsed(gasUsedByShieldContract, gasUsedByVerifierContract);
   }
 
@@ -296,7 +298,7 @@ contract FTokenShield is Ownable, MerkleTree {
       require(nullifiers[_nullifier]==0, "The commitment being spent has already been nullified!");
 
       nullifiers[_nullifier] = _nullifier; // add the nullifier to the list of nullifiers
-      
+
       // Need to cast from bytes32 to address.
       ERC20Interface tokenContract = ERC20Interface(address(uint160(uint256(tokenContractAddress))));
       bool transferCheck = tokenContract.transfer(address(_payTo), _value);
