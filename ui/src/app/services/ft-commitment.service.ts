@@ -71,8 +71,7 @@ export default class FtCommitmentService {
     };
     const url = config.apiGateway.root + 'burnFTCommitment';
     return this.http
-      .post(url, body, httpOptions)
-      .pipe(tap(data => console.log(data)), catchError(this.handleError('burnFTCommitment', [])));
+      .post(url, body, httpOptions);
   }
 
   /**

@@ -1,4 +1,4 @@
-import { UserService } from '../business';
+import { UserService, BlacklistService } from '../business';
 
 /**
  * This function will create or get mongo db connection
@@ -217,6 +217,66 @@ async function deleteNFTShieldContractInfoByContractAddress(req, res, next) {
   }
 }
 
+/**
+ * this function is used to get blacklist users
+ * @param {*} req
+ * @param {*} res
+ */
+async function getBlacklistedUsers(req, res, next) {
+  const blacklistService = new BlacklistService(req.user.db);
+  try {
+    const data = (await blacklistService.getBlacklistedUsers())[0];
+    res.data = data ? data.users : [];
+    next();
+  } catch (err) {
+    next(err);
+  }
+}
+
+/**
+ * this function is used to add a user to the blacklist
+ * req.body = {
+ *  blacklist :  {
+ *   name,
+ *   address,
+ *  }
+ * }
+ * @param {*} req
+ * @param {*} res
+ */
+async function setUserToBlacklist(req, res, next) {
+  const blacklistService = new BlacklistService(req.user.db);
+  try {
+    await blacklistService.setUserToBlacklist(req.body.blacklist);
+    res.data = { message: 'added to blacklist' };
+    next();
+  } catch (err) {
+    next(err);
+  }
+}
+
+/**
+ * this function is used to remove a user from the blacklist
+ * req.body = {
+ *  unBlacklist :  {
+ *   name,
+ *   address,
+ *  }
+ * }
+ * @param {*} req
+ * @param {*} res
+ */
+async function unsetUserFromBlacklist(req, res, next) {
+  const blacklistService = new BlacklistService(req.user.db);
+  try {
+    await blacklistService.unsetUserFromBlacklist(req.body.unBlacklist);
+    res.data = { message: 'removed from blacklist' };
+    next();
+  } catch (err) {
+    next(err);
+  }
+}
+
 export default function(router) {
   router.post('/db-connection', configureDBconnection, getUser);
 
@@ -242,4 +302,11 @@ export default function(router) {
     .route('/users/:name/nft-shield-contracts/:address')
     .put(updateNFTShieldContractInfoByContractAddress)
     .delete(deleteNFTShieldContractInfoByContractAddress);
+
+  // blacklist
+  router
+    .route('/blacklist/users')
+    .get(getBlacklistedUsers)
+    .patch(setUserToBlacklist)
+    .delete(unsetUserFromBlacklist);
 }

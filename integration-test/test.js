@@ -488,9 +488,31 @@ describe('****** Integration Test ******\n', function() {
     });
     context(`${bob.name} tasks: `, function() {
       /*
-       * This acts as a delay, which is needed to ensure that the recipient will be able to receive transferred data through Whisper.
+       *  Mint ERC-20 helper token commitment, so that bob publickey is added to public-key-tree contract
        */
-      before(done => setTimeout(done, 10000));
+      before(done => {
+        request
+          .post('/mintFToken')
+          .use(prefix(apiServerURL))
+          .send({
+            value: erc20.mint,
+          })
+          .set('Accept', 'application/json')
+          .set('Authorization', bob.token)
+          .end(err => {
+            if (err) return done(err);
+            return request
+              .post('/mintFTCommitment')
+              .use(prefix(apiServerURL))
+              .send({ outputCommitments: [erc20Commitments.mint[0]] })
+              .set('Accept', 'application/json')
+              .set('Authorization', bob.token)
+              .end(_err => {
+                if (_err) return done(_err);
+                return done();
+              });
+          });
+      });
       /*
        * Step 14.
        * Burn ERC-20 Commitment.
@@ -624,43 +646,45 @@ describe('****** Integration Test ******\n', function() {
      * Transfer ERC-20 Commitment.
      */
     it(`ERC-20 Commitment Batch transfer ERC-20 Commitment to users`, function(done) {
-      const {
-        value,
-        salt,
-        commitment,
-        commitmentIndex,
-        transferData,
-      } = erc20CommitmentBatchTransfer;
-      request
-        .post('/simpleFTCommitmentBatchTransfer')
-        .use(prefix(apiServerURL))
-        .send({
-          inputCommitments: [
-            {
-              value,
-              salt,
-              commitment,
-              commitmentIndex,
-            },
-          ],
-          outputCommitments: transferData,
-        })
-        .set('Accept', 'application/json')
-        .set('Authorization', alice.token)
-        .end((err, res) => {
-          if (err) return done(err);
-          expect(res.body.data.length).to.be.equal(2);
-          erc20CommitmentBatchTransfer.transferData[0].salt = res.body.data[0].salt; // set Salt from response to calculate and verify commitment.
-          erc20CommitmentBatchTransfer.transferData[0].address = erc20Address;
+      if (process.env.COMPLIANCE !== 'true') {
+        const {
+          value,
+          salt,
+          commitment,
+          commitmentIndex,
+          transferData,
+        } = erc20CommitmentBatchTransfer;
+        request
+          .post('/simpleFTCommitmentBatchTransfer')
+          .use(prefix(apiServerURL))
+          .send({
+            inputCommitments: [
+              {
+                value,
+                salt,
+                commitment,
+                commitmentIndex,
+              },
+            ],
+            outputCommitments: transferData,
+          })
+          .set('Accept', 'application/json')
+          .set('Authorization', alice.token)
+          .end((err, res) => {
+            if (err) return done(err);
+            expect(res.body.data.length).to.be.equal(2);
+            erc20CommitmentBatchTransfer.transferData[0].salt = res.body.data[0].salt; // set Salt from response to calculate and verify commitment.
+            erc20CommitmentBatchTransfer.transferData[0].address = erc20Address;
 
-          expect(res.body.data[0].commitment).to.be.equal(
-            erc20CommitmentBatchTransfer.transferData[0].commitment,
-          );
-          expect(res.body.data[0].commitmentIndex).to.be.equal(
-            erc20CommitmentBatchTransfer.transferData[0].commitmentIndex,
-          );
-          return done();
-        });
+            expect(res.body.data[0].commitment).to.be.equal(
+              erc20CommitmentBatchTransfer.transferData[0].commitment,
+            );
+            expect(res.body.data[0].commitmentIndex).to.be.equal(
+              erc20CommitmentBatchTransfer.transferData[0].commitmentIndex,
+            );
+            return done();
+          });
+      } else this.skip();
     });
   });
 });

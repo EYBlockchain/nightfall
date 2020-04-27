@@ -7,7 +7,7 @@ const requestWrapper = options =>
   new Promise(function promiseHandler(resolve, reject) {
     request(options, function responseHandler(err, res, body) {
       if (err || res.statusCode !== 200) {
-        return reject(err || res.body);
+        return reject(err || res.body.error);
       }
       return resolve(body.data);
     });
@@ -315,6 +315,42 @@ export default {
   simpleFTCommitmentBatchTransfer({ address }, body) {
     const options = {
       url: `${url}/simpleFTCommitmentBatchTransfer`,
+      method: 'POST',
+      json: true,
+      headers: { address },
+      body,
+    };
+    return requestWrapper(options);
+  },
+
+  // blacklist an acoount address.
+  setAddressToBlacklist({ address }, body) {
+    const options = {
+      url: `${url}/setAddressToBlacklist`,
+      method: 'POST',
+      json: true,
+      headers: { address },
+      body,
+    };
+    return requestWrapper(options);
+  },
+
+  // remove account address from blacklist.
+  unsetAddressFromBlacklist({ address }, body) {
+    const options = {
+      url: `${url}/unsetAddressFromBlacklist`,
+      method: 'POST',
+      json: true,
+      headers: { address },
+      body,
+    };
+    return requestWrapper(options);
+  },
+
+  // get decode transaction from transaction hash
+  getAndDecodeTransaction({ address }, body) {
+    const options = {
+      url: `${url}/decodeTransaction`,
       method: 'POST',
       json: true,
       headers: { address },

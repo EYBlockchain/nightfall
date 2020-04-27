@@ -41,11 +41,18 @@ export default class UserService {
     const secretKey = await utils.rndHex(32);
     const publicKey = utils.hash(secretKey);
 
-    const mappedData = userMapper({ ...data, secretKey, publicKey });
-
-    await this.db.addUser(data.name, data.password);
-    await updateUserRole();
-    return this.db.saveData(COLLECTIONS.USER, mappedData);
+    if (data.name !== 'admin') {
+      await this.db.addUser(data.name, data.password);
+      await updateUserRole();
+    }
+    return this.db.saveData(
+      COLLECTIONS.USER,
+      userMapper({
+        ...data,
+        secretKey,
+        publicKey,
+      }),
+    );
   }
 
   /**

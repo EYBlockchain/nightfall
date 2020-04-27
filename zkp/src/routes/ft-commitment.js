@@ -1,5 +1,7 @@
 import { Router } from 'express';
-import { erc20 } from '@eyblockchain/nightlite';
+import { erc20, elgamal } from '@eyblockchain/nightlite';
+import contract from 'truffle-contract';
+
 import utils from '../zkpUtils';
 import fTokenController from '../f-token-controller';
 import { getTruffleContractInstance, getContractAddress } from '../contractUtils';
@@ -329,6 +331,113 @@ async function simpleFTCommitmentBatchTransfer(req, res, next) {
   }
 }
 
+/**
+ * This function will blacklist an account address.
+ * req.body {
+ *    malfeasantAddress: "0x137246e44b7b9e2f1e3ca8530e16d515bb1db586"
+ * }
+ * @param {*} req
+ * @param {*} res
+ */
+async function setAddressToBlacklist(req, res, next) {
+  const { address } = req.headers;
+  const { malfeasantAddress } = req.body;
+  try {
+    const {
+      contractJson: fTokenShieldJson,
+      contractInstance: fTokenShield,
+    } = await getTruffleContractInstance('FTokenShield');
+
+    await erc20.blacklist(malfeasantAddress, {
+      account: address,
+      fTokenShieldJson,
+      fTokenShieldAddress: fTokenShield.address,
+    });
+    res.data = { message: 'added to blacklist' };
+    next();
+  } catch (err) {
+    next(err);
+  }
+}
+
+/**
+ * This function will remove an account address from blacklist.
+ * req.body {
+ *    blacklistedAddress: "0x137246e44b7b9e2f1e3ca8530e16d515bb1db586"
+ * }
+ * @param {*} req
+ * @param {*} res
+ */
+async function unsetAddressFromBlacklist(req, res, next) {
+  const { address } = req.headers;
+  const { blacklistedAddress } = req.body;
+  try {
+    const {
+      contractJson: fTokenShieldJson,
+      contractInstance: fTokenShield,
+    } = await getTruffleContractInstance('FTokenShield');
+
+    await erc20.unblacklist(blacklistedAddress, {
+      account: address,
+      fTokenShieldJson,
+      fTokenShieldAddress: fTokenShield.address,
+    });
+    res.data = { message: 'removed from blacklist' };
+    next();
+  } catch (err) {
+    next(err);
+  }
+}
+
+/**
+ * This function return transaction object from transaction hash.
+ * req.body {
+ *    txHash: "0xb7b47b1ac480694ccf196b31ebffb114e9cb4630fa9f132baf037fc475c3bc1d",
+ *  ` type: TransferRC`
+ * }
+ * @param {*} req
+ * @param {*} res
+ */
+async function decodeTransaction(req, res, next) {
+  const { txHash, type, publicKeys } = req.body;
+  let guessers = [];
+
+  if (type === 'TransferRC') {
+    guessers = [elgamal.rangeGenerator(1000000000), publicKeys, publicKeys];
+  } else {
+    // case burn
+    guessers = [publicKeys];
+  }
+
+  try {
+    const { contractJson: fTokenShieldJson } = await getTruffleContractInstance('FTokenShield');
+
+    const txReceipt = await fTokenController.getTxRecipt(txHash);
+    const fTokenShieldEvents = contract(fTokenShieldJson).events;
+
+    if (!txReceipt) throw Error('No Transaction receipt found.');
+
+    for (const log of txReceipt.logs) {
+      log.event = '';
+      log.args = [];
+
+      const event = fTokenShieldEvents[log.topics[0]];
+      if (event) {
+        log.event = event.name;
+        log.args = await fTokenController.getTxLogDecoded(event.inputs, log.data);
+      }
+    }
+
+    res.data = await erc20.decryptTransaction(txReceipt, {
+      type,
+      guessers,
+    });
+    next();
+  } catch (err) {
+    next(err);
+  }
+}
+
 router.post('/mintFTCommitment', mint);
 router.post('/transferFTCommitment', transfer);
 router.post('/burnFTCommitment', burn);
@@ -337,5 +446,8 @@ router.post('/setFTokenShieldContractAddress', setFTCommitmentShieldAddress);
 router.get('/getFTokenShieldContractAddress', getFTCommitmentShieldAddress);
 router.delete('/removeFTCommitmentshield', unsetFTCommitmentShieldAddress);
 router.post('/simpleFTCommitmentBatchTransfer', simpleFTCommitmentBatchTransfer);
+router.post('/setAddressToBlacklist', setAddressToBlacklist);
+router.post('/unsetAddressFromBlacklist', unsetAddressFromBlacklist);
+router.post('/decodeTransaction', decodeTransaction);
 
 export default router;

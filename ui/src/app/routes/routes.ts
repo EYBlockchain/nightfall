@@ -6,6 +6,7 @@ import OverviewComponent from '../pages/overview';
 import { AuthService } from '../services/auth/auth.service';
 import UserSettingsComponent from '../pages/user-settings';
 import UserProfileComponent from '../pages/user-profile';
+import AdminComponent from '../pages/admin';
 import { UserAccountsComponent } from '../pages/user-accounts/user-accounts.component';
 
 import NftMintComponent from '../pages/nft-mint';
@@ -40,6 +41,7 @@ export const appRoutes: Routes = [
     ],
     canActivate: [AuthService]
   },
+  { path: 'admin', component: AdminComponent, canActivate: [AuthService] },
   { path: 'overview', component: OverviewComponent, canActivate: [AuthService] },
 
   { path: 'nft-commitment/mint', component: NftCommitmentMintComponent , canActivate: [AuthService]},

@@ -157,7 +157,7 @@ If this shows that your version is behind, then you may need to re-install, as a
 ./nightfall-generate-trusted-setup
 ```
 
-_(If only one or a few of the `.code` files have been changed, then it will be faster for you to
+_(If only one or a few of the `.zok` files have been changed, then it will be faster for you to
 consult [the zkp module documentation](zkp/README.md) for details on selecting individual files for
 trusted setup)._
 
@@ -212,6 +212,22 @@ Be sure to be in the main directory and then open terminal and run
   - Test suites will open a terminal, where you can see test container's log. This terminal will
     close automatically.
   - configure `Terminal.app` to close window when shell exits `exit`.
+
+## Using the compliance extensions
+
+For details, see the [zkp readme](zkp/README.md). The compliance version requires you to have selected the correct trusted setup when you ran
+
+```sh
+./nightfall-generate-trusted-setup
+```
+
+After that, you can start it with
+
+```sh
+./nightfall compliance
+```
+
+Nightfall will inject test keys into the underlying Nightfall library, warning you that it has done so. To log in as a compliance administrator, use username `admin`, password `admin`. This is only for demonstration of course. You should use an appropriate access control system for any other purpose.
 
 ## Using other ERC-20 and ERC-721 contracts
 

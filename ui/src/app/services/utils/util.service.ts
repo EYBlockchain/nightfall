@@ -89,4 +89,20 @@ export class UtilService {
       return evt.returnValue = false;
     }
   }
+
+  validateTransactionHash(evt) {
+    const theEvent = evt || window.event;
+    let key;
+    if (theEvent.type === 'paste') {
+        key = evt.clipboardData.getData('text/plain');
+    } else {
+        key = theEvent.keyCode || theEvent.which;
+        key = String.fromCharCode(key);
+    }
+    const regex = /^0x([A-Fa-f0-9]{64})$/;
+    if ( !regex.test(key) ) {
+      theEvent.returnValue = false;
+      if (theEvent.preventDefault) { theEvent.preventDefault(); }
+    }
+  }
 }

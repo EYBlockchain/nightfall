@@ -1,6 +1,5 @@
 import { environment } from '../../environments/environment';
 
-const BaseUrl = environment.url;
 const assetSwarm = '/assets-swarm/';
 const accountsBaseUrl = '/accounts/';
 const assetBlockchain = '/asset-blockchain/';
@@ -9,27 +8,12 @@ const settlement = '/settlement/';
 /**
  * @ignore
  */
-export const api = {
-  root: 'http://localhost:3000/',
-  assetsList: +'asset',
-  account: 'account',
-};
-
-/**
- * @ignore
- */
 export const config = {
   apiGateway: {
-    root: BaseUrl
+    root: environment.api_server_url,
   },
-  zkp: {
-    root: BaseUrl
-  },
-  offchain: {
-    root: BaseUrl
-  },
-  user : {
-    root: BaseUrl + 'user/'
+  rabbitmq: {
+    root: environment.rabbitmq_server_url,
   },
 };
 /**

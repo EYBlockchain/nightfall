@@ -1,0 +1,9 @@
+version: '3.5'
+
+services:
+  
+  api-gateway:
+    environment:
+      NODE_ENV: test
+    networks:
+      - nightfall_network

@@ -42,7 +42,6 @@ export default class UserSettingsComponent extends Config implements OnInit {
   getUserDetails() {
     this.userService.getUserDetails().subscribe(
       data => {
-        console.log('data', data);
         this.user = data['data'];
       },
       error => {

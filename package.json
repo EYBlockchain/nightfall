@@ -7,8 +7,10 @@
     "test": "NODE_CONFIG_DIR=./integration-test/config mocha --require @babel/register -b ./integration-test/ --reporter mochawesome --timeout 1000000",
     "setup": "docker-compose run zkp npm run setup --",
     "setup-mimc": "docker-compose run zkp npm run setup-mimc --",
+    "setup-rc": "docker-compose run zkp npm run setup-rc --",
     "setupAll": "docker-compose run zkp npm run setup-all",
     "setupAll-mimc": "docker-compose run zkp npm run setup-all-mimc",
+    "setupAll-rc": "docker-compose run zkp npm run setup-all-rc",
     "fix": "npm run format && npm run lint -- --fix",
     "format": "prettier --write \"**/*.{json,css,scss,md,html}\"",
     "lint": "eslint .",
@@ -47,5 +49,6 @@
     "solhint": "^1.5.1",
     "superagent": "^5.1.0",
     "superagent-prefix": "0.0.2"
-  }
+  },
+  "dependencies": {}
 }

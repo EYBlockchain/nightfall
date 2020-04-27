@@ -135,6 +135,14 @@ export async function mintToken(req, res, next) {
     outputCommitments: [outputCommitment],
   } = req.body;
   outputCommitment.owner = req.user;
+
+  // send empty response if NODE_ENV is not set
+  // this is case where we want implement RabbitMQ
+  // NODE_ENV is only set to value 'test' at time integration test suit run.
+  if (!process.env.NODE_ENV) {
+    res.send();
+  }
+
   try {
     // mint a private 'token commitment' within the shield contract to represent the public NFToken with the specified tokenId
     const data = await zkp.mintToken(req.user, outputCommitment);
@@ -161,6 +169,16 @@ export async function mintToken(req, res, next) {
     res.data = data;
     next();
   } catch (err) {
+    // insert failed transaction into db.
+    await db.insertNFTCommitmentTransaction(req.user, {
+      outputCommitments: [
+        {
+          ...outputCommitment,
+        },
+      ],
+      isMinted: true,
+      isFailed: true,
+    });
     next(err);
   }
 }
@@ -195,10 +213,18 @@ export async function transferToken(req, res, next) {
     inputCommitments: [inputCommitment],
     receiver,
   } = req.body;
+
+  // send empty response if NODE_ENV is not set
+  // this is case where we want implement RabbitMQ
+  // NODE_ENV is only set to value 'test' at time integration test suit run.
+  if (!process.env.NODE_ENV) {
+    res.send();
+  }
+
   try {
     // Generate a new one-time-use Ethereum address for the sender to use
     const password = (req.user.address + Date.now()).toString();
-    const address = (await accounts.createAccount(password)).data;
+    const address = await accounts.createAccount(password);
     await db.updateUserWithPrivateAccount(req.user, { address, password });
     await accounts.unlockAccount({ address, password });
 
@@ -263,6 +289,19 @@ export async function transferToken(req, res, next) {
     res.data = data;
     next();
   } catch (err) {
+    // insert failed transaction into db.
+    await db.insertNFTCommitmentTransaction(req.user, {
+      inputCommitments: [inputCommitment],
+      outputCommitments: [
+        {
+          ...inputCommitment,
+        },
+      ],
+      receiver,
+      sender: req.user,
+      isTransferred: true,
+      isFailed: true,
+    });
     next(err);
   }
 }
@@ -296,6 +335,14 @@ export async function burnToken(req, res, next) {
     receiver,
     inputCommitments: [inputCommitment],
   } = req.body;
+
+  // send empty response if NODE_ENV is not set
+  // this is case where we want implement RabbitMQ
+  // NODE_ENV is only set to value 'test' at time integration test suit run.
+  if (!process.env.NODE_ENV) {
+    res.send();
+  }
+
   try {
     receiver.address = await offchain.getAddressFromName(receiver.name);
 
@@ -337,6 +384,14 @@ export async function burnToken(req, res, next) {
     res.data = { message: 'burn successful' };
     next();
   } catch (err) {
+    // insert failed transaction into db.
+    await db.insertNFTCommitmentTransaction(req.user, {
+      inputCommitments: [inputCommitment],
+      receiver,
+      sender: req.user,
+      isBurned: true,
+      isFailed: true,
+    });
     next(err);
   }
 }

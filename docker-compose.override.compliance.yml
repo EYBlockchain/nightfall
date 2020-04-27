@@ -1,0 +1,10 @@
+version: '3.5'
+
+services:
+
+  zkp:
+    environment:
+      COMPLIANCE: 'true'
+  # we need many accounts to be able to run the compliance unit tests
+  ganache:
+    command: ganache-cli --accounts=110 --defaultBalanceEther=1000

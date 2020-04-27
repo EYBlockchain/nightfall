@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken';
 import { encryptPassword, decryptPassword } from './password';
 
-const noAuthRoutes = ['/login', 'createAccount'];
+const noAuthRoutes = ['/login', '/createAccount'];
 const JWT_SECRET = 'secret';
 
 export function createToken(data, password) {
@@ -14,11 +14,8 @@ export function createToken(data, password) {
 }
 
 export function authentication(req, res, next) {
-  for (let i = 0; i < noAuthRoutes.length; i += 1) {
-    if (req.path.indexOf(noAuthRoutes[i]) !== -1) {
-      return next();
-    }
-  }
+  if (noAuthRoutes.includes(req.path)) return next();
+
   const token = req.headers.authorization;
   if (token) {
     try {

@@ -12,6 +12,7 @@ async function startEventFilter() {
   console.log(`\nStarting event filters...`);
   await merkleTree.startEventFilter();
   console.log('HASH_TYPE is set to:', process.env.HASH_TYPE);
+  if (process.env.COMPLIANCE === 'true') console.log('Compliance version is being used');
 }
 
 // This is TRIGGERED via the jest configuration options in ../package.json

@@ -53,3 +53,8 @@ export async function transferEtherToAccount(to, from, amount) {
     gasPrice: 20000000000,
   });
 }
+
+export async function getCoinbaseAddress() {
+  const web3 = Web3.connection();
+  return web3.eth.getCoinbase();
+}

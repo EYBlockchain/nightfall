@@ -115,20 +115,27 @@ export default class FtCommitmentBurnComponent implements OnInit , AfterContentI
     this.selectedCommitment = this.selectedCommitmentList[0];
     const commitment = this.selectedCommitment;
     if (!commitment) { return; }
-    const {
-      transactions,
-      index
-    } = this;
+    const { transactions } = this;
     this.isRequesting = true;
     this.ftCommitmentService.burnFTCommitment(commitment, this.receiverName).subscribe( data => {
         this.isRequesting = false;
-        this.toastr.success('Burned commitment ' + commitment['commitment']);
-        transactions.splice(Number(index), 1);
-        this.selectedCommitment = undefined;
-        this.router.navigate(['/overview'], { queryParams: { selectedTab: 'ft-commitment' } });
+        this.toastr.info(`Burning.`);
+
+        // delete used commitment from commitment list
+        transactions.splice(transactions.indexOf(commitment), 1);
+        this.transactions = [ ...this.transactions ];
+
+        // reset the form
+        this.selectedCommitmentList = [];
+        this.receiverName = null;
+
+        // navigate to overview page if no more commitment left
+        if (!transactions.length) {
+          this.router.navigate(['/overview'], { queryParams: { selectedTab: 'ft-commitment' } });
+        }
       }, error => {
         this.isRequesting = false;
-        this.toastr.error('Please try again', 'Error');
+        this.toastr.error((error.error && error.error.error.message) || 'Please try again');
     });
   }
 
