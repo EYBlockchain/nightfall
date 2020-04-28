@@ -135,7 +135,7 @@ export default class FtCommitmentBurnComponent implements OnInit , AfterContentI
         }
       }, error => {
         this.isRequesting = false;
-        this.toastr.error('Please try again', 'Error');
+        this.toastr.error((error.error && error.error.error.message) || 'Please try again');
     });
   }
 

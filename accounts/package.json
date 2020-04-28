@@ -22,9 +22,7 @@
     "config": "^3.2.2",
     "cors": "^2.8.5",
     "express": "^4.17.1",
-    "express-http-proxy": "^1.1.0",
-    "request": "^2.88.0",
-    "jsonwebtoken": "^8.1.0",
+    "minimist": ">=0.2.1",
     "web3": "1.0.0-beta.36"
   },
   "devDependencies": {

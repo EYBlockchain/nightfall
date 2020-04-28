@@ -5,10 +5,13 @@
   "main": "index.js",
   "scripts": {
     "test": "NODE_CONFIG_DIR=./integration-test/config mocha --require @babel/register -b ./integration-test/ --reporter mochawesome --timeout 1000000",
+    "test-rc": "NODE_CONFIG_DIR=./integration-test/config COMPLIANCE=true mocha --require @babel/register -b ./integration-test/ --reporter mochawesome --timeout 1000000",
     "setup": "docker-compose run zkp npm run setup --",
     "setup-mimc": "docker-compose run zkp npm run setup-mimc --",
+    "setup-rc": "docker-compose run zkp npm run setup-rc --",
     "setupAll": "docker-compose run zkp npm run setup-all",
     "setupAll-mimc": "docker-compose run zkp npm run setup-all-mimc",
+    "setupAll-rc": "docker-compose run zkp npm run setup-all-rc",
     "fix": "npm run format && npm run lint -- --fix",
     "format": "prettier --write \"**/*.{json,css,scss,md,html}\"",
     "lint": "eslint .",
@@ -32,6 +35,7 @@
     "@babel/register": "^7.4.4",
     "@commitlint/cli": "^7.6.1",
     "@commitlint/config-conventional": "^7.6.0",
+    "acorn": ">=6.4.1",
     "chai": "^4.2.0",
     "config": "^3.1.0",
     "eslint": "^5.16.0",
@@ -39,11 +43,13 @@
     "husky": "^1.3.1",
     "lint-staged": "^8.2.1",
     "markdownlint-cli": "^0.16.0",
+    "minimist": ">=0.2.1",
     "mocha": "^6.1.4",
     "mochawesome": "^4.0.1",
-    "prettier": "^1.18.2",
+    "prettier": "1.18.2",
     "solhint": "^1.5.1",
     "superagent": "^5.1.0",
     "superagent-prefix": "0.0.2"
-  }
+  },
+  "dependencies": {}
 }

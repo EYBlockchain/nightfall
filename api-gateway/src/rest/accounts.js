@@ -9,7 +9,7 @@ const requestWrapper = options =>
       if (err || res.statusCode !== 200) {
         return reject(err || res.body);
       }
-      return resolve(body);
+      return resolve(body.data);
     });
   });
 
@@ -35,6 +35,16 @@ export default {
       method: 'POST',
       json: true,
       body,
+    };
+    return requestWrapper(options);
+  },
+
+  // get Coinbase address.
+  getCoinbase() {
+    const options = {
+      url: `${url}/getCoinbase`,
+      method: 'GET',
+      json: true,
     };
     return requestWrapper(options);
   },

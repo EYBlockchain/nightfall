@@ -25,6 +25,7 @@ import {
   formatError,
   errorHandler,
 } from './middlewares';
+import setupAdmin from './setup-admin-user';
 
 const app = express();
 
@@ -66,8 +67,9 @@ process.on('unhandledRejection', (reason, p) => {
   logger.error('Unhandled Rejection at:', p, 'reason:', reason);
 });
 
-const server = app.listen(80, '0.0.0.0', () => {
+const server = app.listen(80, '0.0.0.0', async () => {
   setTimeout(() => rabbitmq.connect(), 10000);
+  await setupAdmin();
   logger.info('API-Gateway API server running on port 80');
 });
 

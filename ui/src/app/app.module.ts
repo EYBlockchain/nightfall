@@ -24,6 +24,7 @@ import OverviewComponent from './pages/overview';
 import { NgSelectModule } from '@ng-select/ng-select';
 
 import UserSettingsComponent from './pages/user-settings';
+import AdminComponent from './pages/admin';
 import UserProfileComponent from './pages/user-profile';
 import { UserAccountsComponent } from './pages/user-accounts/user-accounts.component';
 import { CustomSelectionComponent } from './pages/user-accounts/custom-selection-component';
@@ -86,6 +87,7 @@ import { AppAutoFocusDirective } from './shared/autofocus.directive';
     CustomSelectionComponent,
     CustomTextComponent,
     UserProfileComponent,
+    AdminComponent,
     AppAutoFocusDirective
   ],
   entryComponents: [
@@ -109,8 +111,7 @@ import { AppAutoFocusDirective } from './shared/autofocus.directive';
       timeOut: 6000,
       tapToDismiss: true
     }),
-    NgSelectModule
-
+    NgSelectModule,
   ],
 
   providers: [

@@ -38,7 +38,12 @@ npm ci
 popd
 
 printf "${GREEN}*** Launching containerized ganache ***${NC}\n"
-docker-compose up -d ganache
+if [ "$1" == "compliance" ]; then
+	printf "${RED}Using the compliance extensions${NC}\n"
+	docker-compose -f docker-compose.yml -f docker-compose.override.compliance.yml up -d ganache
+else
+	docker-compose up -d ganache
+fi
 
 printf "${GREEN}*** Deploying all contracts ***${NC}\n"
 docker-compose run --rm truffle-offchain migrate --reset --network=default
@@ -50,4 +55,9 @@ docker-compose up -d rabbitmq
 sleep 3
 
 printf "${GREEN}*** Launching containerized microservices ***${NC}\n"
-docker-compose up
+if [ "$1" == "compliance" ]; then
+	printf "${RED}Using the compliance extensions${NC}\n"
+	docker-compose -f docker-compose.yml -f docker-compose.override.compliance.yml up
+else
+	docker-compose up
+fi

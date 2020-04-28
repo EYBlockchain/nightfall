@@ -42,7 +42,7 @@ async function initializeVks(shieldContractName) {
       }),
     );
   } catch (err) {
-    throw new Error('Error while loading verification keys', err);
+    throw new Error(`Error while loading VKs: ${err.message}`);
   }
 }
 

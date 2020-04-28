@@ -136,6 +136,12 @@ services:
       - ./zkp-utils:/app/node_modules/zkp-utils
       - ./database/config:/app/config
       - ./database/setup-mongo-acl-for-new-users.js:/app/setup-mongo-acl-for-new-users.js
+    environment:
+      MONGO_HOST: mongo-nightfall
+      MONGO_PORT: 27017
+      MONGO_NAME: nightfall
+      MONGO_USERNAME: admin
+      MONGO_PASSWORD: admin
     networks:
       - nightfall_network
 

@@ -25,14 +25,24 @@ npm ci
 popd
 
 printf "${GREEN}*** Launching containerized ganache ***${NC}\n"
-docker-compose up -d ganache
+if [[ "$1" == "compliance" ]]
+then
+  printf "${RED}Using the compliance extensions${NC}\n"
+  docker-compose -f docker-compose.yml -f docker-compose.override.compliance.yml up -d ganache
+else
+  docker-compose up -d ganache
+fi
 
 printf "${GREEN}*** Deploying all contracts ***${NC}\n"
 docker-compose run --rm truffle-offchain migrate --reset --network=default
 docker-compose run --rm truffle-zkp migrate --reset --network=default
 
 printf "${GREEN}*** Launching containerized microservices ***${NC}\n"
-if [[ -f ./zkp/code/gm17/ft-consolidation-transfer/proving.key && -f ./zkp/code/gm17/ft-consolidation-transfer/verification.key ]]
+if [[ "$1" == "compliance" ]]
+then
+  printf "${RED}Using the compliance extensions${NC}\n"
+  docker-compose -f docker-compose.yml -f docker-compose.override.compliance.yml -f ./integration-test/docker-compose.test.yml up -d api-gateway
+elif [[ -f ./zkp/code/gm17/ft-consolidation-transfer/proving.key && -f ./zkp/code/gm17/ft-consolidation-transfer/verification.key ]]
 then
   docker-compose -f docker-compose.yml -f docker-compose.override.yml -f ./integration-test/docker-compose.test.yml up -d api-gateway
 else
@@ -49,7 +59,12 @@ sleep 40
 
 # RUN test suits and remove test containers
 printf "${GREEN}*** Run Integration test ***${NC}\n"
-npm run test || isTestFailed=true
+if [[ "$1" == "compliance" ]]
+then
+  npm run test-rc || isTestFailed=true
+else
+  npm run test || isTestFailed=true
+fi
 
 printf "${GREEN}*** List all containers with their Ips ***${NC}\n"
 docker inspect -f '{{.Name}} {{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $(docker-compose ps -q)
@@ -69,7 +84,7 @@ docker-compose down -v || {
   printf "${GREEN}*** Remove zkp-code volume ***${NC}\n"
   docker volume rm nightfall_zkp-code-volume
 
-	printf "${GREEN}*** Remove the merkle tree's mongo volume ***${NC}\n"
+  printf "${GREEN}*** Remove the merkle tree's mongo volume ***${NC}\n"
   docker volume rm nightfall_mongo-merkle-tree-volume
 }
 

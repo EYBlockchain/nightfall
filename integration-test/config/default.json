@@ -1,5 +1,6 @@
 {
   "apiServerURL": "http://localhost:8001",
   "LEAF_HASHLENGTH": 32,
-  "NODE_HASHLENGTH": 27
+  "NODE_HASHLENGTH": 27,
+  "REGULATORY_COMPLIANCE": "enabled"
 }

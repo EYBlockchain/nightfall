@@ -150,4 +150,15 @@ export default {
     };
     return requestWrapper(options);
   },
+
+  // get user name from it public key.
+  getNameFromZkpPublicKey(zkp) {
+    const options = {
+      url: `${url}/getNameFromZkpPublicKey`,
+      method: 'GET',
+      json: true,
+      qs: { zkp },
+    };
+    return requestWrapper(options);
+  },
 };

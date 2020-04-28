@@ -75,6 +75,16 @@ You will find that, using MiMC, all proofs will compute much faster but cost mor
 
 When swapping from using MiMC hashes back to SHA-256, remember to delete `contracts/MiMC.sol` and shut down any open containers.
 
+### Use compliance extensions
+
+This option adds functionality which is intended to support regulatory compliance. Note that use of this functionality does not, of itself, imply that you will be compliant with local financial regulations. Compliance with any such regulations remains entirely your responsibility.
+
+The compliance extensions require a user to encrypt details about their transaction (sender, recipient and amount) using the public keys of a compliance administrator, and to prove that they have correctly done so under zero knowledge.  The encrypted data is emitted as a blockchain event and could be decrypted by a compliance administrator should the need arise. It is also possible for the compliance administrator to blacklist ethereum addresses to prevent that address (associated with a unique zkp public key) from transacting.
+
+Details of how the blacklisting and encryption work are contained in the Nightlite library: [el-gamal.md](https://github.com/EYBlockchain/nightlite/blob/master/el-gamal.md) and [blacklist.md](https://github.com/EYBlockchain/nightlite/blob/master/blacklist.md).
+
+Instructions for running unit tests are exactly the same as for MiMC hashes above, except that the correct docker-compose override file to use is `docker-compose.override.compliance.yml`. Do not forget to select the relevant trusted setup files when running `./nightfall-generate-trusted-setup`.
+
 ### Development
 
 Running the zkp module as part of the fully application is handled by Docker Compose. But you will be running this directly on your machine. Prerequesites for development of Nightfall are documented in [the main project README](../README.md). Satisfy those first before proceeding.

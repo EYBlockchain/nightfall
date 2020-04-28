@@ -11,6 +11,7 @@ import {
   getNameFromAddress,
   getAddressFromName,
   isNameInUse,
+  getNameFromZkpPublicKey,
 } from '../pkd-controller';
 
 const router = express.Router();
@@ -108,7 +109,22 @@ async function getAllRegisteredAddresses(req, res, next) {
 
 async function getAllRegisteredNames(req, res, next) {
   try {
-    res.data = await getNames();
+    const names = await getNames();
+    const adminIndex = names.indexOf('admin');
+    if (adminIndex > -1) {
+      names.splice(adminIndex, 1);
+    }
+    res.data = names;
+    next();
+  } catch (err) {
+    next(err);
+  }
+}
+
+async function getNameFromZkpPublicKeyService(req, res, next) {
+  const { zkp } = req.query;
+  try {
+    res.data = await getNameFromZkpPublicKey(zkp);
     next();
   } catch (err) {
     next(err);
@@ -124,5 +140,6 @@ router.post('/setPublickeyToAddressInPKD', assignZkpPublicKeyToAccount);
 router.get('/getZkpPublicKeyForAccount', getZkpPublicKeyForAccountByName);
 router.post('/setWhisperKeyToAccount', assignWhisperKeyToAccount);
 router.get('/getWhisperKeyForAccount', getWhisperKeyForAccountByName);
+router.get('/getNameFromZkpPublicKey', getNameFromZkpPublicKeyService);
 
 export default router;

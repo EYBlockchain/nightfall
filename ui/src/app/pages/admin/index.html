@@ -1,0 +1,102 @@
+<app-nav> </app-nav>
+<app-spinner
+  *ngIf="isRequesting"
+  [delay]="300"
+  [message]="'Please wait...'"
+  [isRunning]="isRequesting"
+></app-spinner>
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <nav class="mt-4" aria-label="breadcrumb">
+        <ol class="breadcrumb">
+          <li class="breadcrumb-item">
+            <a [routerLink]="['/overview']">Overview</a>
+          </li>
+          <li class="breadcrumb-item active" aria-current="page">Admin</li>
+        </ol>
+      </nav>
+    </div>
+    <div class="col-md-8">
+      <div class="box">
+        <div class="box-header">
+          <h3>Get Transaction Receipt</h3>
+        </div>
+        <div class="box-body">
+          <div class="form-group col-md-10">
+            <label for="name mb-1">Transaction hash</label>
+            <input
+              type="text"
+              class="form-control"
+              autoFocus
+              placeholder="Enter Transaction hash"
+              [(ngModel)]="transactionHash"
+              required
+            />
+          </div>
+          <div class="form-group col-md-10">
+            <label for="transactiontype">Transaction Type</label>
+            <select
+              class="form-control"
+              name="transactiontype"
+              [(ngModel)]="transactionType"
+              required
+            >
+              <option [ngValue]="undefined" selected>Select </option>
+              <option value="Transfer">Transfer</option>
+              <option value="Burn">Burn</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <button
+              type="submit"
+              class="btn btn-md btn-primary"
+              [disabled]="!transactionType || !transactionHash"
+              (click)="decryptTransaction(transactionHash, transactionType)"
+            >
+              Decrypt Transaction
+            </button>
+          </div>
+          <div *ngIf="decryptedData" [innerHtml]="decryptedData"></div>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4" *ngIf="users.length > 0">
+      <div class="box">
+        <div class="box-header">
+          <h3>Blacklist a User</h3>
+        </div>
+        <div class="box-body table-body">
+          <div class="form-group">
+            <input class="form-control" type="text" placeholder="Search an User" (input)="onSearchChange($event.target.value)" />
+          </div>
+          <table class="table">
+            <thead>
+              <tr>
+                <th>Users</th>
+                <th>BlackListed</th>
+                <th style="float: right;">Action</th>
+              </tr>
+            </thead>
+            <tbody class="table-body">
+              <tr *ngFor="let user of users">
+                <td><span>{{ user.name }} </span></td>
+                <td><span>{{ user.isBlacklisted }} </span></td>
+                <td>
+                  <button
+                    class="btn float-right"
+                    (click)="userActions(user.isBlacklisted, user.name)"
+                    [style.color]="'#fff'"
+                    [style.background-color]="user.isBlacklisted ? '#6c757d' : '#13252b'"
+                  >
+                    {{ user.isBlacklisted ? 'WHITELIST' : 'BLACKLIST' }}
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

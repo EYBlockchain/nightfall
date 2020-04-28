@@ -16,6 +16,7 @@ async function main() {
   // -f being the name of the .code file (i.e., 'ft-mint')
   const hashType = process.env.HASH_TYPE === 'mimc' ? 'MiMC' : 'SHA';
   console.log('Hash type is set to:', hashType);
+  if (process.env.COMPLIANCE === 'true') console.log('Compliance mode is enabled');
   console.log(`${process.cwd()}/code/gm17`);
 
   const { f } = argv;
