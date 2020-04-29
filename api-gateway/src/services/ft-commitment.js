@@ -557,7 +557,7 @@ export async function consolidationTransfer(req, res, next) {
   try {
     // Generate a new one-time-use Ethereum address for the sender to use
     const password = (req.user.address + Date.now()).toString();
-    const address = (await accounts.createAccount(password)).data;
+    const address = await accounts.createAccount(password);
     await db.updateUserWithPrivateAccount(req.user, { address, password });
     await accounts.unlockAccount({ address, password });
 

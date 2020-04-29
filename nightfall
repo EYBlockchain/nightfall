@@ -5,6 +5,17 @@ GREEN='\033[0;32m'
 RED='\033[0;31m'
 NC='\033[0m'
 
+commonSetups(){
+  printf "${GREEN}*** Deploying all contracts ***${NC}\n"
+  docker-compose run --rm truffle-offchain migrate --reset --network=default
+  docker-compose run --rm truffle-zkp migrate --reset --network=default
+
+  printf "${GREEN}*** Launching RabbitMQ container ***${NC}\n"
+  docker-compose up -d rabbitmq
+
+  sleep 3
+}
+
 printf "${GREEN}*** Cleaning up all containers ***${NC}\n"
 docker-compose down -v || {
 	# this block will run if ```docker-compose down -v``` fails.
@@ -26,6 +37,13 @@ docker-compose down -v || {
   docker volume rm nightfall_mongo-merkle-tree-volume
 }
 
+printf  "${GREEN}*** Delete zkp and offchain contract's build folder ***${NC}\n"
+rm -dr zkp/build/ || true
+rm -dr offchain/build/ || true
+
+printf "${GREEN}*** Delete zkp/contracts/MerkleTree.sol created by MiMC hash run ***${NC}\n"
+rm zkp/contracts/MerkleTree.sol || true
+
 printf "${GREEN}*** Pull zokrates docker image ***${NC}\n"
 docker pull zokrates/zokrates:0.5.1
 
@@ -37,27 +55,37 @@ pushd zkp-utils
 npm ci
 popd
 
-printf "${GREEN}*** Launching containerized ganache ***${NC}\n"
-if [ "$1" == "compliance" ]; then
+if [[ "$1" == "compliance" ]]
+then
 	printf "${RED}Using the compliance extensions${NC}\n"
+
+  printf "${GREEN}*** Launching containerized ganache ***${NC}\n"
 	docker-compose -f docker-compose.yml -f docker-compose.override.compliance.yml up -d ganache
+
+  commonSetups
+
+  printf "${GREEN}*** Launching containerized microservices ***${NC}\n"
+  docker-compose -f docker-compose.yml -f docker-compose.override.compliance.yml up
+
+elif [[ -f ./zkp/code/gm17/ft-consolidation-transfer/proving.key && -f ./zkp/code/gm17/ft-consolidation-transfer/verification.key  ]]
+then
+  printf "${GREEN}*** Launching containerized ganache ***${NC}\n"
+  docker-compose up -d ganache
+
+  commonSetups
+
+  printf "${GREEN}*** Launching containerized microservices ***${NC}\n"
+  docker-compose -f docker-compose.yml -f docker-compose.override.mimc.yml up
+
 else
-	docker-compose up -d ganache
-fi
+	printf "${GREEN}*** docker-compose Build ***${NC}\n"
+  docker-compose build
 
-printf "${GREEN}*** Deploying all contracts ***${NC}\n"
-docker-compose run --rm truffle-offchain migrate --reset --network=default
-docker-compose run --rm truffle-zkp migrate --reset --network=default
+  printf "${GREEN}*** Launching containerized ganache ***${NC}\n"
+  docker-compose up -d ganache
 
-printf "${GREEN}*** Launching RabbitMQ container ***${NC}\n"
-docker-compose up -d rabbitmq
+  commonSetups
 
-sleep 3
-
-printf "${GREEN}*** Launching containerized microservices ***${NC}\n"
-if [ "$1" == "compliance" ]; then
-	printf "${RED}Using the compliance extensions${NC}\n"
-	docker-compose -f docker-compose.yml -f docker-compose.override.compliance.yml up
-else
-	docker-compose up
+  printf "${GREEN}*** Launching containerized microservices ***${NC}\n"
+  docker-compose up
 fi
