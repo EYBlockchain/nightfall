@@ -655,7 +655,7 @@ describe('****** Integration Test ******\n', function() {
 
   describe('*** ERC-20 and ERC-20  Consolidation Commitment ***', function() {
     before(function() {
-      if (process.env.COMPLIANCE) {
+      if (!process.env.MIMC) {
         this.skip();
       }
     });

@@ -62,6 +62,9 @@ printf "${GREEN}*** Run Integration test ***${NC}\n"
 if [[ "$1" == "compliance" ]]
 then
   npm run test-rc || isTestFailed=true
+elif [[ -f ./zkp/code/gm17/ft-consolidation-transfer/proving.key && -f ./zkp/code/gm17/ft-consolidation-transfer/verification.key ]]
+then
+  npm run test-mimc || isTestFailed=true
 else
   npm run test || isTestFailed=true
 fi

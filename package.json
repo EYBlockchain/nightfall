@@ -6,6 +6,7 @@
   "scripts": {
     "test": "NODE_CONFIG_DIR=./integration-test/config mocha --require @babel/register -b ./integration-test/ --reporter mochawesome --timeout 1000000",
     "test-rc": "NODE_CONFIG_DIR=./integration-test/config COMPLIANCE=true mocha --require @babel/register -b ./integration-test/ --reporter mochawesome --timeout 1000000",
+    "test-mimc": "NODE_CONFIG_DIR=./integration-test/config MIMC=true mocha --require @babel/register -b ./integration-test/ --reporter mochawesome --timeout 1000000",
     "setup": "docker-compose run zkp npm run setup --",
     "setup-mimc": "docker-compose run zkp npm run setup-mimc --",
     "setup-rc": "docker-compose run zkp npm run setup-rc --",
