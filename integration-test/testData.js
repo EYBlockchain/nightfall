@@ -154,7 +154,7 @@ export default {
           );
         },
       },
-      transferCommitments: parseTransferCommitments(erc20, 'batchTransfer', bob),  
+      transferCommitments: parseTransferCommitments(erc20, 'batchTransfer', bob),
     };
   },
 
