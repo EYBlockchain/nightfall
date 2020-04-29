@@ -9,26 +9,22 @@ import testData from './testData';
 const apiServerURL = config.get('apiServerURL');
 
 // independent test data.
-const { alice, bob, erc20, erc20Consolidation } = testData;
+const { alice, bob, erc20, erc721 } = testData;
 
 // dependent test data. which need to be configured.
-let erc721;
-let erc721Commitment;
-let erc721Address;
-let erc20Commitments;
-let erc20Address;
+let erc721CommitmentTransfer;
+let erc20CommitmentTransfer;
 let erc20CommitmentBatchTransfer;
-let erc20ConsolidationCommitment;
+let erc20CommitmentConsolidationTransfer;
 
 describe('****** Integration Test ******\n', function() {
   before(async function() {
     await testData.configureDependentTestData();
     ({
-      erc721,
-      erc721Commitment,
-      erc20Commitments,
+      erc721CommitmentTransfer,
+      erc20CommitmentTransfer,
       erc20CommitmentBatchTransfer,
-      erc20ConsolidationCommitment,
+      erc20CommitmentConsolidationTransfer,
     } = testData);
   });
   /*
@@ -134,11 +130,18 @@ describe('****** Integration Test ******\n', function() {
    *  Finally, Alice burns the received ERC-721 token.
    */
   describe('*** ERC-721 and ERC-721 Commitment ***', function() {
-    before(function() {
+    before(async function() {
       if (process.env.COMPLIANCE) {
         this.skip();
+      } else {
+        // Get the erc721 address so that we can use it to calculate the commitment hashes
+        erc721.contractAddress = (await request
+          .get('/getNFTokenContractAddress')
+          .use(prefix(apiServerURL))
+          .set('Authorization', alice.token)).body.data.nftAddress;
       }
     });
+
     context(`${alice.name} tasks: `, function() {
       /*
        * Step 3.
@@ -166,15 +169,7 @@ describe('****** Integration Test ******\n', function() {
        * Mint ERC-721 token commitment.
        */
       it('Mint ERC-721 token commitment', async function() {
-        // Get the erc721 address so that we can include it in the commitment hashes
-        const erc721AddressResponse = await request
-          .get('/getNFTokenContractAddress')
-          .use(prefix(apiServerURL))
-          .set('Authorization', alice.token);
-        erc721Address = erc721AddressResponse.body.data.nftAddress;
-        erc721Commitment.address = erc721Address;
-
-        const { tokenUri, tokenId } = erc721Commitment;
+        const { tokenUri, tokenId } = erc721CommitmentTransfer;
         let res;
         try {
           res = await request
@@ -198,17 +193,23 @@ describe('****** Integration Test ******\n', function() {
         expect(res).to.have.nested.property('body.data.commitment');
         expect(res).to.have.nested.property('body.data.commitmentIndex');
 
-        erc721Commitment.salt = res.body.data.salt; // set Salt from response to calculate and verify commitment.
+        erc721CommitmentTransfer.salt = res.body.data.salt; // set Salt from response to calculate and verify commitment.
+        erc721CommitmentTransfer.mintCommitmentIndex = res.body.data.commitmentIndex;
 
-        expect(res.body.data.commitment).to.be.equal(erc721Commitment.mintCommitment);
-        expect(res.body.data.commitmentIndex).to.be.equal(erc721Commitment.mintCommitmentIndex);
+        expect(res.body.data.commitment).to.be.equal(erc721CommitmentTransfer.mintCommitment);
       });
       /*
        * Step 5.
        * Transfer ERC-721 Commitment.
        */
       it('Transfer ERC-721 Commitment to Bob', function(done) {
-        const { tokenId, tokenUri, salt, mintCommitment, mintCommitmentIndex } = erc721Commitment;
+        const {
+          tokenId,
+          tokenUri,
+          salt,
+          mintCommitment,
+          mintCommitmentIndex,
+        } = erc721CommitmentTransfer;
         request
           .post('/transferNFTCommitment')
           .use(prefix(apiServerURL))
@@ -234,12 +235,12 @@ describe('****** Integration Test ******\n', function() {
             expect(res).to.have.nested.property('body.data.commitment');
             expect(res).to.have.nested.property('body.data.commitmentIndex');
 
-            erc721Commitment.transferredSalt = res.body.data.salt; // set Salt from response to calculate and verify commitment.
+            erc721CommitmentTransfer.transferredSalt = res.body.data.salt; // set Salt from response to calculate and verify commitment.
 
-            expect(res.body.data.commitment).to.be.equal(erc721Commitment.transferCommitment);
-            expect(res.body.data.commitmentIndex).to.be.equal(
-              erc721Commitment.transferCommitmentIndex,
+            expect(res.body.data.commitment).to.be.equal(
+              erc721CommitmentTransfer.transferCommitment,
             );
+            expect(res.body.data.commitmentIndex).to.be.equal(mintCommitmentIndex + 1);
             return done();
           });
       });
@@ -259,8 +260,8 @@ describe('****** Integration Test ******\n', function() {
           tokenUri,
           transferredSalt,
           transferCommitment,
-          transferCommitmentIndex,
-        } = erc721Commitment;
+          mintCommitmentIndex,
+        } = erc721CommitmentTransfer;
         request
           .post('/burnNFTCommitment')
           .use(prefix(apiServerURL))
@@ -271,7 +272,7 @@ describe('****** Integration Test ******\n', function() {
                 tokenUri,
                 salt: transferredSalt,
                 commitment: transferCommitment,
-                commitmentIndex: transferCommitmentIndex,
+                commitmentIndex: mintCommitmentIndex + 1,
               },
             ],
             receiver: {
@@ -355,73 +356,63 @@ describe('****** Integration Test ******\n', function() {
     /*
      *  Mint ERC-20 helper token commitment, so that bob publickey is added to public-key-tree contract
      */
-    before(done => {
+    before(async function() {
+      // Get the erc20 address so that we calculate the commitment hashes
+      erc20.contractAddress = (await request
+        .get('/getFTokenContractAddress')
+        .use(prefix(apiServerURL))
+        .set('Authorization', alice.token)).body.data.ftAddress;
+
       if (!process.env.COMPLIANCE) {
-        return done();
+        return;
       }
-      return request
+      await request
         .post('/mintFToken')
         .use(prefix(apiServerURL))
         .send({
           value: erc20.mint,
         })
         .set('Accept', 'application/json')
-        .set('Authorization', bob.token)
-        .end(err => {
-          if (err) return done(err);
-          return request
-            .post('/mintFTCommitment')
-            .use(prefix(apiServerURL))
-            .send({ outputCommitments: [erc20Commitments.mint[0]] })
-            .set('Accept', 'application/json')
-            .set('Authorization', bob.token)
-            .end(_err => {
-              if (_err) return done(_err);
-              return done();
-            });
-        });
+        .set('Authorization', bob.token);
+
+      await request
+        .post('/mintFTCommitment')
+        .use(prefix(apiServerURL))
+        .send({ outputCommitments: [erc20CommitmentTransfer.mintCommitments[0]] })
+        .set('Accept', 'application/json')
+        .set('Authorization', bob.token);
     });
     context(`${alice.name} tasks: `, function() {
       /*
        * Step 9.
        * Mint ERC-20 token,
        */
-      it(`Mint ${erc20.mint} ERC-20 tokens`, async function() {
-        // Get the erc20 address so that we can include it in the commitment hashes
-        const erc20AddressResponse = await request
-          .get('/getFTokenContractAddress')
+      it(`Mint ${erc20.mint} ERC-20 tokens`, function(done) {
+        request
+          .post('/mintFToken')
           .use(prefix(apiServerURL))
-          .set('Authorization', alice.token);
-        erc20Address = erc20AddressResponse.body.data.ftAddress;
-        erc20Commitments.erc20Address = erc20Address;
-        erc20CommitmentBatchTransfer.erc20Address = erc20Address;
-
-        let res;
-        try {
-          res = await request
-            .post('/mintFToken')
-            .use(prefix(apiServerURL))
-            .send({
-              value: erc20.mint,
-            })
-            .set('Accept', 'application/json')
-            .set('Authorization', alice.token);
-        } catch (err) {
-          throw new Error(err);
-        }
-
-        expect(res).to.have.nested.property('body.data.message');
-        expect(res.body.data.message).to.be.equal('Mint Successful');
+          .send({
+            value: erc20.mint,
+          })
+          .set('Accept', 'application/json')
+          .set('Authorization', alice.token)
+          .end((err, res) => {
+            if (err) return done(err);
+            expect(res).to.have.nested.property('body.data.message');
+            expect(res.body.data.message).to.be.equal('Mint Successful');
+            return done();
+          });
       });
       /*
        * Step 10.
        * Mint ERC-20 token commitment.
        */
-      it(`Mint ${erc20.toBeMintedAsCommitment[0]} ERC-20 token commitment`, function(done) {
+      it(`Mint ${erc20.transfer.mintCommitments[0]} ERC-20 token commitment`, function(done) {
+        const commitment = erc20CommitmentTransfer.mintCommitments[0];
         request
           .post('/mintFTCommitment')
           .use(prefix(apiServerURL))
-          .send({ outputCommitments: [erc20Commitments.mint[0]] })
+          .send({ outputCommitments: [commitment] })
           .set('Accept', 'application/json')
           .set('Authorization', alice.token)
           .end((err, res) => {
@@ -430,11 +421,10 @@ describe('****** Integration Test ******\n', function() {
             expect(res).to.have.nested.property('body.data.commitment');
             expect(res).to.have.nested.property('body.data.commitmentIndex');
 
-            erc20Commitments.mint[0].salt = res.body.data.salt; // set Salt from response to calculate and verify commitment.
-            erc20Commitments.mint[0].address = erc20Address;
-            erc20Commitments.mint[0].commitmentIndex = res.body.data.commitmentIndex;
+            commitment.salt = res.body.data.salt; // set Salt from response to calculate and verify commitment.
+            commitment.commitmentIndex = res.body.data.commitmentIndex;
 
-            expect(res.body.data.commitment).to.be.equal(erc20Commitments.mint[0].commitment);
+            expect(res.body.data.commitment).to.be.equal(commitment.commitment);
             return done();
           });
       });
@@ -442,11 +432,12 @@ describe('****** Integration Test ******\n', function() {
        * Step 11.
        * Mint ERC-20 token commitment.
        */
-      it(`Mint ${erc20.toBeMintedAsCommitment[1]} ERC-20 token commitment`, function(done) {
+      it(`Mint ${erc20.transfer.mintCommitments[1]} ERC-20 token commitment`, function(done) {
+        const commitment = erc20CommitmentTransfer.mintCommitments[1];
         request
           .post('/mintFTCommitment')
           .use(prefix(apiServerURL))
-          .send({ outputCommitments: [erc20Commitments.mint[1]] })
+          .send({ outputCommitments: [commitment] })
           .set('Accept', 'application/json')
           .set('Authorization', alice.token)
           .end((err, res) => {
@@ -455,12 +446,10 @@ describe('****** Integration Test ******\n', function() {
             expect(res).to.have.nested.property('body.data.commitment');
             expect(res).to.have.nested.property('body.data.commitmentIndex');
 
-            erc20Commitments.mint[1].salt = res.body.data.salt; // set Salt from response to calculate and verify commitment.
-            erc20Commitments.mint[1].address = erc20Address;
-            erc20Commitments.mint[1].commitmentIndex = res.body.data.commitmentIndex;
+            commitment.salt = res.body.data.salt; // set Salt from response to calculate and verify commitment.
+            commitment.commitmentIndex = res.body.data.commitmentIndex;
 
-            expect(res.body.data.commitment).to.be.equal(erc20Commitments.mint[1].commitment);
-
+            expect(res.body.data.commitment).to.be.equal(commitment.commitment);
             return done();
           });
       });
@@ -468,13 +457,14 @@ describe('****** Integration Test ******\n', function() {
        * Step 12.
        * Transfer ERC-20 Commitment.
        */
-      it(`Transfer ${erc20.transfer} ERC-20 Commitment to Bob`, function(done) {
+      it(`Transfer ${erc20.transfer.transferCommitment} ERC-20 Commitment to Bob`, function(done) {
+        const { mintCommitments, transferCommitment, changeCommitment } = erc20CommitmentTransfer;
         request
           .post('/transferFTCommitment')
           .use(prefix(apiServerURL))
           .send({
-            inputCommitments: erc20Commitments.mint,
-            outputCommitments: [erc20Commitments.transfer, erc20Commitments.change],
+            inputCommitments: mintCommitments,
+            outputCommitments: [transferCommitment, changeCommitment],
             receiver: { name: bob.name },
           })
           .set('Accept', 'application/json')
@@ -483,25 +473,21 @@ describe('****** Integration Test ******\n', function() {
             if (err) return done(err);
 
             const outputCommitments = res.body.data;
-            erc20Commitments.transfer.salt = outputCommitments[0].salt; // set Salt from response to calculate and verify commitment.
-            erc20Commitments.transfer.address = erc20Address;
-            erc20Commitments.change.salt = outputCommitments[1].salt; // set Salt from response to calculate and verify commitment.
-            erc20Commitments.change.address = erc20Address;
-            erc20Commitments.change.commitmentIndex = outputCommitments[1].commitmentIndex;
 
-            expect(outputCommitments[0].commitment).to.be.equal(
-              erc20Commitments.transfer.commitment,
-            );
+            transferCommitment.salt = outputCommitments[0].salt; // set Salt from response to calculate and verify commitment.
+            changeCommitment.salt = outputCommitments[1].salt; // set Salt from response to calculate and verify commitment.
+
+            expect(outputCommitments[0].commitment).to.be.equal(transferCommitment.commitment);
             expect(outputCommitments[0].commitmentIndex).to.be.equal(
-              erc20Commitments.mint[1].commitmentIndex + 1,
+              mintCommitments[1].commitmentIndex + 1,
             );
-            expect(outputCommitments[1].commitment).to.be.equal(erc20Commitments.change.commitment);
+            expect(outputCommitments[1].commitment).to.be.equal(changeCommitment.commitment);
             expect(outputCommitments[1].commitmentIndex).to.be.equal(
-              erc20Commitments.mint[1].commitmentIndex + 2,
+              mintCommitments[1].commitmentIndex + 2,
             );
 
-            erc20Commitments.transfer.commitmentIndex = outputCommitments[0].commitmentIndex;
-            erc20Commitments.change.commitmentIndex = outputCommitments[1].commitmentIndex;
+            transferCommitment.commitmentIndex = outputCommitments[0].commitmentIndex;
+            changeCommitment.commitmentIndex = outputCommitments[1].commitmentIndex;
             return done();
           });
       });
@@ -509,13 +495,13 @@ describe('****** Integration Test ******\n', function() {
        * Step 13.
        * Burn ERC-20 Commitment.
        */
-      it(`Burn ${erc20.change} ERC-20 Commitment`, function(done) {
-        if (!erc20.change) this.skip();
+      it(`Burn ${erc20.transfer.changeCommitment} ERC-20 Commitment`, function(done) {
+        if (!erc20.transfer.changeCommitment) this.skip();
         request
           .post('/burnFTCommitment')
           .use(prefix(apiServerURL))
           .send({
-            inputCommitments: [erc20Commitments.change],
+            inputCommitments: [erc20CommitmentTransfer.changeCommitment],
             receiver: {
               name: bob.name,
             },
@@ -535,12 +521,12 @@ describe('****** Integration Test ******\n', function() {
        * Step 14.
        * Burn ERC-20 Commitment.
        */
-      it(`Burn ${erc20.transfer} ERC-20 Commitment`, function(done) {
+      it(`Burn ${erc20.transfer.transferCommitment} ERC-20 Commitment`, function(done) {
         request
           .post('/burnFTCommitment')
           .use(prefix(apiServerURL))
           .send({
-            inputCommitments: [erc20Commitments.transfer],
+            inputCommitments: [erc20CommitmentTransfer.transferCommitment],
             receiver: {
               name: bob.name,
             },
@@ -558,12 +544,13 @@ describe('****** Integration Test ******\n', function() {
        * Step 15.
        * Transfer ERC-20 token
        */
-      it(`Transfer ${erc20.mint} ERC-20 tokens to Alice`, function(done) {
+      it(`Transfer ${erc20.transfer.changeCommitment +
+        erc20.transfer.transferCommitment} ERC-20 tokens to Alice`, function(done) {
         request
           .post('/transferFToken')
           .use(prefix(apiServerURL))
           .send({
-            value: erc20.mint,
+            value: erc20.transfer.changeCommitment + erc20.transfer.transferCommitment,
             receiver: {
               name: alice.name,
             },
@@ -587,12 +574,12 @@ describe('****** Integration Test ******\n', function() {
        * Step 16.
        * Burn ERC-20 Token.
        */
-      it(`Burn ${erc20.mint} ERC-20 tokens`, function(done) {
+      it(`Burn 2 ERC-20 tokens`, function(done) {
         request
           .post('/burnFToken')
           .use(prefix(apiServerURL))
           .send({
-            value: erc20.mint,
+            value: 2,
           })
           .set('Accept', 'application/json')
           .set('Authorization', alice.token)
@@ -600,671 +587,6 @@ describe('****** Integration Test ******\n', function() {
             if (err) return done(err);
             expect(res).to.have.nested.property('body.data.message');
             expect(res.body.data.message).to.be.equal('Burn Successful');
-            return done();
-          });
-      });
-    });
-  });
-
-  describe('*** ERC-20 and ERC-20  Consolidation Commitment ***', function() {
-    context(`${alice.name} tasks: `, function() {
-      before(done => setTimeout(done, 10000));
-      /*
-       * Step 20.
-       * Mint ERC-20 token,
-       */
-      it(`Mint ${erc20Consolidation.mint} ERC-20 tokens`, async function() {
-        // Get the erc20 address so that we can include it in the commitment hashes
-        const erc20AddressResponse = await request
-          .get('/getFTokenContractAddress')
-          .use(prefix(apiServerURL))
-          .set('Authorization', alice.token);
-        erc20Address = erc20AddressResponse.body.data.ftAddress;
-        erc20ConsolidationCommitment.erc20Address = erc20Address;
-        let res;
-        try {
-          res = await request
-            .post('/mintFToken')
-            .use(prefix(apiServerURL))
-            .send({
-              value: erc20Consolidation.mint,
-            })
-            .set('Accept', 'application/json')
-            .set('Authorization', alice.token);
-        } catch (err) {
-          throw new Error(err);
-        }
-
-        expect(res).to.have.nested.property('body.data.message');
-        expect(res.body.data.message).to.be.equal('Mint Successful');
-      });
-      /*
-       * Step 21.
-       * Mint ERC-20 token commitment.
-       */
-      it(`Mint ${
-        erc20Consolidation.toBeMintedAsCommitment[0]
-      } ERC-20 token commitment`, function(done) {
-        request
-          .post('/mintFTCommitment')
-          .use(prefix(apiServerURL))
-          .send({ outputCommitments: [erc20ConsolidationCommitment.mint[0]] })
-          .set('Accept', 'application/json')
-          .set('Authorization', alice.token)
-          .end((err, res) => {
-            if (err) return done(err);
-            expect(res).to.have.nested.property('body.data.salt');
-            expect(res).to.have.nested.property('body.data.commitment');
-            expect(res).to.have.nested.property('body.data.commitmentIndex');
-
-            erc20ConsolidationCommitment.mint[0].salt = res.body.data.salt; // set Salt from response to calculate and verify commitment.
-            erc20ConsolidationCommitment.mint[0].address = erc20Address;
-            expect(res.body.data.commitment).to.be.equal(
-              erc20ConsolidationCommitment.mint[0].commitment,
-            );
-            expect(res.body.data.commitmentIndex).to.be.equal(
-              erc20ConsolidationCommitment.mint[0].commitmentIndex,
-            );
-            return done();
-          });
-      });
-      /*
-       * Step 22.
-       * Mint ERC-20 token commitment.
-       */
-      it(`Mint ${
-        erc20Consolidation.toBeMintedAsCommitment[1]
-      } ERC-20 token commitment`, function(done) {
-        request
-          .post('/mintFTCommitment')
-          .use(prefix(apiServerURL))
-          .send({ outputCommitments: [erc20ConsolidationCommitment.mint[1]] })
-          .set('Accept', 'application/json')
-          .set('Authorization', alice.token)
-          .end((err, res) => {
-            if (err) return done(err);
-            expect(res).to.have.nested.property('body.data.salt');
-            expect(res).to.have.nested.property('body.data.commitment');
-            expect(res).to.have.nested.property('body.data.commitmentIndex');
-
-            erc20ConsolidationCommitment.mint[1].salt = res.body.data.salt; // set Salt from response to calculate and verify commitment.
-            erc20ConsolidationCommitment.mint[1].address = erc20Address;
-            expect(res.body.data.commitment).to.be.equal(
-              erc20ConsolidationCommitment.mint[1].commitment,
-            );
-            expect(res.body.data.commitmentIndex).to.be.equal(
-              erc20ConsolidationCommitment.mint[1].commitmentIndex,
-            );
-            return done();
-          });
-      });
-      /*
-       * Step 23.
-       * Mint ERC-20 token commitment.
-       */
-      it(`Mint ${
-        erc20Consolidation.toBeMintedAsCommitment[2]
-      } ERC-20 token commitment`, function(done) {
-        request
-          .post('/mintFTCommitment')
-          .use(prefix(apiServerURL))
-          .send({ outputCommitments: [erc20ConsolidationCommitment.mint[2]] })
-          .set('Accept', 'application/json')
-          .set('Authorization', alice.token)
-          .end((err, res) => {
-            if (err) return done(err);
-            expect(res).to.have.nested.property('body.data.salt');
-            expect(res).to.have.nested.property('body.data.commitment');
-            expect(res).to.have.nested.property('body.data.commitmentIndex');
-
-            erc20ConsolidationCommitment.mint[2].salt = res.body.data.salt; // set Salt from response to calculate and verify commitment.
-            erc20ConsolidationCommitment.mint[2].address = erc20Address;
-            expect(res.body.data.commitment).to.be.equal(
-              erc20ConsolidationCommitment.mint[2].commitment,
-            );
-            expect(res.body.data.commitmentIndex).to.be.equal(
-              erc20ConsolidationCommitment.mint[2].commitmentIndex,
-            );
-            return done();
-          });
-      });
-      /*
-       * Step 24.
-       * Mint ERC-20 token commitment.
-       */
-      it(`Mint ${
-        erc20Consolidation.toBeMintedAsCommitment[3]
-      } ERC-20 token commitment`, function(done) {
-        request
-          .post('/mintFTCommitment')
-          .use(prefix(apiServerURL))
-          .send({ outputCommitments: [erc20ConsolidationCommitment.mint[3]] })
-          .set('Accept', 'application/json')
-          .set('Authorization', alice.token)
-          .end((err, res) => {
-            if (err) return done(err);
-            expect(res).to.have.nested.property('body.data.salt');
-            expect(res).to.have.nested.property('body.data.commitment');
-            expect(res).to.have.nested.property('body.data.commitmentIndex');
-
-            erc20ConsolidationCommitment.mint[3].salt = res.body.data.salt; // set Salt from response to calculate and verify commitment.
-            erc20ConsolidationCommitment.mint[3].address = erc20Address;
-            expect(res.body.data.commitment).to.be.equal(
-              erc20ConsolidationCommitment.mint[3].commitment,
-            );
-            expect(res.body.data.commitmentIndex).to.be.equal(
-              erc20ConsolidationCommitment.mint[3].commitmentIndex,
-            );
-            return done();
-          });
-      });
-      /*
-       * Step 25.
-       * Mint ERC-20 token commitment.
-       */
-      it(`Mint ${
-        erc20Consolidation.toBeMintedAsCommitment[4]
-      } ERC-20 token commitment`, function(done) {
-        request
-          .post('/mintFTCommitment')
-          .use(prefix(apiServerURL))
-          .send({ outputCommitments: [erc20ConsolidationCommitment.mint[4]] })
-          .set('Accept', 'application/json')
-          .set('Authorization', alice.token)
-          .end((err, res) => {
-            if (err) return done(err);
-            expect(res).to.have.nested.property('body.data.salt');
-            expect(res).to.have.nested.property('body.data.commitment');
-            expect(res).to.have.nested.property('body.data.commitmentIndex');
-
-            erc20ConsolidationCommitment.mint[4].salt = res.body.data.salt; // set Salt from response to calculate and verify commitment.
-            erc20ConsolidationCommitment.mint[4].address = erc20Address;
-            expect(res.body.data.commitment).to.be.equal(
-              erc20ConsolidationCommitment.mint[4].commitment,
-            );
-            expect(res.body.data.commitmentIndex).to.be.equal(
-              erc20ConsolidationCommitment.mint[4].commitmentIndex,
-            );
-            return done();
-          });
-      });
-      /*
-       * Step 26.
-       * Mint ERC-20 token commitment.
-       */
-      it(`Mint ${
-        erc20Consolidation.toBeMintedAsCommitment[5]
-      } ERC-20 token commitment`, function(done) {
-        request
-          .post('/mintFTCommitment')
-          .use(prefix(apiServerURL))
-          .send({ outputCommitments: [erc20ConsolidationCommitment.mint[5]] })
-          .set('Accept', 'application/json')
-          .set('Authorization', alice.token)
-          .end((err, res) => {
-            if (err) return done(err);
-            expect(res).to.have.nested.property('body.data.salt');
-            expect(res).to.have.nested.property('body.data.commitment');
-            expect(res).to.have.nested.property('body.data.commitmentIndex');
-
-            erc20ConsolidationCommitment.mint[5].salt = res.body.data.salt; // set Salt from response to calculate and verify commitment.
-            erc20ConsolidationCommitment.mint[5].address = erc20Address;
-            expect(res.body.data.commitment).to.be.equal(
-              erc20ConsolidationCommitment.mint[5].commitment,
-            );
-            expect(res.body.data.commitmentIndex).to.be.equal(
-              erc20ConsolidationCommitment.mint[5].commitmentIndex,
-            );
-            return done();
-          });
-      });
-      /*
-       * Step 27.
-       * Mint ERC-20 token commitment.
-       */
-      it(`Mint ${
-        erc20Consolidation.toBeMintedAsCommitment[6]
-      } ERC-20 token commitment`, function(done) {
-        request
-          .post('/mintFTCommitment')
-          .use(prefix(apiServerURL))
-          .send({ outputCommitments: [erc20ConsolidationCommitment.mint[6]] })
-          .set('Accept', 'application/json')
-          .set('Authorization', alice.token)
-          .end((err, res) => {
-            if (err) return done(err);
-            expect(res).to.have.nested.property('body.data.salt');
-            expect(res).to.have.nested.property('body.data.commitment');
-            expect(res).to.have.nested.property('body.data.commitmentIndex');
-
-            erc20ConsolidationCommitment.mint[6].salt = res.body.data.salt; // set Salt from response to calculate and verify commitment.
-            erc20ConsolidationCommitment.mint[6].address = erc20Address;
-            expect(res.body.data.commitment).to.be.equal(
-              erc20ConsolidationCommitment.mint[6].commitment,
-            );
-            expect(res.body.data.commitmentIndex).to.be.equal(
-              erc20ConsolidationCommitment.mint[6].commitmentIndex,
-            );
-            return done();
-          });
-      });
-      /*
-       * Step 28.
-       * Mint ERC-20 token commitment.
-       */
-      it(`Mint ${
-        erc20Consolidation.toBeMintedAsCommitment[7]
-      } ERC-20 token commitment`, function(done) {
-        request
-          .post('/mintFTCommitment')
-          .use(prefix(apiServerURL))
-          .send({ outputCommitments: [erc20ConsolidationCommitment.mint[7]] })
-          .set('Accept', 'application/json')
-          .set('Authorization', alice.token)
-          .end((err, res) => {
-            if (err) return done(err);
-            expect(res).to.have.nested.property('body.data.salt');
-            expect(res).to.have.nested.property('body.data.commitment');
-            expect(res).to.have.nested.property('body.data.commitmentIndex');
-
-            erc20ConsolidationCommitment.mint[7].salt = res.body.data.salt; // set Salt from response to calculate and verify commitment.
-            erc20ConsolidationCommitment.mint[7].address = erc20Address;
-            expect(res.body.data.commitment).to.be.equal(
-              erc20ConsolidationCommitment.mint[7].commitment,
-            );
-            expect(res.body.data.commitmentIndex).to.be.equal(
-              erc20ConsolidationCommitment.mint[7].commitmentIndex,
-            );
-            return done();
-          });
-      });
-      /*
-       * Step 29.
-       * Mint ERC-20 token commitment.
-       */
-      it(`Mint ${
-        erc20Consolidation.toBeMintedAsCommitment[8]
-      } ERC-20 token commitment`, function(done) {
-        request
-          .post('/mintFTCommitment')
-          .use(prefix(apiServerURL))
-          .send({ outputCommitments: [erc20ConsolidationCommitment.mint[8]] })
-          .set('Accept', 'application/json')
-          .set('Authorization', alice.token)
-          .end((err, res) => {
-            if (err) return done(err);
-            expect(res).to.have.nested.property('body.data.salt');
-            expect(res).to.have.nested.property('body.data.commitment');
-            expect(res).to.have.nested.property('body.data.commitmentIndex');
-
-            erc20ConsolidationCommitment.mint[8].salt = res.body.data.salt; // set Salt from response to calculate and verify commitment.
-            erc20ConsolidationCommitment.mint[8].address = erc20Address;
-            expect(res.body.data.commitment).to.be.equal(
-              erc20ConsolidationCommitment.mint[8].commitment,
-            );
-            expect(res.body.data.commitmentIndex).to.be.equal(
-              erc20ConsolidationCommitment.mint[8].commitmentIndex,
-            );
-            return done();
-          });
-      });
-      /*
-       * Step 30.
-       * Mint ERC-20 token commitment.
-       */
-      it(`Mint ${
-        erc20Consolidation.toBeMintedAsCommitment[9]
-      } ERC-20 token commitment`, function(done) {
-        request
-          .post('/mintFTCommitment')
-          .use(prefix(apiServerURL))
-          .send({ outputCommitments: [erc20ConsolidationCommitment.mint[9]] })
-          .set('Accept', 'application/json')
-          .set('Authorization', alice.token)
-          .end((err, res) => {
-            if (err) return done(err);
-            expect(res).to.have.nested.property('body.data.salt');
-            expect(res).to.have.nested.property('body.data.commitment');
-            expect(res).to.have.nested.property('body.data.commitmentIndex');
-
-            erc20ConsolidationCommitment.mint[9].salt = res.body.data.salt; // set Salt from response to calculate and verify commitment.
-            erc20ConsolidationCommitment.mint[9].address = erc20Address;
-            expect(res.body.data.commitment).to.be.equal(
-              erc20ConsolidationCommitment.mint[9].commitment,
-            );
-            expect(res.body.data.commitmentIndex).to.be.equal(
-              erc20ConsolidationCommitment.mint[9].commitmentIndex,
-            );
-            return done();
-          });
-      });
-      /*
-       * Step 31.
-       * Mint ERC-20 token commitment.
-       */
-      it(`Mint ${
-        erc20Consolidation.toBeMintedAsCommitment[10]
-      } ERC-20 token commitment`, function(done) {
-        request
-          .post('/mintFTCommitment')
-          .use(prefix(apiServerURL))
-          .send({ outputCommitments: [erc20ConsolidationCommitment.mint[10]] })
-          .set('Accept', 'application/json')
-          .set('Authorization', alice.token)
-          .end((err, res) => {
-            if (err) return done(err);
-            expect(res).to.have.nested.property('body.data.salt');
-            expect(res).to.have.nested.property('body.data.commitment');
-            expect(res).to.have.nested.property('body.data.commitmentIndex');
-
-            erc20ConsolidationCommitment.mint[10].salt = res.body.data.salt; // set Salt from response to calculate and verify commitment.
-            erc20ConsolidationCommitment.mint[10].address = erc20Address;
-            expect(res.body.data.commitment).to.be.equal(
-              erc20ConsolidationCommitment.mint[10].commitment,
-            );
-            expect(res.body.data.commitmentIndex).to.be.equal(
-              erc20ConsolidationCommitment.mint[10].commitmentIndex,
-            );
-            return done();
-          });
-      });
-      /*
-       * Step 32.
-       * Mint ERC-20 token commitment.
-       */
-      it(`Mint ${
-        erc20Consolidation.toBeMintedAsCommitment[11]
-      } ERC-20 token commitment`, function(done) {
-        request
-          .post('/mintFTCommitment')
-          .use(prefix(apiServerURL))
-          .send({ outputCommitments: [erc20ConsolidationCommitment.mint[11]] })
-          .set('Accept', 'application/json')
-          .set('Authorization', alice.token)
-          .end((err, res) => {
-            if (err) return done(err);
-            expect(res).to.have.nested.property('body.data.salt');
-            expect(res).to.have.nested.property('body.data.commitment');
-            expect(res).to.have.nested.property('body.data.commitmentIndex');
-
-            erc20ConsolidationCommitment.mint[11].salt = res.body.data.salt; // set Salt from response to calculate and verify commitment.
-            erc20ConsolidationCommitment.mint[11].address = erc20Address;
-            expect(res.body.data.commitment).to.be.equal(
-              erc20ConsolidationCommitment.mint[11].commitment,
-            );
-            expect(res.body.data.commitmentIndex).to.be.equal(
-              erc20ConsolidationCommitment.mint[11].commitmentIndex,
-            );
-            return done();
-          });
-      });
-      /*
-       * Step 33.
-       * Mint ERC-20 token commitment.
-       */
-      it(`Mint ${
-        erc20Consolidation.toBeMintedAsCommitment[12]
-      } ERC-20 token commitment`, function(done) {
-        request
-          .post('/mintFTCommitment')
-          .use(prefix(apiServerURL))
-          .send({ outputCommitments: [erc20ConsolidationCommitment.mint[12]] })
-          .set('Accept', 'application/json')
-          .set('Authorization', alice.token)
-          .end((err, res) => {
-            if (err) return done(err);
-            expect(res).to.have.nested.property('body.data.salt');
-            expect(res).to.have.nested.property('body.data.commitment');
-            expect(res).to.have.nested.property('body.data.commitmentIndex');
-
-            erc20ConsolidationCommitment.mint[12].salt = res.body.data.salt; // set Salt from response to calculate and verify commitment.
-            erc20ConsolidationCommitment.mint[12].address = erc20Address;
-            expect(res.body.data.commitment).to.be.equal(
-              erc20ConsolidationCommitment.mint[12].commitment,
-            );
-            expect(res.body.data.commitmentIndex).to.be.equal(
-              erc20ConsolidationCommitment.mint[12].commitmentIndex,
-            );
-            return done();
-          });
-      });
-      /*
-       * Step 34.
-       * Mint ERC-20 token commitment.
-       */
-      it(`Mint ${
-        erc20Consolidation.toBeMintedAsCommitment[13]
-      } ERC-20 token commitment`, function(done) {
-        request
-          .post('/mintFTCommitment')
-          .use(prefix(apiServerURL))
-          .send({ outputCommitments: [erc20ConsolidationCommitment.mint[13]] })
-          .set('Accept', 'application/json')
-          .set('Authorization', alice.token)
-          .end((err, res) => {
-            if (err) return done(err);
-            expect(res).to.have.nested.property('body.data.salt');
-            expect(res).to.have.nested.property('body.data.commitment');
-            expect(res).to.have.nested.property('body.data.commitmentIndex');
-
-            erc20ConsolidationCommitment.mint[13].salt = res.body.data.salt; // set Salt from response to calculate and verify commitment.
-            erc20ConsolidationCommitment.mint[13].address = erc20Address;
-            expect(res.body.data.commitment).to.be.equal(
-              erc20ConsolidationCommitment.mint[13].commitment,
-            );
-            expect(res.body.data.commitmentIndex).to.be.equal(
-              erc20ConsolidationCommitment.mint[13].commitmentIndex,
-            );
-            return done();
-          });
-      });
-      /*
-       * Step 35.
-       * Mint ERC-20 token commitment.
-       */
-      it(`Mint ${
-        erc20Consolidation.toBeMintedAsCommitment[14]
-      } ERC-20 token commitment`, function(done) {
-        request
-          .post('/mintFTCommitment')
-          .use(prefix(apiServerURL))
-          .send({ outputCommitments: [erc20ConsolidationCommitment.mint[14]] })
-          .set('Accept', 'application/json')
-          .set('Authorization', alice.token)
-          .end((err, res) => {
-            if (err) return done(err);
-            expect(res).to.have.nested.property('body.data.salt');
-            expect(res).to.have.nested.property('body.data.commitment');
-            expect(res).to.have.nested.property('body.data.commitmentIndex');
-
-            erc20ConsolidationCommitment.mint[14].salt = res.body.data.salt; // set Salt from response to calculate and verify commitment.
-            erc20ConsolidationCommitment.mint[14].address = erc20Address;
-            expect(res.body.data.commitment).to.be.equal(
-              erc20ConsolidationCommitment.mint[14].commitment,
-            );
-            expect(res.body.data.commitmentIndex).to.be.equal(
-              erc20ConsolidationCommitment.mint[14].commitmentIndex,
-            );
-            return done();
-          });
-      });
-      /*
-       * Step 36.
-       * Mint ERC-20 token commitment.
-       */
-      it(`Mint ${
-        erc20Consolidation.toBeMintedAsCommitment[15]
-      } ERC-20 token commitment`, function(done) {
-        request
-          .post('/mintFTCommitment')
-          .use(prefix(apiServerURL))
-          .send({ outputCommitments: [erc20ConsolidationCommitment.mint[15]] })
-          .set('Accept', 'application/json')
-          .set('Authorization', alice.token)
-          .end((err, res) => {
-            if (err) return done(err);
-            expect(res).to.have.nested.property('body.data.salt');
-            expect(res).to.have.nested.property('body.data.commitment');
-            expect(res).to.have.nested.property('body.data.commitmentIndex');
-
-            erc20ConsolidationCommitment.mint[15].salt = res.body.data.salt; // set Salt from response to calculate and verify commitment.
-            erc20ConsolidationCommitment.mint[15].address = erc20Address;
-            expect(res.body.data.commitment).to.be.equal(
-              erc20ConsolidationCommitment.mint[15].commitment,
-            );
-            expect(res.body.data.commitmentIndex).to.be.equal(
-              erc20ConsolidationCommitment.mint[15].commitmentIndex,
-            );
-            return done();
-          });
-      });
-      /*
-       * Step 37.
-       * Mint ERC-20 token commitment.
-       */
-      it(`Mint ${
-        erc20Consolidation.toBeMintedAsCommitment[16]
-      } ERC-20 token commitment`, function(done) {
-        request
-          .post('/mintFTCommitment')
-          .use(prefix(apiServerURL))
-          .send({ outputCommitments: [erc20ConsolidationCommitment.mint[16]] })
-          .set('Accept', 'application/json')
-          .set('Authorization', alice.token)
-          .end((err, res) => {
-            if (err) return done(err);
-            expect(res).to.have.nested.property('body.data.salt');
-            expect(res).to.have.nested.property('body.data.commitment');
-            expect(res).to.have.nested.property('body.data.commitmentIndex');
-
-            erc20ConsolidationCommitment.mint[16].salt = res.body.data.salt; // set Salt from response to calculate and verify commitment.
-            erc20ConsolidationCommitment.mint[16].address = erc20Address;
-            expect(res.body.data.commitment).to.be.equal(
-              erc20ConsolidationCommitment.mint[16].commitment,
-            );
-            expect(res.body.data.commitmentIndex).to.be.equal(
-              erc20ConsolidationCommitment.mint[16].commitmentIndex,
-            );
-            return done();
-          });
-      });
-      /*
-       * Step 38.
-       * Mint ERC-20 token commitment.
-       */
-      it(`Mint ${
-        erc20Consolidation.toBeMintedAsCommitment[17]
-      } ERC-20 token commitment`, function(done) {
-        request
-          .post('/mintFTCommitment')
-          .use(prefix(apiServerURL))
-          .send({ outputCommitments: [erc20ConsolidationCommitment.mint[17]] })
-          .set('Accept', 'application/json')
-          .set('Authorization', alice.token)
-          .end((err, res) => {
-            if (err) return done(err);
-            expect(res).to.have.nested.property('body.data.salt');
-            expect(res).to.have.nested.property('body.data.commitment');
-            expect(res).to.have.nested.property('body.data.commitmentIndex');
-
-            erc20ConsolidationCommitment.mint[17].salt = res.body.data.salt; // set Salt from response to calculate and verify commitment.
-            erc20ConsolidationCommitment.mint[17].address = erc20Address;
-            expect(res.body.data.commitment).to.be.equal(
-              erc20ConsolidationCommitment.mint[17].commitment,
-            );
-            expect(res.body.data.commitmentIndex).to.be.equal(
-              erc20ConsolidationCommitment.mint[17].commitmentIndex,
-            );
-            return done();
-          });
-      });
-      /*
-       * Step 39.
-       * Mint ERC-20 token commitment.
-       */
-      it(`Mint ${
-        erc20Consolidation.toBeMintedAsCommitment[18]
-      } ERC-20 token commitment`, function(done) {
-        request
-          .post('/mintFTCommitment')
-          .use(prefix(apiServerURL))
-          .send({ outputCommitments: [erc20ConsolidationCommitment.mint[18]] })
-          .set('Accept', 'application/json')
-          .set('Authorization', alice.token)
-          .end((err, res) => {
-            if (err) return done(err);
-            expect(res).to.have.nested.property('body.data.salt');
-            expect(res).to.have.nested.property('body.data.commitment');
-            expect(res).to.have.nested.property('body.data.commitmentIndex');
-
-            erc20ConsolidationCommitment.mint[18].salt = res.body.data.salt; // set Salt from response to calculate and verify commitment.
-            erc20ConsolidationCommitment.mint[18].address = erc20Address;
-            expect(res.body.data.commitment).to.be.equal(
-              erc20ConsolidationCommitment.mint[18].commitment,
-            );
-            expect(res.body.data.commitmentIndex).to.be.equal(
-              erc20ConsolidationCommitment.mint[18].commitmentIndex,
-            );
-            return done();
-          });
-      });
-      /*
-       * Step 40.
-       * Mint ERC-20 token commitment.
-       */
-      it(`Mint ${
-        erc20Consolidation.toBeMintedAsCommitment[19]
-      } ERC-20 token commitment`, function(done) {
-        request
-          .post('/mintFTCommitment')
-          .use(prefix(apiServerURL))
-          .send({ outputCommitments: [erc20ConsolidationCommitment.mint[19]] })
-          .set('Accept', 'application/json')
-          .set('Authorization', alice.token)
-          .end((err, res) => {
-            if (err) return done(err);
-            expect(res).to.have.nested.property('body.data.salt');
-            expect(res).to.have.nested.property('body.data.commitment');
-            expect(res).to.have.nested.property('body.data.commitmentIndex');
-
-            erc20ConsolidationCommitment.mint[19].salt = res.body.data.salt; // set Salt from response to calculate and verify commitment.
-            erc20ConsolidationCommitment.mint[19].address = erc20Address;
-            expect(res.body.data.commitment).to.be.equal(
-              erc20ConsolidationCommitment.mint[19].commitment,
-            );
-            expect(res.body.data.commitmentIndex).to.be.equal(
-              erc20ConsolidationCommitment.mint[19].commitmentIndex,
-            );
-            return done();
-          });
-      });
-      /*
-       * Step 23.
-       * Transfer ERC-20 Commitment.
-       */
-      it(`Transfer ${erc20Consolidation.transfer} ERC-20 Commitment to Bob`, function(done) {
-        request
-          .post('/consolidationTransfer')
-          .use(prefix(apiServerURL))
-          .send({
-            inputCommitments: erc20ConsolidationCommitment.mint,
-            outputCommitment: erc20ConsolidationCommitment.transfer,
-            receiver: { name: bob.name },
-          })
-          .set('Accept', 'application/json')
-          .set('Authorization', alice.token)
-          .end((err, res) => {
-            if (err) return done(err);
-
-            const outputCommitment = res.body.data;
-            erc20ConsolidationCommitment.transfer.salt = outputCommitment.salt; // set Salt from response to calculate and verify commitment.
-            erc20ConsolidationCommitment.transfer.address = erc20Address;
-            expect(res.body.data.commitment).to.be.equal(
-              erc20ConsolidationCommitment.transferData.commitment,
-            );
-            expect(res.body.data.commitmentIndex).to.be.equal(
-              erc20ConsolidationCommitment.transferData.commitmentIndex,
-            );
             return done();
           });
       });
@@ -1279,38 +601,15 @@ describe('****** Integration Test ******\n', function() {
     });
     /*
      * Step 17.
-     * Mint ERC-20 token,
-     */
-    it(`Mint ERC-20 tokens`, function(done) {
-      request
-        .post('/mintFToken')
-        .use(prefix(apiServerURL))
-        .send({
-          value: erc20CommitmentBatchTransfer.mint,
-        })
-        .set('Accept', 'application/json')
-        .set('Authorization', alice.token)
-        .end((err, res) => {
-          if (err) return done(err);
-          expect(res).to.have.nested.property('body.data.message');
-          expect(res.body.data.message).to.be.equal('Mint Successful');
-          return done();
-        });
-    });
-    /*
-     * Step 18.
      * Mint ERC-20 token commitment.
      */
-    it(`Mint ERC-20 token commitment`, function(done) {
+    it(`Mint ${erc20.batchTransfer.mintCommitment} ERC-20 token commitment`, function(done) {
+      const commitment = erc20CommitmentBatchTransfer.mintCommitment;
       request
         .post('/mintFTCommitment')
         .use(prefix(apiServerURL))
         .send({
-          outputCommitments: [
-            {
-              value: erc20CommitmentBatchTransfer.value,
-            },
-          ],
+          outputCommitments: [commitment],
         })
         .set('Accept', 'application/json')
         .set('Authorization', alice.token)
@@ -1320,56 +619,105 @@ describe('****** Integration Test ******\n', function() {
           expect(res).to.have.nested.property('body.data.commitment');
           expect(res).to.have.nested.property('body.data.commitmentIndex');
 
-          erc20CommitmentBatchTransfer.salt = res.body.data.salt; // set Salt from response to calculate and verify commitment.
-          erc20CommitmentBatchTransfer.address = erc20Address;
-          erc20CommitmentBatchTransfer.commitmentIndex = res.body.data.commitmentIndex;
+          commitment.salt = res.body.data.salt; // set Salt from response to calculate and verify commitment.
+          commitment.commitmentIndex = res.body.data.commitmentIndex;
 
-          expect(res.body.data.commitment).to.be.equal(erc20CommitmentBatchTransfer.commitment);
+          expect(res.body.data.commitment).to.be.equal(commitment.commitment);
           return done();
         });
     });
     /*
-     * Step 19.
-     * Transfer ERC-20 Commitment.
+     * Step 18.
+     * Batch Transfer ERC-20 Commitment.
      */
     it(`ERC-20 Commitment Batch transfer ERC-20 Commitment to users`, function(done) {
-      const {
-        value,
-        salt,
-        commitment,
-        commitmentIndex,
-        transferData,
-      } = erc20CommitmentBatchTransfer;
+      const { mintCommitment, transferCommitments } = erc20CommitmentBatchTransfer;
       request
         .post('/simpleFTCommitmentBatchTransfer')
         .use(prefix(apiServerURL))
         .send({
-          inputCommitments: [
-            {
-              value,
-              salt,
-              commitment,
-              commitmentIndex,
-            },
-          ],
-          outputCommitments: transferData,
+          inputCommitments: [mintCommitment],
+          outputCommitments: transferCommitments,
         })
         .set('Accept', 'application/json')
         .set('Authorization', alice.token)
         .end((err, res) => {
           if (err) return done(err);
           expect(res.body.data.length).to.be.equal(2);
-          erc20CommitmentBatchTransfer.transferData[0].salt = res.body.data[0].salt; // set Salt from response to calculate and verify commitment.
-          erc20CommitmentBatchTransfer.transferData[0].address = erc20Address;
+          transferCommitments[0].salt = res.body.data[0].salt; // set Salt from response to calculate and verify commitment.
 
-          expect(res.body.data[0].commitment).to.be.equal(
-            erc20CommitmentBatchTransfer.transferData[0].commitment,
-          );
-          expect(res.body.data[0].commitmentIndex).to.be.equal(
-            erc20CommitmentBatchTransfer.commitmentIndex + 1,
-          );
+          expect(res.body.data[0].commitment).to.be.equal(transferCommitments[0].commitment);
+          expect(res.body.data[0].commitmentIndex).to.be.equal(mintCommitment.commitmentIndex + 1);
           return done();
         });
+    });
+  });
+
+  describe('*** ERC-20 and ERC-20  Consolidation Commitment ***', function() {
+    before(function() {
+      if (process.env.COMPLIANCE) {
+        this.skip();
+      }
+    });
+    context(`${alice.name} tasks: `, function() {
+      /*
+       * Step 19.
+       * Mint ERC-20 Commitments.
+       */
+      erc20.consolidationTransfer.mintCommitments.forEach(function(value, index) {
+        it(`Mint ${value} ERC-20 commitments`, function(done) {
+          const commitment = erc20CommitmentConsolidationTransfer.mintCommitments[index];
+          request
+            .post('/mintFTCommitment')
+            .use(prefix(apiServerURL))
+            .send({
+              outputCommitments: [commitment],
+            })
+            .set('Accept', 'application/json')
+            .set('Authorization', alice.token)
+            .end((err, res) => {
+              if (err) return done(err);
+              expect(res).to.have.nested.property('body.data.salt');
+              expect(res).to.have.nested.property('body.data.commitment');
+              expect(res).to.have.nested.property('body.data.commitmentIndex');
+
+              commitment.salt = res.body.data.salt; // set Salt from response to calculate and verify commitment.
+              commitment.commitmentIndex = res.body.data.commitmentIndex;
+
+              expect(res.body.data.commitment).to.be.equal(commitment.commitment);
+              return done();
+            });
+        });
+      });
+      /*
+       * Step 20.
+       * Consolidation Transfer ERC-20 Commitment.
+       */
+      it(`Consolidation Transfer of ${erc20.consolidationTransfer.transferCommitment} ERC-20 Commitment to Bob`, function(done) {
+        const { mintCommitments, transferCommitment } = erc20CommitmentConsolidationTransfer;
+        request
+          .post('/consolidationTransfer')
+          .use(prefix(apiServerURL))
+          .send({
+            inputCommitments: mintCommitments,
+            outputCommitment: transferCommitment,
+            receiver: { name: bob.name },
+          })
+          .set('Accept', 'application/json')
+          .set('Authorization', alice.token)
+          .end((err, res) => {
+            if (err) return done(err);
+
+            const outputCommitment = res.body.data;
+            transferCommitment.salt = outputCommitment.salt; // set Salt from response to calculate and verify commitment.
+
+            expect(res.body.data.commitment).to.be.equal(transferCommitment.commitment);
+            expect(res.body.data.commitmentIndex).to.be.equal(
+              mintCommitments[mintCommitments.length - 1].commitmentIndex + 1,
+            );
+            return done();
+          });
+      });
     });
   });
 });
