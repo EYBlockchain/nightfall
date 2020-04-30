@@ -712,7 +712,7 @@ describe('****** Integration Test ******\n', function() {
             transferCommitment.salt = outputCommitment.salt; // set Salt from response to calculate and verify commitment.
 
             expect(res.body.data.commitment).to.be.equal(transferCommitment.commitment);
-            expect(res.body.data.commitmentIndex).to.be.equal(
+            expect(parseInt(res.body.data.commitmentIndex, 16)).to.be.equal(
               mintCommitments[mintCommitments.length - 1].commitmentIndex + 1,
             );
             return done();

@@ -5,7 +5,13 @@ GREEN='\033[0;32m'
 RED='\033[0;31m'
 NC='\033[0m'
 
-commonSetups(){
+launchContainers(){
+  printf "${GREEN}*** Docker Compose Build ***${NC}\n"
+  docker-compose build
+
+  printf "${GREEN}*** Launching containerized ganache ***${NC}\n"
+  docker-compose up -d ganache
+
   printf "${GREEN}*** Deploying all contracts ***${NC}\n"
   docker-compose run --rm truffle-offchain migrate --reset --network=default
   docker-compose run --rm truffle-zkp migrate --reset --network=default
@@ -14,6 +20,14 @@ commonSetups(){
   docker-compose up -d rabbitmq
 
   sleep 3
+
+  printf "${GREEN}*** Launching containerized microservices ***${NC}\n"
+  if [[ -f docker-compose.override.yml ]]
+  then
+    docker-compose -f docker-compose.yml -f docker-compose.override.yml up
+  else
+    docker-compose up
+  fi
 }
 
 printf "${GREEN}*** Cleaning up all containers ***${NC}\n"
@@ -37,55 +51,25 @@ docker-compose down -v || {
   docker volume rm nightfall_mongo-merkle-tree-volume
 }
 
-printf  "${GREEN}*** Delete zkp and offchain contract's build folder ***${NC}\n"
+printf  "${GREEN}*** Delete files created by previous run ***${NC}\n"
 rm -dr zkp/build/ || true
 rm -dr offchain/build/ || true
-
-printf "${GREEN}*** Delete zkp/contracts/MerkleTree.sol created by MiMC hash run ***${NC}\n"
 rm zkp/contracts/MerkleTree.sol || true
+rm docker-compose.override.yml || true
 
 printf "${GREEN}*** Pull zokrates docker image ***${NC}\n"
 docker pull zokrates/zokrates:0.5.1
-
-printf "${GREEN}*** docker-compose Build ***${NC}\n"
-docker-compose build
 
 printf "${GREEN}*** Installing zkp-util dependencies"
 pushd zkp-utils
 npm ci
 popd
 
-if [[ "$1" == "compliance" ]]
+if [[ "$1" == "compliance" || "$1" == "mimc" ]]
 then
-	printf "${RED}Using the compliance extensions${NC}\n"
-
-  printf "${GREEN}*** Launching containerized ganache ***${NC}\n"
-	docker-compose -f docker-compose.yml -f docker-compose.override.compliance.yml up -d ganache
-
-  commonSetups
-
-  printf "${GREEN}*** Launching containerized microservices ***${NC}\n"
-  docker-compose -f docker-compose.yml -f docker-compose.override.compliance.yml up
-
-elif [[ -f ./zkp/code/gm17/ft-consolidation-transfer/proving.key && -f ./zkp/code/gm17/ft-consolidation-transfer/verification.key  ]]
-then
-  printf "${GREEN}*** Launching containerized ganache ***${NC}\n"
-  docker-compose up -d ganache
-
-  commonSetups
-
-  printf "${GREEN}*** Launching containerized microservices ***${NC}\n"
-  docker-compose -f docker-compose.yml -f docker-compose.override.mimc.yml up
+  cp docker-compose.override.$1.yml docker-compose.override.yml
+  launchContainers
 
 else
-	printf "${GREEN}*** docker-compose Build ***${NC}\n"
-  docker-compose build
-
-  printf "${GREEN}*** Launching containerized ganache ***${NC}\n"
-  docker-compose up -d ganache
-
-  commonSetups
-
-  printf "${GREEN}*** Launching containerized microservices ***${NC}\n"
-  docker-compose up
+  launchContainers
 fi

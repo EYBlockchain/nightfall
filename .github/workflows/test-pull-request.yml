@@ -170,7 +170,7 @@ jobs:
           sudo ln -s /dev/ft-batch-transfer zkp/code/gm17/ft-batch-transfer
           df -h
       - name: Run integration test
-        run: ./nightfall-test
+        run: ./nightfall-test mimc
       - name: If integration test failed, upload logs files as artifacts
         if: failure()
         uses: actions/upload-artifact@master

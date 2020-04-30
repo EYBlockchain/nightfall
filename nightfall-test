@@ -7,27 +7,45 @@ NC='\033[0m'
 
 declare isTestFailed=false
 
-commonSetups(){
+launchContainersAndRunIntegrationTest(){
+  printf "${GREEN}*** Docker Compose Build ***${NC}\n"
+  docker-compose build
+
+  printf "${GREEN}*** Launching containerized ganache ***${NC}\n"
+  docker-compose up -d ganache
+
   printf "${GREEN}*** Deploying all contracts ***${NC}\n"
   docker-compose run --rm truffle-offchain migrate --reset --network=default
   docker-compose run --rm truffle-zkp migrate --reset --network=default
-}
 
-storeLogs(){
+  printf "${GREEN}*** Launching containerized microservices ***${NC}\n"
+  if [[ -f docker-compose.override.yml ]]
+  then
+    docker-compose -f docker-compose.yml -f docker-compose.override.yml -f ./integration-test/docker-compose.test.yml up -d api-gateway
+  else
+    docker-compose -f docker-compose.yml -f ./integration-test/docker-compose.test.yml up -d api-gateway
+  fi
+
   # save all test logs to a file in background
   printf "${GREEN}*** Saving the test logs to nightfall_test.log file ***${NC}\n"
   docker-compose logs -f &> nightfall_test.log &disown
+
+  # delay needed to ensure all container are in running state.
+  sleep 30
+
+  printf "${GREEN}*** Run Integration test ***${NC}\n"
+  npm run $1 || isTestFailed=true
 }
+
 
 printf "${GREEN}*** Cleaning up all test containers ***${NC}\n"
 docker-compose down -v || true
 
-printf  "${GREEN}*** Delete zkp and offchain contract's build folder ***${NC}\n"
+printf  "${GREEN}*** Delete files created by previous run ***${NC}\n"
 rm -dr zkp/build/ || true
 rm -dr offchain/build/ || true
-
-printf "${GREEN}*** Delete zkp/contracts/MerkleTree.sol created by MiMC hash run ***${NC}\n"
 rm zkp/contracts/MerkleTree.sol || true
+rm docker-compose.override.yml || true
 
 printf "${GREEN}*** Pull zokrates docker image ***${NC}\n"
 docker pull zokrates/zokrates:0.5.1
@@ -40,69 +58,13 @@ pushd zkp-utils
 npm ci
 popd
 
-if [[ "$1" == "compliance" ]]
+if [[ "$1" == "compliance" || "$1" == "mimc" ]]
 then
-  printf "${RED}Using the compliance extensions${NC}\n"
-
-  printf "${GREEN}*** docker-compose Build ***${NC}\n"
-  docker-compose -f docker-compose.yml -f docker-compose.override.compliance.yml build
-
-  printf "${GREEN}*** Launching containerized ganache ***${NC}\n"
-  docker-compose -f docker-compose.yml -f docker-compose.override.compliance.yml up -d ganache
-
-  commonSetups
-
-  printf "${GREEN}*** Launching containerized microservices ***${NC}\n"
-  docker-compose -f docker-compose.yml -f docker-compose.override.compliance.yml -f ./integration-test/docker-compose.test.yml up -d api-gateway
-
-  storeLogs
-
-  # delay needed to ensure all container are in running state.
-  sleep 30
-
-  printf "${GREEN}*** Run Integration test ***${NC}\n"
-  npm run test-rc || isTestFailed=true
-
-elif [[ -f ./zkp/code/gm17/ft-consolidation-transfer/proving.key && -f ./zkp/code/gm17/ft-consolidation-transfer/verification.key  ]]
-then
-  printf "${GREEN}*** docker-compose Build ***${NC}\n"
-  docker-compose -f docker-compose.yml -f docker-compose.override.mimc.yml build
-
-  printf "${GREEN}*** Launching containerized ganache ***${NC}\n"
-  docker-compose -f docker-compose.yml -f docker-compose.override.mimc.yml up -d ganache
-
-  commonSetups
-
-  printf "${GREEN}*** Launching containerized microservices ***${NC}\n"
-  docker-compose -f docker-compose.yml -f docker-compose.override.mimc.yml -f ./integration-test/docker-compose.test.yml up -d api-gateway
-
-  storeLogs
-
-  # delay needed to ensure all container are in running state.
-  sleep 30
-
-  printf "${GREEN}*** Run Integration test ***${NC}\n"
-  npm run test-mimc || isTestFailed=true
+  cp docker-compose.override.$1.yml docker-compose.override.yml
+  launchContainersAndRunIntegrationTest test-$1
 
 else
-  printf "${GREEN}*** docker-compose Build ***${NC}\n"
-  docker-compose build
-
-  printf "${GREEN}*** Launching containerized ganache ***${NC}\n"
-  docker-compose up -d ganache
-
-  commonSetups
-
-  printf "${GREEN}*** Launching containerized microservices ***${NC}\n"
-  docker-compose -f docker-compose.yml -f ./integration-test/docker-compose.test.yml up -d api-gateway
-
-  storeLogs
-
-  # delay needed to ensure all container are in running state.
-  sleep 30
-
-  printf "${GREEN}*** Run Integration test ***${NC}\n"
-  npm run test || isTestFailed=true
+  launchContainersAndRunIntegrationTest test
 fi
 
 printf "${GREEN}*** List all containers with their Ips ***${NC}\n"
