@@ -67,6 +67,8 @@ else
   launchContainersAndRunIntegrationTest test
 fi
 
+df -h
+
 printf "${GREEN}*** List all containers with their Ips ***${NC}\n"
 docker inspect -f '{{.Name}} {{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $(docker-compose ps -q)
 

@@ -153,7 +153,7 @@ jobs:
         run: |
           sudo usermod -a -G sudo runner
           sudo swapoff -a
-          sudo fallocate -l 12G /mnt/swapfile
+          sudo fallocate -l 14G /mnt/swapfile
           sudo mkswap /mnt/swapfile
           sudo swapon /mnt/swapfile
       - name: Rename mimc docker-compose yml file
