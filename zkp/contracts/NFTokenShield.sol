@@ -138,6 +138,11 @@ contract NFTokenShield is Ownable, MerkleTree {
         bytes32 _nullifier,
         bytes32 _commitment
     ) external {
+
+        // check inputs vs on-chain states
+        require(nullifiers[_nullifier] == 0, "The commitment being spent has already been nullified!");
+        require(roots[_root] == _root, "The input root has never been the root of the Merkle Tree");
+
         // gas measurement:
         uint256 gasCheckpoint = gasleft();
 
@@ -157,10 +162,6 @@ contract NFTokenShield is Ownable, MerkleTree {
         // gas measurement:
         uint256 gasUsedByVerifierContract = gasCheckpoint - gasleft();
         gasCheckpoint = gasleft();
-
-        // check inputs vs on-chain states
-        require(nullifiers[_nullifier] == 0, "The commitment being spent has already been nullified!");
-        require(roots[_root] == _root, "The input root has never been the root of the Merkle Tree");
 
         // update contract states
         nullifiers[_nullifier] = _nullifier; // remember we spent it
@@ -187,6 +188,11 @@ contract NFTokenShield is Ownable, MerkleTree {
         uint256 _tokenId,
         uint256 _payTo
     ) public {
+
+        // check inputs vs on-chain states
+        require(roots[_root] == _root, "The input root has never been the root of the Merkle Tree");
+        require(nullifiers[_nullifier] == 0, "The commitment being spent has already been nullified!");
+        
         // gas measurement:
         uint256 gasCheckpoint = gasleft();
 
@@ -210,10 +216,6 @@ contract NFTokenShield is Ownable, MerkleTree {
         // gas measurement:
         uint256 gasUsedByVerifierContract = gasCheckpoint - gasleft();
         gasCheckpoint = gasleft();
-
-        // check inputs vs on-chain states
-        require(roots[_root] == _root, "The input root has never been the root of the Merkle Tree");
-        require(nullifiers[_nullifier] == 0, "The commitment being spent has already been nullified!");
 
         // update contract states
         nullifiers[_nullifier] = _nullifier; //add the nullifier to the list of nullifiers
