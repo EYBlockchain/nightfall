@@ -27,7 +27,6 @@ contract PublicKeyTree is MiMC, Ownable {
   function addPublicKeyToTree(bytes32 key) internal {
     // firstly we need to mod the key to Fq(zok) because that's what Zokrates and MiMC will do
     key = bytes32(uint256(key) % q);
-    require(M[nextAvailableIndex] == 0, "Trying to add key to a non-empty leaf");
     require(L[key] == 0, "The key being added is already in the Public Key tree");
     M[nextAvailableIndex] = key;
     L[key] = nextAvailableIndex; // reverse lookup for a leaf
@@ -61,7 +60,6 @@ contract PublicKeyTree is MiMC, Ownable {
     bytes32 blacklistedKey = bytes32(uint256(keyLookup[addr]) % q); //keyLookup stores the key before conversition to Fq
     require(uint256(blacklistedKey) != 0, 'The key being blacklisted does not exist');
     uint256 blacklistedIndex = L[blacklistedKey];
-    require(blacklistedIndex >= FIRST_LEAF_INDEX, 'The blacklisted index is not that of a leaf');
     delete M[blacklistedIndex];
     // and recalculate the root
     bytes32 root = updatePathToRoot(blacklistedIndex);
@@ -110,7 +108,6 @@ contract PublicKeyTree is MiMC, Ownable {
     bytes32 blacklistedKey = bytes32(uint256(keyLookup[addr]) % q); //keyLookup stores the key before conversition to Fq
     require(uint256(blacklistedKey) != 0, 'The key being unblacklisted does not exist');
     uint256 blacklistedIndex = L[blacklistedKey];
-    require(blacklistedIndex >= FIRST_LEAF_INDEX, 'The blacklisted index is not that of a leaf');
     M[blacklistedIndex] = blacklistedKey;
     // and recalculate the root
     bytes32 root = updatePathToRoot(blacklistedIndex);
@@ -142,7 +139,7 @@ contract PublicKeyTree is MiMC, Ownable {
   Updates each node of the Merkle Tree on the path from leaf to root.
   p - is the Index of the new token within M.
   */
-  function updatePathToRoot(uint256 p) internal returns (bytes32) {
+  function updatePathToRoot(uint256 p) private returns (bytes32) {
 
   /*
   If Z were the token, then the p's mark the 'path', and the s's mark the 'sibling path'
