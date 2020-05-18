@@ -139,12 +139,12 @@ contract NFTokenShield is Ownable, MerkleTree {
         bytes32 _commitment
     ) external {
 
+        // gas measurement:
+        uint256 gasCheckpoint = gasleft();
+
         // check inputs vs on-chain states
         require(nullifiers[_nullifier] == 0, "The commitment being spent has already been nullified!");
         require(roots[_root] == _root, "The input root has never been the root of the Merkle Tree");
-
-        // gas measurement:
-        uint256 gasCheckpoint = gasleft();
 
         // Check that the publicInputHash equals the hash of the 'public inputs':
         bytes31 publicInputHash = bytes31(bytes32(_inputs[0])<<8);
@@ -189,12 +189,12 @@ contract NFTokenShield is Ownable, MerkleTree {
         uint256 _payTo
     ) public {
 
+        // gas measurement:
+        uint256 gasCheckpoint = gasleft();
+
         // check inputs vs on-chain states
         require(roots[_root] == _root, "The input root has never been the root of the Merkle Tree");
         require(nullifiers[_nullifier] == 0, "The commitment being spent has already been nullified!");
-        
-        // gas measurement:
-        uint256 gasCheckpoint = gasleft();
 
         // Check that the publicInputHash equals the hash of the 'public inputs':
         bytes31 publicInputHash = bytes31(bytes32(_inputs[0])<<8);

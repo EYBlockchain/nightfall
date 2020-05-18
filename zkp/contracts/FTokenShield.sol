@@ -139,16 +139,16 @@ contract FTokenShield is Ownable, MerkleTree, PublicKeyTree {
       bytes32 _commitmentF
     ) external {
 
+      // gas measurement:
+      uint256[3] memory gasUsed; // array needed to stay below local stack limit
+      gasUsed[0] = gasleft();
+
       // check inputs vs on-chain states
       require(roots[_root] == _root, "The input root has never been the root of the Merkle Tree");
       require(_nullifierC != _nullifierD, "The two input nullifiers must be different!");
       require(_commitmentE != _commitmentF, "The new commitments (commitmentE and commitmentF) must be different!");
       require(nullifiers[_nullifierC] == 0, "The commitment being spent (commitmentE) has already been nullified!");
       require(nullifiers[_nullifierD] == 0, "The commitment being spent (commitmentF) has already been nullified!");
-
-      // gas measurement:
-      uint256[3] memory gasUsed; // array needed to stay below local stack limit
-      gasUsed[0] = gasleft();
 
       // Check that the publicInputHash equals the hash of the 'public inputs':
       bytes31 publicInputHash = bytes31(bytes32(_inputs[0]) << 8);
@@ -196,12 +196,12 @@ contract FTokenShield is Ownable, MerkleTree, PublicKeyTree {
       bytes32[] calldata _commitments
     ) external {
 
+      // gas measurement:
+      uint256 gasCheckpoint = gasleft();
+
       // check inputs vs on-chain states
       require(roots[_root] == _root, "The input root has never been the root of the Merkle Tree");
       require(nullifiers[_nullifier] == 0, "The commitment being spent has already been nullified!");
-
-      // gas measurement:
-      uint256 gasCheckpoint = gasleft();
 
       // Check that the publicInputHash equals the hash of the 'public inputs':
       bytes31 publicInputHash = bytes31(bytes32(_inputs[0]) << 8);
@@ -238,15 +238,15 @@ contract FTokenShield is Ownable, MerkleTree, PublicKeyTree {
   */
   function consolidationTransfer(uint256[] calldata _proof, uint256[] calldata _inputs, bytes32 _root, bytes32[] calldata _nullifiers, bytes32 _commitment) external {
 
+      // gas measurement:
+      uint256 gasCheckpoint = gasleft();
+
       // check inputs vs on-chain states
       require(roots[_root] == _root, "The input root has never been the root of the Merkle Tree");
       for (uint i = 0; i < _nullifiers.length; i++) {
         require(nullifiers[_nullifiers[i]] == 0, "The commitment being spent has already been nullified!");
         nullifiers[_nullifiers[i]] = _nullifiers[i]; //remember we spent it
       }
-
-      // gas measurement:
-      uint256 gasCheckpoint = gasleft();
 
       // Check that the publicInputHash equals the hash of the 'public inputs':
       // bytes31 publicInputHash = bytes31(bytes32(_inputs[0]) << 8);
@@ -277,12 +277,12 @@ contract FTokenShield is Ownable, MerkleTree, PublicKeyTree {
 
   function burn(bytes32 tokenContractAddress, uint256[] calldata _proof, uint256[] calldata _inputs, bytes32 _root, bytes32 _nullifier, uint128 _value, uint256 _payTo) external {
 
+      // gas measurement:
+      uint256 gasCheckpoint = gasleft();
+
       // check inputs vs on-chain states
       require(roots[_root] == _root, "The input root has never been the root of the Merkle Tree");
       require(nullifiers[_nullifier]==0, "The commitment being spent has already been nullified!");
-
-      // gas measurement:
-      uint256 gasCheckpoint = gasleft();
 
       // Check that the publicInputHash equals the hash of the 'public inputs':
       bytes31 publicInputHash = bytes31(bytes32(_inputs[0]) << 8);
@@ -369,6 +369,10 @@ contract FTokenShield is Ownable, MerkleTree, PublicKeyTree {
   */
   function transferRC(uint256[] calldata _proof, uint256[] calldata _inputs, bytes32[] calldata publicInputs) external {
 
+      // gas measurement:
+      uint256[3] memory gasUsed; // array needed to stay below local stack limit
+      gasUsed[0] = gasleft();
+
       //TODO - need to enforce correct public keys!!
       // Unfortunately stack depth constraints mandate an array, so we can't use more friendly names.
       // However, here's a handy guide:
@@ -390,10 +394,6 @@ contract FTokenShield is Ownable, MerkleTree, PublicKeyTree {
       require(publicInputs[10] == compressedAdminPublicKeys[0], 'Admin public key 0 does not match');
       require(publicInputs[11] == compressedAdminPublicKeys[1], 'Admin public key 1 does not match');
       require(publicInputs[12] == compressedAdminPublicKeys[2], 'Admin public key 2 does not match');
-
-      // gas measurement:
-      uint256[3] memory gasUsed; // array needed to stay below local stack limit
-      gasUsed[0] = gasleft();
 
       // Check that the publicInputHash equals the hash of the 'public inputs':
       bytes31 publicInputHash = bytes31(bytes32(_inputs[0]) << 8);
@@ -431,6 +431,9 @@ contract FTokenShield is Ownable, MerkleTree, PublicKeyTree {
   }
   function burnRC(uint256[] calldata _proof, uint256[] calldata _inputs, bytes32[] calldata publicInputs) external {
 
+      // gas measurement:
+      uint256 gasCheckpoint = gasleft();
+      
       // Unfortunately stack depth constraints mandate an array, so we can't use more friendly names.
       // publicInputs[0] - tokenContractAddress (left-padded with 0s)
       // publicInputs[1] - root (of the commitment Merkle tree)
@@ -445,9 +448,6 @@ contract FTokenShield is Ownable, MerkleTree, PublicKeyTree {
       require(nullifiers[publicInputs[2]]==0, "The commitment being spent has already been nullified!");
       require(publicKeyRoots[publicInputs[5]] != 0,"The input public key root has never been a root of the Merkle Tree");
       require(publicInputs[8] == compressedAdminPublicKeys[0], 'Admin public key 0 does not match');
-
-      // gas measurement:
-      uint256 gasCheckpoint = gasleft();
 
       // Check that the publicInputHash equals the hash of the 'public inputs':
       bytes31 publicInputHash = bytes31(bytes32(_inputs[0]) << 8);
