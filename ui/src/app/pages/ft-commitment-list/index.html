@@ -44,6 +44,16 @@
               </div>
             </div>
           </div>
+          <ngb-pagination
+            *ngIf="transactions"
+            class="d-flex justify-content-end zkp-pagination"
+            (pageChange)="pageChanged($event)"
+            [collectionSize]="totalCollection"
+            [pageSize]="pageSize"
+            [(page)]="pageNo"
+            aria-label="Default pagination"
+          >
+          </ngb-pagination>
           <div class="text-center" *ngIf="!transactions">No {{ ftName }} Commitment's Found</div>
         </div>
       </div>

@@ -193,7 +193,11 @@
                   <ng-container *ngFor="let transaction of nftCommitmentTransactions">
                     <tr *ngIf="transaction.transactionType === 'mint'">
                       <td>{{ utilService.replaceUnderscores(transaction.transactionType) }}</td>
-                      <td [title]="transaction.outputCommitments[0].tokenId">{{ transaction.outputCommitments[0].tokenId.slice(0, 20) }}....</td>
+                      <td *ngIf="!transaction.isFailed" [title]="transaction.outputCommitments[0].tokenId">{{ transaction.outputCommitments[0].tokenId.slice(0, 20) }}....</td>
+                      <td *ngIf="transaction.isFailed">
+                        <i class="fa fa-ban" aria-hidden="true"></i>
+                        <span class="tx-failed">TRANSACTION FAILED</span>
+                      </td>
                       <td>{{ transaction.outputCommitments[0].tokenUri }}</td>
                       <td>{{ transaction.createdAt | date: 'dd/MM/yyyy hh:mm:ss a' }}</td>
                       <td></td>
@@ -201,7 +205,11 @@
                     </tr>
                     <tr *ngIf="transaction.transactionType === 'transfer_outgoing'">
                       <td>{{ utilService.replaceUnderscores(transaction.transactionType) }}</td>
-                      <td [title]="transaction.outputCommitments[0].tokenId">{{ transaction.outputCommitments[0].tokenId.slice(0, 20) }}....</td>
+                      <td *ngIf="!transaction.isFailed" [title]="transaction.outputCommitments[0].tokenId">{{ transaction.outputCommitments[0].tokenId.slice(0, 20) }}....</td>
+                      <td *ngIf="transaction.isFailed">
+                        <i class="fa fa-ban" aria-hidden="true"></i>
+                        <span class="tx-failed">TRANSACTION FAILED</span>
+                      </td>
                       <td>{{ transaction.outputCommitments[0].tokenUri }}</td>
                       <td>{{ transaction.createdAt | date: 'dd/MM/yyyy hh:mm:ss a' }}</td>
                       <td>{{ transaction.receiver.name }}</td>
@@ -217,7 +225,11 @@
                     </tr>
                     <tr *ngIf="transaction.transactionType === 'burn'">
                       <td>{{ utilService.replaceUnderscores(transaction.transactionType) }}</td>
-                      <td [title]="transaction.inputCommitments[0].tokenId">{{ transaction.inputCommitments[0].tokenId.slice(0, 20) }}....</td>
+                      <td *ngIf="!transaction.isFailed" [title]="transaction.inputCommitments[0].tokenId">{{ transaction.inputCommitments[0].tokenId.slice(0, 20) }}....</td>
+                       <td *ngIf="transaction.isFailed">
+                        <i class="fa fa-ban" aria-hidden="true"></i>
+                        <span class="tx-failed">TRANSACTION FAILED</span>
+                      </td>
                       <td>{{ transaction.inputCommitments[0].tokenUri }}</td>
                       <td>{{ transaction.createdAt | date: 'dd/MM/yyyy hh:mm:ss a' }}</td>
                       <td>{{ transaction.receiver.name }}</td>
@@ -306,8 +318,12 @@
 
                     <tr *ngIf="transaction.transactionType === 'mint'">
                       <td>{{ utilService.replaceUnderscores(transaction.transactionType) }}</td>
-                      <td>{{ ftSymbol + ' ' + utilService.convertToNumber(transaction.outputCommitments[0].value) }}</td>
-                      <td [title]="transaction.outputCommitments[0].commitment">{{ transaction.outputCommitments[0].commitment }}</td>
+                      <td >{{ ftSymbol + ' ' + utilService.convertToNumber(transaction.outputCommitments[0].value) }}</td>
+                      <td *ngIf="!transaction.isFailed" [title]="transaction.outputCommitments[0].commitment">{{ transaction.outputCommitments[0].commitment }}</td>
+                      <td *ngIf="transaction.isFailed">
+                        <i class="fa fa-ban" aria-hidden="true"></i>
+                        <span class="tx-failed">TRANSACTION FAILED</span>
+                      </td>
                       <td>{{ transaction.createdAt | date: 'dd/MM/yyyy hh:mm:ss a' }}</td>
                       <td></td>
                       <td></td>
@@ -325,7 +341,11 @@
                     <tr *ngIf="transaction.transactionType === 'burn'">
                       <td>{{ utilService.replaceUnderscores(transaction.transactionType) }}</td>
                       <td>{{ ftSymbol + ' ' + utilService.convertToNumber(transaction.inputCommitments[0].value) }}</td>
-                      <td [title]="transaction.inputCommitments[0].commitment">{{ transaction.inputCommitments[0].commitment }}</td>
+                      <td *ngIf="!transaction.isFailed" [title]="transaction.inputCommitments[0].commitment">{{ transaction.inputCommitments[0].commitment }}</td>
+                      <td *ngIf="transaction.isFailed">
+                        <i class="fa fa-ban" aria-hidden="true"></i>
+                        <span class="tx-failed">TRANSACTION FAILED</span>
+                      </td>
                       <td>{{ transaction.createdAt | date: 'dd/MM/yyyy hh:mm:ss a' }}</td>
                       <td>{{transaction.receiver.name}}</td>
                       <td></td>
@@ -345,7 +365,13 @@
                         {{ utilService.replaceUnderscores(transaction.transactionType) }}
                       </td>
                       <td>{{ transaction.receiver ? (ftSymbol + ' ' + utilService.convertToNumber(transaction.outputCommitments[0].value)) : (ftSymbol + ' ' + utilService.sumCommitmentValues(transaction.outputCommitments).value) }}</td>
-                      <td title="Click to see list of commitments"><span class="active fas collapsed" >View commitments</span></td>
+                      <td title="Click to see list of commitments">
+                        <span *ngIf="transaction.isFailed">
+                          <i class="fa fa-ban" aria-hidden="true"></i>
+                          <span class="tx-failed">TRANSACTION FAILED</span>
+                        </span>
+                        <span class="active fas collapsed" >View commitments</span>
+                      </td>
                       <td>{{ transaction.createdAt | date: 'dd/MM/yyyy hh:mm:ss a' }}</td>
                       <td>{{transaction.receiver && transaction.receiver.name}}</td>
                       <td></td>
@@ -371,8 +397,13 @@
                             </tr>
                             <tr *ngFor="let commitments of transaction.outputCommitments; index as i">
                               <td>{{ ftSymbol +' ' +utilService.convertToNumber(commitments.value) }}</td>
-                              <td>{{ commitments.commitment }}</td>
-                              <td>{{ commitments.owner.name }}</td>
+                              <td *ngIf="!transaction.isFailed">{{ commitments.commitment }}</td>
+                               <td *ngIf="transaction.isFailed">
+                                <i class="fa fa-ban" aria-hidden="true"></i>
+                                <span class="tx-failed">TRANSACTION FAILED</span>
+                              </td>
+                              <td *ngIf="!transaction.isFailed">{{ commitments.owner.name }}</td>
+                              <td *ngIf="transaction.isFailed"></td>
                             </tr>                               
                           </table>
                         </div>

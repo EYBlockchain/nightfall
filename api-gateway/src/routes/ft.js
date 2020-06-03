@@ -110,7 +110,7 @@ router.route('/burnFToken').post(burnFToken);
  * @apiSuccess (Success 200) address of ERC-20 tokens.
  *
  * @apiSuccessExample {json} Success response:
- *  HTTPS 200 OK
+ * HTTPS 200 OK
  *	 {
  *	   "data":
  *        {
@@ -133,7 +133,7 @@ router.route('/getFTokenContractAddress').get(getFTokenAddress);
  * @apiSuccess (Success 200) address of ERC-20 tokens.
  *
  * @apiSuccessExample {json} Success response:
- *  HTTPS 200 OK
+ * HTTPS 200 OK
  *	 {
  *	   "data":
  *     {
@@ -177,7 +177,7 @@ router.route('/getFTokenInfo').get(getFTokenInfo);
  * @apiSuccess (Success 200) {String} message insert status message.
  *
  * @apiSuccessExample {json} Success response:
- *     HTTPS 200 OK
+ * HTTPS 200 OK
  *    {
  *    "message": "inserted"
  *    }
@@ -209,7 +209,7 @@ router.post('/insertFTTransactionToDb', insertFTTransactionToDb);
  *
  *
  * @apiSuccessExample {json} Success response:
- *     HTTPS 200 OK
+ * HTTPS 200 OK
  *    {
  *      "data":[
  *        {

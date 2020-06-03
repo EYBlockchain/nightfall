@@ -70,12 +70,12 @@ export default class NftBurnComponent implements OnInit , AfterContentInit {
     this.selectedCommitment = this.selectedCommitmentList[0];
     this.nftService.burnNFToken(this.selectedCommitment).subscribe( data => {
         this.isRequesting = false;
-        this.toastr.success('Burn Successful');
+        this.toastr.success('Burn Token Successfully.', 'Success');
         this.selectedCommitment = undefined;
         this.router.navigate(['/overview'], { queryParams: { selectedTab: 'nft' } });
       }, error => {
         this.isRequesting = false;
-        this.toastr.error('Please try again', 'Error');
+        this.toastr.error('Please try again.', 'Error');
     });
   }
 
@@ -97,12 +97,10 @@ export default class NftBurnComponent implements OnInit , AfterContentInit {
    * @param item {Object} Item to be removed.
    */
   onRemove(item) {
-    console.log('selected items', this.selectedCommitmentList, item);
     const newList = this.selectedCommitmentList.filter((it) => {
       return item._id !== it._id;
     });
     this.selectedCommitmentList = newList;
-    console.log('selected new items', this.selectedCommitmentList);
   }
 
   /**

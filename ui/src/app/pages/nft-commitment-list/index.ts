@@ -92,7 +92,7 @@ export default class NftCommitmentListComponent implements OnInit {
       }
     }, error => {
       this.isRequesting = false;
-      this.toastr.error('Please Enter a valid SKU.', error);
+      this.toastr.error('Please Enter a valid SKU.', 'Error');
     });
   }
 

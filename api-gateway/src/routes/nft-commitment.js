@@ -35,7 +35,7 @@ router.route('/checkCorrectnessForNFTCommitment').post(checkCorrectnessForNFTCom
  *   .success((res, status) => doSomethingHere())
  *   .error((err, status) => doSomethingHere());
  *
- * @apiSuccess (Success 200) {String} commitment Token commitment number.
+ * @apiSuccess (Success 200) {String} commitment      Token commitment number.
  * @apiSuccess (Success 200) {Number} commitmentIndex token index value from blockchain.
  *
  * @apiSuccessExample {json} Success response:
@@ -53,9 +53,9 @@ router.route('/mintNFTCommitment').post(mintToken);
  * @apiName  Transfer a ERC-721 commitment
  * @apiGroup ERC-721 commitment
  *
- * @apiParam (Request body) {Object} inputCommitments selected commitments.
- * @apiParam (Request body) {Object} outputCommitments Hex String of value.
- * @apiParam (Request body) {Object} receiver Object with Receiver name.
+ * @apiParam (Request body) {Object} inputCommitments   selected commitments.
+ * @apiParam (Request body) {Object} outputCommitments  Hex String of value.
+ * @apiParam (Request body) {Object} receiver           Object with Receiver name.
  *
  * @apiExample {js} Example usage:
  * const data = {
@@ -79,8 +79,9 @@ router.route('/mintNFTCommitment').post(mintToken);
  *   .success((res, status) => doSomethingHere())
  *   .error((err, status) => doSomethingHere());
  *
- * @apiSuccess (Success 200) {String} commitment Token commitment number.
- * @apiSuccess (Success 200) {Number} commitmentIndex token index value from blockchain.
+ * @apiSuccess (Success 200) {String} commitment        Token commitment number.
+ * @apiSuccess (Success 200) {Number} commitmentIndex   token index value from blockchain.
+ * @apiSuccess (Success 200) {String} salt              Salt of the non fungible token.
  *
  * @apiSuccessExample {json} Success response:
  *     HTTPS 200 OK
@@ -99,13 +100,13 @@ router.route('/transferNFTCommitment').post(transferToken);
  * @apiName  Burn a ERC-721 commitment
  * @apiGroup ERC-721 commitment
  *
- * @apiParam (Request body) {String} tokenId Hex String of a non fungible token to burn.
- * @apiParam (Request body) {String} tokenUri URI of the non fungible token.
- * @apiParam (Request body) {String} salt Salt of the non fungible token.
- * @apiParam (Request body) {String} senderSecretKey Secret key of Transferror (Alice).
- * @apiParam (Request body) {String} commitment Token commitment of the non fungible token.
- * @apiParam (Request body) {String} commitmentIndex Token index of the non fungible token.
- * @apiParam (Request body) {String} reciever Reciever name of the non fungible token.
+ * @apiParam (Request body) {String} tokenId          Hex String of a non fungible token to burn.
+ * @apiParam (Request body) {String} tokenUri         URI of the non fungible token.
+ * @apiParam (Request body) {String} salt             Salt of the non fungible token.
+ * @apiParam (Request body) {String} senderSecretKey  Secret key of Transferror (Alice).
+ * @apiParam (Request body) {String} commitment       Token commitment of the non fungible token.
+ * @apiParam (Request body) {String} commitmentIndex  Token index of the non fungible token.
+ * @apiParam (Request body) {String} reciever         Reciever name of the non fungible token.
  *
  * @apiExample {js} Example usage:
  * const data = {
@@ -147,13 +148,13 @@ router.route('/burnNFTCommitment').post(burnToken);
  * @apiName  Insert ERC-721 commitment
  * @apiGroup ERC-721 commitment
  *
- * @apiParam (Request body) {String} tokenId Hex String of a non fungible token.
- * @apiParam (Request body) {String} tokenUri URI of the non fungible token.
- * @apiParam (Request body) {String} salt Salt of the non fungible token.
- * @apiParam (Request body) {String} commitment Token commitment of the non fungible token.
- * @apiParam (Request body) {String} commitmentIndex Token index of the non fungible token.
- * @apiParam (Request body) {Boolean} isMinted if data is for minted token.
- * @apiParam (Request body) {Bolean} isReceived if data is transaferred token.
+ * @apiParam (Request body) {String} tokenId          Hex String of a non fungible token.
+ * @apiParam (Request body) {String} tokenUri         URI of the non fungible token.
+ * @apiParam (Request body) {String} salt             Salt of the non fungible token.
+ * @apiParam (Request body) {String} commitment       Token commitment of the non fungible token.
+ * @apiParam (Request body) {String} commitmentIndex  Token index of the non fungible token.
+ * @apiParam (Request body) {Boolean} isMinted        if data is for minted token.
+ * @apiParam (Request body) {Bolean} isReceived       if data is transaferred token.
  *
  * @apiExample {js} Example usage:
  * const data = {
@@ -186,8 +187,8 @@ router.post('/insertNFTCommitmentToDb', insertNFTCommitmentToDb);
  * @apiName  List all ERC-721 commitments
  * @apiGroup ERC-721 commitment
  *
- * @apiParam (Request query) {String} limit page size (optional).
- * @apiParam (Request query) {String} pageNo page number (optional).
+ * @apiParam (Request query) {String} limit   page size (optional).
+ * @apiParam (Request query) {String} pageNo  page number (optional).
 
  *
  * @apiExample {js} Example usage:
@@ -200,9 +201,12 @@ router.post('/insertNFTCommitmentToDb', insertNFTCommitmentToDb);
  *   .success((res, status) => doSomethingHere())
  *   .error((err, status) => doSomethingHere());
  *
- * @apiSuccess (Success 200) {Array} data ERC-721 commitments.
- * @apiSuccess (Success 200) {Array} totalCount Total no. of tokens.
- *
+ * @apiSuccess (Success 200) {String} tokenId          Hex String of a non fungible token.
+ * @apiSuccess (Success 200) {String} tokenUri         URI of the non fungible token.
+ * @apiSuccess (Success 200) {String} salt             Salt of the non fungible token.
+ * @apiSuccess (Success 200) {String} commitment       Token commitment of the non fungible token.
+ * @apiSuccess (Success 200) {String} commitmentIndex  Token index of the non fungible token.
+ * @apiSuccess (Success 200) {Boolean} isMinted        if data is for minted token.
  * @apiSuccessExample {json} Success response:
  *     HTTPS 200 OK
  *    {
@@ -231,8 +235,8 @@ router.get('/getNFTCommitments', getNFTCommitments);
  * @apiName  List all ERC-721 commitment transactions
  * @apiGroup ERC-721 commitment
  *
- * @apiParam (Request query) {String} limit page size (optional).
- * @apiParam (Request query) {String} pageNo page number (optional).
+ * @apiParam (Request query) {String} limit   page size (optional).
+ * @apiParam (Request query) {String} pageNo  page number (optional).
 
  *
  * @apiExample {js} Example usage:
@@ -245,7 +249,11 @@ router.get('/getNFTCommitments', getNFTCommitments);
  *   .success((res, status) => doSomethingHere())
  *   .error((err, status) => doSomethingHere());
  *
- * @apiSuccess (Success 200) {Array} data ERC-721 commitment transactions.
+ * @apiSuccess (Success 200) {String} tokenId          Hex String of a non fungible token.
+ * @apiSuccess (Success 200) {String} tokenUri         URI of the non fungible token.
+ * @apiSuccess (Success 200) {String} salt             Salt of the non fungible token.
+ * @apiSuccess (Success 200) {String} commitment       Token commitment of the non fungible token.
+ * @apiSuccess (Success 200) {String} commitmentIndex  Token index of the non fungible token.
  * @apiSuccess (Success 200) {Array} totalCount Total no. of token transactions.
  *
  * @apiSuccessExample {json} Success response:

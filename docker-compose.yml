@@ -43,6 +43,8 @@ services:
       OFFCHAIN_PORT: 80
       ZKP_HOST: http://zkp
       ZKP_PORT: 80
+      RABBITMQ_HOST: amqp://rabbitmq
+      RABBITMQ_PORT: 5672
     networks:
       - nightfall_network
 
@@ -77,7 +79,7 @@ services:
       - ganache
       - merkle-tree
     volumes:
-      #- ./zkp/.yalc:/app/.yalc
+      # - ./zkp/.yalc:/app/.yalc
       - ./zkp/src:/app/src
       - ./zkp/build:/app/build
       - ./zkp/code:/app/code
@@ -85,8 +87,9 @@ services:
       - ./zkp/__tests__:/app/__tests__
       - ./zkp/config:/app/config
       - /var/run/docker.sock:/var/run/docker.sock
-      - /mnt:/mnt # only for github actions
+      - /dev:/dev # only for github actions
     environment:
+      HASH_TYPE: 'sha' #override this with docker-compose.override.mimc
       BLOCKCHAIN_HOST: ws://ganache
       BLOCKCHAIN_PORT: 8545
       MERKLE_TREE_HOST: http://merkle-tree
@@ -101,12 +104,19 @@ services:
       context: ./ui
       dockerfile: Dockerfile
     restart: on-failure
+    depends_on:
+      - rabbitmq
     volumes:
       - ./ui/src:/app/src
       - ./ui/angular.json:/app/angular.json
       - ./ui/tsconfig.json:/app/tsconfig.json
     ports:
       - '8000:80'
+    environment:
+      API_GATEWAY_HOST: http://localhost
+      API_GATEWAY_PORT: 8001
+      RABBITMQ_HOST: ws://localhost
+      RABBITMQ_PORT: 15674
     networks:
       - nightfall_network
 
@@ -131,6 +141,12 @@ services:
       - ./zkp-utils:/app/node_modules/zkp-utils
       - ./database/config:/app/config
       - ./database/setup-mongo-acl-for-new-users.js:/app/setup-mongo-acl-for-new-users.js
+    environment:
+      MONGO_HOST: mongo-nightfall
+      MONGO_PORT: 27017
+      MONGO_NAME: nightfall
+      MONGO_USERNAME: admin
+      MONGO_PASSWORD: admin
     networks:
       - nightfall_network
 
@@ -175,6 +191,9 @@ services:
       ETH_GAS_PRICE: 20000000000
     volumes:
       - ./zkp/contracts/:/truffle/contracts:delegated
+      - /truffle/contracts/mimc
+      - /truffle/contracts/sha
+      - ./zkp/contracts/sha/MerkleTree.sol:/truffle/contracts/MerkleTree.sol:delegated
       - ./zkp/migrations/:/truffle/migrations:delegated
       - ./zkp/build/contracts/:/truffle/build/contracts:cached
       - ./zkp/test/:/truffle/test:delegated
@@ -188,7 +207,7 @@ services:
       - nightfall_network
 
   merkle-tree:
-    image: eyblockchain/timber:v1.3.0
+    image: eyblockchain/timber:v2.1.0
     restart: on-failure
     depends_on:
       - mongo-merkle-tree
@@ -197,6 +216,7 @@ services:
       - ./config/merkle-tree:/app/config # mount point might be different if configuring from another application
       - ./zkp/contracts/:/app/contracts:consistent # required if deploying contracts from within this service (if CONTRACT_LOCATION = 'default')
       - ./zkp/build/:/app/build:consistent # required if CONTRACT_LOCATION = 'default'
+      - app/node_modules
     ports:
       - '9000:80'
     environment:
@@ -225,6 +245,15 @@ services:
     volumes:
       - ./database/docker-entrypoint-initdb.d/02_setup_admin_user.js:/docker-entrypoint-initdb.d/02_setup_admin_user.js
       - mongo-merkle-tree-volume:/data/db
+    networks:
+      - nightfall_network
+
+  rabbitmq:
+    image: rabbitmq
+    volumes:
+      - ./rabbitmq-enabled-plugins:/etc/rabbitmq/enabled_plugins
+    ports:
+      - '15674:15674'
     networks:
       - nightfall_network
 

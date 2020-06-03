@@ -14,14 +14,21 @@ export default class FtCommitmentService {
    * @param {object} data
    */
   insertFTCommitmentTransaction(data) {
-    const { isTransferred, isReceived, isChange, isBurned, isBatchTransferred } = data;
+    const {
+      isTransferred,
+      isReceived,
+      isChange,
+      isBurned,
+      isBatchTransferred,
+      isConsolidateTransferred,
+    } = data;
 
     if (isReceived)
       return this.ftCommitmentTransactionService.insertTransaction({
         ...data,
         transactionType: 'transfer_incoming',
       });
-    if (isTransferred || isBatchTransferred)
+    if (isTransferred || isBatchTransferred || isConsolidateTransferred)
       return this.ftCommitmentTransactionService.insertTransaction({
         ...data,
         transactionType: 'transfer_outgoing',
@@ -64,6 +71,7 @@ export default class FtCommitmentService {
         commitment: commitmentHash,
         isTransferred: { $exists: false },
         isBatchTransferred: { $exists: false },
+        isConsolidateTransferred: { $exists: false },
       },
       { $set: mappedData },
     );
@@ -81,6 +89,7 @@ export default class FtCommitmentService {
         isTransferred: { $exists: false },
         isBatchTransferred: { $exists: false },
         isBurned: { $exists: false },
+        isConsolidateTransferred: { $exists: false },
       });
     }
     const { pageNo, limit } = pageination;
@@ -90,6 +99,7 @@ export default class FtCommitmentService {
         isTransferred: { $exists: false },
         isBatchTransferred: { $exists: false },
         isBurned: { $exists: false },
+        isConsolidateTransferred: { $exists: false },
       },
       undefined,
       { createdAt: -1 },

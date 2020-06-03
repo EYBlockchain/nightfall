@@ -61,7 +61,11 @@ export default class LoginComponent implements OnInit {
         localStorage.setItem('publicKey', data['data']['publicKey']);
         this.isRequesting = false;
         this.sg['name'] = data['data']['name'];
-        this.router.navigate(['/overview']);
+        if (data['data']['name'] === 'admin') {
+          this.router.navigate(['/admin']);
+        } else {
+          this.router.navigate(['/overview']);
+        }
 
       },
       (err: HttpErrorResponse) => {
@@ -69,7 +73,7 @@ export default class LoginComponent implements OnInit {
          if (errmsg.indexOf(':') > -1) {
            errmsg = errmsg.split(':')[1];
          }
-        this.toastr.error(errmsg, 'Error');
+        this.toastr.error('Please try again.', 'Error');
         this.isRequesting = false;
       }
     );

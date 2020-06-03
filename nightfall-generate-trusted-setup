@@ -10,16 +10,56 @@ setupList=""
 completedSetups=()
 completedSetupList=""
 selectedSetupsIndexes=""
+setupCmd=setup
+setupAllCmd=setupAll
+
 declare -i index=0
 
 mkdir zkp/code/gm17 || true
 
-# Get available trusted setup names, excluding the 'common' directory
-pushd zkp/code/gm17/
+read -p $'\n''Do you want to use MiMC hashing? (y/n) : ' yn
+case $yn in
+  [Yy]* ) printf "\nDon't forgot to specify docker-compose.override.mimc.yml\n"
+    setupCmd=setup-mimc
+    setupAllCmd=setupAll-mimc
+    mimc=yes
+    mkdir zkp/code/gm17/ft-batch-transfer zkp/code/gm17/ft-burn zkp/code/gm17/ft-consolidation-transfer zkp/code/gm17/ft-mint zkp/code/gm17/ft-transfer zkp/code/gm17/nft-burn zkp/code/gm17/nft-mint zkp/code/gm17/nft-transfer || true
+    ;;
+  [Nn]* )
+    ;;
+  * ) printf "Please answer yes or no.\n"
+    ;;
+esac
+if [ ${setupCmd} != "setup-mimc" ]
+  then
+    read -p 'Do you want to use the compliance version? (y/n) : ' yn
+    case $yn in
+      [Yy]* ) printf "\nOnly fungible token proofs will be used\n"
+        setupCmd=setup-rc
+        setupAllCmd=setupAll-rc
+        mkdir zkp/code/gm17/ft-burn zkp/code/gm17/ft-mint zkp/code/gm17/ft-transfer || true
+        ;;
+      [Nn]* ) mkdir zkp/code/gm17/ft-batch-transfer zkp/code/gm17/ft-burn zkp/code/gm17/ft-mint zkp/code/gm17/ft-transfer zkp/code/gm17/nft-burn zkp/code/gm17/nft-mint zkp/code/gm17/nft-transfer || true
+        ;;
+      * ) printf "Please answer yes or no.\n"
+        ;;
+    esac
+fi
+
+# Get available trusted setup names, excluding the 'common' directory and deployment-specific directories
+pushd zkp/code/gm17
 for d in *
 do
   if [ -d "$d" ] && [ "$d" != "common" ]
   then
+    if  [ "$d" == "ft-consolidation-transfer" ] && [ ${setupCmd} == "setup" ]
+    then
+      continue
+    fi
+    if  [ "$d" == "ft-consolidation-transfer" ] || [ "$d" == "ft-batch-transfer" ] || [ "$d" == "nft-transfer" ] || [ "$d" == "nft-burn" ] || [ "$d" == "nft-mint" ] && [ ${setupCmd} == "setup-rc" ]
+    then
+      continue
+    fi
     index+=1
     setupList+="${index} $d\n"
     setups+=($d)
@@ -42,7 +82,7 @@ generateSetups(){
   selectedSetupsIndexes=$(echo $selectedSetupsIndexes | tr "," "\n")
   for i in $selectedSetupsIndexes
   do
-    npm run setup -- -f gm17/${setups[$i-1]}
+    npm run ${setupCmd} -- -f ${setups[$i-1]}
   done
 }
 
@@ -59,7 +99,7 @@ while true
 do
   read -p $'\n''Do you want to generate all trusted setups? (y/n) : ' yn
   case $yn in
-    [Yy]* ) npm run setupAll
+    [Yy]* ) npm run ${setupAllCmd}
       exit
       ;;
     [Nn]* ) printf "\nType the number of each trusted setup seperated by a comma\n"

@@ -8,6 +8,7 @@ import {
   getFTCommitments,
   getFTCommitmentTransactions,
   simpleFTCommitmentBatchTransfer,
+  consolidationTransfer,
 } from '../services/ft-commitment';
 
 const router = express.Router();
@@ -31,9 +32,9 @@ router.route('/checkCorrectnessForFTCommitment').post(checkCorrectnessForFTCommi
  *   .success((res, status) => doSomethingHere())
  *   .error((err, status) => doSomethingHere());
  *
- * @apiSuccess (Success 200) {String} commitment commitment number.
+ * @apiSuccess (Success 200) {String} commitment      commitment number.
  * @apiSuccess (Success 200) {Number} commitmentIndex commitment index value from blockchain.
- * @apiSuccess (Success 200) {String} salt genearted salt to mint commitment.
+ * @apiSuccess (Success 200) {String} salt genearted  salt to mint commitment.
  *
  * @apiSuccessExample {json} Success response:
  *     HTTPS 200 OK
@@ -51,9 +52,9 @@ router.route('/mintFTCommitment').post(mintFTCommitment);
  * @apiName  Transfer ERC-20 commitment
  * @apiGroup ERC-20 commitment
  *
- * @apiParam (Request body) {Object} inputCommitments array of selected commitments.
- * @apiParam (Request body) {Object} outputCommitments array of Hex String of value.
- * @apiParam (Request body) {Object} receiver object with key name of receiver.
+ * @apiParam (Request body) {Object} inputCommitments   array of selected commitments.
+ * @apiParam (Request body) {Object} outputCommitments  array of Hex String of value.
+ * @apiParam (Request body) {Object} receiver           object with key name of receiver.
  *
  * @apiExample {js} Example usage:
  * const data = {
@@ -98,9 +99,14 @@ router.route('/mintFTCommitment').post(mintFTCommitment);
  *   .success((res, status) => doSomethingHere())
  *   .error((err, status) => doSomethingHere());
  *
- *
+ * @apiSuccess (Success 200) {Number} value value to be transferred.
+ * @apiSuccess (Success 200) {String} salt genearted salt to mint commitment.
+ * @apiSuccess (Success 200) {Object} owner Owner object with name and publickey.
+ * @apiSuccess (Success 200) {Number} commitmentIndex commitment index value from blockchain.
+ * @apiSuccess (Success 200) {String} commitment commitment number.
  * @apiSuccessExample {json} Success response:
- *     HTTPS 200 OK
+ * HTTPS 200 OK
+ * {
  * data: [
  * {
  *     "value": "0x00000000000000000000000000000014",
@@ -127,6 +133,7 @@ router.route('/mintFTCommitment').post(mintFTCommitment);
  *   }
  * }
  * ]
+ * }
  */
 router.route('/transferFTCommitment').post(transferFTCommitment);
 
@@ -171,10 +178,10 @@ router.route('/transferFTCommitment').post(transferFTCommitment);
  * @apiSuccess (Success 200) {String} message  Burn success message.
  *
  * @apiSuccessExample {json} Success response:
- *     HTTPS 200 OK
- *	  {
- *		"message":"Burn successful",
- *	  }
+ * HTTPS 200 OK
+ * {
+ *    "message":"Burn successful",
+ * }
  */
 router.route('/burnFTCommitment').post(burnFTCommitment);
 
@@ -206,10 +213,10 @@ router.route('/burnFTCommitment').post(burnFTCommitment);
  * @apiSuccess (Success 200) {String} message status message.
  *
  * @apiSuccessExample {json} Success response:
- *     HTTPS 200 OK
- *    {
+ * HTTPS 200 OK
+ * {
  *    "message":"inserted"
- *    }
+ * }
  */
 router.post('/insertFTCommitmentToDb', insertFTCommitmentToDb);
 
@@ -221,7 +228,6 @@ router.post('/insertFTCommitmentToDb', insertFTCommitmentToDb);
  *
  * @apiParam (Request query) {String} limit page size (optional).
  * @apiParam (Request query) {String} pageNo page number (optional).
-
  *
  * @apiExample {js} Example usage:
  * const qyery = {
@@ -233,11 +239,15 @@ router.post('/insertFTCommitmentToDb', insertFTCommitmentToDb);
  *   .success((res, status) => doSomethingHere())
  *   .error((err, status) => doSomethingHere());
  *
- * @apiSuccess (Success 200) {Array} data ERC-20 commitments.
- * @apiSuccess (Success 200) {Array} totalCount Total no. of tokens.
+ * @apiSuccess (Success 200) {Number} value           value to be transferred.
+ * @apiSuccess (Success 200) {Array}  totalCount      Total no. of tokens.
+ * @apiSuccess (Success 200) {String} salt            genearted salt to mint commitment.
+ * @apiSuccess (Success 200) {Object} owner           Owner object with name and publickey.
+ * @apiSuccess (Success 200) {Number} commitmentIndex commitment index value from blockchain.
+ * @apiSuccess (Success 200) {String} commitment      commitment number.
  *
  * @apiSuccessExample {json} Success response:
- *     HTTPS 200 OK
+ * HTTPS 200 OK
  *    {
  *      "data":[
  *        {
@@ -263,8 +273,8 @@ router.get('/getFTCommitments', getFTCommitments);
  * @apiName  List all ERC-20 commitment transactions
  * @apiGroup ERC-20 commitment
  *
- * @apiParam (Request query) {String} limit page size (optional).
- * @apiParam (Request query) {String} pageNo page number (optional).
+ * @apiParam (Request query) {String} limit   page size (optional).
+ * @apiParam (Request query) {String} pageNo  page number (optional).
 
  *
  * @apiExample {js} Example usage:
@@ -277,11 +287,13 @@ router.get('/getFTCommitments', getFTCommitments);
  *   .success((res, status) => doSomethingHere())
  *   .error((err, status) => doSomethingHere());
  *
- * @apiSuccess (Success 200) {Array} data ERC-20 commitment transactions.
- * @apiSuccess (Success 200) {Array} totalCount Total no. of token transactions.
+ * @apiSuccess (Success 200) {Object} inputCommitments   array of selected commitments.
+ * @apiSuccess (Success 200) {Object} outputCommitments  array of Hex String of value.
+ * @apiSuccess (Success 200) {Object} receiver           object with key name of receiver.
+ * @apiSuccess (Success 200) {Array} transactionType     Transaction type.
  *
  * @apiSuccessExample {json} Success response:
- *     HTTPS 200 OK
+ * HTTPS 200 OK
  *    {
  *      "data":[{
  *        "_id":"5e255a5a415c6b0039a057c7",
@@ -307,7 +319,7 @@ router.get('/getFTCommitments', getFTCommitments);
  *        "receiver":{
  *          "name":"alice"
  *        },
- *      }     
+ *      }
  */
 router.route('/getFTCommitmentTransactions').get(getFTCommitmentTransactions);
 
@@ -354,9 +366,13 @@ router.route('/getFTCommitmentTransactions').get(getFTCommitmentTransactions);
  *   .success((res, status) => doSomethingHere())
  *   .error((err, status) => doSomethingHere());
  *
- *
+ * @apiSuccess (Success 200) {Number} value           value to be transferred.
+ * @apiSuccess (Success 200) {String} salt            genearted salt to mint commitment.
+ * @apiSuccess (Success 200) {Object} owner           Owner object with name and publickey.
+ * @apiSuccess (Success 200) {Number} commitmentIndex commitment index value from blockchain.
+ * @apiSuccess (Success 200) {String} commitment      commitment number.
  * @apiSuccessExample {json} Success response:
- *     HTTPS 200 OK
+ * HTTPS 200 OK
  * data: [
  *    {
  *      "value":"0x00000000000000000000000000000001",
@@ -389,5 +405,87 @@ router.route('/getFTCommitmentTransactions').get(getFTCommitmentTransactions);
  *  ]
  */
 router.post('/simpleFTCommitmentBatchTransfer', simpleFTCommitmentBatchTransfer);
+
+/**
+ * @api {post} /consolidationTransfer consolidation Transfer for ERC-20 commitment
+ * @apiVersion 1.0.0
+ * @apiName  Consolidation Transfer ERC-20 commitment
+ * @apiGroup ERC-20 commitment
+ *
+ * @apiParam (Request body) {Object} inputCommitments array of selected commitments.
+ * @apiParam (Request body) {Object} outputCommitment array of Hex String of value.
+ * @apiParam (Request body) {Object} receiver object with key name of receiver.
+ * @apiParam (Request body) {Object} sender object with key name of sender.
+ *
+ * @apiExample {js} Example usage:
+ *
+ * const data: {
+ *  receiver: {name: "a"},
+ *  inputCommitments: [
+ *  {
+ *    owner: {
+ *      name: "a"
+ *      publicKey: "0x4dcdd089a4afba3c5f779dd97ec3d95e72c5c0da0cadc427fc9a5641a427698f"
+ *    },
+ *    _id: "5e8c03a7d9431f0039852781"
+ *    value: "0x00000000000000000000000000000001"
+ *    salt: "0x9780b5a4d7b6b0a1561d29486de67b5f0b6bef4816d1a330a96b0a67a7b2595e"
+ *    commitment: "0xd3d39059076b90db1f26324e5690cd974cf46f6727d3ce9e8adc206508e2abf5"
+ *    commitmentIndex: 0
+ *    isMinted: true
+ *  },
+ *  {
+ *    owner: {
+ *      name: "a"
+ *      publicKey: "0x4dcdd089a4afba3c5f779dd97ec3d95e72c5c0da0cadc427fc9a5641a427698f"
+ *    },
+ *    _id: "5e8c03bed9431f0039852784
+ *    value: "0x00000000000000000000000000000001"
+ *    salt: "0x59538e9d0b2ebb9da1cedf6713730195b898d369fc74ead3633d2bbc22f605ed"
+ *    commitment: "0xb85bf44d9e18820c19f5b1319b0ab24ffbe9ad524a5bb60cb1f438f9f39b18d3"
+ *    commitmentIndex: 1
+ *    isMinted: true
+ *  },
+ *  {
+ *    owner: {
+ *      name: "a"
+ *      publicKey: "0x4dcdd089a4afba3c5f779dd97ec3d95e72c5c0da0cadc427fc9a5641a427698f"
+ *    },
+ *    _id: "5e8c03bed9431f0039852784
+ *    value: "0x00000000000000000000000000000001"
+ *    salt: "0x2e3d5c27bb97d50b304a34a04451756fc3dca4b38b2c831a16c33aabb9676952"
+ *    commitment: "0xc925442eb33a92105b090c42cdfb62893968a2601e425cfdd4f2ee19387c67e9"
+ *    commitmentIndex: 2
+ *    isMinted: true
+ *  },
+ *  ...
+ * ],
+ * }
+ *
+ * $http.post(url, data)
+ *   .success((res, status) => doSomethingHere())
+ *   .error((err, status) => doSomethingHere());
+ *
+ * @apiSuccess (Success 200) {Number} value value to be transferred.
+ * @apiSuccess (Success 200) {String} salt genearted salt to mint commitment.
+ * @apiSuccess (Success 200) {Object} owner Owner object with name and publickey.
+ * @apiSuccess (Success 200) {Number} commitmentIndex commitment index value from blockchain.
+ * @apiSuccess (Success 200) {String} commitment commitment number.
+ * @apiSuccessExample {json} Success response:
+ * HTTPS 200 OK
+ * data :
+ * {
+ *    "value":"0x00000000000000000000000000000014",
+ *    "salt":"0xce4f2a50b07c92b0c12fbf738cd8090ca898c5956f2de14f04c7f6ee6a46bdc7",
+ *    "commitment":"0xbb51e94ff3a0ef1e6198195b3b412fe0def4d234ff5916ca953d521f84eea613",
+ *    "commitmentIndex": 32
+ *    "owner":
+ *    {
+ *        "name": "b",
+ *        "publicKey": "0xb30f3e92f24d08a94cee52a0b4703fbdff096856376b66741a30da5538c80271"
+ *     }
+ *  }
+ */
+router.post('/consolidationTransfer', consolidationTransfer);
 
 export default router;

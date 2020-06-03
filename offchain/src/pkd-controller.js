@@ -62,6 +62,11 @@ export async function getPublicKeysFromName(name) {
   return pkd.getPublicKeysFromName(bytes32(name));
 }
 
+export async function getNameFromZkpPublicKey(zkp) {
+  const pkd = await PKD.deployed();
+  return stringify(await pkd.getNameFromZkpPublicKey(zkp));
+}
+
 export async function getPublicKeysFromAddress(address) {
   const pkd = await PKD.deployed();
   return pkd.getPublicKeysFromAddress.call(utils.ensure0x(address));

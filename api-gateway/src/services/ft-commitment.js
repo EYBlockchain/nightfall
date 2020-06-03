@@ -109,6 +109,14 @@ export async function mintFTCommitment(req, res, next) {
     outputCommitments: [outputCommitment],
   } = req.body;
   outputCommitment.owner = req.user;
+
+  // send empty response if NODE_ENV is not set
+  // this is case where we want implement RabbitMQ
+  // NODE_ENV is only set to value 'test' at time integration test suit run.
+  if (!process.env.NODE_ENV) {
+    res.send();
+  }
+
   try {
     const data = await zkp.mintFTCommitment(req.user, outputCommitment);
 
@@ -127,6 +135,16 @@ export async function mintFTCommitment(req, res, next) {
     res.data = data;
     next();
   } catch (err) {
+    // insert failed transaction into db.
+    await db.insertFTCommitmentTransaction(req.user, {
+      outputCommitments: [
+        {
+          ...outputCommitment,
+        },
+      ],
+      isMinted: true,
+      isFailed: true,
+    });
     next(err);
   }
 }
@@ -173,10 +191,18 @@ export async function mintFTCommitment(req, res, next) {
  */
 export async function transferFTCommitment(req, res, next) {
   const { receiver, inputCommitments } = req.body;
+
+  // send empty response if NODE_ENV is not set
+  // this is case where we want implement RabbitMQ
+  // NODE_ENV is only set to value 'test' at time integration test suit run.
+  if (!process.env.NODE_ENV) {
+    res.send();
+  }
+
   try {
     // Generate a new one-time-use Ethereum address for the sender to use
     const password = (req.user.address + Date.now()).toString();
-    const address = (await accounts.createAccount(password)).data;
+    const address = await accounts.createAccount(password);
     await db.updateUserWithPrivateAccount(req.user, { address, password });
     await accounts.unlockAccount({ address, password });
 
@@ -238,6 +264,13 @@ export async function transferFTCommitment(req, res, next) {
     res.data = outputCommitments;
     next();
   } catch (err) {
+    // insert failed transaction into db.
+    await db.insertFTCommitmentTransaction(req.user, {
+      ...req.body,
+      sender: req.user,
+      isTransferred: true,
+      isFailed: true,
+    });
     next(err);
   }
 }
@@ -265,6 +298,14 @@ export async function burnFTCommitment(req, res, next) {
     receiver,
     inputCommitments: [commitment],
   } = req.body;
+
+  // send empty response if NODE_ENV is not set
+  // this is case where we want implement RabbitMQ
+  // NODE_ENV is only set to value 'test' at time integration test suit run.
+  if (!process.env.NODE_ENV) {
+    res.send();
+  }
+
   try {
     receiver.address = await offchain.getAddressFromName(receiver.name);
     const user = await db.fetchUser(req.user);
@@ -300,6 +341,14 @@ export async function burnFTCommitment(req, res, next) {
 
     next();
   } catch (err) {
+    // insert failed transaction into db.
+    await db.insertFTCommitmentTransaction(req.user, {
+      inputCommitments: [commitment],
+      receiver,
+      sender: req.user,
+      isBurned: true,
+      isFailed: true,
+    });
     next(err);
   }
 }
@@ -339,18 +388,28 @@ export async function burnFTCommitment(req, res, next) {
  */
 export async function simpleFTCommitmentBatchTransfer(req, res, next) {
   let changeIndex;
-  let changeData = {};
+  let changeData;
 
   const {
     inputCommitments: [inputCommitment],
     outputCommitments,
   } = req.body;
+
+  const reqBodyOutCommitments = [...outputCommitments];
+
+  // send empty response if NODE_ENV is not set
+  // this is case where we want implement RabbitMQ
+  // NODE_ENV is only set to value 'test' at time integration test suit run.
+  if (!process.env.NODE_ENV) {
+    res.send();
+  }
+
   let selectedCommitmentValue = Number(inputCommitment.value); // amount of selected commitment
 
   try {
     // Generate a new one-time-use Ethereum address for the sender to use
     const password = (req.user.address + Date.now()).toString();
-    const address = (await accounts.createAccount(password)).data;
+    const address = await accounts.createAccount(password);
     await db.updateUserWithPrivateAccount(req.user, { address, password });
     await accounts.unlockAccount({ address, password });
 
@@ -417,6 +476,8 @@ export async function simpleFTCommitmentBatchTransfer(req, res, next) {
       });
     }
 
+    if (changeIndex) commitments.push(changeData);
+
     await db.insertFTCommitmentTransaction(req.user, {
       inputCommitments: [inputCommitment],
       outputCommitments: commitments,
@@ -427,6 +488,134 @@ export async function simpleFTCommitmentBatchTransfer(req, res, next) {
     res.data = commitments;
     next();
   } catch (err) {
+    // insert failed transaction into db.
+    await db.insertFTCommitmentTransaction(req.user, {
+      inputCommitments: [inputCommitment],
+      outputCommitments: reqBodyOutCommitments,
+      sender: req.user,
+      isBatchTransferred: true,
+      isFailed: true,
+    });
+    next(err);
+  }
+}
+
+/**
+ * This function will do consolidated fungible commitment transfer
+ * req.user {
+ * address: '0x3bd5ae4b9ae233843d9ccd30b16d3dbc0acc5b7f',
+ * name: 'alice',
+ * publicKey: '0x70dd53411043c9ff4711ba6b6c779cec028bd43e6f525a25af36b8',
+ * password: 'alicesPassword'
+ * }
+ * req.body {
+ *  receiver: {name: "a"},
+ *  inputCommitments: [
+ *  {
+ *    owner: {
+ *      name: "a"
+ *      publicKey: "0x4dcdd089a4afba3c5f779dd97ec3d95e72c5c0da0cadc427fc9a5641a427698f"
+ *    },
+ *    _id: "5e8c03a7d9431f0039852781"
+ *    value: "0x00000000000000000000000000000001"
+ *    salt: "0x9780b5a4d7b6b0a1561d29486de67b5f0b6bef4816d1a330a96b0a67a7b2595e"
+ *    commitment: "0xd3d39059076b90db1f26324e5690cd974cf46f6727d3ce9e8adc206508e2abf5"
+ *    commitmentIndex: 0
+ *    isMinted: true
+ *  },
+ *  {
+ *    owner: {
+ *      name: "a"
+ *      publicKey: "0x4dcdd089a4afba3c5f779dd97ec3d95e72c5c0da0cadc427fc9a5641a427698f"
+ *    },
+ *    _id: "5e8c03bed9431f0039852784
+ *    value: "0x00000000000000000000000000000001"
+ *    salt: "0x59538e9d0b2ebb9da1cedf6713730195b898d369fc74ead3633d2bbc22f605ed"
+ *    commitment: "0xb85bf44d9e18820c19f5b1319b0ab24ffbe9ad524a5bb60cb1f438f9f39b18d3"
+ *    commitmentIndex: 1
+ *    isMinted: true
+ *  },
+ *  {
+ *    owner: {
+ *      name: "a"
+ *      publicKey: "0x4dcdd089a4afba3c5f779dd97ec3d95e72c5c0da0cadc427fc9a5641a427698f"
+ *    },
+ *    _id: "5e8c03bed9431f0039852784
+ *    value: "0x00000000000000000000000000000001"
+ *    salt: "0x2e3d5c27bb97d50b304a34a04451756fc3dca4b38b2c831a16c33aabb9676952"
+ *    commitment: "0xc925442eb33a92105b090c42cdfb62893968a2601e425cfdd4f2ee19387c67e9"
+ *    commitmentIndex: 2
+ *    isMinted: true
+ *  },
+ *  ...
+ * ],
+ * }
+ * @param {*} req
+ * @param {*} res
+ */
+export async function consolidationTransfer(req, res, next) {
+  const { receiver, inputCommitments } = req.body;
+
+  // send empty response if NODE_ENV is not set
+  // this is case where we want implement RabbitMQ
+  // NODE_ENV is only set to value 'test' at time integration test suit run.
+  if (!process.env.NODE_ENV) {
+    res.send();
+  }
+
+  try {
+    // Generate a new one-time-use Ethereum address for the sender to use
+    const password = (req.user.address + Date.now()).toString();
+    const address = await accounts.createAccount(password);
+    await db.updateUserWithPrivateAccount(req.user, { address, password });
+    await accounts.unlockAccount({ address, password });
+
+    receiver.publicKey = await offchain.getZkpPublicKeyFromName(receiver.name); // fetch pk from PKD by passing username
+
+    // get logged in user's secretKey.
+    req.body.sender = {};
+    req.body.sender.secretKey = (await db.fetchUser(req.user)).secretKey;
+
+    const { outputCommitment, txReceipt } = await zkp.consolidationTransfer({ address }, req.body);
+    outputCommitment.owner = receiver;
+
+    for (const inputCommitment of inputCommitments) {
+      await db.updateFTCommitmentByCommitmentHash(req.user, inputCommitment.commitment, {
+        outputCommitments: [{ owner: receiver }],
+        isConsolidateTransferred: true,
+      });
+    }
+
+    await db.insertFTCommitmentTransaction(req.user, {
+      inputCommitments,
+      outputCommitments: [outputCommitment],
+      receiver,
+      sender: req.user,
+      isConsolidateTransferred: true,
+    });
+
+    const user = await db.fetchUser(req.user);
+
+    await sendWhisperMessage(user.shhIdentity, {
+      outputCommitments: [outputCommitment],
+      blockNumber: txReceipt.receipt.blockNumber,
+      receiver,
+      sender: req.user,
+      isReceived: true,
+      for: 'FTCommitment',
+    });
+
+    res.data = outputCommitment;
+    next();
+  } catch (err) {
+    await db.insertFTCommitmentTransaction(req.user, {
+      inputCommitments,
+      outputCommitments: [req.body.outputCommitment],
+      receiver,
+      sender: req.user,
+      isConsolidateTransferred: true,
+      isFailed: true,
+    });
     next(err);
   }
 }

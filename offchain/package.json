@@ -22,6 +22,7 @@
     "config": "^3.2.2",
     "express": "^4.17.1",
     "jsonfile": "^5.0.0",
+    "minimist": ">=0.2.1",
     "request": "^2.88.0",
     "truffle-contract": "4.0.15",
     "web3": "1.0.0-beta.36"
@@ -30,6 +31,7 @@
     "@babel/core": "^7.4.4",
     "@babel/node": "^7.2.2",
     "@babel/preset-env": "^7.4.4",
+    "acorn": ">=5.7.4",
     "jest": "^24.8.0",
     "jest-expect-message": "^1.0.2",
     "nodemon": "^1.19.0"

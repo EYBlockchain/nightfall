@@ -5,8 +5,33 @@ GREEN='\033[0;32m'
 RED='\033[0;31m'
 NC='\033[0m'
 
+launchContainers(){
+  printf "${GREEN}*** Docker Compose Build ***${NC}\n"
+  docker-compose build
+
+  printf "${GREEN}*** Launching containerized ganache ***${NC}\n"
+  docker-compose up -d ganache
+
+  printf "${GREEN}*** Deploying all contracts ***${NC}\n"
+  docker-compose run --rm truffle-offchain migrate --reset --network=default
+  docker-compose run --rm truffle-zkp migrate --reset --network=default
+
+  printf "${GREEN}*** Launching independent containers ***${NC}\n"
+  # these container take time to setup
+  # starting them first to avoid ECONNREFUSED error
+  # as other containers depends on them
+  docker-compose up -d rabbitmq
+  docker-compose up -d mongo-merkle-tree
+  docker-compose up -d mongo-nightfall
+
+  sleep 10
+
+  printf "${GREEN}*** Launching containerized microservices ***${NC}\n"
+  docker-compose up
+}
+
 printf "${GREEN}*** Cleaning up all containers ***${NC}\n"
-docker-compose -f docker-compose.yml down -v || {
+docker-compose down -v || {
 	# this block will run if ```docker-compose down -v``` fails.
 	sleep 3
 
@@ -26,6 +51,12 @@ docker-compose -f docker-compose.yml down -v || {
   docker volume rm nightfall_mongo-merkle-tree-volume
 }
 
+printf  "${GREEN}*** Delete files created by previous run ***${NC}\n"
+rm -dr zkp/build/ || true
+rm -dr offchain/build/ || true
+rm zkp/contracts/MerkleTree.sol || true
+rm docker-compose.override.yml || true
+
 printf "${GREEN}*** Pull zokrates docker image ***${NC}\n"
 docker pull zokrates/zokrates:0.5.1
 
@@ -34,12 +65,11 @@ pushd zkp-utils
 npm ci
 popd
 
-printf "${GREEN}*** Launching containerized ganache ***${NC}\n"
-docker-compose up -d ganache
+if [[ "$1" == "compliance" || "$1" == "mimc" ]]
+then
+  cp docker-compose.override.$1.yml docker-compose.override.yml
+  launchContainers
 
-printf "${GREEN}*** Deploying all contracts ***${NC}\n"
-docker-compose run --rm truffle-offchain migrate --reset --network=default
-docker-compose run --rm truffle-zkp migrate --reset --network=default
-
-printf "${GREEN}*** Launching containerized microservices ***${NC}\n"
-docker-compose -f docker-compose.yml up --build
+else
+  launchContainers
+fi

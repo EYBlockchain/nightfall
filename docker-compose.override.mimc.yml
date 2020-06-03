@@ -1,0 +1,19 @@
+version: '3.5'
+
+services:
+  zkp:
+    environment:
+      HASH_TYPE: 'mimc'
+    depends_on:
+      - merkle-tree
+      
+  merkle-tree:
+    environment:
+      HASH_TYPE: 'mimc'
+
+  truffle-zkp:
+    environment:
+      HASH_TYPE: 'mimc'
+    volumes:
+      - ./zkp/contracts/mimc/MerkleTree.sol:/truffle/contracts/MerkleTree.sol:delegated
+      - ./zkp/contracts/mimc/MiMC.sol:/truffle/contracts/MiMC.sol:delegated

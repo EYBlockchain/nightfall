@@ -6,3 +6,4 @@ export { default as nftCommitmentTransactionSchema } from './nft-commitment-tran
 export { default as ftTransactionSchema } from './ft-transaction.model';
 export { default as ftCommitmentSchema } from './ft-commitment.model';
 export { default as ftCommitmentTransactionSchema } from './ft-commitment-transaction.model';
+export { default as blacklistSchema } from './blacklist.model';

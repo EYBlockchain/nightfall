@@ -29,7 +29,7 @@ export default class FtService {
     const url = config.apiGateway.root + 'mintFToken';
     return this.http
       .post(url, body, httpOptions)
-      .pipe(tap(data => console.log(`Bought fungible.`)), catchError(this.handleError('mintFToken', [])));
+      .pipe(tap(data => console.log(`Mint fungible token successfully.`)), catchError(this.handleError('mintFToken', [])));
   }
 
   /**
@@ -49,7 +49,7 @@ export default class FtService {
     const url = config.apiGateway.root + 'transferFToken';
     return this.http
       .post(url, body, httpOptions)
-      .pipe(tap(data => console.log(`Bought fungible.`)), catchError(this.handleError('transferFToken', [])));
+      .pipe(tap(data => console.log(`Transfer fungible successfully.`)), catchError(this.handleError('transferFToken', [])));
   }
 
   /**
@@ -67,7 +67,7 @@ export default class FtService {
     const url = config.apiGateway.root + 'burnFToken';
     return this.http
       .post(url, body, httpOptions)
-      .pipe(tap(data => console.log(`Bought fungible.`)), catchError(this.handleError('burnFToken', [])));
+      .pipe(tap(data => console.log(`Burn fungible token successfully.`)), catchError(this.handleError('burnFToken', [])));
   }
 
 

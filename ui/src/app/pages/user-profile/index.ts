@@ -40,11 +40,10 @@ export default class UserProfileComponent extends Config implements OnInit {
   getUserDetails() {
     this.userService.getUserDetails().subscribe(
       data => {
-        console.log('data', data);
         this.user = data['data'];
       },
       error => {
-        console.log('error in user get', error);
+        console.log('Error in getting current user details.', error);
       }
     );
   }

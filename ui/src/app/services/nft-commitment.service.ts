@@ -34,7 +34,7 @@ export default class NftCommitmentService {
 
     return this.http
       .post(url, body, httpOptions)
-      .pipe(tap(data => console.log(`Token minted `)), catchError(this.handleError('mintToken', [])));
+      .pipe(tap(data => console.log(`Token minted successfully`)), catchError(this.handleError('mintToken', [])));
   }
 
 
@@ -63,7 +63,7 @@ export default class NftCommitmentService {
 
     return this.http
       .post(url, body, httpOptions)
-      .pipe(tap(data => console.log(data)), catchError(this.handleError('spendToken', [])));
+      .pipe(tap(data => console.log()), catchError(this.handleError('spendToken', [])));
   }
 
   /**
@@ -89,7 +89,7 @@ export default class NftCommitmentService {
     const url = config.apiGateway.root + 'burnNFTCommitment';
     return this.http
       .post(url, body, httpOptions)
-      .pipe(tap(data => console.log(data)), catchError(this.handleError('burnToken', [])));
+      .pipe(tap(data => console.log()), catchError(this.handleError('burnToken', [])));
   }
 
 /**
@@ -114,7 +114,7 @@ export default class NftCommitmentService {
 
     return this.http
       .get(url, httpOptions)
-      .pipe(tap(data => console.log(data)), catchError(this.handleError('getTokens', [])));
+      .pipe(tap(data => console.log()), catchError(this.handleError('getTokens', [])));
   }
 
   /**

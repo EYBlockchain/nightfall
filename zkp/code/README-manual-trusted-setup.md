@@ -23,7 +23,7 @@ Let's inspect the nft-mint folder:
 `cd nft-mint`  
 `ls`
 
-If you've newly cloned the Nightfall repository, you'll only see one file: `nft-mint.code`.
+If you've newly cloned the Nightfall repository, you'll only see one file: `nft-mint.zok`.
 
 Now we can run ZoKrates.
 
@@ -45,9 +45,9 @@ From this ZoKrates command line:
 Ensure there is a folder called `code` (which only exists because we mounted our local machine's
 'code' folder to here when we ran Docker) and an executable file called `zokrates` in here.
 
-Compile your .code file
+Compile your .zok file
 
-`./zokrates compile -i code/nft-mint.code`
+`./zokrates compile -i code/nft-mint.zok`
 
 Perform the trusted setup to generate proving key files: `./zokrates setup`
 
@@ -76,7 +76,7 @@ created json file:
 
 `node key-extractor-standalone.js -i gm17/nft-mint/verifier.sol >nft-mint-vk.json`
 
-We're all done! We have the proving key and verification key for nft-mint.code. All saved on our
+We're all done! We have the proving key and verification key for nft-mint.zok. All saved on our
 local machine.
 
 You should be able to now close your container. The below exits and removes all containers:

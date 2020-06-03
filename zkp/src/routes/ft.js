@@ -4,10 +4,25 @@ import fTokenController from '../f-token-controller';
 const router = Router();
 
 /**
- * This function is to mint a fungible token
+ * @api {post} /mintFToken
+ * @apiDescription This function is to mint a fungible token
+ * @apiVersion 1.0.0
+ * @apiName mintFToken
+ *
+ * @apiParam (Request body) {Number} value  ft commitment to be minted
+ * @apiExample {json} Example usage:
  * req.body = {
  *  value: 20,
  * }
+ *
+ * @apiSuccess (Success 200) {String} message Mint Successful.
+ *
+ * @apiSuccessExample {json} Success-Response:
+ * HTTPS 200 OK
+ * {
+ *		"message": "Mint Successful"
+ * }
+ *
  * @param {*} req
  * @param {*} res
  */
@@ -25,7 +40,14 @@ async function mint(req, res, next) {
 }
 
 /**
- * This function is to transfer a fungible token to a receiver
+ * @api {post} /transferFToken
+ * @apiDescription This function is to transfer a fungible token to a receiver
+ * @apiVersion 1.0.0
+ * @apiName transferFToken
+ *
+ * @apiParam (Request body) {Number} value  ft commitment to be minted
+ * @apiParam (Request body) {Object} receiver The name of the Receiver.
+ * @apiExample {json} Example usage:
  * req.body = {
  *  value: 20,
  *  receiver: {
@@ -33,6 +55,15 @@ async function mint(req, res, next) {
  *    address: '0x3915e408fd5cff354fd73549d31a4bc66f7335db59bc4e84001473'
  *  }
  * }
+ *
+ * @apiSuccess (Success 200) {String} message Transfer Successful.
+ *
+ * @apiSuccessExample {json} Success-Response:
+ * HTTPS 200 OK
+ * {
+ *		"message": "transfer Successful"
+ * }
+ *
  * @param {*} req
  * @param {*} res
  */
@@ -50,10 +81,25 @@ async function transfer(req, res, next) {
 }
 
 /**
- * This function is to burn a fungible token
+ * @api {post} /burnFToken
+ * @apiDescription This function is to burn a fungible token
+ * @apiVersion 1.0.0
+ * @apiName burnFToken
+ *
+ * @apiParam (Request body) {Number} value  ft commitment to be minted
+ * @apiExample {json} Example usage:
  * req.body = {
  *  value: 20,
  * }
+ *
+ * @apiSuccess (Success 200) {String} message Burn Successful.
+ *
+ * @apiSuccessExample {json} Success-Response:
+ * HTTPS 200 OK
+ * {
+ *		"message": "Burn Successful"
+ * }
+ *
  * @param {*} req
  * @param {*} res
  */
@@ -72,6 +118,10 @@ async function burn(req, res, next) {
 
 /**
  * This function is to retrieve address of a fungible token
+ * res.data = {
+ *   ftAddress : 0xa34eaa922ae0039f6e1dc1216aba285f4b161cf408eb3966f597114b0f6abd72
+ * }
+ *
  * @param {*} req
  * @param {*} res
  */
@@ -91,6 +141,12 @@ async function getAddress(req, res, next) {
 
 /**
  * This function is to retrieve information of a fungible token
+ * res.data : {
+ *  "balance":"0",
+ *  "symbol":"OPS",
+ *  "name":"EY OpsCoin"
+ * }
+ *
  * @param {*} req
  * @param {*} res
  */

@@ -1,0 +1,104 @@
+<app-nav> </app-nav>
+<app-spinner
+  *ngIf="isRequesting"
+  [delay]="300"
+  [message]="'please wait...'"
+  [isRunning]="isRequesting"
+></app-spinner>
+<div class="container ">
+  <div class="">
+    <nav class="mt-4" aria-label="breadcrumb">
+      <ol class="breadcrumb">
+        <li class="breadcrumb-item">
+          <a [routerLink]="['/overview']">Overview</a>
+        </li>
+        <li class="breadcrumb-item active" aria-current="page">
+          Consolidation Transfer {{ this.ftName }} Commitment
+        </li>
+      </ol>
+    </nav>
+    <div class="box">
+      <div>
+      <div class="box-header">
+        <h3>Consolidation Transfer {{ this.ftName }} Commitment</h3>
+      </div>
+
+      <div class="box-body" *ngIf="transactions">
+        <div class="form-group">
+          <label for="name mb-1">Select 20 {{ this.ftSymbol }} Commitments To Transfer</label>
+          <div class="row col-sm-12">
+            <ng-select
+                #select
+                [items]="transactions"
+                [multiple]="true"
+                [virtualScroll]="true"
+                [loading]="loading"
+                [closeOnSelect]="false"
+                [(ngModel)]="selectedCommitmentList"
+                [maxSelectedItems]="20"
+                [searchFn]="customSearchFn"
+                class="custom"
+                placeholder="Select Commitments"
+                style="width:50%;"
+                >
+                <ng-template ng-label-tmp let-item="item">
+                  <span aria-hidden="true" class="ng-value-icon left" (click)="onRemove(item)"
+                    >×</span
+                  >
+                  <b> {{ utilService.convertToNumber(item.value) }} </b> {{this.ftSymbol}} &nbsp;
+                </ng-template>
+                <ng-template ng-option-tmp let-item="item" let-item$="item$" let-index="index">
+                    <input id="item-{{index}}" type="checkbox" [ngModel]="item$.selected"/> 
+                    <b> {{ utilService.convertToNumber(item.value) }} </b> {{this.ftSymbol}} ({{
+                      item.commitment.slice(0, 20)
+                    }})...
+                </ng-template>
+            </ng-select>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="publicKey">Select Receiver</label>
+          <div class="row">
+            <div class="col-sm-6">
+              <select
+                class="form-control"
+                id="publicKey"
+                name="sellist1"
+                [(ngModel)]="receiverName"
+                required
+              >
+                <option [ngValue]="undefined" selected>Select </option>
+                <option *ngFor="let user of users" value="{{ user }}">{{ user }}</option>
+              </select>
+            </div>
+          </div>
+        </div>
+
+        <div class="" *ngIf="transactions">
+          <label for="name" >Value Of {{ this.ftSymbol }} Commitments To Transfer : {{ getTotalTransferValue() }}</label>
+        </div>
+
+        <div class="row form-group">
+          <div class="col-md-6">
+            <button
+              type="button"
+              [disabled]="
+                !transactions ||
+                !transactions.length ||
+                !(selectedCommitmentList.length == 20) ||
+                !transferValue ||
+                !receiverName
+              "
+              class="btn btn-md btn-primary"
+              (click)="initiateConsolidationTransfer()"
+            >
+              Transfer {{ this.ftName }} Commitments
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="text-center box-body" *ngIf="!transactions">No {{ this.ftName }} Commitment's Found</div>
+    </div>
+  </div>
+</div>
