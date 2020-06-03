@@ -55,7 +55,7 @@ export class TokenInterceptor implements HttpInterceptor {
             // redirect to the login route
             // or show a modal
           } else if (err.status === 403) {
-            this.toastrService.error('Not Authorised...Please Login again');
+            this.toastrService.error('Not Authorised... Please Login again');
             this.router.navigate(['/login']);
             jQuery('ngb-modal-window').click();
           }

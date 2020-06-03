@@ -30,7 +30,7 @@ const router = express.Router();
  *   .error((err, status) => doSomethingHere());
  *
  * @apiSuccess (Success 200) {String} message status message.
- *
+ * @apiSuccess (Success 200) {String} tokenId ID of the ERC721 token.
  * @apiSuccessExample {json} Success response:
  *  HTTPS 200 OK
  *  data: {
@@ -46,10 +46,10 @@ router.route('/mintNFToken').post(mintNFToken);
  * @apiName  Transfer a non-fungible token
  * @apiGroup ERC-721
  *
- * @apiParam (Request body) {String} tokenId unique ERC-721 token Id.
- * @apiParam (Request body) {String} tokenUri URI of token.
- * @apiParam (Request body) {String} receiver Name of Receiver.
- * @apiParam (Request body) {String} contractAddress TokenShield Address (optional).
+ * @apiParam (Request body) {String} tokenId      unique ERC-721 token Id.
+ * @apiParam (Request body) {String} tokenUri     URI of token.
+ * @apiParam (Request body) {String} receiver     Name of Receiver.
+ * @apiParam (Request body) {Boolean} isMinted    if the token is minted.
  *
  * @apiExample {js} Example usage:
  * const data = {
@@ -80,9 +80,11 @@ router.route('/transferNFToken').post(transferNFToken);
  * @apiName  Burn a non-fungible token
  * @apiGroup ERC-721
  *
- * @apiParam (Request body) {String} tokenId unique ERC-721 token Id.
- * @apiParam (Request body) {String} tokenUri URI of token.
- * @apiParam (Request body) {String} contractAddress TokenShield Address (optional).
+ * @apiParam (Request body) {String} tokenId        unique ERC-721 token Id.
+ * @apiParam (Request body) {String} tokenUri       URI of token.
+ * @apiParam (Request body) {String} reciever       Reciever name and address of the non fungible token.
+ * @apiParam (Request body) {String} sender         Sender name and address of the non fungible token.
+ * @apiParam (Request body) {Boolean} isReceived    if the token is minted.
  *
  * @apiExample {js} Example usage:
  * const data = {
@@ -133,8 +135,9 @@ router.route('/burnNFToken').post(burnNFToken);
  *   .success((res, status) => doSomethingHere())
  *   .error((err, status) => doSomethingHere());
  *
- * @apiSuccess (Success 200) {Array} data ERC-721 tokens.
- * @apiSuccess (Success 200) {Array} totalCount Total no. of tokens.
+ * @apiSuccess (Request body) {String} tokenId     unique ERC-721 token Id.
+ * @apiSuccess (Request body) {String} tokenUri    URI of token.
+ * @apiSuccess (Success 200)  {Boolean} isMinted   if the token is minted.
  *
  * @apiSuccessExample {json} Success response:
  * HTTPS 200 OK
@@ -204,8 +207,10 @@ router.post('/insertNFTToDb', insertNFTToDb);
  *   .success((res, status) => doSomethingHere())
  *   .error((err, status) => doSomethingHere());
  *
- * @apiSuccess (Success 200) {Array} data ERC-721 token transactions.
- * @apiSuccess (Success 200) {Array} totalCount Total no. of token transactions in database.
+ * @apiSuccess (Success 200) {String} tokenId          Unique ERC-721 token Id.
+ * @apiSuccess (Success 200) {String} tokenUri         URI of token.
+ * @apiSuccess (Success 200) {String} transactionType  Type of transaction.
+ * @apiSuccess (Success 200) {Array} totalCount        Total no. of token transactions in database.
  *
  * @apiSuccessExample {json} Success response:
  * HTTPS 200 OK
@@ -237,8 +242,7 @@ router.route('/getNFTTransactions').get(getNFTTransactions);
  *   .success((res, status) => doSomethingHere())
  *   .error((err, status) => doSomethingHere());
  *
- * @apiSuccess (Success 200) {Array} data ERC-721 tokens.
- * @apiSuccess (Success 200) {Array} totalCount Total no. of tokens.
+ * @apiSuccess (Success 200) [address] address ERC-721 token address.
  *
  * @apiSuccessExample {json} Success response:
  * HTTPS 200 OK

@@ -86,7 +86,7 @@ export default class NftCommitmentBurnComponent implements OnInit, AfterContentI
     } = this;
     const selectedCommitment = this.selectedCommitmentList[0];
     if (!selectedCommitment) {
-      this.toastr.error('All fields are mandatory');
+      this.toastr.warning('All fields are mandatory.','Warning');
       return;
     }
     this.isRequesting = true;
@@ -95,13 +95,23 @@ export default class NftCommitmentBurnComponent implements OnInit, AfterContentI
       this.receiverName,
     ).subscribe( data => {
         this.isRequesting = false;
-        this.toastr.success('Token burned successfully.');
-        transactions.splice(Number(index), 1);
-        this.selectedCommitment = undefined;
-        this.router.navigate(['/overview'], { queryParams: { selectedTab: 'nft-commitment' } });
+        this.toastr.info(`Burning.`);
+
+        // delete used commitment from commitment list
+        transactions.splice(transactions.indexOf(selectedCommitment), 1);
+        this.transactions = [ ...this.transactions ];
+
+        // reset the form
+        this.selectedCommitmentList = [];
+        this.receiverName = null;
+
+        // navigate to overview page if no more commitment left
+        if (!transactions.length) {
+          this.router.navigate(['/overview'], { queryParams: { selectedTab: 'nft-commitment' } });
+        }
       }, error => {
         this.isRequesting = false;
-        this.toastr.error('Please try again', 'Error');
+        this.toastr.error('Please try again.', 'Error');
     });
   }
 
@@ -121,7 +131,7 @@ export default class NftCommitmentBurnComponent implements OnInit, AfterContentI
       }
     }, error => {
       this.isRequesting = false;
-      this.toastr.error('Please Enter a valid SKU.', error);
+      this.toastr.error('Please Enter a valid SKU.', 'Error');
     });
   }
 
@@ -130,12 +140,10 @@ export default class NftCommitmentBurnComponent implements OnInit, AfterContentI
    * @param item {Object} Item to be removed.
    */
   onRemove(item) {
-    console.log('selected items', this.selectedCommitmentList, item);
     const newList = this.selectedCommitmentList.filter((it) => {
       return item._id !== it._id;
     });
     this.selectedCommitmentList = newList;
-    console.log('selected new items', this.selectedCommitmentList);
   }
 
   /**

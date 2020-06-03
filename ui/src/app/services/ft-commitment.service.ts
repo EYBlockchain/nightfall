@@ -39,16 +39,26 @@ export default class FtCommitmentService {
   /**
    * Method to initiate a HTTP request to fetch ERC-20 token commitments.
    *
+   * @param pageNo {Number} Page number
+   * @param limit {Number} Page limit
    */
-  getFTCommitments() {
+  getFTCommitments(pageNo?: number, limit?: number) {
     const httpOptions = {
       headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
     };
-    const url = config.apiGateway.root + 'getFTCommitments';
+    let url = config.apiGateway.root + 'getFTCommitments?';
+
+    if (pageNo) {
+      url += 'pageNo=' + pageNo + '&';
+    }
+
+    if (limit) {
+      url += 'limit=' + limit + '&';
+    }
 
     return this.http
       .get(url, httpOptions)
-      .pipe(tap(data => console.log(data)), catchError(this.handleError('getFTCommitments', [])));
+      .pipe(tap(data => console.log()), catchError(this.handleError('getFTCommitments', [])));
   }
 
   /**
@@ -71,8 +81,7 @@ export default class FtCommitmentService {
     };
     const url = config.apiGateway.root + 'burnFTCommitment';
     return this.http
-      .post(url, body, httpOptions)
-      .pipe(tap(data => console.log(data)), catchError(this.handleError('burnFTCommitment', [])));
+      .post(url, body, httpOptions);
   }
 
   /**
@@ -94,6 +103,30 @@ export default class FtCommitmentService {
     };
 
     const url = config.apiGateway.root + 'transferFTCommitment';
+    return this.http
+      .post(url, body, httpOptions)
+      .pipe(tap(data => console.log()));
+  }
+
+    /**
+   *
+   * Method to initiate a HTTP request for consolidation transfer of ERC-20 token commitments.
+   *
+   * @param inputCommitments {Object} selected commitments
+   * @param outputCommitment {Object} values array of transferred and change
+   * @param receiver {String} receiver 
+   */
+  consolidationFTCommitmentTransfer (inputCommitments, outputCommitment, receiver) {
+    const httpOptions = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+    };
+    const body = {
+      inputCommitments,
+      outputCommitment,
+      receiver,
+    };
+
+    const url = config.apiGateway.root + 'consolidationTransfer';
     return this.http
       .post(url, body, httpOptions)
       .pipe(tap(data => console.log(data)));
@@ -125,7 +158,7 @@ export default class FtCommitmentService {
     const url = config.apiGateway.root + 'simpleFTCommitmentBatchTransfer';
     return this.http
       .post(url, body, httpOptions)
-      .pipe(tap(data => console.log(data)));
+      .pipe(tap(data => console.log()));
   }
 
   /**

@@ -96,18 +96,17 @@ export default class NftTransferComponent implements OnInit, AfterContentInit {
    */
   transferToken () {
     this.isRequesting = true;
-    console.log('selectedToken', this.selectedToken);
     this.selectedToken = this.selectedTokenList[0];
     const receiver = {
       name: this.receiverName
     };
     this.nftService.transferNFToken(this.selectedToken, receiver).subscribe( data => {
         this.isRequesting = false;
-        this.toastr.success('Transfer to Receiver ' + this.receiverName);
+        this.toastr.success('Transferred token to ' + this.receiverName, 'Success');
         this.router.navigate(['/overview'], { queryParams: { selectedTab: 'nft' } });
       }, error => {
         this.isRequesting = false;
-        this.toastr.error('Please try again', error);
+        this.toastr.error('Please try again.', 'Error');
     });
   }
 
@@ -120,7 +119,7 @@ export default class NftTransferComponent implements OnInit, AfterContentInit {
       this.tokenList = data['data'];
     }, error => {
       this.isRequesting = false;
-      console.log('getNFTokens error', error);
+      console.log('Error in listing NFTokens', error);
   });
   }
 
@@ -130,12 +129,10 @@ export default class NftTransferComponent implements OnInit, AfterContentInit {
    * @param item {Object} Item to be removed.
    */
   onRemove(item) {
-    console.log('selected items', this.selectedTokenList, item);
     const newList = this.selectedTokenList.filter((it) => {
       return item._id !== it._id;
     });
     this.selectedTokenList = newList;
-    console.log('selected new items', this.selectedTokenList);
   }
 
   /**

@@ -1,4 +1,3 @@
-import { api } from '../shared/config';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs/Observable';
 import { HttpClient } from '@angular/common/http';
@@ -24,7 +23,7 @@ export default class UserService {
    */
   getAccounts() {
     return this.http.get(this.root + 'listAccounts').pipe(
-      tap(datra => console.log(''))
+      tap(data => console.log())
     );
   }
 
@@ -39,7 +38,7 @@ export default class UserService {
 
     return this.http
       .get(url, httpOptions)
-      .pipe(tap(data => console.log(data)),
+      .pipe(tap(data => console.log()),
       catchError(err => {
         console.log('User Not Found', err);
         return err;
@@ -125,7 +124,7 @@ export default class UserService {
     return this.http.get(url).pipe(
       tap(data => {}),
       catchError(err => {
-        console.log('Count api Not Found', err);
+        console.log('Error in getting token commitment count', err);
         return err;
       })
     );
@@ -137,7 +136,7 @@ export default class UserService {
   getBalance(address) {
     const url = this.root + 'account/' + address;
     return this.http.get(url).pipe(
-      tap(datra => console.log(''))
+      tap(datra => console.log())
     );
   }
 
@@ -194,7 +193,7 @@ export default class UserService {
       contractName: account.contractName,
       isSelected: account.selection,
     };
-    return this.http.post(url, body, httpOptions).pipe(tap(data => console.log('added ERC-20 Account')));
+    return this.http.post(url, body, httpOptions).pipe(tap(data => console.log('Added ERC-20 account')));
   }
 
   /**
@@ -220,7 +219,7 @@ export default class UserService {
         isSelected: account.selection
       };
     }
-    return this.http.post(url, body, httpOptions).pipe(tap(data => console.log('update ERC-20 Account')));
+    return this.http.post(url, body, httpOptions).pipe(tap(data => console.log('Update ERC-20 Account')));
   }
 
   /**
@@ -236,7 +235,7 @@ export default class UserService {
     } else if (account.tokenShield) {
       url = url + 'token_shield=' + account.contractAdd;
     }
-    return this.http.post(url, httpOptions).pipe(tap(data => console.log('update ERC-20 Account')));
+    return this.http.post(url, httpOptions).pipe(tap(data => console.log('Delete ERC-20 Account')));
   }
 
   /**
@@ -245,7 +244,7 @@ export default class UserService {
   getDefaultShieldAddress() {
     const url = config.apiGateway.root + 'getShieldAddresses';
     return this.http.get(url).pipe(
-      tap(data => console.log(''))
+      tap(data => console.log())
     );
   }
 
@@ -256,7 +255,7 @@ export default class UserService {
   getNFTAddress() {
     const url = config.apiGateway.root  + 'getNFTokenContractAddress';
     return this.http.get(url).pipe(
-      tap(data => console.log(''))
+      tap(data => console.log())
     );
   }
 
@@ -266,10 +265,61 @@ export default class UserService {
   getFTAddress() {
     const url = config.apiGateway.root + 'getFTokenContractAddress';
     return this.http.get(url).pipe(
-      tap(data => console.log(''))
+      tap(data => console.log())
     );
   }
 
+  /**
+   * Method to blacklist an account
+   *
+   * @param name
+   */
+  setAddressToBlacklist(name) {
+    const httpOptions = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+    };
+    const url = this.root + 'setAddressToBlacklist';
+    const body = {
+      name,
+    };
+    return this.http.post(url, body, httpOptions).pipe(tap(data => console.log('Account blacklisted')));
+  }
+
+  /**
+   * Method to unblacklist an account
+   *
+   * @param name
+   */
+  unsetAddressFromBlacklist(name) {
+    const httpOptions = {
+      headers: new HttpHeaders({ 'Content-Type': 'application/json' }),
+    };
+    const url = this.root + 'unsetAddressFromBlacklist';
+    const body = {
+      name,
+    };
+    return this.http.post(url, body, httpOptions).pipe(tap(data => console.log('Account removed form blacklist')));
+  }
+
+  /**
+   * Method to fetch blacklisted accounts
+   */
+  getBlacklistedUsers() {
+    const url = config.apiGateway.root + 'getBlacklistedUsers';
+    return this.http.get(url).pipe(
+      tap(data => console.log())
+    );
+  }
+
+  /**
+   * Method to decrypt and view the transaction details
+   */
+  getAndDecodeTransaction(txHash, type) {
+    const url = config.apiGateway.root + 'getAndDecodeTransaction?txHash=' + txHash + '&type=' + type + 'RC';
+    return this.http.get(url).pipe(
+      tap(data => console.log())
+    );
+  }
 
   /**
    * Error handler for http request.

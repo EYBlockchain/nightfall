@@ -44,6 +44,13 @@
                     routerLinkActive="active"
                     >Accounts</a
                   >
+                  <a
+                  [routerLink]="['/admin']"
+                  class="list-group-item list-group-item-action settings-links "
+                  routerLinkActive="active"
+                  *ngIf="user.name==='admin'"
+                  >Profile Page</a
+                >
                 </div>
               </div>
             </div>

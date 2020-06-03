@@ -3,11 +3,27 @@ import nfController from '../nf-token-controller';
 
 const router = Router();
 /**
- * This function is to mint a non fungible token
- * const data = {
+ * @api {post} /mintNFToken
+ * @apiDescription This function is to mint a non fungible token
+ * @apiVersion 1.0.0
+ * @apiName mintNFToken
+ *
+ * @apiParam (Request body) {String} tokenUri URI of token.
+ * @apiParam (Request body) {String} tokenId  ID of token.
+ * @apiExample {json} Example usage:
+ * req.body = {
  *   tokenUri: 'unique token URI',
  *   "tokenId":"0x1542f342b6220000000000000000000000000000000000000000000000000000"
  * }
+ *
+ * @apiSuccess (Success 200) {String} message NFT Mint Successful.
+ *
+ * @apiSuccessExample {json} Success-Response:
+ * HTTPS 200 OK
+ * {
+ *		"message": "NFT Mint Successful"
+ * }
+ *
  * @param {*} req
  * @param {*} res
  */
@@ -27,8 +43,17 @@ async function mint(req, res, next) {
 }
 
 /**
- * This function is to transfer a non fungible token to a reciever
- * const data = {
+ * @api {post} /transferNFToken
+ * @apiDescription This function is to transfer a non fungible token to a reciever
+ * @apiVersion 1.0.0
+ * @apiName transferNFToken
+ *
+ * @apiParam (Request body) {String} tokenId      unique ERC-721 token Id.
+ * @apiParam (Request body) {String} tokenUri     URI of token.
+ * @apiParam (Request body) {String} receiver     Name of Receiver.
+ * @apiParam (Request body) {Boolean} isMinted    if the token is minted.
+ * @apiExample {json} Example usage:
+ * req.body = {
  *    tokenUri: "sample"
  *    tokenId: "0x1542f342b6220000000000000000000000000000000000000000000000000000"
  *    receiver: {
@@ -36,6 +61,15 @@ async function mint(req, res, next) {
  *      address: "0x666fA6a40F7bc990De774857eCf35e3C82f07505"
  *    }
  * }
+ *
+ * @apiSuccess (Success 200) {String} message NFT Transfer Successful.
+ *
+ * @apiSuccessExample {json} Success-Response:
+ * HTTPS 200 OK
+ * {
+ *		"message": "NFT Transfer Successful"
+ * }
+ *
  * @param {*} req
  * @param {*} res
  */
@@ -55,11 +89,27 @@ async function transfer(req, res, next) {
 }
 
 /**
- * This function is to burn a non fungible token
- * const data = {
+ * @api {post} /burnNFToken
+ * @apiDescription This function is to burn a non fungible token
+ * @apiVersion 1.0.0
+ * @apiName burnNFToken
+ *
+ * @apiParam (Request body) {String} tokenId      unique ERC-721 token Id.
+ * @apiParam (Request body) {String} tokenUri     URI of token.
+ * @apiExample {json} Example usage:
+ * req.body = {
  *    tokenUri: "sample"
  *    tokenId: "0x1542f342b6220000000000000000000000000000000000000000000000000000"
  *  }
+ *
+ * @apiSuccess (Success 200) {String} message NFT Burn Successful.
+ *
+ * @apiSuccessExample {json} Success-Response:
+ * HTTPS 200 OK
+ * {
+ *		"message": "NFT Burn Successful"
+ * }
+ *
  * @param {*} req
  * @param {*} res
  */
@@ -80,6 +130,12 @@ async function burn(req, res, next) {
 
 /**
  * This function is to retrieve address of a non fungible token
+ * res.data :
+ * {
+ *    "balance":"0",
+ *    "nftName":"EYToken",
+ *    "nftSymbol":"EYT"
+ * }
  * @param {*} req
  * @param {*} res
  */
@@ -99,6 +155,12 @@ async function getAddress(req, res, next) {
 
 /**
  * This function is to retrieve information of a non fungible token
+ * res.data : {
+ *    "balance":"1",
+ *    "nftName":"EYToken",
+ *    "nftSymbol":"EYT"
+ * }
+ *
  * @param {*} req
  * @param {*} res
  */

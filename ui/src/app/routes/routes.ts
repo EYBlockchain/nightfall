@@ -6,6 +6,7 @@ import OverviewComponent from '../pages/overview';
 import { AuthService } from '../services/auth/auth.service';
 import UserSettingsComponent from '../pages/user-settings';
 import UserProfileComponent from '../pages/user-profile';
+import AdminComponent from '../pages/admin';
 import { UserAccountsComponent } from '../pages/user-accounts/user-accounts.component';
 
 import NftMintComponent from '../pages/nft-mint';
@@ -24,6 +25,7 @@ import FtTransferComponent from '../pages/ft-transfer';
 
 import FtCommitmentMintComponent from '../pages/ft-commitment-mint';
 import FtCommitmentTrasnferComponent from '../pages/ft-commitment-transfer';
+import FtCommitmentConsolidationTrasnferComponent from '../pages/ft-commitment-consolidation-transfer';
 import FtCommitmentBurnComponent from '../pages/ft-commitment-burn';
 import FtCommitmentListComponent from '../pages/ft-commitment-list';
 import FtCommitmentBatchTrasnferComponent from '../pages/ft-commitment-batch-transfer';
@@ -40,6 +42,7 @@ export const appRoutes: Routes = [
     ],
     canActivate: [AuthService]
   },
+  { path: 'admin', component: AdminComponent, canActivate: [AuthService] },
   { path: 'overview', component: OverviewComponent, canActivate: [AuthService] },
 
   { path: 'nft-commitment/mint', component: NftCommitmentMintComponent , canActivate: [AuthService]},
@@ -54,6 +57,7 @@ export const appRoutes: Routes = [
 
   { path: 'ft-commitment/mint' , component: FtCommitmentMintComponent, canActivate: [AuthService] },
   { path: 'ft-commitment/transfer', component: FtCommitmentTrasnferComponent, canActivate: [AuthService] },
+  { path: 'ft-commitment/consolidation-transfer', component: FtCommitmentConsolidationTrasnferComponent, canActivate: [AuthService] },
   { path: 'ft-commitment/batch-transfer', component: FtCommitmentBatchTrasnferComponent, canActivate: [AuthService] },
   { path: 'ft-commitment/burn', component: FtCommitmentBurnComponent, canActivate: [AuthService] },
   { path: 'ft-commitment/list' , component: FtCommitmentListComponent, canActivate: [AuthService] },

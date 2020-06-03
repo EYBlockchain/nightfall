@@ -122,7 +122,7 @@ export default class FtCommitmentBatchTrasnferComponent implements OnInit , Afte
           });
         }
       }, (error) => {
-        console.log('error', error);
+        console.log('Error in listing FTCommitments ', error);
         this.isRequesting = false;
       });
   }
@@ -150,7 +150,7 @@ export default class FtCommitmentBatchTrasnferComponent implements OnInit , Afte
     let emptyInputFlag: boolean;
     const count = this.selectedCommitmentList.length;
     if (!count || count !== 1) {
-      this.toastr.error('Invalid commitment Selection.');
+      this.toastr.warning('Invalid commitment Selection.', 'Warning');
       return;
     }
     this.transferData = this.transferDetails.value.map(({value, receiverName}) => {
@@ -167,28 +167,39 @@ export default class FtCommitmentBatchTrasnferComponent implements OnInit , Afte
     });
     const { transactions } = this;
     if (emptyInputFlag === true) {
-      this.toastr.error('All fields are mandatory');
+      this.toastr.warning('All fields are mandatory.', 'Warning');
       return;
     }
     this.isRequesting = true;
     const [commitment] = this.selectedCommitmentList;
-    // const transactionId = this.batchTransactions['id'];
+
     this.ftCommitmentService.transferFTBatchCommitment(
       this.selectedCommitmentList[0],
       this.transferData,
     ).subscribe( data => {
         this.isRequesting = false;
-        this.toastr.success('Transferred to selected receivers');
-        transactions.splice(commitment.id, 1);
-        this.getFTCommitments();
-        this.router.navigate(['/overview'], { queryParams: { selectedTab: 'ft-batch-commitment' } });
+
+        this.toastr.success('Transferred fungible tokens to selected receivers.', 'Success');
+
+        // reset the form
+        while (this.transferDetails.length !== 0) {
+          this.transferDetails.removeAt(0);
+        }
+        this.transferDetails.push(this.createItemFormGroup());
+
+        // delete used commitment from commitment list
+        transactions.splice(transactions.indexOf(commitment), 1);
+        this.transactions = [ ...this.transactions ];
+        this.selectedCommitmentList = [];
+
+        // navigate to overview page if no more commitment left
+        if (!transactions.length) {
+          this.router.navigate(['/overview'], { queryParams: { selectedTab: 'ft-batch-commitment' } });
+        }
+
       }, ({error}) => {
         this.isRequesting = false;
-        if (error.error && error.error.message) {
-          this.toastr.error(error.error.message, 'Error');
-        } else {
-          this.toastr.error('Please try again', 'Error');
-        }
+        this.toastr.error('Please try again.', 'Error');
     });
   }
 

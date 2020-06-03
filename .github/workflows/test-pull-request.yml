@@ -18,8 +18,8 @@ jobs:
       - name: Run check for ESLint errors
         run: npm run lint
 
-  zkp-unit-test:
-    name: ZKP microservice unit test
+  zkp-unit-test-sha:
+    name: ZKP microservice unit test (HASH_TYPE = sha)
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v1
@@ -27,7 +27,9 @@ jobs:
         with:
           node-version: '10.15.3'
       - name: Pull docker image
-        run: docker pull zokrates/zokrates:0.5.1
+        run: |
+          docker rmi $(docker images -aq)
+          docker pull zokrates/zokrates:0.5.1
       - name: Increase swap memory
         run: |
           sudo usermod -a -G sudo runner
@@ -35,31 +37,28 @@ jobs:
           sudo fallocate -l 12G /mnt/swapfile
           sudo mkswap /mnt/swapfile
           sudo swapon /mnt/swapfile
-          swapon --show
-          grep SwapTotal /proc/meminfo
       - name: Build docker images
-        run: docker-compose build
+        run: docker-compose build truffle-zkp zkp
       - name: Generate the keys and constraint files for Zero Knowledge Proofs
         run: |
           chmod -R 777 zkp/code/
           npm run setupAll
-      - name: Remove ZoKrates Containers
+      - name: Remove containers
+        run: docker-compose down -v
+      - name: Move ft-batch-transfer to make space
         run: |
-          docker stop $(docker ps -a -q)
-          docker rm $(docker ps -a -q)
-      - name: Build zkp image
-        run: docker-compose build zkp
-      - name: Setup ganache container, deploy zkp contracts
+          sudo mv zkp/code/gm17/ft-batch-transfer /dev/ft-batch-transfer
+          sudo ln -s /dev/ft-batch-transfer zkp/code/gm17/ft-batch-transfer
+          df -h
+      - name: Deploy zkp contracts
         run: |
           docker-compose run --rm truffle-zkp compile --all
           docker-compose run --rm truffle-zkp migrate --reset --network=default
-      - name: Start merkle-tree microservice
-        run: docker-compose up -d merkle-tree
       - name: Run zkp unit tests
         run: docker-compose run --rm zkp npm test
 
-  integration-test:
-    name: Run integration test
+  zkp-unit-test-mimc:
+    name: ZKP microservice unit test (HASH_TYPE = mimc)
     runs-on: ubuntu-18.04
     steps:
       - uses: actions/checkout@v1
@@ -67,7 +66,50 @@ jobs:
         with:
           node-version: '10.15.3'
       - name: Pull docker image
-        run: docker pull zokrates/zokrates:0.5.1
+        run: |
+          docker rmi $(docker images -aq)
+          docker pull zokrates/zokrates:0.5.1
+      - name: Increase swap memory
+        run: |
+          sudo usermod -a -G sudo runner
+          sudo swapoff -a
+          sudo fallocate -l 13G /mnt/swapfile
+          sudo mkswap /mnt/swapfile
+          sudo swapon /mnt/swapfile
+      - name: Rename mimc docker-compose yml file
+        run: mv docker-compose.override.mimc.yml docker-compose.override.yml
+      - name: Build docker images
+        run: docker-compose build truffle-zkp zkp
+      - name: Generate the keys and constraint files for Zero Knowledge Proofs
+        run: |
+          chmod -R 777 zkp/code/
+          npm run setupAll-mimc
+      - name: Remove containers
+        run: docker-compose down -v
+      - name: Move ft-batch-transfer to make space
+        run: |
+          sudo mv zkp/code/gm17/ft-batch-transfer /dev/ft-batch-transfer
+          sudo ln -s /dev/ft-batch-transfer zkp/code/gm17/ft-batch-transfer
+          df -h
+      - name: Deploy zkp contracts
+        run: |
+          docker-compose run --rm truffle-zkp compile --all
+          docker-compose run --rm truffle-zkp migrate --reset --network=default
+      - name: Run zkp unit tests
+        run: docker-compose run --rm zkp npm test
+
+  integration-test-sha:
+    name: Run integration test (HASH_TYPE = sha)
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '10.15.3'
+      - name: Pull docker image
+        run: |
+          docker rmi $(docker images -aq)
+          docker pull zokrates/zokrates:0.5.1
       - name: Increase swap memory
         run: |
           sudo usermod -a -G sudo runner
@@ -75,20 +117,96 @@ jobs:
           sudo fallocate -l 12G /mnt/swapfile
           sudo mkswap /mnt/swapfile
           sudo swapon /mnt/swapfile
-          swapon --show
-          grep SwapTotal /proc/meminfo
-      - name: Build docker images
-        run: docker-compose build
       - name: Generate the keys and constraint files for Zero Knowledge Proofs
         run: |
           chmod -R 777 zkp/code/
           npm run setupAll
-      - name: Remove ZoKrates Containers
+      - name: Remove containers
+        run: docker-compose down -v
+      - name: Move ft-batch-transfer to make space
         run: |
-          docker stop $(docker ps -a -q)
-          docker rm $(docker ps -a -q)
+          sudo mv zkp/code/gm17/ft-batch-transfer /dev/ft-batch-transfer
+          sudo ln -s /dev/ft-batch-transfer zkp/code/gm17/ft-batch-transfer
+          df -h
       - name: Run integration test
         run: ./nightfall-test
+      - name: If integration test failed, upload logs files as artifacts
+        if: failure()
+        uses: actions/upload-artifact@master
+        with:
+          name: integration-test-logs
+          path: nightfall_test.log
+
+  integration-test-mimc:
+    name: Run integration test (HASH_TYPE = mimc)
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '10.15.3'
+      - name: Pull docker image
+        run: |
+          docker rmi $(docker images -aq)
+          docker pull zokrates/zokrates:0.5.1
+      - name: Increase swap memory
+        run: |
+          sudo usermod -a -G sudo runner
+          sudo swapoff -a
+          sudo fallocate -l 13G /mnt/swapfile
+          sudo mkswap /mnt/swapfile
+          sudo swapon /mnt/swapfile
+      - name: Rename mimc docker-compose yml file
+        run: cp docker-compose.override.mimc.yml docker-compose.override.yml
+      - name: Generate the keys and constraint files for Zero Knowledge Proofs
+        run: |
+          chmod -R 777 zkp/code/
+          npm run setupAll-mimc
+      - name: Remove containers
+        run: docker-compose down -v
+      - name: Move ft-batch-transfer to make space
+        run: |
+          sudo mv zkp/code/gm17/ft-batch-transfer /dev/ft-batch-transfer
+          sudo ln -s /dev/ft-batch-transfer zkp/code/gm17/ft-batch-transfer
+          df -h
+      - name: Run integration test
+        run: ./nightfall-test mimc
+      - name: If integration test failed, upload logs files as artifacts
+        if: failure()
+        uses: actions/upload-artifact@master
+        with:
+          name: integration-test-logs
+          path: nightfall_test.log
+
+  integration-test-compliance:
+    name: Run compliance integration test
+    runs-on: ubuntu-18.04
+    steps:
+      - uses: actions/checkout@v1
+      - uses: actions/setup-node@v1
+        with:
+          node-version: '10.15.3'
+      - name: Pull docker image
+        run: |
+          docker rmi $(docker images -aq)
+          docker pull zokrates/zokrates:0.5.1
+      - name: Increase swap memory
+        run: |
+          sudo usermod -a -G sudo runner
+          sudo swapoff -a
+          sudo fallocate -l 13G /mnt/swapfile
+          sudo mkswap /mnt/swapfile
+          sudo swapon /mnt/swapfile
+      - name: Rename compliance docker-compose yml file
+        run: cp docker-compose.override.compliance.yml docker-compose.override.yml
+      - name: Generate the keys and constraint files for Zero Knowledge Proofs
+        run: |
+          chmod -R 777 zkp/code/
+          npm run setupAll-rc
+      - name: Remove containers
+        run: docker-compose down -v
+      - name: Run integration test
+        run: ./nightfall-test compliance
       - name: If integration test failed, upload logs files as artifacts
         if: failure()
         uses: actions/upload-artifact@master

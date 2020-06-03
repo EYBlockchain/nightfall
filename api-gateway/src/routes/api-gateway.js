@@ -4,6 +4,10 @@ import {
   createAccountHandler,
   loadVks,
   getTokenCommitmentCounts,
+  setAddressToBlacklist,
+  unsetAddressFromBlacklist,
+  getBlacklistedUsers,
+  getAndDecodeTransaction,
 } from '../services/api-gateway';
 
 const router = express.Router();
@@ -14,7 +18,7 @@ const router = express.Router();
  * @apiName Login
  * @apiGroup User
  *
- * @apiParam (Request body) {String} name The User name
+ * @apiParam (Request body) {String} name     The User name
  * @apiParam (Request body) {String} password The User Password
  *
  * @apiExample {js} Example usage:
@@ -55,8 +59,8 @@ router.route('/login').post(loginHandler);
  * @apiName SignUp
  * @apiGroup User
  *
- * @apiParam (Request body) {String} name The User name
- * @apiParam (Request body) {String} email The User Email
+ * @apiParam (Request body) {String} name     The User name
+ * @apiParam (Request body) {String} email    The User Email
  * @apiParam (Request body) {String} password The User Password
  *
  * @apiExample {js} Example usage:
@@ -101,8 +105,8 @@ router.route('/createAccount').post(createAccountHandler);
  *   .success((res, status) => doSomethingHere())
  *   .error((err, status) => doSomethingHere());
  *
- * @apiSuccess (Success 200) {Number} nftCommitmentCount Total no. of ERC-721 commitments.
- * @apiSuccess (Success 200) {Number} ftCommitmentCount Total no. of ERC-20 commitments.
+ * @apiSuccess (Success 200) {Number} nftCommitmentCount  Total no. of ERC-721 commitments.
+ * @apiSuccess (Success 200) {Number} ftCommitmentCount   Total no. of ERC-20 commitments.
  *
  * @apiSuccessExample {json} Success response:
  *     HTTPS 200 OK
@@ -114,6 +118,102 @@ router.route('/createAccount').post(createAccountHandler);
  * @apiUse NameInUse
  */
 router.get('/getTokenCommitmentCounts', getTokenCommitmentCounts);
+
+/**
+ * @api {post} /setAddressToBlacklist blacklist a user account address
+ * @apiVersion 1.0.0
+ * @apiName setAddressToBlacklist
+ * @apiGroup User
+ *
+ * $http.get(url, data)
+ *   .success((res, status) => doSomethingHere())
+ *   .error((err, status) => doSomethingHere());
+ *
+ * @apiSuccess (Success 200) {string} message status message.
+ *
+ * @apiSuccessExample {json} Success response:
+ *     HTTPS 200 OK
+ *    {
+ *    "message": "added to blacklist"
+ *    }
+ *
+ * @apiUse NameInUse
+ */
+router.post('/setAddressToBlacklist', setAddressToBlacklist);
+
+/**
+ * @api {post} /unsetAddressFromBlacklist will remove a user account address from blacklist.
+ * @apiVersion 1.0.0
+ * @apiName unsetAddressFromBlacklist
+ * @apiGroup User
+ *
+ * $http.get(url, data)
+ *   .success((res, status) => doSomethingHere())
+ *   .error((err, status) => doSomethingHere());
+ *
+ * @apiSuccess (Success 200) {string} message status message.
+ *
+ * @apiSuccessExample {json} Success response:
+ *     HTTPS 200 OK
+ *    {
+ *    "message": "removed from blacklist"
+ *    }
+ *
+ * @apiUse NameInUse
+ */
+router.post('/unsetAddressFromBlacklist', unsetAddressFromBlacklist);
+
+/**
+ * @api {get} /getBlacklistedUsers fetch blacklisted users.
+ * @apiVersion 1.0.0
+ * @apiName getBlacklistedUsers
+ * @apiGroup User
+ *
+ * $http.get(url, data)
+ *   .success((res, status) => doSomethingHere())
+ *   .error((err, status) => doSomethingHere());
+ *
+ * @apiSuccess (Success 200) {Sting} name Name of the user.
+ * @apiSuccess (Success 200) {Boolean} isBlacklisted.
+ *
+ * @apiSuccessExample {json} Success response:
+ *     HTTPS 200 OK
+ *    {
+ *    "data": [
+ *      null,
+ *       {
+ *           "name": "a",
+ *           "isBlacklisted": true
+ *      },
+ *      {
+ *           "name": "b",
+ *           "isBlacklisted": true
+ *      }
+ *    ]
+ *    }
+ *
+ * @apiUse NameInUse
+ */
+router.get('/getBlacklistedUsers', getBlacklistedUsers);
+
+/**
+ * @api {get} /getAndDecodeTransaction fetch docoded zkp transactions.
+ * @apiVersion 1.0.0
+ * @apiName getAndDecodeTransaction
+ * @apiGroup User
+ *
+ * $http.get(url, data)
+ *   .success((res, status) => doSomethingHere())
+ *   .error((err, status) => doSomethingHere());
+ *
+ * @apiSuccess (Success 200) {Sting} name Name of the user.
+ * @apiSuccess (Success 200) {Boolean} isBlacklisted.
+ *
+ * @apiSuccessExample {json} Success response:
+ *     HTTPS 200 OK
+ * @apiUse NameInUse
+ */
+router.get('/getAndDecodeTransaction', getAndDecodeTransaction);
 
 // vk APIs
 router.route('/vk').post(loadVks);

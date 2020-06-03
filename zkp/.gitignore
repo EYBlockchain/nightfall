@@ -95,7 +95,7 @@ build-test
 
 #other zkp files
 #ensures users who do their own local 'trusted setups' don't 'corrupt' the shared zkp files in the opensource repo.
-**/gm17/*/**
+code/gm17/*
 !**/*.code
 !**/*.zok
 # We want to keep ft-burn.code, but not out.code

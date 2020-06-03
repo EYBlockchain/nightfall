@@ -56,12 +56,13 @@ export default class CreateAccountsComponent implements OnInit {
     this.isRequesting = true;
      this.userService.createAccount(this.createAccount.value).subscribe(
       data => {
-        this.toastr.success('Account Created', 'Success');
+        this.toastr.success('Account Created.', 'Success');
         this.isRequesting = false;
         this.router.navigate(['/login']);
       },
-      (err: HttpErrorResponse) => {
-        this.toastr.error('Please try again', 'Error');
+      (error) => {
+        const errMessage = error.error.error.message + '. Please try again.';
+        this.toastr.error(errMessage, 'Error');
         this.isRequesting = false;
       }
     );

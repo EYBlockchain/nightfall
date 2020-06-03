@@ -7,11 +7,54 @@ NC='\033[0m'
 
 declare isTestFailed=false
 
-printf "${GREEN}*** Cleaning up all test containers ***${NC}\n"
-docker-compose -f docker-compose.yml down -v || true
+launchContainersAndRunIntegrationTest(){
+  printf "${GREEN}*** Docker Compose Build ***${NC}\n"
+  docker-compose build
 
-printf "${GREEN}*** Build image for all Containers ***${NC}\n"
-docker-compose -f docker-compose.yml build
+  printf "${GREEN}*** Launching containerized ganache ***${NC}\n"
+  docker-compose up -d ganache
+
+  printf "${GREEN}*** Deploying all contracts ***${NC}\n"
+  docker-compose run --rm truffle-offchain migrate --reset --network=default
+  docker-compose run --rm truffle-zkp migrate --reset --network=default
+
+  printf "${GREEN}*** Launching independent containers ***${NC}\n"
+  # these container take time to setup
+  # starting them first to avoid ECONNREFUSED error
+  # as other containers depends on them
+  docker-compose up -d mongo-merkle-tree
+  docker-compose up -d mongo-nightfall
+
+  sleep 10
+
+  printf "${GREEN}*** Launching containerized microservices ***${NC}\n"
+  if [[ -f docker-compose.override.yml ]]
+  then
+    docker-compose -f docker-compose.yml -f docker-compose.override.yml -f ./integration-test/docker-compose.test.yml up -d api-gateway
+  else
+    docker-compose -f docker-compose.yml -f ./integration-test/docker-compose.test.yml up -d api-gateway
+  fi
+
+  # save all test logs to a file in background
+  printf "${GREEN}*** Saving the test logs to nightfall_test.log file ***${NC}\n"
+  docker-compose logs -f &> nightfall_test.log &disown
+
+  # delay needed to ensure all container are in running state.
+  sleep 30
+
+  printf "${GREEN}*** Run Integration test ***${NC}\n"
+  npm run $1 || isTestFailed=true
+}
+
+
+printf "${GREEN}*** Cleaning up all test containers ***${NC}\n"
+docker-compose down -v || true
+
+printf  "${GREEN}*** Delete files created by previous run ***${NC}\n"
+rm -dr zkp/build/ || true
+rm -dr offchain/build/ || true
+rm zkp/contracts/MerkleTree.sol || true
+rm docker-compose.override.yml || true
 
 printf "${GREEN}*** Pull zokrates docker image ***${NC}\n"
 docker pull zokrates/zokrates:0.5.1
@@ -24,32 +67,22 @@ pushd zkp-utils
 npm ci
 popd
 
-printf "${GREEN}*** Launching containerized ganache ***${NC}\n"
-docker-compose up -d ganache
+if [[ "$1" == "compliance" || "$1" == "mimc" ]]
+then
+  cp docker-compose.override.$1.yml docker-compose.override.yml
+  launchContainersAndRunIntegrationTest test-$1
 
-printf "${GREEN}*** Deploying all contracts ***${NC}\n"
-docker-compose run --rm truffle-offchain migrate --reset --network=default
-docker-compose run --rm truffle-zkp migrate --reset --network=default
+else
+  launchContainersAndRunIntegrationTest test
+fi
 
-printf "${GREEN}*** Launching containerized microservices ***${NC}\n"
-docker-compose -f docker-compose.yml up --build -d mongo-nightfall accounts offchain zkp database api-gateway mongo-merkle-tree merkle-tree
-
-# save all test logs to a file in background
-printf "${GREEN}*** Saving the test logs to nightfall_test.log file ***${NC}\n"
-docker-compose -f docker-compose.yml logs -f &> nightfall_test.log &disown
-
-# delay needed to ensure all container are in running state.
-sleep 20
-
-# RUN test suits and remove test containers
-printf "${GREEN}*** Run Integration test ***${NC}\n"
-npm run test || isTestFailed=true
+df -h
 
 printf "${GREEN}*** List all containers with their Ips ***${NC}\n"
-docker inspect -f '{{.Name}} {{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $(docker-compose -f docker-compose.yml ps -q)
+docker inspect -f '{{.Name}} {{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $(docker-compose ps -q)
 
 printf "${GREEN}*** Cleaning up all containers ***${NC}\n"
-docker-compose -f docker-compose.yml down -v || {
+docker-compose down -v || {
   # delay need as waiting time so all container are properly done
   # nightfall_default network have no dependency left.
   sleep 3
@@ -63,7 +96,7 @@ docker-compose -f docker-compose.yml down -v || {
   printf "${GREEN}*** Remove zkp-code volume ***${NC}\n"
   docker volume rm nightfall_zkp-code-volume
 
-	printf "${GREEN}*** Remove the merkle tree's mongo volume ***${NC}\n"
+  printf "${GREEN}*** Remove the merkle tree's mongo volume ***${NC}\n"
   docker volume rm nightfall_mongo-merkle-tree-volume
 }
 

@@ -164,6 +164,26 @@ async function checkCorrectness(
   return results;
 }
 
+/**
+Return transaction receipt for a particular transaction hash.
+@param txHash - Mined transaction's hash.
+@returns - an object transaction receipt.
+*/
+async function getTxRecipt(txHash) {
+  const web3 = Web3.connection();
+  return web3.eth.getTransactionReceipt(txHash);
+}
+
+/**
+Return decoded transaction receipt object.
+@param inputs - event input defination.
+@param data - encoded data
+*/
+async function getTxLogDecoded(inputs, data) {
+  const web3 = Web3.connection();
+  return web3.eth.abi.decodeLog(inputs, data);
+}
+
 export default {
   getBalance,
   getFTAddress,
@@ -176,4 +196,6 @@ export default {
   unSetShield,
   checkCorrectness,
   getShieldAddress,
+  getTxRecipt,
+  getTxLogDecoded,
 };

@@ -133,7 +133,6 @@ export default class OverviewComponent extends Config implements OnInit {
     const nftBalance = this.userService.getNFTBalance();
     Observable.forkJoin([ftCount, tokenCount, nftBalance]).subscribe(
       responseList  => {
-        console.log(responseList[2]);
         this.count = responseList[1]['data'];
         this.ftBalance =  responseList[0]['data']['balance'];
         this.ftName = responseList[0]['data']['name'];
@@ -145,12 +144,11 @@ export default class OverviewComponent extends Config implements OnInit {
         localStorage.setItem('nftName', this.nftName);
         this.nftSymbol = responseList[2]['data']['nftSymbol'];
         localStorage.setItem('nftSymbol', this.nftSymbol);
-        console.log('this.count', this.count );
         this.isRequesting = false;
       },
       error => {
         this.isRequesting = false;
-        console.log('error in user get', error);
+        console.log('Error in retrieving FT and NFT counts', error);
       });
   }
 
@@ -170,13 +168,11 @@ export default class OverviewComponent extends Config implements OnInit {
     this.isPagination = false;
     this.userService.getTransactions(type, this.pageNo, this.pageSize).subscribe(
       data => {
-        console.log('getTransactions', data, type);
         if (type === 'nft-commitment') {
           this.currentType = 'nft-commitment';
           this.nftCommitmentTransactions = data['data']['data'].length > 0 ? data['data']['data'] : [];
           const totalCount = parseInt(data['data']['totalCount'], 10);
           const totalPages = this.getTotalPages(totalCount);
-          console.log('totalPages', totalPages);
           if (totalPages > 1) {
             this.isPagination = true;
           }
@@ -186,7 +182,6 @@ export default class OverviewComponent extends Config implements OnInit {
           this.nftTransactions = data['data']['data'].length > 0 ? data['data']['data'] : [];
           const totalCount = parseInt(data['data']['totalCount'], 10);
           const totalPages = this.getTotalPages(totalCount);
-          console.log('totalPages', totalPages);
           if (totalPages > 1) {
             this.isPagination = true;
           }
@@ -196,7 +191,6 @@ export default class OverviewComponent extends Config implements OnInit {
           this.ftTransactions = data['data']['data'].length > 0 ? data['data']['data'] : [];
           const totalCount = parseInt(data['data']['totalCount'], 10);
           const totalPages = this.getTotalPages(totalCount);
-          console.log('totalPages', totalPages);
           if (totalPages > 1) {
             this.isPagination = true;
           }
@@ -206,7 +200,6 @@ export default class OverviewComponent extends Config implements OnInit {
           this.ftCommitmentTransactions = data['data']['data'].length > 0 ? data['data']['data'] : [];
           const totalCount = parseInt(data['data']['totalCount'], 10);
           const totalPages = this.getTotalPages(totalCount);
-          console.log('totalPages', totalPages);
           if (totalPages > 1) {
             this.isPagination = true;
           }
@@ -214,7 +207,7 @@ export default class OverviewComponent extends Config implements OnInit {
         }
       },
       error => {
-        console.log('error in user get', error);
+        console.log('Error in fetching token transaction', error);
       }
     );
   }
@@ -235,7 +228,6 @@ export default class OverviewComponent extends Config implements OnInit {
   getTransactionList(type, pageN, pageSize) {
     this.userService.getTransactions(type, pageN, pageSize).subscribe(
       data => {
-        console.log('getTransactions', data);
         if (type === 'nft-commitment') {
           this.currentType = 'nft-commitment';
           this.nftCommitmentTransactions = data['data']['data'].length > 0 ? data['data']['data'] : [];
@@ -251,7 +243,7 @@ export default class OverviewComponent extends Config implements OnInit {
         }
       },
       error => {
-        console.log('error in user get', error);
+        console.log('Error in fetching transaction list', error);
       }
     );
   }

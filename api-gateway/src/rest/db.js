@@ -292,12 +292,13 @@ export default {
   },
 
   // fetch FT Commitments
-  getFTCommitments({ name }) {
+  getFTCommitments({ name }, qs) {
     const options = {
       url: `${url}/ft-commitments`,
       method: 'GET',
       json: true,
       headers: { loggedInUsername: name },
+      qs,
     };
     return requestWrapper(options);
   },
@@ -322,6 +323,41 @@ export default {
       json: true,
       headers: { loggedInUsername: name },
       qs,
+    };
+    return requestWrapper(options);
+  },
+
+  // get blacklist an users.
+  getBlacklistedUsers({ name }) {
+    const options = {
+      url: `${url}/blacklist/users`,
+      method: 'GET',
+      json: true,
+      headers: { loggedInUsername: name },
+    };
+    return requestWrapper(options);
+  },
+
+  // blacklist an user.
+  setUserToBlacklist({ name }, body) {
+    const options = {
+      url: `${url}/blacklist/users`,
+      method: 'PATCH',
+      json: true,
+      headers: { loggedInUsername: name },
+      body,
+    };
+    return requestWrapper(options);
+  },
+
+  // remove account user.
+  unsetUserFromBlacklist({ name }, body) {
+    const options = {
+      url: `${url}/blacklist/users`,
+      method: 'DELETE',
+      json: true,
+      headers: { loggedInUsername: name },
+      body,
     };
     return requestWrapper(options);
   },
