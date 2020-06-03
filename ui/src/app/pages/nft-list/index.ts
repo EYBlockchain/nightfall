@@ -81,7 +81,7 @@ export default class NftListComponent implements OnInit {
       }
     }, error => {
       this.isRequesting = false;
-      this.toastr.error('Please try again!.', error);
+      this.toastr.error('Please try again.', 'Error');
     });
   }
 

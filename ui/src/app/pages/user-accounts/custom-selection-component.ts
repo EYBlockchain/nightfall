@@ -26,7 +26,6 @@ export class CustomSelectionComponent implements ViewCell, OnInit {
   @Input() rowData: any;
 
   ngOnInit() {
-      console.log('this.value', this.value);
       this.renderValue = (this.value) ? 'True' : 'False';
   }
 

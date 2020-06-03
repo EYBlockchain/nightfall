@@ -109,7 +109,6 @@ export class UserAccountsComponent extends Config implements OnInit {
   ngOnInit() {
     this._serviceSubscription = this.onChange.subscribe({
       next: (event: any) => {
-          console.log(`Received message #${event.message}`);
           const rows = Array.from(document.querySelectorAll('.ng2-smart-actions'));
           rows.forEach((item: HTMLElement, key) => {
             if (key !== 0) {
@@ -192,7 +191,7 @@ export class UserAccountsComponent extends Config implements OnInit {
    */
   addAccount(event) {
     if (!this.isValidAccountForm(event.newData)) {
-      this.toastr.error('Please fill all the fields.');
+      this.toastr.warning('Please fill all the fields.', 'Warning');
       event.confirm.reject(event.newData);
       return;
     }
@@ -200,7 +199,7 @@ export class UserAccountsComponent extends Config implements OnInit {
       this.loadAccountDetails();
       event.confirm.resolve(event.newData);
     }, (error) => {
-      this.toastr.error('Please try again!');
+      this.toastr.error('Please try again.', 'Error');
       event.confirm.reject(event.newData);
     });
   }
@@ -212,7 +211,7 @@ export class UserAccountsComponent extends Config implements OnInit {
    */
   editAccount(event) {
     if (!this.isValidAccountForm(event.newData)) {
-      this.toastr.error('Please fill all the fields.');
+      this.toastr.warning('Please fill all the fields.', 'Warning');
       event.confirm.reject(event.newData);
       return;
     }
@@ -220,7 +219,7 @@ export class UserAccountsComponent extends Config implements OnInit {
       this.loadAccountDetails();
       event.confirm.resolve(event.newData);
     }, (error) => {
-      this.toastr.error('Please try again!');
+      this.toastr.error('Please try again.', 'Error');
       event.confirm.reject(event.newData);
     });
   }
@@ -232,7 +231,7 @@ export class UserAccountsComponent extends Config implements OnInit {
    */
   deleteAccount(event) {
     if (!this.isValidAccountForm(event.data)) {
-      this.toastr.error('Please fill all the fields.');
+      this.toastr.warning('Please fill all the fields.', 'Warning');
       event.confirm.reject(event.data);
       return;
     }
@@ -240,7 +239,7 @@ export class UserAccountsComponent extends Config implements OnInit {
       this.loadAccountDetails();
       event.confirm.resolve(event.data);
     }, (error) => {
-      this.toastr.error('Please try again!');
+      this.toastr.error('Please try again.', 'Error');
       event.confirm.reject(event.data);
     });
   }
@@ -270,7 +269,7 @@ export class UserAccountsComponent extends Config implements OnInit {
 
       },
       (error) => {
-        console.log('error', error);
+        console.log('Error in populating existing shield contract info ', error);
       }
     );
   }
@@ -283,7 +282,7 @@ export class UserAccountsComponent extends Config implements OnInit {
       (data: any) => {
         this.defaultContractDetails = data['data'];
     }, (error) => {
-      console.log('error', error);
+      console.log('Error in getting default shield contract details ', error);
     });
   }
 

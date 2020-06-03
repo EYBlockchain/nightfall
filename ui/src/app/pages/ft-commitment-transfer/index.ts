@@ -96,7 +96,6 @@ export default class FtCommitmentTrasnferComponent implements OnInit , AfterCont
       .subscribe(
         (data) => {
         this.isRequesting = false;
-        console.log(data['data']);
         if (data && data['data'].length ) {
           this.transactions = data['data'].map((tx, indx) => {
             tx.selected = false;
@@ -105,7 +104,7 @@ export default class FtCommitmentTrasnferComponent implements OnInit , AfterCont
           });
         }
       }, (error) => {
-        console.log('error', error);
+        console.log('Error in listing FTCommitments', error);
         this.isRequesting = false;
       });
   }
@@ -131,9 +130,8 @@ export default class FtCommitmentTrasnferComponent implements OnInit , AfterCont
    */
   initiateTransfer () {
     const count = this.selectedCommitmentList.length;
-    console.log('count', count, this.selectedCommitmentList);
     if (!count || count !== 2) {
-      this.toastr.error('Invalid commitment Selection.');
+      this.toastr.warning('Invalid commitment Selection.', 'Warning');
       return;
     }
     const [commitment1, commitment2] = this.selectedCommitmentList;
@@ -143,7 +141,7 @@ export default class FtCommitmentTrasnferComponent implements OnInit , AfterCont
     } = this;
 
     if (!transferValue || !this.receiverName) {
-      this.toastr.error('All fields are mandatory');
+      this.toastr.warning('All fields are mandatory.', 'Warning');
       return;
     }
 
@@ -151,7 +149,6 @@ export default class FtCommitmentTrasnferComponent implements OnInit , AfterCont
     let returnValue = Number(commitment1['value']) + Number(commitment2['value']);
     returnValue -= transferValue;
     console.log('RETURNVALUE', returnValue, transferValue, this.toHex(returnValue), this.toHex(transferValue));
-
     this.ftCommitmentService.transferFTCommitment(
       [commitment1, commitment2],
       [{value: this.toHex(transferValue)}, {value: this.toHex(returnValue)}],
@@ -176,7 +173,7 @@ export default class FtCommitmentTrasnferComponent implements OnInit , AfterCont
         }
       }, error => {
         this.isRequesting = false;
-        this.toastr.error('Please try again', 'Error');
+        this.toastr.error('Please try again.', 'Error');
     });
   }
 
@@ -185,12 +182,10 @@ export default class FtCommitmentTrasnferComponent implements OnInit , AfterCont
    * @param item {Object} Item to be removed.
    */
   onRemove(item) {
-    console.log('selected items', this.selectedCommitmentList, item);
     const newList = this.selectedCommitmentList.filter((it) => {
       return item._id !== it._id;
     });
     this.selectedCommitmentList = newList;
-    console.log('selected new items', this.selectedCommitmentList);
   }
 
   /**

@@ -49,11 +49,11 @@ export default class FtMintComponent implements OnInit {
     this.isRequesting = true;
     this.ftService.mintFToken(this.amount).subscribe(transaction => {
       this.isRequesting = false;
-      this.toastr.success('fungible token minted successfully.');
+      this.toastr.success('Fungible token(s) minted successfully.', 'Success');
       this.router.navigate(['/overview'], { queryParams: { selectedTab: 'ft' } });
     }, error => {
         this.isRequesting = false;
-        this.toastr.error('Please try again', 'Error');
+        this.toastr.error('Please try again.', 'Error');
     });
   }
 

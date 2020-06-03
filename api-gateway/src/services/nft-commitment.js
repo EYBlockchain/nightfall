@@ -47,7 +47,6 @@ export async function insertNFTCommitmentToDb(req, res, next) {
 export async function getNFTCommitments(req, res, next) {
   try {
     res.data = await db.getNFTCommitments(req.user, req.query);
-    console.log(res.data);
     next();
   } catch (err) {
     next(err);
@@ -224,7 +223,7 @@ export async function transferToken(req, res, next) {
   try {
     // Generate a new one-time-use Ethereum address for the sender to use
     const password = (req.user.address + Date.now()).toString();
-    const address = (await accounts.createAccount(password)).data;
+    const address = await accounts.createAccount(password);
     await db.updateUserWithPrivateAccount(req.user, { address, password });
     await accounts.unlockAccount({ address, password });
 

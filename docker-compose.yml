@@ -112,6 +112,11 @@ services:
       - ./ui/tsconfig.json:/app/tsconfig.json
     ports:
       - '8000:80'
+    environment:
+      API_GATEWAY_HOST: http://localhost
+      API_GATEWAY_PORT: 8001
+      RABBITMQ_HOST: ws://localhost
+      RABBITMQ_PORT: 15674
     networks:
       - nightfall_network
 
@@ -136,6 +141,12 @@ services:
       - ./zkp-utils:/app/node_modules/zkp-utils
       - ./database/config:/app/config
       - ./database/setup-mongo-acl-for-new-users.js:/app/setup-mongo-acl-for-new-users.js
+    environment:
+      MONGO_HOST: mongo-nightfall
+      MONGO_PORT: 27017
+      MONGO_NAME: nightfall
+      MONGO_USERNAME: admin
+      MONGO_PASSWORD: admin
     networks:
       - nightfall_network
 

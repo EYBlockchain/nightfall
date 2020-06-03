@@ -91,7 +91,7 @@ export default class NftCommitmentMintComponent implements OnInit, AfterContentI
         }
       }, error => {
         this.isRequesting = false;
-        this.toastr.error('Please try again', 'Error');
+        this.toastr.error('Please try again.', 'Error');
     });
   }
 
@@ -101,12 +101,10 @@ export default class NftCommitmentMintComponent implements OnInit, AfterContentI
    * @param item {Object} Item to be removed.
    */
   onRemove(item) {
-    console.log('selected items', this.selectedCommitmentList, item);
     const newList = this.selectedCommitmentList.filter((it) => {
       return item._id !== it._id;
     });
     this.selectedCommitmentList = newList;
-    console.log('selected new items', this.selectedCommitmentList);
   }
 
   /**
@@ -134,7 +132,7 @@ export default class NftCommitmentMintComponent implements OnInit, AfterContentI
       this.tokenList = data['data'];
     }, error => {
       this.isRequesting = false;
-      console.log('getNFTokens error', error);
+      console.log('Error in listing NFTokens', error);
   });
   }
 

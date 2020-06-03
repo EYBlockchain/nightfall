@@ -71,7 +71,7 @@ export default class FtTransferComponent implements OnInit {
         this.ftBalance = data['data']['balance'];
       },
       error => {
-        console.log('error in user get', error);
+        console.log('Error in listing FTokens', error);
       }
     );
   }
@@ -81,16 +81,16 @@ export default class FtTransferComponent implements OnInit {
   transferFToken() {
     if (!this.amount || !this.receiverName) { return; }
     if (this.amount > this.ftBalance) {
-      return this.toastr.error('You do not have enough ERC-20 tokens');
+      return this.toastr.warning('You do not have enough ERC-20 tokens');
     }
     this.isRequesting = true;
     this.ftService.transferFToken(this.amount, this.receiverName).subscribe(transaction => {
       this.isRequesting = false;
-      this.toastr.success('fungible token transferred Successfully.');
+      this.toastr.success('Fungible token(s) transferred Successfully.', 'Success');
       this.router.navigate(['/overview'], { queryParams: { selectedTab: 'ft' } });
     }, error => {
         this.isRequesting = false;
-        this.toastr.error('Please try again', 'Error');
+        this.toastr.error('Please try again.', 'Error');
     });
   }
 

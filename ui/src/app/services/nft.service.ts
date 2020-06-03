@@ -49,7 +49,7 @@ export default class NftService {
     const url = config.apiGateway.root + 'transferNFToken';
     return this.http
       .post(url, body, httpOptions)
-      .pipe(tap(data => console.log(`Token minted `)), catchError(this.handleError('mintNFToken', [])));
+      .pipe(tap(data => console.log(`Token Transferred `)), catchError(this.handleError('mintNFToken', [])));
   }
 
  /**
@@ -67,7 +67,7 @@ export default class NftService {
 
     return this.http
       .post(url, body, httpOptions)
-      .pipe(tap(data => console.log(`Token minted `)), catchError(this.handleError('mintNFToken', [])));
+      .pipe(tap(data => console.log(`Token Burned `)), catchError(this.handleError('mintNFToken', [])));
   }
 
   /**
@@ -92,7 +92,7 @@ export default class NftService {
 
     return this.http
       .get(url, httpOptions)
-      .pipe(tap(data => console.log(data)), catchError(this.handleError('getNFTTokens', [])));
+      .pipe(tap(data => console.log()), catchError(this.handleError('getNFTTokens', [])));
   }
 
   /**

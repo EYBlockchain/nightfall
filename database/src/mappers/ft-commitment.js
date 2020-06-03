@@ -8,6 +8,7 @@ export default function({
   outputCommitments,
   zCorrect,
   zOnchainCorrect,
+  isConsolidateTransferred,
 }) {
   const flags = {
     [isMinted && 'isMinted']: isMinted,
@@ -16,6 +17,7 @@ export default function({
     [isReceived && 'isReceived']: isReceived,
     [isChange && 'isChange']: isChange,
     [isBatchTransferred && 'isBatchTransferred']: isBatchTransferred,
+    [isConsolidateTransferred && 'isConsolidateTransferred']: isConsolidateTransferred,
   };
   if (!outputCommitments) {
     return flags;

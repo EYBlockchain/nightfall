@@ -32,6 +32,7 @@ export default new Schema(
     isReceived: Boolean,
     isChange: Boolean,
     isBatchTransferred: Boolean,
+    isConsolidateTransferred: Boolean,
 
     // boolean stats - correctness checks
     commitmentReconciles: Boolean, // for a given A, pk, S and z, do we have that h(A,pk,S)=z?

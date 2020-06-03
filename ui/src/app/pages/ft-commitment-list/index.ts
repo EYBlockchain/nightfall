@@ -25,6 +25,18 @@ export default class FtCommitmentListComponent implements OnInit {
    * Fungeble Token name , read from ERC-20 contract.
    */
   ftName: string;
+  /**
+   * For pagination purpose
+   */
+  pageNo = 1;
+  /**
+   * For pagination purpose, initial value for page size is set it as 4
+   */
+  pageSize = 12;
+  /**
+   * Total collection of objects to calculate pages for pagination.
+   */
+  totalCollection: number;
 
   constructor(
     private toastr: ToastrService,
@@ -37,6 +49,16 @@ export default class FtCommitmentListComponent implements OnInit {
     this.getFTCommitments();
   }
 
+  /**
+   * Method to handle pagination.
+   *
+   * @param pageN {Number} Page number
+   */
+  pageChanged (pageNo) {
+    if (isNaN(pageNo)) { return; }
+    this.pageNo = pageNo;
+    this.getFTCommitments();
+  }
 
   /**
    * Method list down all ERC-20 commitments.
@@ -44,12 +66,15 @@ export default class FtCommitmentListComponent implements OnInit {
   getFTCommitments() {
     this.transactions = null;
     this.isRequesting = true;
-    this.ftCommitmentService.getFTCommitments()
+    this.ftCommitmentService.getFTCommitments(this.pageNo, this.pageSize)
       .subscribe( data => {
         this.isRequesting = false;
         if (data &&
-          data['data'] && data['data'].length) {
-          this.transactions = data['data'].map((tx, indx) => {
+        data['data'] &&
+        data['data']['data'] &&
+        data['data']['data'].length) {
+          this.totalCollection = parseInt(data['data']['totalCount']);
+          this.transactions = data['data']['data'].map((tx, indx) => {
             tx.selected = false;
             tx.id = indx;
             return tx;

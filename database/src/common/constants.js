@@ -9,4 +9,5 @@ export const COLLECTIONS = {
   FT_TRANSACTION: 'ft_transaction',
   FT_COMMITMENT: 'ft_commitment',
   FT_COMMITMENT_TRANSACTION: 'ft_commitment_transaction',
+  BLACKLIST: 'blacklist',
 };

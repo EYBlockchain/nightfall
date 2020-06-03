@@ -1,0 +1,19 @@
+.list-group{
+  max-height: 300px;
+  overflow:scroll;
+  -webkit-overflow-scrolling: touch;
+}
+
+.table {
+  border: 1px solid #ddd;
+  background-color: white;
+}
+
+.table-body {
+  max-height: 600px; 
+  overflow: auto;
+}
+
+.float-right {
+  float: right;
+}
