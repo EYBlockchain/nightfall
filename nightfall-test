@@ -46,15 +46,34 @@ launchContainersAndRunIntegrationTest(){
   npm run $1 || isTestFailed=true
 }
 
+cleanup(){
+  printf "${GREEN}*** Cleaning up all containers ***${NC}\n"
+  docker-compose down -v || {
+    # delay need as waiting time so all container are properly done
+    # nightfall_default network have no dependency left.
+    sleep 3
 
-printf "${GREEN}*** Cleaning up all test containers ***${NC}\n"
-docker-compose down -v || true
+    printf "${GREEN}*** Remove nightfall network ***${NC}\n"
+    docker network rm nightfall_network
 
-printf  "${GREEN}*** Delete files created by previous run ***${NC}\n"
-rm -dr zkp/build/ || true
-rm -dr offchain/build/ || true
-rm zkp/contracts/MerkleTree.sol || true
-rm docker-compose.override.yml || true
+    printf "${GREEN}*** Remove nightfall's mongo volume ***${NC}\n"
+    docker volume rm nightfall_mongo-nightfall-volume
+
+    printf "${GREEN}*** Remove zkp-code volume ***${NC}\n"
+    docker volume rm nightfall_zkp-code-volume
+
+    printf "${GREEN}*** Remove the merkle tree's mongo volume ***${NC}\n"
+    docker volume rm nightfall_mongo-merkle-tree-volume
+  }
+
+  printf  "${GREEN}*** Delete files created by previous run ***${NC}\n"
+  rm -dr zkp/build/ || true
+  rm -dr offchain/build/ || true
+  rm zkp/contracts/MerkleTree.sol || true
+  rm docker-compose.override.yml || true
+}
+
+cleanup
 
 printf "${GREEN}*** Pull zokrates docker image ***${NC}\n"
 docker pull zokrates/zokrates:0.5.1
@@ -81,24 +100,7 @@ df -h
 printf "${GREEN}*** List all containers with their Ips ***${NC}\n"
 docker inspect -f '{{.Name}} {{range .NetworkSettings.Networks}}{{.IPAddress}}{{end}}' $(docker-compose ps -q)
 
-printf "${GREEN}*** Cleaning up all containers ***${NC}\n"
-docker-compose down -v || {
-  # delay need as waiting time so all container are properly done
-  # nightfall_default network have no dependency left.
-  sleep 3
-
-  printf "${GREEN}*** Remove nightfall network ***${NC}\n"
-  docker network rm nightfall_network
-
-  printf "${GREEN}*** Remove nightfall's mongo volume ***${NC}\n"
-  docker volume rm nightfall_mongo-nightfall-volume
-
-  printf "${GREEN}*** Remove zkp-code volume ***${NC}\n"
-  docker volume rm nightfall_zkp-code-volume
-
-  printf "${GREEN}*** Remove the merkle tree's mongo volume ***${NC}\n"
-  docker volume rm nightfall_mongo-merkle-tree-volume
-}
+cleanup
 
 if $isTestFailed
 then

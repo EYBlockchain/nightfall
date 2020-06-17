@@ -30,32 +30,36 @@ launchContainers(){
   docker-compose up
 }
 
-printf "${GREEN}*** Cleaning up all containers ***${NC}\n"
-docker-compose down -v || {
-	# this block will run if ```docker-compose down -v``` fails.
-	sleep 3
+cleanup(){
+  printf "${GREEN}*** Cleaning up all containers ***${NC}\n"
+  docker-compose down -v || {
+    # this block will run if ```docker-compose down -v``` fails.
+    sleep 3
 
-	printf "${GREEN}*** Remove nightfall network ***${NC}\n"
-  docker network rm nightfall_network
+    printf "${GREEN}*** Remove nightfall network ***${NC}\n"
+    docker network rm nightfall_network
 
-  printf "${GREEN}*** Remove nightfall's mongo volume ***${NC}\n"
-  docker volume rm nightfall_mongo-nightfall-volume
+    printf "${GREEN}*** Remove nightfall's mongo volume ***${NC}\n"
+    docker volume rm nightfall_mongo-nightfall-volume
 
-  printf "${GREEN}*** Remove zkp-code volume ***${NC}\n"
-  docker volume rm nightfall_zkp-code-volume
+    printf "${GREEN}*** Remove zkp-code volume ***${NC}\n"
+    docker volume rm nightfall_zkp-code-volume
 
-	printf "${GREEN}*** Remove merkle_tree network ***${NC}\n"
-  docker network rm merkle_tree_network
+    printf "${GREEN}*** Remove merkle_tree network ***${NC}\n"
+    docker network rm merkle_tree_network
 
-	printf "${GREEN}*** Remove the merkle tree's mongo volume ***${NC}\n"
-  docker volume rm nightfall_mongo-merkle-tree-volume
+    printf "${GREEN}*** Remove the merkle tree's mongo volume ***${NC}\n"
+    docker volume rm nightfall_mongo-merkle-tree-volume
+  }
+
+  printf  "${GREEN}*** Delete files created by previous run ***${NC}\n"
+  rm -dr zkp/build/ || true
+  rm -dr offchain/build/ || true
+  rm zkp/contracts/MerkleTree.sol || true
+  rm docker-compose.override.yml || true
 }
 
-printf  "${GREEN}*** Delete files created by previous run ***${NC}\n"
-rm -dr zkp/build/ || true
-rm -dr offchain/build/ || true
-rm zkp/contracts/MerkleTree.sol || true
-rm docker-compose.override.yml || true
+cleanup
 
 printf "${GREEN}*** Pull zokrates docker image ***${NC}\n"
 docker pull zokrates/zokrates:0.5.1
@@ -73,3 +77,5 @@ then
 else
   launchContainers
 fi
+
+cleanup
