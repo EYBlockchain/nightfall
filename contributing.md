@@ -20,3 +20,16 @@ We will prefer if your commit messages can please follow the [Conventional Commi
 * `feat(code): proofs presented in more compact form`
 * `fix: remove appending of '1' to inputs`
 * `refactor(UI): new restfull api used`
+
+## Best practices
+
+We recognize certain development best practices and document them here to aid contributors, promote consistent practices and make reference easy.
+
+### Docker Compose
+
+* Bind mounts
+  * Use read only (`:ro`) for bind mounts if possible, or document why you need writable, in docker-compose.yml.
+    * [Docker bind mount documentation](https://docs.docker.com/storage/bind-mounts/#use-a-read-only-bind-mount) — "For some development applications, the container needs to write into the bind mount, so changes are propagated back to the Docker host. At other times, the container only needs read access."
+  * Use `cached` if files are expected to be edited on the host machine (e.g. for rapid development) or `delegated` if files are expected to be written on the container.
+    * [Docker: Performance tuning for volume mounts](https://docs.docker.com/docker-for-mac/osxfs-caching/)
+    * https://stackoverflow.com/a/55461550/300224 — How to use `:ro` with `:cached`

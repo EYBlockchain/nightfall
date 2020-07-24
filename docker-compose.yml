@@ -9,9 +9,9 @@ services:
     depends_on:
       - ganache
     volumes:
-      - ./accounts/src:/app/src
-      - ./accounts/config:/app/config
-      - ./accounts/.babelrc:/app/.babelrc
+      - ./accounts/src:/app/src:cached,ro
+      - ./accounts/config:/app/config:cached,ro
+      - ./accounts/.babelrc:/app/.babelrc:cached,ro
     environment:
       BLOCKCHAIN_HOST: http://ganache
       BLOCKCHAIN_PORT: 8545
@@ -29,9 +29,9 @@ services:
       - zkp
       - database
     volumes:
-      - ./api-gateway/src:/app/src
-      - ./api-gateway/config:/app/config
-      - ./api-gateway/.babelrc:/app/.babelrc
+      - ./api-gateway/src:/app/src:cached,ro
+      - ./api-gateway/config:/app/config:cached,ro
+      - ./api-gateway/.babelrc:/app/.babelrc:cached,ro
     ports:
       - '8001:80'
     environment:
@@ -56,12 +56,12 @@ services:
     depends_on:
       - ganache
     volumes:
-      - ./offchain/src:/app/src
-      - ./offchain/build:/app/build
-      - ./offchain/.babelrc:/app/.babelrc
-      - ./offchain/__tests__:/app/__tests__
-      - ./zkp-utils:/app/node_modules/zkp-utils
-      - ./offchain/config:/app/config
+      - ./offchain/src:/app/src:cached,ro
+      - ./offchain/build:/app/build:cached 
+      - ./offchain/.babelrc:/app/.babelrc:cached,ro
+      - ./offchain/__tests__:/app/__tests__:cached,ro
+      - ./zkp-utils:/app/node_modules/zkp-utils:ro
+      - ./offchain/config:/app/config:ro
     environment:
       AUTHENTICATION_API_HOST: http://api-gateway
       AUTHENTICATION_API_PORT: 80
@@ -80,13 +80,13 @@ services:
       - merkle-tree
     volumes:
       # - ./zkp/.yalc:/app/.yalc
-      - ./zkp/src:/app/src
-      - ./zkp/build:/app/build
-      - ./zkp/code:/app/code
-      - ./zkp/.babelrc:/app/.babelrc
-      - ./zkp/__tests__:/app/__tests__
-      - ./zkp/config:/app/config
-      - /var/run/docker.sock:/var/run/docker.sock
+      - ./zkp/src:/app/src:cached,ro
+      - ./zkp/build:/app/build:delegated 
+      - ./zkp/code:/app/code:cached 
+      - ./zkp/.babelrc:/app/.babelrc:cached,ro
+      - ./zkp/__tests__:/app/__tests__:cached,ro
+      - ./zkp/config:/app/config:cached,ro
+      - /var/run/docker.sock:/var/run/docker.sock 
       - /dev:/dev # only for github actions
     environment:
       HASH_TYPE: 'sha' #override this with docker-compose.override.mimc
@@ -107,9 +107,9 @@ services:
     depends_on:
       - rabbitmq
     volumes:
-      - ./ui/src:/app/src
-      - ./ui/angular.json:/app/angular.json
-      - ./ui/tsconfig.json:/app/tsconfig.json
+      - ./ui/src:/app/src:cached,ro
+      - ./ui/angular.json:/app/angular.json:cached,ro
+      - ./ui/tsconfig.json:/app/tsconfig.json:cached,ro
     ports:
       - '8000:80'
     environment:
@@ -157,7 +157,7 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD=admin
       - MONGO_INITDB_DATABASE=nightfall
     volumes:
-      - ./database/docker-entrypoint-initdb.d/01_setup_admin_user.js:/docker-entrypoint-initdb.d/01_setup_admin_user.js
+      - ./database/docker-entrypoint-initdb.d/01_setup_admin_user.js:/docker-entrypoint-initdb.d/01_setup_admin_user.js:cached
       - mongo-nightfall-volume:/data/db
     networks:
       - nightfall_network
@@ -170,10 +170,10 @@ services:
       ETH_GAS: 6000000
       ETH_GAS_PRICE: 20000000000
     volumes:
-      - ./offchain/contracts:/truffle/contracts:delegated
-      - ./offchain/migrations/:/truffle/migrations:delegated
-      - ./offchain/build/contracts/:/truffle/build/contracts:cached
-      - ./offchain/test/:/truffle/test:delegated
+      - ./offchain/contracts:/truffle/contracts:cached,ro
+      - ./offchain/migrations/:/truffle/migrations:cached,ro
+      - ./offchain/build/contracts/:/truffle/build/contracts:delegated 
+      - ./offchain/test/:/truffle/test:cached,ro
     depends_on:
       - ganache
     logging:
@@ -193,11 +193,11 @@ services:
       - ./zkp/contracts/:/truffle/contracts:delegated
       - /truffle/contracts/mimc
       - /truffle/contracts/sha
-      - ./zkp/contracts/sha/MerkleTree.sol:/truffle/contracts/MerkleTree.sol:delegated
-      - ./zkp/migrations/:/truffle/migrations:delegated
-      - ./zkp/build/contracts/:/truffle/build/contracts:cached
-      - ./zkp/test/:/truffle/test:delegated
-      - ./zkp/src/:/truffle/src:delegated
+      - ./zkp/contracts/sha/MerkleTree.sol:/truffle/contracts/MerkleTree.sol      
+      - ./zkp/migrations/:/truffle/migrations:cached,ro
+      - ./zkp/build/contracts/:/truffle/build/contracts:delegated 
+      - ./zkp/test/:/truffle/test:cached,ro
+      - ./zkp/src/:/truffle/src:cached,ro
     depends_on:
       - ganache
     logging:
@@ -222,11 +222,7 @@ services:
     environment:
       BLOCKCHAIN_HOST: ws://ganache
       BLOCKCHAIN_PORT: 8545
-      CONTRACT_LOCATION: 'default' # Where to find the contractInstances?
-      # Specify one of:
-      # - 'remote' (to GET them from a remote microservice); or
-      # - 'mongodb' (to get them from mongodb); or
-      # - 'default' (to get them from the app/build/ folder)
+      CONTRACT_LOCATION: 'default' 
       MONGO_HOST: mongodb://mongo-merkle-tree
       MONGO_PORT: 27017
       MONGO_NAME: merkle_tree
@@ -235,7 +231,6 @@ services:
     networks:
       - nightfall_network
 
-  # The database storing the merkle tree
   mongo-merkle-tree:
     image: mongo
     environment:
