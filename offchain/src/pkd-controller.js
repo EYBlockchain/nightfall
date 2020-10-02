@@ -4,7 +4,7 @@ This module provides an API for interacting with the pkd smart contract.
 The functions are fairly self-documenting so not individually commented.
 */
 
-import tc from 'truffle-contract';
+import tc from '@truffle/contract';
 import jsonfile from 'jsonfile';
 import utils from 'zkp-utils';
 
