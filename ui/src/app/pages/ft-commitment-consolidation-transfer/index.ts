@@ -63,7 +63,7 @@ export default class FtCommitmentConsolidationTrasnferComponent implements OnIni
   /**
    * Reference of combo box
    */
-  @ViewChild('select') select: NgSelectComponent;
+  @ViewChild('select', {static: false}) select: NgSelectComponent;
 
   constructor(
     private toastr: ToastrService,
@@ -85,7 +85,7 @@ export default class FtCommitmentConsolidationTrasnferComponent implements OnIni
 
   ngAfterContentInit() {
     setTimeout(() => {
-      this.select.filterInput.nativeElement.focus();
+      this.select.focus();
     }, 500);
   }
 

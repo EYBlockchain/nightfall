@@ -49,7 +49,7 @@ export default class NftCommitmentMintComponent implements OnInit, AfterContentI
   /**
    * Reference of combo box
    */
-  @ViewChild('select') select: NgSelectComponent;
+  @ViewChild('select', {static: false}) select: NgSelectComponent;
 
   constructor(
     private toastr: ToastrService,
@@ -67,7 +67,7 @@ export default class NftCommitmentMintComponent implements OnInit, AfterContentI
 
   ngAfterContentInit() {
     setTimeout(() => {
-      this.select.filterInput.nativeElement.focus();
+      this.select.focus();
     }, 500);
   }
 

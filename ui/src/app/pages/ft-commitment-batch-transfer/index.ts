@@ -71,7 +71,7 @@ export default class FtCommitmentBatchTrasnferComponent implements OnInit , Afte
   /**
    * Reference of combo box
    */
-  @ViewChild('select') select: NgSelectComponent;
+  @ViewChild('select', {static: false}) select: NgSelectComponent;
 
   constructor(
     private toastr: ToastrService,
@@ -101,7 +101,7 @@ export default class FtCommitmentBatchTrasnferComponent implements OnInit , Afte
   ngAfterContentInit() {
     setTimeout(() => {
       if (this.select) {
-        this.select.filterInput.nativeElement.focus();
+        this.select.focus();
       }
     }, 500);
   }
