@@ -1,0 +1,5 @@
+#!/bin/bash
+
+while ! nc -z $MONGO_HOST $MONGO_PORT; do sleep 3; done
+
+npm start
