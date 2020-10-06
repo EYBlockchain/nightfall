@@ -1,38 +1,39 @@
-.batch-transfer-table{
-    border: 1px solid #cacaca;
-    border-radius: .25rem;
-    width: 100%;
+.batch-transfer-table {
+  border: 1px solid #cacaca;
+  border-radius: 0.25rem;
+  width: 100%;
 }
 
-.batch-transfer-table-row{
-    border: 1px solid #cacaca;
+.batch-transfer-table-row {
+  border: 1px solid #cacaca;
 }
 
-.batch-transfer-table-head, .batch-transfer-table-content{
-    padding: 10px;
+.batch-transfer-table-head,
+.batch-transfer-table-content {
+  padding: 10px;
 }
 
-.batch-table-actions{
-    width: 10%;
+.batch-table-actions {
+  width: 10%;
 }
 
-.batch-table-value{
-    width: 40%;
+.batch-table-value {
+  width: 40%;
 }
 
-.fa-plus-square{
-    cursor: pointer;
-    color: #24AB38;
-    font-size: 25px;
+.fa-plus-square {
+  cursor: pointer;
+  color: #24ab38;
+  font-size: 25px;
 }
 
-.fa-minus-square{
-    cursor: pointer;
-    color: #FF3232;
-    font-size: 25px;
+.fa-minus-square {
+  cursor: pointer;
+  color: #ff3232;
+  font-size: 25px;
 }
 
 .disabled {
-    pointer-events: none; 
-    color: #cacaca;
+  pointer-events: none;
+  color: #cacaca;
 }

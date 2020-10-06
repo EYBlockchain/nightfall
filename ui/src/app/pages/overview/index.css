@@ -119,24 +119,23 @@ a {
   padding: 0;
 }
 
-tbody{
+tbody {
   font-weight: lighter;
 }
 
-.active{
+.active {
   cursor: pointer;
   pointer-events: visible;
   color: blue;
 }
 
-
-.details-table{
+.details-table {
   font-size: smaller;
   margin: 1em 0 1em 1em;
   width: 98%;
 }
 
-.details-pane{
+.details-pane {
   background-color: #f9f9fa;
 }
 

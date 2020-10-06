@@ -27,7 +27,7 @@
               <label for="name">Enter Token URI</label>
               <input
                 type="text"
-                autoFocus
+                autofocus
                 class="form-control text-box"
                 [(ngModel)]="tokenURI"
                 (keydown)="$event.keyCode == 13 ? mintToken() : null"

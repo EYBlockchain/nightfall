@@ -22,70 +22,69 @@
 
       <div class="box-body">
         <div class="containe-form" *ngIf="transactions && transactions.length">
-            <div class="form-group">
-                <label for="name mb-1">Select {{ ftSymbol }} Commitment</label>
-                <div class="row col-sm-12">
-                  <ng-select
-                    #select
-                    [items]="transactions"
-                    class="custom"
-                    autoFocus
-                    [virtualScroll]="true"
-                    [multiple]="true"
-                    [loading]="loading"
-                    [maxSelectedItems]="1"
-                    [searchFn]="customSearchFn"
-                    [(ngModel)]="selectedCommitmentList"
-                    placeholder="Select {{ ftSymbol }} Commitment"
-                    style="width:50%;"
+          <div class="form-group">
+            <label for="name mb-1">Select {{ ftSymbol }} Commitment</label>
+            <div class="row col-sm-12">
+              <ng-select
+                #select
+                [items]="transactions"
+                class="custom"
+                autoFocus
+                [virtualScroll]="true"
+                [multiple]="true"
+                [loading]="loading"
+                [maxSelectedItems]="1"
+                [searchFn]="customSearchFn"
+                [(ngModel)]="selectedCommitmentList"
+                placeholder="Select {{ ftSymbol }} Commitment"
+                style="width:50%;"
+              >
+                <ng-template ng-label-tmp let-item="item">
+                  <span aria-hidden="true" class="ng-value-icon left" (click)="onRemove(item)"
+                    >×</span
                   >
-                    <ng-template ng-label-tmp let-item="item">
-                      <span aria-hidden="true" class="ng-value-icon left" (click)="onRemove(item)"
-                        >×</span
-                      >
-                      <b>{{ utilService.convertToNumber(item.value) }} </b>{{ ftSymbol }} &nbsp;
-                    </ng-template>
-                    <ng-template ng-option-tmp let-item="item" let-index="index">
-                      <b>{{ utilService.convertToNumber(item.value) }} </b>{{ ftSymbol }} ({{
-                        item.commitment.slice(0, 20)
-                      }})...
-                    </ng-template>
-                  </ng-select>
-                </div>
+                  <b>{{ utilService.convertToNumber(item.value) }} </b>{{ ftSymbol }} &nbsp;
+                </ng-template>
+                <ng-template ng-option-tmp let-item="item" let-index="index">
+                  <b>{{ utilService.convertToNumber(item.value) }} </b>{{ ftSymbol }} ({{
+                  item.commitment.slice(0, 20) }})...
+                </ng-template>
+              </ng-select>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="publicKey">Select Receiver</label>
+            <div class="row">
+              <div class="col-sm-6">
+                <select
+                  class="form-control"
+                  id="publicKey"
+                  name="sellist1"
+                  [(ngModel)]="receiverName"
+                  required
+                >
+                  <option [ngValue]="undefined" selected>Select </option>
+                  <option *ngFor="let user of users" value="{{ user }}">{{ user }}</option>
+                </select>
               </div>
-      
-              <div class="form-group" >
-                <label for="publicKey">Select Receiver</label>
-                <div class="row">
-                  <div class="col-sm-6">
-                    <select
-                      class="form-control"
-                      id="publicKey"
-                      name="sellist1"
-                      [(ngModel)]="receiverName"
-                      required
-                    >
-                      <option [ngValue]="undefined" selected>Select </option>
-                      <option *ngFor="let user of users" value="{{ user }}">{{ user }}</option>
-                    </select>
-                  </div>
-                </div>
-              </div>
-      
-              <div class="row form-group" *ngIf="transactions && transactions.length">
-                <div class="col-md-6">
-                  <button
-                    type="submit"
-                    class="btn btn-md btn-primary"
-                    [disabled]="!selectedCommitmentList.length || !receiverName"
-                    (click)="initiateBurn()"
-                  >
-                    Burn {{ ftName }} Commitment
-                  </button>
-                </div>
-              </div>
+            </div>
+          </div>
+
+          <div class="row form-group" *ngIf="transactions && transactions.length">
+            <div class="col-md-6">
+              <button
+                type="submit"
+                class="btn btn-md btn-primary"
+                [disabled]="!selectedCommitmentList.length || !receiverName"
+                (click)="initiateBurn()"
+              >
+                Burn {{ ftName }} Commitment
+              </button>
+            </div>
+          </div>
         </div>
-        
+
         <div class="text-center" *ngIf="!transactions">No {{ ftName }} Commitment's Found</div>
       </div>
     </div>

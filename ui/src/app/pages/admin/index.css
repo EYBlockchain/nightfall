@@ -1,6 +1,6 @@
-.list-group{
+.list-group {
   max-height: 300px;
-  overflow:scroll;
+  overflow: scroll;
   -webkit-overflow-scrolling: touch;
 }
 
@@ -10,7 +10,7 @@
 }
 
 .table-body {
-  max-height: 600px; 
+  max-height: 600px;
   overflow: auto;
 }
 

@@ -19,109 +19,127 @@
     </nav>
     <div class="box">
       <div>
-      <div class="box-header">
-        <h3>Batch Transfer {{ ftName }} Commitment</h3>
-      </div>
-
-      <div class="box-body" *ngIf="transactions">
-        <div class="form-group">
-          <label for="name mb-1">Select {{ ftSymbol }} Commitment To Transfer</label>
-          <div class="row col-sm-12">
-            <ng-select
-              #select
-              [items]="transactions"
-              class="custom"
-              [virtualScroll]="true"
-              [loading]="loading"
-              [multiple]="true"
-              [(ngModel)]="selectedCommitmentList"
-              [maxSelectedItems]="1"
-              [searchFn]="customSearchFn"
-              placeholder="Select Commitment"
-              style="width:50%;"
-            >
-              <ng-template ng-label-tmp let-item="item">
-                <span aria-hidden="true" class="ng-value-icon left" (click)="onRemove(item)"
-                  >×</span
-                >
-                <b>{{ utilService.convertToNumber(item.value) }} </b>{{ ftSymbol }} &nbsp;
-              </ng-template>
-              <ng-template ng-option-tmp let-item="item" let-index="index">
-                <b>{{ utilService.convertToNumber(item.value) }} </b>{{ ftSymbol }} ({{
-                  item.commitment.slice(0, 20)
-                }})...
-              </ng-template>
-            </ng-select>
-          </div>
+        <div class="box-header">
+          <h3>Batch Transfer {{ ftName }} Commitment</h3>
         </div>
 
-        <div class="form-group" [formGroup]="addForm">
-          <div class="row" *ngIf="transactions">
-            <div class="col-sm-6">
-              <table class="batch-transfer-table">
-                <tr class="batch-transfer-table-row">
-                  <th class="batch-transfer-table-head batch-table-actions">Actions</th>                  
-                  <th class="batch-transfer-table-head batch-table-value">Values of {{ ftSymbol }} Commitment To Transfer</th>
-                  <th class="batch-transfer-table-head">Select Receivers</th>
-                </tr>
-                <tr>
-                  <td class="batch-transfer-table-content">
-                    <i class="fa fa-plus-square" aria-hidden="true" (click) = "addTransferInfo($event)" title="Add new row" [class.disabled]="transferDetails.value.length >= 20"></i>
-                  </td>
-                  <td class="batch-transfer-table-content"></td>
-                  <td class="batch-transfer-table-content"></td>
-                </tr>
-                <tr class="batch-transfer-table-row" *ngFor="let row of addForm.get('rows')?.controls; let i = index">
-                    <td class="batch-transfer-table-content">
-                        <i class="fa fa-minus-square" aria-hidden="true" (click) = "removeTransferInfo(i)" title="Delete row"></i>
-                    </td>
-                    <td class="batch-transfer-table-content">
-                        <input
-                          type="number"
-                          min="0"
-                          (keypress)="utilService.noNegtiveNumber($event)"
-                          (paste)="utilService.noNegtiveNumber($event)"
-                          class="form-control"
-                          [formControl]="row.get('value')"
-                          name="E"
-                          placeholder="Value to transfer"
-                        />
-                    </td>
-                    <td class="batch-transfer-table-content">
-                        <select
-                          class="form-control"
-                          id="publicKey"
-                          [formControl]="row.get('receiverName')"
-                          required
-                        >
-                          <option [ngValue]="undefined" selected>Select </option>
-                          <option *ngFor="let user of users" value="{{ user }}">{{ user }}</option>
-                        </select>
-                    </td>
-                </tr>
-              </table>
+        <div class="box-body" *ngIf="transactions">
+          <div class="form-group">
+            <label for="name mb-1">Select {{ ftSymbol }} Commitment To Transfer</label>
+            <div class="row col-sm-12">
+              <ng-select
+                #select
+                [items]="transactions"
+                class="custom"
+                [virtualScroll]="true"
+                [loading]="loading"
+                [multiple]="true"
+                [(ngModel)]="selectedCommitmentList"
+                [maxSelectedItems]="1"
+                [searchFn]="customSearchFn"
+                placeholder="Select Commitment"
+                style="width:50%;"
+              >
+                <ng-template ng-label-tmp let-item="item">
+                  <span aria-hidden="true" class="ng-value-icon left" (click)="onRemove(item)"
+                    >×</span
+                  >
+                  <b>{{ utilService.convertToNumber(item.value) }} </b>{{ ftSymbol }} &nbsp;
+                </ng-template>
+                <ng-template ng-option-tmp let-item="item" let-index="index">
+                  <b>{{ utilService.convertToNumber(item.value) }} </b>{{ ftSymbol }} ({{
+                  item.commitment.slice(0, 20) }})...
+                </ng-template>
+              </ng-select>
             </div>
           </div>
-        </div>
 
-        <div class="row form-group">
-          <div class="col-md-6">
-            <button
-              type="button"
-              [disabled]="
+          <div class="form-group" [formGroup]="addForm">
+            <div class="row" *ngIf="transactions">
+              <div class="col-sm-6">
+                <table class="batch-transfer-table">
+                  <tr class="batch-transfer-table-row">
+                    <th class="batch-transfer-table-head batch-table-actions">Actions</th>
+                    <th class="batch-transfer-table-head batch-table-value">
+                      Values of {{ ftSymbol }} Commitment To Transfer
+                    </th>
+                    <th class="batch-transfer-table-head">Select Receivers</th>
+                  </tr>
+                  <tr>
+                    <td class="batch-transfer-table-content">
+                      <i
+                        class="fa fa-plus-square"
+                        aria-hidden="true"
+                        (click)="addTransferInfo($event)"
+                        title="Add new row"
+                        [class.disabled]="transferDetails.value.length >= 20"
+                      ></i>
+                    </td>
+                    <td class="batch-transfer-table-content"></td>
+                    <td class="batch-transfer-table-content"></td>
+                  </tr>
+                  <tr
+                    class="batch-transfer-table-row"
+                    *ngFor="let row of addForm.get('rows')?.controls; let i = index"
+                  >
+                    <td class="batch-transfer-table-content">
+                      <i
+                        class="fa fa-minus-square"
+                        aria-hidden="true"
+                        (click)="removeTransferInfo(i)"
+                        title="Delete row"
+                      ></i>
+                    </td>
+                    <td class="batch-transfer-table-content">
+                      <input
+                        type="number"
+                        min="0"
+                        (keypress)="utilService.noNegtiveNumber($event)"
+                        (paste)="utilService.noNegtiveNumber($event)"
+                        class="form-control"
+                        [formControl]="row.get('value')"
+                        name="E"
+                        placeholder="Value to transfer"
+                      />
+                    </td>
+                    <td class="batch-transfer-table-content">
+                      <select
+                        class="form-control"
+                        id="publicKey"
+                        [formControl]="row.get('receiverName')"
+                        required
+                      >
+                        <option [ngValue]="undefined" selected>Select </option>
+                        <option *ngFor="let user of users" value="{{ user }}">{{ user }}</option>
+                      </select>
+                    </td>
+                  </tr>
+                </table>
+              </div>
+            </div>
+          </div>
+
+          <div class="row form-group">
+            <div class="col-md-6">
+              <button
+                type="button"
+                [disabled]="
                 !transferDetails ||
                 !transferDetails.length ||
                 !(selectedCommitmentList.length == 1)
               "
-              class="btn btn-md btn-primary"
-              (click)="initiateTransfer()"
-            >
-              Batch Transfer {{ this.ftName }} Commitment
-            </button>
+                class="btn btn-md btn-primary"
+                (click)="initiateTransfer()"
+              >
+                Batch Transfer {{ this.ftName }} Commitment
+              </button>
+            </div>
           </div>
         </div>
+        <div class="text-center box-body" *ngIf="!transactions">
+          No {{ this.ftName }} Commitment's Found
+        </div>
       </div>
-      <div class="text-center box-body" *ngIf="!transactions">No {{ this.ftName }} Commitment's Found</div>
     </div>
   </div>
 </div>

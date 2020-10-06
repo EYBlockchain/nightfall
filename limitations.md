@@ -39,7 +39,10 @@ this code.
 
 ## Oudated ZoKrates release
 
-Our image from ZoKrates is from January 2019 and is already outdated. It might include security bugs which have since been fixed over in the ZoKrates repository. The syntax of the ZoKrates DSL has also changed considerably since January 2019, and therefore the `.pcode` files of Nightfall are written in outdated syntax.
+Our image from ZoKrates is from January 2019 and is already outdated. It might include security bugs
+which have since been fixed over in the ZoKrates repository. The syntax of the ZoKrates DSL has also
+changed considerably since January 2019, and therefore the `.pcode` files of Nightfall are written
+in outdated syntax.
 
 ## No batching or aggregation of proofs
 

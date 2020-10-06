@@ -28,7 +28,7 @@
             <input
               type="text"
               class="form-control"
-              autoFocus
+              autofocus
               placeholder="Enter Transaction hash"
               [(ngModel)]="transactionHash"
               required
@@ -68,7 +68,12 @@
         </div>
         <div class="box-body table-body">
           <div class="form-group">
-            <input class="form-control" type="text" placeholder="Search an User" (input)="onSearchChange($event.target.value)" />
+            <input
+              class="form-control"
+              type="text"
+              placeholder="Search an User"
+              (input)="onSearchChange($event.target.value)"
+            />
           </div>
           <table class="table">
             <thead>

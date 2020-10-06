@@ -28,7 +28,7 @@
               type="number"
               (keypress)="utilService.validate($event)"
               class="form-control text-box"
-              autoFocus
+              autofocus
               [(ngModel)]="amount"
               (keydown)="$event.keyCode == 13 ? mintFToken() : null"
               placeholder="Please enter amount"

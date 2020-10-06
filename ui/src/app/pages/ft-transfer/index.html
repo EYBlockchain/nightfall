@@ -27,7 +27,7 @@
             <input
               type="number"
               class="form-control text-box"
-              autoFocus
+              autofocus
               [(ngModel)]="amount"
               (keydown)="$event.keyCode == 13 ? transferFToken() : null"
               (keypress)="utilService.validate($event)"

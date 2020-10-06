@@ -18,104 +18,108 @@
       </ol>
       <div>
         <a [routerLink]="['/ft-commitment/consolidation-transfer']">
-          <button type="button" class="btn btn-outline-dark consolidation-transfer">Consolidation Transfer Commitment</button>
+          <button type="button" class="btn btn-outline-dark consolidation-transfer">
+            Consolidation Transfer Commitment
+          </button>
         </a>
       </div>
     </nav>
     <div class="box">
       <div>
-      <div class="box-header">
-        <h3>Transfer {{ this.ftName }} Commitment</h3>
-      </div>
-
-      <div class="box-body" *ngIf="transactions">
-        <div class="form-group">
-          <label for="name mb-1">Select Two {{ this.ftSymbol }} Commitment To Transfer</label>
-          <div class="row col-sm-12">
-            <ng-select
-              #select
-              [items]="transactions"
-              class="custom"
-              [virtualScroll]="true"
-              [loading]="loading"
-              [multiple]="true"
-              [(ngModel)]="selectedCommitmentList"
-              [maxSelectedItems]="2"
-              [searchFn]="customSearchFn"
-              placeholder="Select Commitments"
-              style="width:50%;"
-            >
-              <ng-template ng-label-tmp let-item="item">
-                <span aria-hidden="true" class="ng-value-icon left" (click)="onRemove(item)"
-                  >×</span
-                >
-                <b>{{ utilService.convertToNumber(item.value) }} </b>{{this.ftSymbol}} &nbsp;
-              </ng-template>
-              <ng-template ng-option-tmp let-item="item" let-index="index">
-                <b>{{ utilService.convertToNumber(item.value) }} </b>{{this.ftSymbol}} ({{
-                  item.commitment.slice(0, 20)
-                }})...
-              </ng-template>
-            </ng-select>
-          </div>
+        <div class="box-header">
+          <h3>Transfer {{ this.ftName }} Commitment</h3>
         </div>
 
-        <div class="" *ngIf="transactions">
-          <label for="name">Value Of {{ this.ftSymbol }} Commitment To Transfer</label>
+        <div class="box-body" *ngIf="transactions">
+          <div class="form-group">
+            <label for="name mb-1">Select Two {{ this.ftSymbol }} Commitment To Transfer</label>
+            <div class="row col-sm-12">
+              <ng-select
+                #select
+                [items]="transactions"
+                class="custom"
+                [virtualScroll]="true"
+                [loading]="loading"
+                [multiple]="true"
+                [(ngModel)]="selectedCommitmentList"
+                [maxSelectedItems]="2"
+                [searchFn]="customSearchFn"
+                placeholder="Select Commitments"
+                style="width:50%;"
+              >
+                <ng-template ng-label-tmp let-item="item">
+                  <span aria-hidden="true" class="ng-value-icon left" (click)="onRemove(item)"
+                    >×</span
+                  >
+                  <b>{{ utilService.convertToNumber(item.value) }} </b>{{this.ftSymbol}} &nbsp;
+                </ng-template>
+                <ng-template ng-option-tmp let-item="item" let-index="index">
+                  <b>{{ utilService.convertToNumber(item.value) }} </b>{{this.ftSymbol}} ({{
+                  item.commitment.slice(0, 20) }})...
+                </ng-template>
+              </ng-select>
+            </div>
+          </div>
+
+          <div class="" *ngIf="transactions">
+            <label for="name">Value Of {{ this.ftSymbol }} Commitment To Transfer</label>
+            <div class="row form-group">
+              <div class="col-md-6">
+                <input
+                  type="number"
+                  min="0"
+                  (keypress)="utilService.noNegtiveNumber($event)"
+                  (paste)="utilService.noNegtiveNumber($event)"
+                  class="form-control"
+                  [(ngModel)]="transferValue"
+                  name="E"
+                  placeholder="Value to transfer"
+                />
+              </div>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label for="publicKey">Select Receiver</label>
+            <div class="row">
+              <div class="col-sm-6">
+                <select
+                  class="form-control"
+                  id="publicKey"
+                  name="sellist1"
+                  [(ngModel)]="receiverName"
+                  required
+                >
+                  <option [ngValue]="undefined" selected>Select </option>
+                  <option *ngFor="let user of users" value="{{ user }}">{{ user }}</option>
+                </select>
+              </div>
+            </div>
+          </div>
+
           <div class="row form-group">
             <div class="col-md-6">
-              <input
-                type="number"
-                min="0"
-                (keypress)="utilService.noNegtiveNumber($event)"
-                (paste)="utilService.noNegtiveNumber($event)"
-                class="form-control"
-                [(ngModel)]="transferValue"
-                name="E"
-                placeholder="Value to transfer"
-              />
-            </div>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="publicKey">Select Receiver</label>
-          <div class="row">
-            <div class="col-sm-6">
-              <select
-                class="form-control"
-                id="publicKey"
-                name="sellist1"
-                [(ngModel)]="receiverName"
-                required
-              >
-                <option [ngValue]="undefined" selected>Select </option>
-                <option *ngFor="let user of users" value="{{ user }}">{{ user }}</option>
-              </select>
-            </div>
-          </div>
-        </div>
-
-        <div class="row form-group">
-          <div class="col-md-6">
-            <button
-              type="button"
-              [disabled]="
+              <button
+                type="button"
+                [disabled]="
                 !transactions ||
                 !transactions.length ||
                 !(selectedCommitmentList.length == 2) ||
                 !transferValue ||
                 !receiverName
               "
-              class="btn btn-md btn-primary"
-              (click)="initiateTransfer()"
-            >
-              Transfer {{ this.ftName }} Commitment
-            </button>
+                class="btn btn-md btn-primary"
+                (click)="initiateTransfer()"
+              >
+                Transfer {{ this.ftName }} Commitment
+              </button>
+            </div>
           </div>
         </div>
+        <div class="text-center box-body" *ngIf="!transactions">
+          No {{ this.ftName }} Commitment's Found
+        </div>
       </div>
-      <div class="text-center box-body" *ngIf="!transactions">No {{ this.ftName }} Commitment's Found</div>
     </div>
   </div>
 </div>

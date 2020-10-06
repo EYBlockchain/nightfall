@@ -6,10 +6,10 @@ Only the latest minor version of Nightfall is supported with security updates. T
 published as new patch versions. All versioning follows Semantic Versioning. You can find the latest
 version [released on GitHub](https://github.com/EYBlockchain/nightfall/releases).
 
-| Branch                                        | Supported          |
-| --------------------------------------------- | ------------------ |
+| Branch                                                          | Supported          |
+| --------------------------------------------------------------- | ------------------ |
 | [master](https://github.com/EYBlockchain/nightfall/tree/master) | :white_check_mark: |
-| Earlier minor releases                        | :x:                |
+| Earlier minor releases                                          | :x:                |
 
 ## Reporting a vulnerability
 

@@ -4,31 +4,24 @@
 
 # Description
 
-
 #### System information
 
-Docker version: `docker version`
-OS & Version: Windows/Linux/OSX
-Commit hash : (if `develop`)
+Docker version: `docker version` OS & Version: Windows/Linux/OSX Commit hash : (if `develop`)
 
 #### Expected behaviour
 
-
 #### Actual behaviour
-
 
 #### Steps to reproduce the behaviour
 
-
 #### Backtrace
 
-````
+```
 [backtrace]
-````
+```
 
 #### Logs
 
-
-````
+```
 [logs]
-````
+```
