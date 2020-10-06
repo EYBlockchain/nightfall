@@ -21,10 +21,8 @@ async function getDeployedPKD() {
   if (!contractInterface || !contractInterface.networks || !contractInterface.networks[networkId]) {
     throw new Error(`${networkId} not in contract Interface`);
   }
-  return (new web3.eth.Contract(
-      contractInterface.abi,
-      contractInterface.networks[networkId].address,
-    )).methods;
+  return new web3.eth.Contract(contractInterface.abi, contractInterface.networks[networkId].address)
+    .methods;
 }
 
 export async function isNameInUse(name) {
