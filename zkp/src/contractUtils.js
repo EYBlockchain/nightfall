@@ -1,4 +1,4 @@
-import contract from 'truffle-contract';
+import contract from '@truffle/contract';
 import jsonfile from 'jsonfile';
 import Web3 from './web3';
 

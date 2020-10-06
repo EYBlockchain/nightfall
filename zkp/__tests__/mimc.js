@@ -1,4 +1,4 @@
-import contract from 'truffle-contract';
+import contract from '@truffle/contract';
 import utils from 'zkp-utils';
 
 import { getContractAddress, getContractInterface } from '../src/contractUtils';

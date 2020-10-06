@@ -28,6 +28,7 @@
   "dependencies": {
     "@eyblockchain/nightlite": "5.5.4",
     "@eyblockchain/zokrates.js": "^1.2.0",
+    "@truffle/contract": "^4.2.24",
     "big-integer": "^1.6.48",
     "body-parser": "^1.19.0",
     "config": "^3.2.2",
@@ -42,7 +43,6 @@
     "node-docker-api": "^1.1.22",
     "request": "^2.88.0",
     "safe-buffer": "^5.2.0",
-    "truffle-contract": "4.0.15",
     "web3": "1.3.0",
     "websocket": "^1.0.31",
     "winston": "^3.2.1",

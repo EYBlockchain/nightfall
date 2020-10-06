@@ -7,7 +7,7 @@
  * @author westlad, Chaitanya-Konda, iAmMichaelConnor
  */
 
-import contract from 'truffle-contract';
+import contract from '@truffle/contract';
 import jsonfile from 'jsonfile';
 import { merkleTree } from '@eyblockchain/nightlite';
 import Web3 from './web3';
