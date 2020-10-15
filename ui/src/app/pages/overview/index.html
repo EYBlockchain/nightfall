@@ -408,6 +408,8 @@
                       data-toggle="collapse"
                       [attr.data-target]="'#collapse-' + i"
                       [attr.aria-controls]="'collapse-' + i"
+                      [attr.aria-expanded]="transaction.isExpand"
+                      (click)="transaction.isExpand = !transaction.isExpand"
                       *ngIf="transaction.transactionType === 'transfer_outgoing'"
                     >
                       <td>
@@ -432,7 +434,7 @@
                     </tr>
                     <tr *ngIf="transaction.transactionType === 'transfer_outgoing'">
                       <td class="collapse-row details-pane" colspan="6">
-                        <div [attr.id]="'collapse-' + i" class="collapse out">
+                        <div [attr.id]="'collapse-' + i" [ngbCollapse]="!transaction.isExpand" class="collapse out">
                           <table
                             class="details-table table table-striped"
                             *ngIf="transaction.inputCommitments.length > 1"
