@@ -11,8 +11,6 @@ export default {
    * Connects to web3 and then sets proper handlers for events
    */
   connect() {
-    if (this.web3) return this.web3.currentProvider;
-
     logger.info('Blockchain Connecting ...');
     const provider = new Web3.providers.WebsocketProvider(config.get('web3ProviderURL'));
 
@@ -21,8 +19,6 @@ export default {
     provider.on('end', logger.error);
 
     this.web3 = new Web3(provider);
-
-    return provider;
   },
 
   /**
@@ -35,5 +31,12 @@ export default {
       return this.web3.eth.net.isListening();
     }
     return false;
+  },
+
+  waitTillConnected() {
+    return new Promise(resolve => {
+      while (!this.isConnected());
+      resolve();
+    });
   },
 };

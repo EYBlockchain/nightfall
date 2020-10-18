@@ -287,7 +287,6 @@ async function burn(req, res, next) {
  */
 async function checkCorrectness(req, res, next) {
   try {
-    const { address } = req.headers;
     const { tokenId, publicKey, salt, commitment, commitmentIndex, blockNumber } = req.body;
     const erc721Address = await getContractAddress('NFTokenMetadata');
 
@@ -299,7 +298,6 @@ async function checkCorrectness(req, res, next) {
       commitment,
       commitmentIndex,
       blockNumber,
-      address,
     );
     res.data = results;
     next();

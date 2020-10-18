@@ -245,7 +245,6 @@ export async function transferToken(req, res, next) {
         receiver,
       },
     );
-
     data.commitmentIndex = parseInt(data.commitmentIndex, 16);
 
     // Update the sender's token db.
@@ -277,7 +276,7 @@ export async function transferToken(req, res, next) {
           owner: receiver,
         },
       ],
-      blockNumber: data.txReceipt.receipt.blockNumber,
+      blockNumber: data.txReceipt.blockNumber,
       receiver,
       sender: req.user,
       isReceived: true,

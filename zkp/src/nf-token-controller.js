@@ -7,21 +7,9 @@
 
 /* eslint-disable camelcase */
 
-import contract from '@truffle/contract';
-import jsonfile from 'jsonfile';
 import { merkleTree } from '@eyblockchain/nightlite';
-import Web3 from './web3';
-import { getContractAddress } from './contractUtils';
+import { getWeb3ContractInstance, getContractAddress } from './contractUtils';
 import logger from './logger';
-
-const NFTokenShield = contract(jsonfile.readFileSync('./build/contracts/NFTokenShield.json'));
-NFTokenShield.setProvider(Web3.connect());
-
-const Verifier = contract(jsonfile.readFileSync('./build/contracts/Verifier.json'));
-Verifier.setProvider(Web3.connect());
-
-const NFTokenMetadata = contract(jsonfile.readFileSync('./build/contracts/NFTokenMetadata.json'));
-NFTokenMetadata.setProvider(Web3.connect());
 
 const shield = {}; // this field holds the current Shield contract instance.
 
@@ -32,8 +20,7 @@ const shield = {}; // this field holds the current Shield contract instance.
  * @param {string} address - the Ethereum address of the user to whom this shieldAddress will apply
  */
 async function setShield(shieldAddress, address) {
-  if (shieldAddress === undefined) shield[address] = await getContractAddress('NFTokenShield');
-  else shield[address] = await NFTokenShield.at(shieldAddress);
+  shield[address] = await getWeb3ContractInstance('NFTokenShield', shieldAddress);
 }
 
 function unSetShield(address) {
@@ -46,24 +33,24 @@ function unSetShield(address) {
 async function getShieldAddress(account) {
   const nfTokenShield = shield[account]
     ? shield[account]
-    : await getContractAddress('NFTokenShield');
-  return nfTokenShield.address;
+    : await getWeb3ContractInstance('NFTokenShield');
+  return nfTokenShield._address; // eslint-disable-line no-underscore-dangle
 }
 
 /**
  * return the name of the ERC-721 tokens
  */
 async function getNFTName() {
-  const nfToken = await NFTokenMetadata.at(await getContractAddress('NFTokenMetadata'));
-  return nfToken.name.call();
+  const nfToken = await getWeb3ContractInstance('NFTokenMetadata');
+  return nfToken.methods.name().call();
 }
 
 /**
  * return the symbol of the ERC-721 tokens
  */
 async function getNFTSymbol() {
-  const nfToken = await NFTokenMetadata.at(await getContractAddress('NFTokenMetadata'));
-  return nfToken.symbol.call();
+  const nfToken = await getWeb3ContractInstance('NFTokenMetadata');
+  return nfToken.methods.symbol().call();
 }
 
 /**
@@ -77,24 +64,24 @@ async function getNFTAddress() {
  * return the symbol of the ERC-721 tokens
  */
 async function getNFTURI(tokenID) {
-  const nfToken = await NFTokenMetadata.at(await getContractAddress('NFTokenMetadata'));
-  return nfToken.tokenURI.call(tokenID);
+  const nfToken = await getWeb3ContractInstance('NFTokenMetadata');
+  return nfToken.methods.tokenURI(tokenID).call();
 }
 
 /**
  * return the number of tokens held by an account
  */
 async function getBalance(address) {
-  const nfToken = await NFTokenMetadata.at(await getContractAddress('NFTokenMetadata'));
-  return nfToken.balanceOf.call(address);
+  const nfToken = await getWeb3ContractInstance('NFTokenMetadata');
+  return nfToken.methods.balanceOf(address).call();
 }
 
 /**
  * return the number of tokens held by an account
  */
 async function getOwner(tokenID) {
-  const nfToken = await NFTokenMetadata.at(await getContractAddress('NFTokenMetadata'));
-  return nfToken.ownerOf.call(tokenID);
+  const nfToken = await getWeb3ContractInstance('NFTokenMetadata');
+  return nfToken.methods.ownerOf(tokenID).call();
 }
 
 /**
@@ -102,8 +89,8 @@ async function getOwner(tokenID) {
  */
 async function mintNFToken(tokenID, tokenURI, address) {
   logger.info('Minting NF Token', tokenID, address);
-  const nfToken = await NFTokenMetadata.at(await getContractAddress('NFTokenMetadata'));
-  return nfToken.mint(tokenID, tokenURI, {
+  const nfToken = await getWeb3ContractInstance('NFTokenMetadata');
+  return nfToken.methods.mint(tokenID, tokenURI).send({
     from: address,
     gas: 4000000,
   });
@@ -114,8 +101,8 @@ async function mintNFToken(tokenID, tokenURI, address) {
  */
 async function transferNFToken(tokenID, fromAddress, toAddress) {
   logger.info(`Transferring NF Token ${tokenID}from ${fromAddress}to ${toAddress}`);
-  const nfToken = await NFTokenMetadata.at(await getContractAddress('NFTokenMetadata'));
-  return nfToken.safeTransferFrom(fromAddress, toAddress, tokenID, {
+  const nfToken = await getWeb3ContractInstance('NFTokenMetadata');
+  return nfToken.methods.safeTransferFrom(fromAddress, toAddress, tokenID).send({
     from: fromAddress,
     gas: 4000000,
   });
@@ -126,8 +113,8 @@ async function transferNFToken(tokenID, fromAddress, toAddress) {
  */
 async function burnNFToken(tokenID, address) {
   logger.info('Burning NF Token', tokenID, address);
-  const nfToken = await NFTokenMetadata.at(await getContractAddress('NFTokenMetadata'));
-  return nfToken.burn(tokenID, {
+  const nfToken = await getWeb3ContractInstance('NFTokenMetadata');
+  return nfToken.methods.burn(tokenID).send({
     from: address,
     gas: 4000000,
   });
@@ -138,8 +125,8 @@ async function burnNFToken(tokenID, address) {
  */
 async function addApproverNFToken(approved, tokenID, address) {
   logger.info('Adding Approver for an NF Token', approved, tokenID, address);
-  const nfToken = await NFTokenMetadata.at(await getContractAddress('NFTokenMetadata'));
-  return nfToken.approve(approved, tokenID, {
+  const nfToken = await getWeb3ContractInstance('NFTokenMetadata');
+  return nfToken.methods.approve(approved, tokenID).send({
     from: address,
     gas: 4000000,
   });
@@ -150,8 +137,8 @@ async function addApproverNFToken(approved, tokenID, address) {
  */
 async function getApproved(tokenID) {
   logger.info('Getting Approver for an NF Token', tokenID);
-  const nfToken = await NFTokenMetadata.at(await getContractAddress('NFTokenMetadata'));
-  return nfToken.getApproved.call(tokenID);
+  const nfToken = await getWeb3ContractInstance('NFTokenMetadata');
+  return nfToken.methods.getApproved(tokenID).call();
 }
 
 async function checkCorrectness(
@@ -162,10 +149,7 @@ async function checkCorrectness(
   commitment,
   commitmentIndex,
   blockNumber,
-  account,
 ) {
-  const nfTokenShield = shield[account] ? shield[account] : await NFTokenShield.deployed();
-
   const results = await merkleTree.checkCorrectness(
     erc721Address,
     tokenId,
@@ -174,7 +158,7 @@ async function checkCorrectness(
     commitment,
     commitmentIndex,
     blockNumber,
-    nfTokenShield,
+    'NFTokenShield',
   );
   logger.info('\nnf-token-controller', '\ncheckCorrectness', '\nresults', results);
 

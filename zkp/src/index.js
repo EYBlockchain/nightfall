@@ -6,15 +6,20 @@
 
 import express from 'express';
 import bodyParser from 'body-parser';
-import { merkleTree, provider, overrideDefaultConfig } from '@eyblockchain/nightlite';
+import { merkleTree, overrideDefaultConfig } from '@eyblockchain/nightlite';
 import config from 'config';
 import { ftCommitmentRoutes, ftRoutes, nftCommitmentRoutes, nftRoutes } from './routes';
 import vkController from './vk-controller'; // this import TRIGGERS the runController() script within.
 import { formatResponse, formatError, errorHandler } from './middlewares';
 import complianceInit from './compliance-init';
 import logger from './logger';
+import Web3 from './web3';
 
 const app = express();
+
+Web3.connect();
+
+if (process.env.NODE_ENV !== 'test') vkController.runController();
 
 overrideDefaultConfig({
   NODE_HASHLENGTH: config.NODE_HASHLENGTH,
@@ -46,9 +51,6 @@ app.use('/', nftCommitmentRoutes);
 app.use('/', ftCommitmentRoutes);
 app.use('/', ftRoutes);
 app.use('/', nftRoutes);
-
-// Provide Nightlite with a provider.
-provider.connect();
 
 app.route('/vk').post(async function runVkController(req, res, next) {
   try {

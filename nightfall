@@ -7,7 +7,7 @@ NC='\033[0m'
 
 launchContainers(){
   printf "${GREEN}*** Docker Compose Build ***${NC}\n"
-  docker-compose build
+  docker-compose build --build-arg NPM_TOKEN=${NPM_TOKEN}
 
   printf "${GREEN}*** Launching containerized ganache ***${NC}\n"
   docker-compose up -d ganache
@@ -61,6 +61,12 @@ cleanup(){
 }
 
 cleanup
+
+if [[ -z "$NPM_TOKEN" ]]; then
+  printf "${RED}*** ENV variable NPM_TOKEN is not set ***${NC}\n"
+  printf "Please set a valid (permission required :repo and :read-packages) github personal access token to the ENV - 'NPM_TOKEN'\n"
+  exit 1
+fi
 
 printf "${GREEN}*** Pull zokrates docker image ***${NC}\n"
 docker pull zokrates/zokrates:0.5.1

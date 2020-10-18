@@ -253,7 +253,7 @@ export async function transferFTCommitment(req, res, next) {
     // send new ft commitment to BOB via Whisper.
     await sendWhisperMessage(user.shhIdentity, {
       outputCommitments: [transferCommitment],
-      blockNumber: txReceipt.receipt.blockNumber,
+      blockNumber: txReceipt.blockNumber,
       receiver,
       sender: req.user,
       isReceived: true,
@@ -466,7 +466,7 @@ export async function simpleFTCommitmentBatchTransfer(req, res, next) {
       data.owner = data.receiver;
       await sendWhisperMessage(user.shhIdentity, {
         outputCommitments: [data],
-        blockNumber: txReceipt.receipt.blockNumber,
+        blockNumber: txReceipt.blockNumber,
         receiver: data.receiver,
         sender: req.user,
         isReceived: true,
@@ -596,7 +596,7 @@ export async function consolidationTransfer(req, res, next) {
 
     await sendWhisperMessage(user.shhIdentity, {
       outputCommitments: [outputCommitment],
-      blockNumber: txReceipt.receipt.blockNumber,
+      blockNumber: txReceipt.blockNumber,
       receiver,
       sender: req.user,
       isReceived: true,

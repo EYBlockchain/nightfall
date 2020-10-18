@@ -5,10 +5,9 @@ import utils from 'zkp-utils';
 
 import Web3 from '../src/web3';
 import controller from '../src/f-token-controller';
-import { getTruffleContractInstance, getContractAddress } from '../src/contractUtils';
+import { getWeb3ContractInstance, getContractAddress } from '../src/contractUtils';
 // import { setAuthorityPrivateKeys, rangeGenerator } from '../src/el-gamal';
 
-const web3 = Web3.connection();
 const amountC = '0x00000000000000000000000000000020'; // 128 bits = 16 bytes = 32 chars
 const amountD = '0x00000000000000000000000000000030';
 const amountE = '0x00000000000000000000000000000040';
@@ -45,11 +44,11 @@ let erc20Address;
 if (process.env.COMPLIANCE === 'true') {
   beforeAll(async () => {
     elgamal.setAuthorityPrivateKeys(); // setup test keys
-    accounts = await web3.eth.getAccounts();
+    await Web3.waitTillConnected();
+    accounts = await Web3.connection().eth.getAccounts();
     console.log('Number of test accounts', accounts.length);
-    const { contractInstance } = await getTruffleContractInstance('FTokenShield');
-    fTokenShieldAddress = contractInstance.address;
-    fTokenShieldInstance = contractInstance;
+    fTokenShieldInstance = await getWeb3ContractInstance('FTokenShield');
+    fTokenShieldAddress = fTokenShieldInstance._address;
 
     erc20Address = await getContractAddress('FToken');
     const erc20AddressPadded = `0x${utils.strip0x(erc20Address).padStart(64, '0')}`;
@@ -90,19 +89,20 @@ if (process.env.COMPLIANCE === 'true') {
       publicKeyA,
       saltAliceToAliceF,
     );
-    fTokenShieldInstance.setRootPruningInterval(100, {
+    fTokenShieldInstance.methods.setRootPruningInterval(100).send({
       from: accounts[0],
       gas: 6500000,
       gasPrice: 20000000000,
     });
-    fTokenShieldInstance.setCompressedAdminPublicKeys(
-      elgamal.AUTHORITY_PUBLIC_KEYS.map(pt => elgamal.edwardsCompress(pt)),
-      {
+    fTokenShieldInstance.methods
+      .setCompressedAdminPublicKeys(
+        elgamal.AUTHORITY_PUBLIC_KEYS.map(pt => elgamal.edwardsCompress(pt)),
+      )
+      .send({
         from: accounts[0],
         gas: 6500000,
         gasPrice: 20000000000,
-      },
-    );
+      });
   });
 
   // eslint-disable-next-line no-undef
@@ -240,12 +240,12 @@ if (process.env.COMPLIANCE === 'true') {
     });
 
     test("Should register bob's and Eve's public keys", async () => {
-      await fTokenShieldInstance.checkUser(publicKeyB, {
+      await fTokenShieldInstance.methods.checkUser(publicKeyB).send({
         from: accounts[1],
         gas: 6500000,
         gasPrice: 20000000000,
       });
-      await fTokenShieldInstance.checkUser(publicKeyE, {
+      await fTokenShieldInstance.methods.checkUser(publicKeyE).send({
         from: accounts[3],
         gas: 6500000,
         gasPrice: 20000000000,
@@ -304,11 +304,13 @@ if (process.env.COMPLIANCE === 'true') {
 
     test("Should have three public key roots stored (from addition of Alice's then Bob's and Eve's keys)", async () => {
       expect.assertions(2);
-      let root = await fTokenShieldInstance.currentPublicKeyRoot.call();
+      let root = await fTokenShieldInstance.methods.currentPublicKeyRoot().call();
       let rootCount = 0;
-      const publicKeyRootComputations = await fTokenShieldInstance.publicKeyRootComputations.call();
+      const publicKeyRootComputations = await fTokenShieldInstance.methods
+        .publicKeyRootComputations()
+        .call();
       while (BigInt(root) !== BigInt(0)) {
-        const publicKeyRoot = await fTokenShieldInstance.publicKeyRoots.call(root); // eslint-disable-line no-await-in-loop
+        const publicKeyRoot = await fTokenShieldInstance.methods.publicKeyRoots(root).call(); // eslint-disable-line no-await-in-loop
         rootCount++;
         root = publicKeyRoot;
       }
@@ -319,7 +321,7 @@ if (process.env.COMPLIANCE === 'true') {
 
     test(`Should blacklist Bob so he can't transfer an ERC-20 commitment to Eve`, async () => {
       expect.assertions(1);
-      await fTokenShieldInstance.blacklistAddress(accounts[1], {
+      await fTokenShieldInstance.methods.blacklistAddress(accounts[1]).send({
         from: accounts[0],
         gas: 6500000,
         gasPrice: 20000000000,
@@ -369,7 +371,7 @@ if (process.env.COMPLIANCE === 'true') {
     });
 
     test(`Should unblacklist Bob so he can transfer an ERC-20 commitment to Eve`, async () => {
-      await fTokenShieldInstance.unBlacklistAddress(accounts[1], {
+      await fTokenShieldInstance.methods.unBlacklistAddress(accounts[1]).send({
         from: accounts[0],
         gas: 6500000,
         gasPrice: 20000000000,
@@ -415,11 +417,13 @@ if (process.env.COMPLIANCE === 'true') {
 
     test("Should have two roots stored (latest root when Bob was blacklisted and additon of Bob's re-enabled key)", async () => {
       expect.assertions(2);
-      let root = await fTokenShieldInstance.currentPublicKeyRoot.call();
+      let root = await fTokenShieldInstance.methods.currentPublicKeyRoot().call();
       let rootCount = 0;
-      const publicKeyRootComputations = await fTokenShieldInstance.publicKeyRootComputations.call();
+      const publicKeyRootComputations = await fTokenShieldInstance.methods
+        .publicKeyRootComputations()
+        .call();
       while (BigInt(root) !== BigInt(0)) {
-        const publicKeyRoot = await fTokenShieldInstance.publicKeyRoots.call(root); // eslint-disable-line no-await-in-loop
+        const publicKeyRoot = await fTokenShieldInstance.methods.publicKeyRoots(root).call(); // eslint-disable-line no-await-in-loop
         rootCount++;
         root = publicKeyRoot;
       }
@@ -490,7 +494,7 @@ if (process.env.COMPLIANCE === 'true') {
       // try to register the new keys with accounts (ignore Alice's and Bob's accounts)
       for (let i = 4; i < accounts.length; i++) {
         userPromises.push(
-          fTokenShieldInstance.checkUser(zkpPublicKeys[i], {
+          fTokenShieldInstance.methods.checkUser(zkpPublicKeys[i]).send({
             from: accounts[i],
             gas: 6500000,
             gasPrice: 20000000000,
@@ -502,11 +506,13 @@ if (process.env.COMPLIANCE === 'true') {
 
     test('After 108 root computations we should still have only 100 roots stored due to pruning of oldest root', async () => {
       expect.assertions(2);
-      let root = await fTokenShieldInstance.currentPublicKeyRoot.call();
+      let root = await fTokenShieldInstance.methods.currentPublicKeyRoot().call();
       let rootCount = 0;
-      const publicKeyRootComputations = await fTokenShieldInstance.publicKeyRootComputations.call();
+      const publicKeyRootComputations = await fTokenShieldInstance.methods
+        .publicKeyRootComputations()
+        .call();
       while (BigInt(root) !== BigInt(0)) {
-        const publicKeyRoot = await fTokenShieldInstance.publicKeyRoots.call(root); // eslint-disable-line no-await-in-loop
+        const publicKeyRoot = await fTokenShieldInstance.methods.publicKeyRoots(root).call(); // eslint-disable-line no-await-in-loop
         rootCount++;
         root = publicKeyRoot;
       }
@@ -518,12 +524,12 @@ if (process.env.COMPLIANCE === 'true') {
     test('Alice and Bob are already registered, so attempting to register them again with a different ZKP public key should fail', async () => {
       expect.assertions(1);
       try {
-        await fTokenShieldInstance.checkUser(await utils.rndHex(32), {
+        await fTokenShieldInstance.methods.checkUser(await utils.rndHex(32)).send({
           from: accounts[0],
           gas: 6500000,
           gasPrice: 20000000000,
         });
-        await fTokenShieldInstance.checkUser(await utils.rndHex(32), {
+        await fTokenShieldInstance.methods.checkUser(await utils.rndHex(32)).send({
           from: accounts[0],
           gas: 6500000,
           gasPrice: 20000000000,

@@ -94,7 +94,7 @@ export default class UserService {
     const url = config.apiGateway.root + 'getFTokenInfo';
     return this.http.get(url).pipe(
       map((data: any) => {
-        data.data.balance = Number('0x' + data.data.balance);
+        data.data.balance = Number(data.data.balance);
         return data;
       }),
       catchError(err => {

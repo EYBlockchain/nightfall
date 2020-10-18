@@ -7,21 +7,10 @@
  * @author westlad, Chaitanya-Konda, iAmMichaelConnor
  */
 
-import contract from '@truffle/contract';
-import jsonfile from 'jsonfile';
 import { merkleTree } from '@eyblockchain/nightlite';
 import Web3 from './web3';
 import logger from './logger';
-import { getContractAddress } from './contractUtils';
-
-const FTokenShield = contract(jsonfile.readFileSync('./build/contracts/FTokenShield.json'));
-FTokenShield.setProvider(Web3.connect());
-
-const Verifier = contract(jsonfile.readFileSync('./build/contracts/Verifier.json'));
-Verifier.setProvider(Web3.connect());
-
-const FToken = contract(jsonfile.readFileSync('./build/contracts/FToken.json'));
-FToken.setProvider(Web3.connect());
+import { getWeb3ContractInstance, getContractAddress } from './contractUtils';
 
 const shield = {}; // this field holds the current Shield contract instance.
 
@@ -37,8 +26,7 @@ async function unlockAccount(address, password) {
  * @param {string} address - the Ethereum address of the user to whom this shieldAddress will apply
  */
 async function setShield(shieldAddress, address) {
-  if (shieldAddress === undefined) shield[address] = await getContractAddress('FTokenShield');
-  else shield[address] = await FTokenShield.at(shieldAddress);
+  shield[address] = await getWeb3ContractInstance('FTokenShield', shieldAddress);
 }
 
 function unSetShield(address) {
@@ -51,8 +39,8 @@ function unSetShield(address) {
 async function getShieldAddress(account) {
   const fTokenShieldInstance = shield[account]
     ? shield[account]
-    : await getContractAddress('FTokenShield');
-  return fTokenShieldInstance.address;
+    : await getWeb3ContractInstance('FTokenShield');
+  return fTokenShieldInstance._address; // eslint-disable-line no-underscore-dangle
 }
 
 /**
@@ -60,8 +48,8 @@ async function getShieldAddress(account) {
  * @param {string} address - the address of the Ethereum account
  */
 async function getBalance(address) {
-  const fToken = await FToken.at(await getContractAddress('FToken'));
-  return fToken.balanceOf.call(address);
+  const fToken = await getWeb3ContractInstance('FToken');
+  return fToken.methods.balanceOf(address).call();
 }
 
 /**
@@ -81,8 +69,8 @@ async function getFTAddress() {
  */
 async function buyFToken(amount, address) {
   logger.info('Buying ERC-20', amount, address);
-  const fToken = await FToken.at(await getContractAddress('FToken'));
-  return fToken.mint(address, amount, {
+  const fToken = await getWeb3ContractInstance('FToken');
+  return fToken.methods.mint(address, amount).send({
     from: address,
     gas: 4000000,
   });
@@ -97,8 +85,8 @@ async function buyFToken(amount, address) {
  */
 async function transferFToken(amount, fromAddress, toAddress) {
   logger.info('Transferring ERC-20', amount, toAddress);
-  const fToken = await FToken.at(await getContractAddress('FToken'));
-  return fToken.transfer(toAddress, amount, {
+  const fToken = await getWeb3ContractInstance('FToken');
+  return fToken.methods.transfer(toAddress, amount).send({
     from: fromAddress,
     gas: 4000000,
   });
@@ -117,8 +105,8 @@ async function transferFToken(amount, fromAddress, toAddress) {
 async function burnFToken(amount, address) {
   logger.info('Buying ERC-20', amount, address);
 
-  const fToken = await FToken.at(await getContractAddress('FToken'));
-  return fToken.burn(address, amount, {
+  const fToken = await getWeb3ContractInstance('FToken');
+  return fToken.methods.burn(address, amount).send({
     from: address,
     gas: 4000000,
   });
@@ -132,9 +120,9 @@ async function burnFToken(amount, address) {
  */
 async function getTokenInfo() {
   logger.info('Getting ERC-20 info');
-  const fToken = await FToken.at(await getContractAddress('FToken'));
-  const symbol = await fToken.symbol.call();
-  const name = await fToken.name.call();
+  const fToken = await getWeb3ContractInstance('FToken');
+  const symbol = await fToken.methods.symbol().call();
+  const name = await fToken.methods.name().call();
   return { symbol, name };
 }
 
@@ -146,10 +134,7 @@ async function checkCorrectness(
   commitment,
   commitmentIndex,
   blockNumber,
-  account,
 ) {
-  const fTokenShieldInstance = shield[account] ? shield[account] : await FTokenShield.deployed();
-
   const results = await merkleTree.checkCorrectness(
     erc20Address,
     amount,
@@ -158,7 +143,7 @@ async function checkCorrectness(
     commitment,
     commitmentIndex,
     blockNumber,
-    fTokenShieldInstance,
+    'FTokenShield',
   );
   logger.info('\nf-token-controller', '\ncheckCorrectness', '\nresults', results);
 

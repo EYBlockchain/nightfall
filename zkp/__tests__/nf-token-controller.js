@@ -3,7 +3,7 @@
 import { erc721 } from '@eyblockchain/nightlite';
 import utils from 'zkp-utils';
 
-import bc from '../src/web3';
+import Web3 from '../src/web3';
 import controller from '../src/nf-token-controller';
 import { getContractAddress } from '../src/contractUtils';
 
@@ -31,8 +31,8 @@ let nfTokenShieldAddress;
 let erc721Address;
 if (process.env.COMPLIANCE !== 'true') {
   beforeAll(async () => {
-    if (!(await bc.isConnected())) await bc.connect();
-    accounts = await (await bc.connection()).eth.getAccounts();
+    await Web3.waitTillConnected();
+    accounts = await Web3.connection().eth.getAccounts();
     nfTokenShieldAddress = await getContractAddress('NFTokenShield');
     erc721Address = await getContractAddress('NFTokenMetadata');
     const erc721AddressPadded = `0x${utils.strip0x(erc721Address).padStart(64, '0')}`;
@@ -111,7 +111,7 @@ if (process.env.COMPLIANCE !== 'true') {
     test('Should burn ERC 721 token B of Bob', async () => {
       const countBefore = await controller.getBalance(accounts[2]);
       await controller.burnNFToken(tokenIdB, accounts[2]);
-      expect((await controller.getBalance(accounts[2])).toNumber()).toEqual(countBefore - 1);
+      expect(Number(await controller.getBalance(accounts[2]))).toEqual(countBefore - 1);
     });
 
     test('Should mint an ERC 721 commitment for Alice for asset A  (Z_A_A)', async () => {

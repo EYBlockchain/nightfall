@@ -1,10 +1,9 @@
 import { Router } from 'express';
 import { erc20, elgamal } from '@eyblockchain/nightlite';
-import contract from '@truffle/contract';
 import utils from 'zkp-utils';
 
 import fTokenController from '../f-token-controller';
-import { getTruffleContractInstance, getContractAddress } from '../contractUtils';
+import { getWeb3ContractInstance, getContractAddress } from '../contractUtils';
 
 const router = Router();
 
@@ -264,7 +263,6 @@ async function burn(req, res, next) {
  */
 async function checkCorrectness(req, res, next) {
   try {
-    const { address } = req.headers;
     const { value, salt, publicKey, commitment, commitmentIndex, blockNumber } = req.body;
     const erc20Address = await getContractAddress('FToken');
 
@@ -276,7 +274,6 @@ async function checkCorrectness(req, res, next) {
       commitment,
       commitmentIndex,
       blockNumber,
-      address,
     );
     res.data = results;
     next();
@@ -648,10 +645,12 @@ async function decodeTransaction(req, res, next) {
   }
 
   try {
-    const { contractJson: fTokenShieldJson } = await getTruffleContractInstance('FTokenShield');
+    const fTokenShieldInstance = await getWeb3ContractInstance('FTokenShield');
+    const fTokenShieldEvents = await fTokenShieldInstance.getPastEvents('allEvents', {
+      filter: { transactionHash: txHash },
+    });
 
     const txReceipt = await fTokenController.getTxRecipt(txHash);
-    const fTokenShieldEvents = contract(fTokenShieldJson).events;
 
     if (!txReceipt) throw Error('No Transaction receipt found.');
 

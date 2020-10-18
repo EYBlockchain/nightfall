@@ -5,7 +5,7 @@
 import config from 'config';
 import { elgamal } from '@eyblockchain/nightlite';
 import Web3 from './web3';
-import { getTruffleContractInstance } from './contractUtils';
+import { getWeb3ContractInstance } from './contractUtils';
 
 const web3 = Web3.connection();
 
@@ -15,21 +15,20 @@ const web3 = Web3.connection();
 async function startCompliance() {
   if (process.env.COMPLIANCE === 'true') {
     const accounts = await web3.eth.getAccounts();
-    const { contractInstance: fTokenShieldInstance } = await getTruffleContractInstance(
-      'FTokenShield',
-    );
+    const fTokenShieldInstance = await getWeb3ContractInstance('FTokenShield');
 
     // setup test keys
     elgamal.setAuthorityPrivateKeys();
     try {
-      fTokenShieldInstance.setCompressedAdminPublicKeys(
-        elgamal.AUTHORITY_PUBLIC_KEYS.map(pt => elgamal.edwardsCompress(pt)),
-        {
+      fTokenShieldInstance.methods
+        .setCompressedAdminPublicKeys(
+          elgamal.AUTHORITY_PUBLIC_KEYS.map(pt => elgamal.edwardsCompress(pt)),
+        )
+        .send({
           from: accounts[0],
           gas: 6500000,
           gasPrice: config.GAS_PRICE,
-        },
-      );
+        });
     } catch (err) {
       throw new Error(err);
     }

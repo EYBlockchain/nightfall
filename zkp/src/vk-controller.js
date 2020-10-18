@@ -8,27 +8,25 @@
 import config from 'config';
 import { vks } from '@eyblockchain/nightlite';
 import Web3 from './web3';
-import { getTruffleContractInstance } from './contractUtils';
-
-const web3 = Web3.connection();
+import { getContractInterface, getWeb3ContractInstance } from './contractUtils';
 
 /**
  * Loads VKs to the VkRegistry (Shield contracts)
  * @param {string} shieldContractName The vkRegistry is just the contract which stores the verification keys. In our case, that's the FTokenShield.sol and NFTokenShield.sol contracts.
  */
 async function initializeVks(shieldContractName) {
+  await Web3.waitTillConnected();
+  const web3 = Web3.connection();
   const accounts = await web3.eth.getAccounts();
   const account = accounts[0];
 
   // Get vkRegistry contract details. The vkRegistry is just the contract which stores the verification keys. In our case, that's the FTokenShield.sol and NFTokenShield.sol contracts.
-  const {
-    contractJson: shieldJson,
-    contractInstance: shieldContract,
-  } = await getTruffleContractInstance(shieldContractName);
+  const shieldJson = getContractInterface(shieldContractName);
+  const shieldContract = await getWeb3ContractInstance(shieldContractName);
 
   const blockchainOptions = {
     shieldJson,
-    shieldAddress: shieldContract.address,
+    shieldAddress: shieldContract._address, // eslint-disable-line no-underscore-dangle
     account,
   };
 
@@ -50,8 +48,6 @@ async function runController() {
   await initializeVks('FTokenShield');
   await initializeVks('NFTokenShield');
 }
-
-if (process.env.NODE_ENV !== 'test') runController();
 
 export default {
   runController,

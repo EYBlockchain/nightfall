@@ -26,6 +26,8 @@ if (config.get('isLoggerEnable')) {
     ),
     transports: [new transports.Console()],
   });
+  winstonLogger.info.bind(winstonLogger);
+  winstonLogger.error.bind(winstonLogger);
 }
 
 const logger = winstonLogger || consoleLogger;

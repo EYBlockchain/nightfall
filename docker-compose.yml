@@ -279,7 +279,6 @@ volumes:
   mongo-nightfall-volume: {}
   mongo-merkle-tree-volume: {}
   zkp-code-volume:
-    driver: local
     driver_opts:
       type: none
       device: $PWD/zkp/code/
