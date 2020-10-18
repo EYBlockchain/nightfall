@@ -58,7 +58,7 @@ jobs:
           docker-compose run --rm truffle-zkp migrate --reset --network=default
       - name: Deploy Nightlite contracts
         run: |
-          cd zkp/ && npm ci && cd ..
+          cd zkp/ && npm i && cd ..
           docker-compose run --rm truffle-nightlite compile --all
           docker-compose run --rm truffle-nightlite migrate --reset --network=default
       - name: Run zkp unit tests
@@ -106,7 +106,7 @@ jobs:
           docker-compose run --rm truffle-zkp migrate --reset --network=default
       - name: Deploy Nightlite contracts
         run: |
-          cd zkp/ && npm ci && cd ..
+          cd zkp/ && npm i && cd ..
           docker-compose run --rm truffle-nightlite compile --all
           docker-compose run --rm truffle-nightlite migrate --reset --network=default
       - name: Run zkp unit tests

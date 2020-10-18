@@ -78,7 +78,7 @@ popd
 
 printf "${GREEN}*** Installing zkp dependencies ***${NC}\n"
 pushd zkp
-npm ci
+npm i
 popd
 
 if [[ "$1" == "compliance" || "$1" == "mimc" ]]
