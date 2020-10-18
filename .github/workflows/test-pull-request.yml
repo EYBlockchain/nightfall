@@ -21,6 +21,8 @@ jobs:
   zkp-unit-test-sha:
     name: ZKP microservice unit test (HASH_TYPE = sha)
     runs-on: ubuntu-18.04
+    env:
+      NPM_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-node@v1
@@ -38,7 +40,7 @@ jobs:
           sudo mkswap /mnt/swapfile
           sudo swapon /mnt/swapfile
       - name: Build docker images
-        run: docker-compose build truffle-zkp truffle-nightlite zkp
+        run: docker-compose build --build-arg NPM_TOKEN=${NPM_TOKEN} truffle-zkp truffle-nightlite zkp
       - name: Generate the keys and constraint files for Zero Knowledge Proofs
         run: |
           chmod -R 777 zkp/code/
@@ -65,6 +67,8 @@ jobs:
   zkp-unit-test-mimc:
     name: ZKP microservice unit test (HASH_TYPE = mimc)
     runs-on: ubuntu-18.04
+    env:
+      NPM_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-node@v1
@@ -84,7 +88,7 @@ jobs:
       - name: Rename mimc docker-compose yml file
         run: mv docker-compose.override.mimc.yml docker-compose.override.yml
       - name: Build docker images
-        run: docker-compose build truffle-zkp truffle-nightlite zkp
+        run: docker-compose build --build-arg NPM_TOKEN=${NPM_TOKEN} truffle-zkp truffle-nightlite zkp
       - name: Generate the keys and constraint files for Zero Knowledge Proofs
         run: |
           chmod -R 777 zkp/code/
@@ -111,6 +115,8 @@ jobs:
   integration-test-sha:
     name: Run integration test (HASH_TYPE = sha)
     runs-on: ubuntu-18.04
+    env:
+      NPM_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-node@v1
@@ -127,6 +133,8 @@ jobs:
           sudo fallocate -l 12G /mnt/swapfile
           sudo mkswap /mnt/swapfile
           sudo swapon /mnt/swapfile
+      - name: Build docker images
+        run: docker-compose build --build-arg NPM_TOKEN=${NPM_TOKEN}
       - name: Generate the keys and constraint files for Zero Knowledge Proofs
         run: |
           chmod -R 777 zkp/code/
@@ -150,6 +158,8 @@ jobs:
   integration-test-mimc:
     name: Run integration test (HASH_TYPE = mimc)
     runs-on: ubuntu-18.04
+    env:
+      NPM_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-node@v1
@@ -168,6 +178,8 @@ jobs:
           sudo swapon /mnt/swapfile
       - name: Rename mimc docker-compose yml file
         run: cp docker-compose.override.mimc.yml docker-compose.override.yml
+      - name: Build docker images
+        run: docker-compose build --build-arg NPM_TOKEN=${NPM_TOKEN}
       - name: Generate the keys and constraint files for Zero Knowledge Proofs
         run: |
           chmod -R 777 zkp/code/
@@ -191,6 +203,8 @@ jobs:
   integration-test-compliance:
     name: Run compliance integration test
     runs-on: ubuntu-18.04
+    env:
+      NPM_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-node@v1
@@ -209,6 +223,8 @@ jobs:
           sudo swapon /mnt/swapfile
       - name: Rename compliance docker-compose yml file
         run: cp docker-compose.override.compliance.yml docker-compose.override.yml
+      - name: Build docker images
+        run: docker-compose build --build-arg NPM_TOKEN=${NPM_TOKEN}
       - name: Generate the keys and constraint files for Zero Knowledge Proofs
         run: |
           chmod -R 777 zkp/code/
