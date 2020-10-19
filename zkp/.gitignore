@@ -100,3 +100,8 @@ code/gm17/*
 !**/*.zok
 # We want to keep ft-burn.code, but not out.code
 **/out.code
+
+# putting package-lock.json to ignore add change logic
+# to do 'npm i' instead of 'npm ci'
+# doing this to avoid error: 'integrity checksum failed when using sha512'
+package-lock.json
