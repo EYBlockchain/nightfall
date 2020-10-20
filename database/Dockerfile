@@ -8,10 +8,8 @@ RUN echo "deb http://repo.mongodb.org/apt/debian stretch/mongodb-org/4.0 main" >
 RUN apt-get update
 RUN apt-get install -y mongodb-org
 
-COPY ./package.json ./package-lock.json ./start-script ./
+COPY ./package.json ./package-lock.json ./
 RUN npm ci
 
-RUN apt-get update -y
-RUN apt-get install -y netcat
 
 EXPOSE 80

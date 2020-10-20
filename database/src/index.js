@@ -47,6 +47,10 @@ app.use((err, req, res, next) => {
   next(err);
 });
 
+process.on('unhandledRejection', (reason, p) => {
+  logger.error('Unhandled Rejection at:', p, 'reason:', reason);
+});
+
 app.use(formatError);
 app.use(errorHandler);
 

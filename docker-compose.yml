@@ -142,7 +142,7 @@ services:
       - ./zkp-utils:/app/node_modules/zkp-utils
       - ./database/config:/app/config
       - ./database/setup-mongo-acl-for-new-users.js:/app/setup-mongo-acl-for-new-users.js
-    command: ./start-script
+    command: npm start
     environment:
       MONGO_HOST: mongo-nightfall
       MONGO_PORT: 27017
@@ -160,6 +160,7 @@ services:
       - MONGO_INITDB_DATABASE=nightfall
     volumes:
       - ./database/docker-entrypoint-initdb.d/01_setup_admin_user.js:/docker-entrypoint-initdb.d/01_setup_admin_user.js
+      - ./database/is-mongo-ready.js:/is-mongo-ready.js
       - mongo-nightfall-volume:/data/db
     networks:
       - nightfall_network
