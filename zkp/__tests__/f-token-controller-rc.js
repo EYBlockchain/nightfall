@@ -462,7 +462,7 @@ if (process.env.COMPLIANCE === 'true') {
     });
 
     test(`Should decrypt Alice's Transfer commitment to Bob`, async () => {
-      const decrypt = erc20.decryptEventLog(transferTxReceipt.events['TransferRC'], {
+      const decrypt = erc20.decryptEventLog(transferTxReceipt.events.TransferRC, {
         type: 'TransferRC',
         guessers: [
           elgamal.rangeGenerator(1000000),
@@ -476,7 +476,7 @@ if (process.env.COMPLIANCE === 'true') {
     });
 
     test(`Should decrypt Alice's Burn commitment`, async () => {
-      const decrypt = erc20.decryptEventLog(burnTxReceipt.events['BurnRC'], {
+      const decrypt = erc20.decryptEventLog(burnTxReceipt.events.BurnRC, {
         type: 'BurnRC',
         guessers: [[publicKeyA, publicKeyB, publicKeyE]],
       });
