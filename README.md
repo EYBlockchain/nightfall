@@ -104,6 +104,13 @@ For Linux users:
 
 For Mac & Linux users:
 
+Next set a environment variable NPM_TOKEN, value should be a github
+personal access token with `:repo` and `:read-package` permission granted.
+
+```sh
+export NPM_TOKEN=XXXXX
+```
+
 Next pull a compatible Docker image of ZoKrates
 
 ```sh
