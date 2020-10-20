@@ -1,5 +1,6 @@
-var check = true
+/* eslint-disable */
 
+var check = true
 while (check) {
   try {
     sleep(3);

@@ -151,7 +151,7 @@ if (process.env.COMPLIANCE === 'true') {
 
     test('Should mint an ERC-20 commitment commitmentAliceC for Alice for asset C', async () => {
       expect.assertions(1);
-      console.log('Alices account ', (await controller.getBalance(accounts[0])).toNumber());
+      console.log('Alices account ', await controller.getBalance(accounts[0]));
       const { commitment: zTest, commitmentIndex: zIndex } = await erc20.mint(
         amountC,
         publicKeyA,
@@ -169,7 +169,7 @@ if (process.env.COMPLIANCE === 'true') {
       );
       zInd1 = parseInt(zIndex, 10);
       expect(commitmentAliceC).toEqual(zTest);
-      console.log(`Alice's account `, (await controller.getBalance(accounts[0])).toNumber());
+      console.log(`Alice's account `, await controller.getBalance(accounts[0]));
     });
 
     test('Should mint another ERC-20 commitment commitmentAliceD for Alice for asset D', async () => {
@@ -191,7 +191,7 @@ if (process.env.COMPLIANCE === 'true') {
       );
       zInd2 = parseInt(zIndex, 10);
       expect(commitmentAliceD).toEqual(zTest);
-      console.log(`Alice's account `, (await controller.getBalance(accounts[0])).toNumber());
+      console.log(`Alice's account `, await controller.getBalance(accounts[0]));
     });
 
     test("Should fail to transfer a ERC-20 commitment to Bob because he's not registered yet)", async () => {
@@ -316,7 +316,7 @@ if (process.env.COMPLIANCE === 'true') {
       }
       rootCount--;
       expect(rootCount).toEqual(3);
-      expect(publicKeyRootComputations.toNumber()).toEqual(3);
+      expect(Number(publicKeyRootComputations)).toEqual(3);
     });
 
     test(`Should blacklist Bob so he can't transfer an ERC-20 commitment to Eve`, async () => {
@@ -429,15 +429,15 @@ if (process.env.COMPLIANCE === 'true') {
       }
       rootCount--;
       expect(rootCount).toEqual(2);
-      expect(publicKeyRootComputations.toNumber()).toEqual(2);
+      expect(Number(publicKeyRootComputations)).toEqual(2);
     });
 
     test(`Should burn Alice's remaining ERC-20 commitment (to Eve)`, async () => {
       expect.assertions(1);
       const bal1 = await controller.getBalance(accounts[3]);
       const bal = await controller.getBalance(accounts[0]);
-      console.log('accounts[3]', bal1.toNumber());
-      console.log('accounts[0]', bal.toNumber());
+      console.log('accounts[3]', bal1);
+      console.log('accounts[0]', bal);
       ({ txReceipt: burnTxReceipt } = await erc20.burn(
         amountF,
         secretKeyA,
@@ -457,13 +457,12 @@ if (process.env.COMPLIANCE === 'true') {
         },
       ));
       const bal2 = await controller.getBalance(accounts[3]);
-      console.log('accounts[3]', bal2.toNumber());
+      console.log('accounts[3]', bal2);
       expect(parseInt(amountF, 16)).toEqual(bal2 - bal1);
     });
 
-    test(`Should decrypt Alice's Transfer commitment to Bob`, () => {
-      expect.assertions(3);
-      const decrypt = erc20.decryptTransaction(transferTxReceipt, {
+    test(`Should decrypt Alice's Transfer commitment to Bob`, async () => {
+      const decrypt = erc20.decryptEventLog(transferTxReceipt.events['TransferRC'], {
         type: 'TransferRC',
         guessers: [
           elgamal.rangeGenerator(1000000),
@@ -476,9 +475,8 @@ if (process.env.COMPLIANCE === 'true') {
       expect(decrypt[2]).toMatch(publicKeyB);
     });
 
-    test(`Should decrypt Alice's Burn commitment`, () => {
-      expect.assertions(1);
-      const decrypt = erc20.decryptTransaction(burnTxReceipt, {
+    test(`Should decrypt Alice's Burn commitment`, async () => {
+      const decrypt = erc20.decryptEventLog(burnTxReceipt.events['BurnRC'], {
         type: 'BurnRC',
         guessers: [[publicKeyA, publicKeyB, publicKeyE]],
       });
@@ -518,7 +516,7 @@ if (process.env.COMPLIANCE === 'true') {
       }
       rootCount--;
       expect(rootCount).toEqual(100);
-      expect(publicKeyRootComputations.toNumber()).toEqual(108);
+      expect(Number(publicKeyRootComputations)).toEqual(108);
     });
 
     test('Alice and Bob are already registered, so attempting to register them again with a different ZKP public key should fail', async () => {
