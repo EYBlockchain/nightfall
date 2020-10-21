@@ -117,6 +117,7 @@ jobs:
     runs-on: ubuntu-18.04
     env:
       NPM_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      COMPOSE_INTERACTIVE_NO_CLI: 1
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-node@v1
@@ -160,6 +161,7 @@ jobs:
     runs-on: ubuntu-18.04
     env:
       NPM_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      COMPOSE_INTERACTIVE_NO_CLI: 1
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-node@v1
@@ -205,6 +207,7 @@ jobs:
     runs-on: ubuntu-18.04
     env:
       NPM_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      COMPOSE_INTERACTIVE_NO_CLI: 1
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-node@v1
