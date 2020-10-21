@@ -26,7 +26,7 @@ launchContainersAndRunIntegrationTest(){
   docker-compose up -d mongo-merkle-tree
   docker-compose up -d mongo-nightfall
 
-  while ! docker exec -it nightfall_mongo-nightfall_1 mongo nightfall --host=localhost -u admin -p admin is-mongo-ready.js; do
+  while ! docker-compose exec -it mongo-nightfall mongo nightfall --host=localhost -u admin -p admin is-mongo-ready.js; do
     sleep 3
   done
 
