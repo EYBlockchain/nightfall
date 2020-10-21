@@ -26,9 +26,13 @@ launchContainersAndRunIntegrationTest(){
   docker-compose up -d mongo-merkle-tree
   docker-compose up -d mongo-nightfall
 
-  while ! docker exec -it nightfall_mongo-nightfall_1 mongo nightfall --host=localhost -u admin -p admin is-mongo-ready.js; do
-    sleep 3
-  done
+  # check to avoid `docker-compose exec` in github actions workflow
+  if [[ ! $GITHUB_ACTION ]]
+  then
+    while ! docker-compose exec mongo-nightfall mongo nightfall --host=localhost -u admin -p admin is-mongo-ready.js; do
+      sleep 3
+    done
+  fi
 
   printf "${GREEN}*** Launching containerized microservices ***${NC}\n"
   if [[ -f docker-compose.override.yml ]]
