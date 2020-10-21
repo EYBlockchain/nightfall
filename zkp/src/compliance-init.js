@@ -7,13 +7,12 @@ import { elgamal } from '@eyblockchain/nightlite';
 import Web3 from './web3';
 import { getWeb3ContractInstance } from './contractUtils';
 
-const web3 = Web3.connection();
-
 /**
  * Load test Admin keys for demonstrating the compliance extensions
  */
 async function startCompliance() {
   if (process.env.COMPLIANCE === 'true') {
+    const web3 = Web3.connection();
     const accounts = await web3.eth.getAccounts();
     const fTokenShieldInstance = await getWeb3ContractInstance('FTokenShield');
 
