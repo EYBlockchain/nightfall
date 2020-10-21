@@ -143,11 +143,6 @@ jobs:
           npm run setupAll-rc
       - name: Remove containers
         run: docker-compose down -v
-      - name: Move ft-batch-transfer to make space
-        run: |
-          sudo mv zkp/code/gm17/ft-batch-transfer /dev/ft-batch-transfer
-          sudo ln -s /dev/ft-batch-transfer zkp/code/gm17/ft-batch-transfer
-          df -h
       - name: Deploy zkp contracts
         run: |
           docker-compose run --rm truffle-zkp compile --all
@@ -227,7 +222,7 @@ jobs:
           sudo mkswap /mnt/swapfile
           sudo swapon /mnt/swapfile
       - name: Rename mimc docker-compose yml file
-        run: mv docker-compose.override.mimc.yml docker-compose.override.yml
+        run: cp docker-compose.override.mimc.yml docker-compose.override.yml
       - name: Build docker images
         run: docker-compose build --build-arg NPM_TOKEN=${NPM_TOKEN}
       - name: Generate the keys and constraint files for Zero Knowledge Proofs
@@ -273,7 +268,7 @@ jobs:
           sudo mkswap /mnt/swapfile
           sudo swapon /mnt/swapfile
       - name: Rename compliance docker-compose yml file
-        run: mv docker-compose.override.compliance.yml docker-compose.override.yml
+        run: cp docker-compose.override.compliance.yml docker-compose.override.yml
       - name: Build docker images
         run: docker-compose build --build-arg NPM_TOKEN=${NPM_TOKEN}
       - name: Generate the keys and constraint files for Zero Knowledge Proofs
