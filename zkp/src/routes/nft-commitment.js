@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { erc721 } from '@eyblockchain/nightlite';
-import utils from 'zkp-utils';
+import { randomHex } from 'zkp-utils';
 
 import nfController from '../nf-token-controller';
 import { getContractAddress } from '../contractUtils';
@@ -44,7 +44,7 @@ async function mint(req, res, next) {
     tokenId,
     owner: { publicKey },
   } = req.body;
-  const salt = await utils.rndHex(32);
+  const salt = await randomHex(32);
   const nfTokenShieldAddress = await getContractAddress('NFTokenShield');
   const nfTokenAddress = await getContractAddress('NFTokenMetadata');
 
@@ -127,7 +127,7 @@ async function transfer(req, res, next) {
     commitment,
     commitmentIndex,
   } = req.body;
-  const newCommitmentSalt = await utils.rndHex(32);
+  const newCommitmentSalt = await randomHex(32);
   const { address } = req.headers;
   const nfTokenShieldAddress = await getContractAddress('NFTokenShield');
   const erc721Address = await getContractAddress('NFTokenMetadata');

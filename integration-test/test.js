@@ -4,6 +4,8 @@ import { expect } from 'chai';
 import request from 'superagent';
 import prefix from 'superagent-prefix';
 import config from 'config';
+import { GN } from 'general-number';
+
 import testData from './testData';
 
 const apiServerURL = config.get('apiServerURL');
@@ -138,10 +140,12 @@ describe('****** Integration Test ******\n', function() {
         this.skip();
       } else {
         // Get the erc721 address so that we can use it to calculate the commitment hashes
-        erc721.contractAddress = (await request
-          .get('/getNFTokenContractAddress')
-          .use(prefix(apiServerURL))
-          .set('Authorization', alice.token)).body.data.nftAddress;
+        erc721.contractAddress = new GN(
+          (await request
+            .get('/getNFTokenContractAddress')
+            .use(prefix(apiServerURL))
+            .set('Authorization', alice.token)).body.data.nftAddress,
+        );
       }
     });
 
@@ -367,10 +371,12 @@ describe('****** Integration Test ******\n', function() {
      */
     before(async function() {
       // Get the erc20 address so that we calculate the commitment hashes
-      erc20.contractAddress = (await request
-        .get('/getFTokenContractAddress')
-        .use(prefix(apiServerURL))
-        .set('Authorization', alice.token)).body.data.ftAddress;
+      erc20.contractAddress = new GN(
+        (await request
+          .get('/getFTokenContractAddress')
+          .use(prefix(apiServerURL))
+          .set('Authorization', alice.token)).body.data.ftAddress,
+      );
 
       if (!process.env.COMPLIANCE) {
         return;

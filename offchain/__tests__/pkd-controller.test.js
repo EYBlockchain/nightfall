@@ -4,7 +4,7 @@
 Authors:
 */
 
-import utils from 'zkp-utils';
+import { utf8ToHex, hexToUtf8, randomHex } from 'zkp-utils';
 
 import {
   isNameInUse,
@@ -34,7 +34,7 @@ const web3 = Web3.connection();
 
 describe('PKD Controller testing', () => {
   test('Utility function correctly converts string to hex', () => {
-    const hex = utils.utf8StringToHex('zero-knowledge', 32);
+    const hex = utf8ToHex('zero-knowledge', 32);
 
     expect(hex, 'Test for string to hex conversion failed!').toEqual(
       '0x0000000000000000000000000000000000007a65726f2d6b6e6f776c65646765',
@@ -43,9 +43,7 @@ describe('PKD Controller testing', () => {
   });
 
   test('Utility function correctly converts hex to string', () => {
-    const str = utils.hexToUtf8String(
-      '0x0000000000000000000000000000000000007a65726f2d6b6e6f776c65646765',
-    );
+    const str = hexToUtf8('0x0000000000000000000000000000000000007a65726f2d6b6e6f776c65646765');
 
     expect(str, 'Test for hex to string converstion failed!').toEqual('zero-knowledge');
   });
@@ -106,7 +104,7 @@ describe('PKD Controller testing', () => {
   });
 
   test('ZKP public key can be set and retrieved using the ZKP public key to address association', async () => {
-    zkpPublicKeyInput = await utils.rndHex(32);
+    zkpPublicKeyInput = await randomHex(32);
     const accounts = await web3.eth.getAccounts();
     await setZkpPublicKey(zkpPublicKeyInput, accounts[0]);
     const zkpPublicKeyOutput = await getZkpPublicKeyFromAddress(accounts[0]);
@@ -130,7 +128,7 @@ describe('PKD Controller testing', () => {
 
   test('Public key can be set and retrieved using the Public key to address association', async () => {
     const accounts = await web3.eth.getAccounts();
-    zkpPublicKeyInput = await utils.rndHex(32);
+    zkpPublicKeyInput = await randomHex(32);
 
     const publicKeyInput = [];
     const publicKeyOutput = [];

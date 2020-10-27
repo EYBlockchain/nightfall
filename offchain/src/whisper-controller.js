@@ -4,7 +4,7 @@
 @author Westlad
 */
 
-import utils from 'zkp-utils';
+import { strip0x, hexToUtf8, ensure0x } from 'zkp-utils';
 import Web3 from './web3';
 import logger from './logger';
 
@@ -42,7 +42,7 @@ As a minimum it must contain the Whisper key pair.
 This version returns the raw hex Whisper payload
 */
 async function subscribe(idReceiver, topic = TRANSFER_TOPIC, listener) {
-  if (utils.strip0x(topic).length !== 8) throw new Error('Whisper topic must be 4 bytes long');
+  if (strip0x(topic).length !== 8) throw new Error('Whisper topic must be 4 bytes long');
   if (idReceiver.shhIdentity === undefined)
     throw new Error(
       'no valid Whisper key pair was found.  Please generate these before subscribing',
@@ -62,7 +62,7 @@ Function to decode a javascript object encoded as a Whisper hex message payload 
 @returns {string} - the decoded javascript object
 */
 function decodeMessage(msgHex) {
-  const msgStr = utils.hexToUtf8String(msgHex);
+  const msgStr = hexToUtf8(msgHex);
   return JSON.parse(msgStr);
 }
 
@@ -80,7 +80,7 @@ This version will return a Javascript object as the payload (assuming sendObject
 the object)
 */
 async function subscribeObject(idReceiver, topic = TRANSFER_TOPIC, userData, listener) {
-  if (utils.strip0x(topic).length !== 8) throw new Error('Whisper topic must be 4 bytes long');
+  if (strip0x(topic).length !== 8) throw new Error('Whisper topic must be 4 bytes long');
   if (idReceiver.shhIdentity === undefined)
     throw new Error(
       'no valid Whisper key pair was found.  Please generate these before subscribing',
@@ -110,7 +110,7 @@ function to send a Whisper message
 @param {string} pkReceiver - the receipient's public key
 */
 async function sendMessage(message, idSender, pkReceiver, topic = TRANSFER_TOPIC) {
-  if (utils.strip0x(topic).length !== 8) throw new Error('Whisper topic must be 4 bytes long');
+  if (strip0x(topic).length !== 8) throw new Error('Whisper topic must be 4 bytes long');
   if (idSender.shhIdentity === undefined)
     throw new Error('Whisper identity not found in id object');
   try {
@@ -137,7 +137,7 @@ function encodeMessage(msgObj) {
   const msgStr = JSON.stringify(msgObj);
   const buf = Buffer.from(msgStr, 'utf8');
   const msgHex = buf.toString('hex');
-  return utils.ensure0x(msgHex);
+  return ensure0x(msgHex);
 }
 
 /**
@@ -153,7 +153,7 @@ to 'receive'.  It's a little crude and 3s is overkill but will do for now.
 @param {string} pkReceiver - the receipient's public key
 */
 async function sendObject(message, idSender, pkReceiver, topic = TRANSFER_TOPIC) {
-  if (utils.strip0x(topic).length !== 8) throw new Error('Whisper topic must be 4 bytes long');
+  if (strip0x(topic).length !== 8) throw new Error('Whisper topic must be 4 bytes long');
   if (idSender.shhIdentity === undefined)
     throw new Error('Whisper identity not found in id object');
   try {

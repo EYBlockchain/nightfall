@@ -60,7 +60,6 @@ services:
       - ./offchain/build:/app/build
       - ./offchain/.babelrc:/app/.babelrc
       - ./offchain/__tests__:/app/__tests__
-      - ./zkp-utils:/app/node_modules/zkp-utils
       - ./offchain/config:/app/config
     environment:
       AUTHENTICATION_API_HOST: http://api-gateway
@@ -86,7 +85,6 @@ services:
       - ./zkp/.babelrc:/app/.babelrc
       - ./zkp/__tests__:/app/__tests__
       - ./zkp/config:/app/config
-      - ./zkp-utils:/app/node_modules/zkp-utils
       - /var/run/docker.sock:/var/run/docker.sock
       - /dev:/dev # only for github actions
     environment:
@@ -139,7 +137,6 @@ services:
     volumes:
       - ./database/src:/app/src
       - ./database/.babelrc:/app/.babelrc
-      - ./zkp-utils:/app/node_modules/zkp-utils
       - ./database/config:/app/config
       - ./database/setup-mongo-acl-for-new-users.js:/app/setup-mongo-acl-for-new-users.js
     command: npm start

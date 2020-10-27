@@ -1,19 +1,19 @@
 import config from 'config';
-import utils from '../zkp-utils';
+import { shaHash } from 'zkp-utils';
+import { GN } from 'general-number';
 
-const { leftPadHex } = utils;
 const LEAF_HASHLENGTH = config.get('LEAF_HASHLENGTH');
 
 function parseMintCommitments(erc20, type, user) {
   return erc20[type].mintCommitments.map(value => {
     return {
-      value: leftPadHex(value.toString(16), 32),
+      value: new GN(value).hex(16),
       get commitment() {
-        return utils.concatenateThenHash(
-          `0x${utils.strip0x(erc20.contractAddress).padStart(64, '0')}`,
+        return shaHash(
+          erc20.contractAddress.hex(32),
           this.value,
           user.pk,
-          this.salt === undefined ? '0x0' : this.salt, // S_A - set at erc-20 commitment mint (step 18)
+          this.salt === undefined ? '0' : this.salt, // S_A - set at erc-20 commitment mint (step 18)
         );
       },
     };
@@ -23,14 +23,14 @@ function parseMintCommitments(erc20, type, user) {
 function parseTransferCommitments(erc20, type, user) {
   return erc20[type].transferCommitments.map(value => {
     return {
-      value: leftPadHex(value.toString(16), 32),
+      value: new GN(value).hex(16),
       receiver: { name: user.name },
       get commitment() {
-        return utils.concatenateThenHash(
-          `0x${utils.strip0x(erc20.contractAddress).padStart(64, '0')}`,
+        return shaHash(
+          erc20.contractAddress.hex(32),
           this.value,
           user.pk,
-          this.salt === undefined ? '0x0' : this.salt, // S_A - set at erc-20 commitment mint (step 18)
+          this.salt === undefined ? '0' : this.salt, // S_A - set at erc-20 commitment mint (step 18)
         );
       },
     };
@@ -44,7 +44,7 @@ export default {
     email: 'alice@ey.com',
     password: 'pass',
     get pk() {
-      return this.secretKey === undefined ? undefined : utils.hash(this.secretKey); // secretKey - set at login test suit (step 2)
+      return this.secretKey === undefined ? undefined : shaHash(this.secretKey); // secretKey - set at login test suit (step 2)
     },
   },
   bob: {
@@ -52,7 +52,7 @@ export default {
     email: 'bob@ey.com',
     password: 'pass',
     get pk() {
-      return this.secretKey === undefined ? undefined : utils.hash(this.secretKey); // secretKey - set at login test suit (step 2)
+      return this.secretKey === undefined ? undefined : shaHash(this.secretKey); // secretKey - set at login test suit (step 2)
     },
   },
   erc721: {
@@ -85,9 +85,9 @@ export default {
       },
       // commitment while mint
       get mintCommitment() {
-        return utils.concatenateThenHash(
-          `0x${utils.strip0x(erc721.contractAddress).padStart(64, '0')}`,
-          utils.strip0x(this.tokenId).slice(-(LEAF_HASHLENGTH * 2)),
+        return shaHash(
+          erc721.contractAddress.hex(32),
+          this.tokenId.slice(-(LEAF_HASHLENGTH * 2)),
           alice.pk,
           this.salt, // salt - set at erc-721 commitment mint (step 4)
         );
@@ -95,9 +95,9 @@ export default {
 
       // commitment while transfer
       get transferCommitment() {
-        return utils.concatenateThenHash(
-          `0x${utils.strip0x(erc721.contractAddress).padStart(64, '0')}`,
-          utils.strip0x(this.tokenId).slice(-(LEAF_HASHLENGTH * 2)),
+        return shaHash(
+          erc721.contractAddress.hex(32),
+          this.tokenId.slice(-(LEAF_HASHLENGTH * 2)),
           bob.pk,
           this.transferredSalt, // S_B - set at erc-721 commitment transfer to bob (step 5)
         );
@@ -114,10 +114,10 @@ export default {
     return {
       mintCommitments: parseMintCommitments(erc20, 'transfer', alice),
       transferCommitment: {
-        value: leftPadHex(erc20.transfer.transferCommitment.toString(16), 32),
+        value: new GN(erc20.transfer.transferCommitment).hex(16),
         get commitment() {
-          return utils.concatenateThenHash(
-            `0x${utils.strip0x(erc20.contractAddress).padStart(64, '0')}`,
+          return shaHash(
+            erc20.contractAddress.hex(32),
             this.value,
             bob.pk,
             this.salt === undefined ? '0x0' : this.salt, // S_E - set at erc-20 commitment transfer (step 12)
@@ -125,10 +125,10 @@ export default {
         },
       },
       changeCommitment: {
-        value: leftPadHex(erc20.transfer.changeCommitment.toString(16), 32),
+        value: new GN(erc20.transfer.changeCommitment).hex(16),
         get commitment() {
-          return utils.concatenateThenHash(
-            `0x${utils.strip0x(erc20.contractAddress).padStart(64, '0')}`,
+          return shaHash(
+            erc20.contractAddress.hex(32),
             this.value,
             alice.pk,
             this.salt === undefined ? '0x0' : this.salt, // S_F - set at erc-20 commitment transfer (step 12)
@@ -143,10 +143,10 @@ export default {
     const { alice, bob, erc20 } = this;
     return {
       mintCommitment: {
-        value: leftPadHex(erc20.batchTransfer.mintCommitment.toString(16), 32),
+        value: new GN(erc20.batchTransfer.mintCommitment).hex(16),
         get commitment() {
-          return utils.concatenateThenHash(
-            `0x${utils.strip0x(erc20.contractAddress).padStart(64, '0')}`,
+          return shaHash(
+            erc20.contractAddress.hex(32),
             this.value,
             alice.pk,
             this.salt === undefined ? '0x0' : this.salt, // S_A - set at erc-20 commitment mint (step 18)
@@ -163,12 +163,10 @@ export default {
     return {
       mintCommitments: erc20CommitmentBatchTransfer.transferCommitments,
       transferCommitment: {
-        get value() {
-          return leftPadHex(erc20.batchTransfer.mintCommitment.toString(16), 32);
-        },
+        value: new GN(erc20.batchTransfer.mintCommitment).hex(16),
         get commitment() {
-          return utils.concatenateThenHash(
-            `0x${utils.strip0x(erc20.contractAddress).padStart(64, '0')}`,
+          return shaHash(
+            erc20.contractAddress.hex(32),
             this.value,
             alice.pk,
             this.salt === undefined ? '0x0' : this.salt, // S_E - set at erc-20 commitment transfer (step 12)

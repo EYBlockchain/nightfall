@@ -73,11 +73,6 @@ fi
 printf "${GREEN}*** Pull zokrates docker image ***${NC}\n"
 docker pull zokrates/zokrates:0.5.1
 
-printf "${GREEN}*** Installing zkp-util dependencies ***${NC}\n"
-pushd zkp-utils
-npm ci
-popd
-
 printf "${GREEN}*** Installing zkp dependencies ***${NC}\n"
 pushd zkp
 npm i

@@ -1,7 +1,8 @@
 /* eslint-disable import/no-unresolved */
 
 import { erc20 } from '@eyblockchain/nightlite';
-import utils from 'zkp-utils';
+import { shaHash, randomHex } from 'zkp-utils';
+import { GN } from 'general-number';
 
 import Web3 from '../src/web3';
 import controller from '../src/f-token-controller';
@@ -72,22 +73,23 @@ if (process.env.COMPLIANCE !== 'true') {
     accounts = await Web3.connection().eth.getAccounts();
 
     fTokenShieldAddress = await getContractAddress('FTokenShield');
-    erc20Address = await getContractAddress('FToken');
-    const erc20AddressPadded = `0x${utils.strip0x(erc20Address).padStart(64, '0')}`;
+    erc20Address = new GN(await getContractAddress('FToken'));
 
     for (let i = 0; i < PROOF_LENGTH; i++) {
-      outputPublicKeys[i] = utils.strip0x(utils.hash(receiverSecretKeys[i]));
+      outputPublicKeys[i] = shaHash(receiverSecretKeys[i]);
     }
 
-    publicKeyAlice = utils.strip0x(utils.hash(secretKeyA));
+    publicKeyAlice = shaHash(secretKeyA);
 
-    inputCommitmentSalt = await utils.rndHex(32);
-    inputCommitmentId = utils.concatenateThenHash(
-      erc20AddressPadded,
+    inputCommitmentSalt = await randomHex(32);
+    inputCommitmentId = shaHash(
+      erc20Address.hex(32),
       inputAmount,
       publicKeyAlice,
       inputCommitmentSalt,
     );
+
+    erc20Address = erc20Address.hex();
   });
 
   // eslint-disable-next-line no-undef
@@ -173,7 +175,7 @@ if (process.env.COMPLIANCE !== 'true') {
       const d = '0x00000000000000000000000000000002';
       const e = '0x00000000000000000000000000000001';
       const f = '0x00000000000000000000000000000003';
-      const pkE = await utils.rndHex(32); // public key of Eve, who we transfer to
+      const pkE = await randomHex(32); // public key of Eve, who we transfer to
       const inputCommitments = [
         {
           value: c,
@@ -189,8 +191,8 @@ if (process.env.COMPLIANCE !== 'true') {
         },
       ];
       outputCommitments = [
-        { value: e, salt: await utils.rndHex(32) },
-        { value: f, salt: await utils.rndHex(32) },
+        { value: e, salt: await randomHex(32) },
+        { value: f, salt: await randomHex(32) },
       ];
 
       await erc20.transfer(

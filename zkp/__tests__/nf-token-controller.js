@@ -1,7 +1,8 @@
 /* eslint-disable import/no-unresolved */
 
 import { erc721 } from '@eyblockchain/nightlite';
-import utils from 'zkp-utils';
+import { randomHex, shaHash } from 'zkp-utils';
+import { GN } from 'general-number';
 
 import Web3 from '../src/web3';
 import controller from '../src/nf-token-controller';
@@ -34,41 +35,43 @@ if (process.env.COMPLIANCE !== 'true') {
     await Web3.waitTillConnected();
     accounts = await Web3.connection().eth.getAccounts();
     nfTokenShieldAddress = await getContractAddress('NFTokenShield');
-    erc721Address = await getContractAddress('NFTokenMetadata');
-    const erc721AddressPadded = `0x${utils.strip0x(erc721Address).padStart(64, '0')}`;
-    tokenIdA = await utils.rndHex(32);
-    tokenIdB = await utils.rndHex(32);
-    tokenIdG = await utils.rndHex(32);
-    publicKeyA = utils.ensure0x(utils.strip0x(utils.hash(secretKeyA)).padStart(32, '0'));
-    publicKeyB = utils.ensure0x(utils.strip0x(utils.hash(secretKeyB)).padStart(32, '0'));
-    saltAliceA = await utils.rndHex(32);
-    saltAliceG = await utils.rndHex(32);
-    saltAliceToBobA = await utils.rndHex(32);
-    saltAliceToBobG = await utils.rndHex(32);
-    commitmentAliceA = utils.concatenateThenHash(
-      erc721AddressPadded,
-      utils.strip0x(tokenIdA).slice(-32 * 2),
+    erc721Address = new GN(await getContractAddress('NFTokenMetadata'));
+
+    tokenIdA = await randomHex(32);
+    tokenIdB = await randomHex(32);
+    tokenIdG = await randomHex(32);
+    publicKeyA = shaHash(secretKeyA);
+    publicKeyB = shaHash(secretKeyB);
+    saltAliceA = await randomHex(32);
+    saltAliceG = await randomHex(32);
+    saltAliceToBobA = await randomHex(32);
+    saltAliceToBobG = await randomHex(32);
+    commitmentAliceA = shaHash(
+      erc721Address.hex(32),
+      tokenIdA.slice(-32 * 2),
       publicKeyA,
       saltAliceA,
     );
-    commitmentAliceG = utils.concatenateThenHash(
-      erc721AddressPadded,
-      utils.strip0x(tokenIdG).slice(-32 * 2),
+    commitmentAliceG = shaHash(
+      erc721Address.hex(32),
+      tokenIdG.slice(-32 * 2),
       publicKeyA,
       saltAliceG,
     );
-    commitmentBobA = utils.concatenateThenHash(
-      erc721AddressPadded,
-      utils.strip0x(tokenIdA).slice(-32 * 2),
+    commitmentBobA = shaHash(
+      erc721Address.hex(32),
+      tokenIdA.slice(-32 * 2),
       publicKeyB,
       saltAliceToBobA,
     );
-    commitmentBobG = utils.concatenateThenHash(
-      erc721AddressPadded,
-      utils.strip0x(tokenIdG).slice(-32 * 2),
+    commitmentBobG = shaHash(
+      erc721Address.hex(32),
+      tokenIdG.slice(-32 * 2),
       publicKeyB,
       saltAliceToBobG,
     );
+
+    erc721Address = erc721Address.hex();
   });
 
   describe('nf-token-controller.js tests', () => {
