@@ -36,7 +36,7 @@ export async function getAddressFromName(name) {
 
 export async function getNameFromAddress(address) {
   const pkd = await getDeployedPKD();
-  return hexToUtf8(await pkd.getNameFromAddress(utils.ensure0x(address)).call());
+  return hexToUtf8(await pkd.getNameFromAddress(ensure0x(address)).call());
 }
 
 export async function getNames() {
