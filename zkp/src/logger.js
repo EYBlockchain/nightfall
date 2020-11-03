@@ -28,6 +28,7 @@ if (config.get('isLoggerEnable')) {
   });
   winstonLogger.info.bind(winstonLogger);
   winstonLogger.error.bind(winstonLogger);
+  winstonLogger.debug.bind(winstonLogger);
 }
 
 const logger = winstonLogger || consoleLogger;
