@@ -9,14 +9,16 @@ jobs:
   eslint-test:
     name: Run eslint check
     runs-on: ubuntu-18.04
+    env:
+      NPM_TOKEN: ${{ secrets.GITHUB_TOKEN }}
     steps:
       - uses: actions/checkout@v1
       - uses: actions/setup-node@v1
         with:
           node-version: '14.15.0'
-      - run: npm ci
       - name: run npm install in all microservices
         run: |
+          npm i
           cd accounts/ && npm i && cd ..
           cd api-gateway/ && npm i && cd ..
           cd database/ && npm i && cd ..
