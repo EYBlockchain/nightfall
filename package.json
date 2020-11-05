@@ -53,5 +53,11 @@
     "superagent": "^5.1.0",
     "superagent-prefix": "0.0.2",
     "zkp-utils": "^1.0.8"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "npm run lint",
+      "commit-msg": "commitlint -E HUSKY_GIT_PARAMS"
+    }
   }
 }
