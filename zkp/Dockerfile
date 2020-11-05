@@ -1,7 +1,7 @@
 # Pull in a Zokrates container so that we can pull its contents into the below container.
 FROM zokrates/zokrates:0.5.1 as builder
 
-FROM node:11.15
+FROM node:14.15
 
 ARG NPM_TOKEN
 

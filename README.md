@@ -52,10 +52,10 @@ The Nightfall demonstration requires the following software to run:
     `python --version`
   - You may need to run `npm config set python /usr/bin/python2.7` (or wherever your python 2
     location is)
-- Node (tested with node 10.15.3) with npm and node-gyp.
-  - Will not work with node v12. To check the node version, run `node --version`
-  - If using mac/brew, then you may need to run `brew install node@10` and
-    `brew link --overwrite node@10 --force`
+- Node (tested with node 14.15.0) with npm and node-gyp.
+  - Will not work with node v15. To check the node version, run `node --version`
+  - If using mac/brew, then you may need to run `brew install node@14` and
+    `brew link --overwrite node@14 --force`
 - Xcode Command line tools:
   - If running macOS, install Xcode then run `xcode-select --install` to install command line tools.
 
