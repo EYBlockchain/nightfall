@@ -5,7 +5,7 @@ import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import UserService from '../../services/user.service';
 import FtCommitmentService from '../../services/ft-commitment.service';
 import { UtilService } from '../../services/utils/util.service';
-import { toastrConfig } from '../../config/config'
+import { toastrConfig } from '../../config/config';
 
 /**
  *  This component, which is used for rendering the page of Mint ERC-20 token commitment.

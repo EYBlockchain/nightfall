@@ -5,7 +5,7 @@ import FtCommitmentService from '../../services/ft-commitment.service';
 import UserService from '../../services/user.service';
 import { UtilService } from '../../services/utils/util.service';
 import { NgSelectComponent } from '@ng-select/ng-select';
-import { toastrConfig } from '../../config/config'
+import { toastrConfig } from '../../config/config';
 
 
 /**
@@ -137,7 +137,7 @@ export default class FtCommitmentConsolidationTrasnferComponent implements OnIni
     if (!count || count !== 20) {
       this.toastr.warning('Invalid commitment Selection.', 'Warning');
       return;
-    } 
+    }
 
     if (!this.receiverName) {
       this.toastr.warning('All fields are mandatory', 'Warning');

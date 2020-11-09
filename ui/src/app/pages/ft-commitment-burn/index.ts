@@ -5,7 +5,7 @@ import { Router } from '@angular/router';
 import {UtilService} from '../../services/utils/util.service';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import UserService from '../../services/user.service';
-import { toastrConfig } from '../../config/config'
+import { toastrConfig } from '../../config/config';
 
 /**
  *  Burn ft-commitment component, which is used for rendering the page of burn fungible token commitment.
@@ -121,7 +121,7 @@ export default class FtCommitmentBurnComponent implements OnInit , AfterContentI
     this.isRequesting = true;
     this.ftCommitmentService.burnFTCommitment(commitment, this.receiverName).subscribe( data => {
         this.isRequesting = false;
-        this.toastr.show(`Burning fungible token commitment.`,'', toastrConfig, 'burnFTCommitment');
+        this.toastr.show(`Burning fungible token commitment.`, '', toastrConfig, 'burnFTCommitment');
 
         // delete used commitment from commitment list
         transactions.splice(transactions.indexOf(commitment), 1);

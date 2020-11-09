@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import NftCommitmentService from '../../services/nft-commitment.service';
 import { NgSelectComponent } from '@ng-select/ng-select';
 import UserService from '../../services//user.service';
-import { toastrConfig } from '../../config/config'
+import { toastrConfig } from '../../config/config';
 
 /**
  * Burn private token component, which is used for rendering the page of burn ERC-721 commitment.
@@ -87,7 +87,7 @@ export default class NftCommitmentBurnComponent implements OnInit, AfterContentI
     } = this;
     const selectedCommitment = this.selectedCommitmentList[0];
     if (!selectedCommitment) {
-      this.toastr.warning('All fields are mandatory.','Warning');
+      this.toastr.warning('All fields are mandatory.', 'Warning');
       return;
     }
     this.isRequesting = true;

@@ -114,7 +114,7 @@ export default class FtCommitmentService {
    *
    * @param inputCommitments {Object} selected commitments
    * @param outputCommitment {Object} values array of transferred and change
-   * @param receiver {String} receiver 
+   * @param receiver {String} receiver
    */
   consolidationFTCommitmentTransfer (inputCommitments, outputCommitment, receiver) {
     const httpOptions = {

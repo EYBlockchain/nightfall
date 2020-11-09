@@ -5,7 +5,7 @@ import NftCommitmentService from '../../services/nft-commitment.service';
 import UserService from '../../services/user.service';
 import { UtilService } from '../../services/utils/util.service';
 import { NgSelectComponent } from '@ng-select/ng-select';
-import { toastrConfig } from '../../config/config'
+import { toastrConfig } from '../../config/config';
 
 /**
  *  Spend token component, which is used for rendering the page of transfer ERC-721 token commitment to the selected receipent.

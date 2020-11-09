@@ -51,10 +51,10 @@ export class NavComponent implements OnInit, OnDestroy {
       this.parseDataAndShowToaster(data);
     });
   }
-  
+
   toastRemover(action) {
     for (const toast of this.toastr.toasts) {
-      if (toast.portal.instance.toastPackage.toastType == action) {
+      if (toast.portal.instance.toastPackage.toastType === action) {
         this.toastr.clear(toast.toastId);
         break;
       }

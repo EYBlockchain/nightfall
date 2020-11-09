@@ -73,7 +73,7 @@ export default class FtCommitmentListComponent implements OnInit {
         data['data'] &&
         data['data']['data'] &&
         data['data']['data'].length) {
-          this.totalCollection = parseInt(data['data']['totalCount']);
+          this.totalCollection = Number(data['data']['totalCount']);
           this.transactions = data['data']['data'].map((tx, indx) => {
             tx.selected = false;
             tx.id = indx;

@@ -41,7 +41,7 @@ export class UtilService {
   }
 
   validate(evt) {
-    const theEvent = evt || window.event;
+    const theEvent = evt;
     let key;
     if (theEvent.type === 'paste') { // Handle paste
         key = evt.clipboardData.getData('text/plain');
@@ -57,7 +57,7 @@ export class UtilService {
   }
 
   allowLowercase(evt) {
-    const theEvent = evt || window.event;
+    const theEvent = evt;
     let key;
     if (theEvent.type === 'paste') { // Handle paste
         key = evt.clipboardData.getData('text/plain');
@@ -90,7 +90,7 @@ export class UtilService {
   }
 
   validateTransactionHash(evt) {
-    const theEvent = evt || window.event;
+    const theEvent = evt;
     let key;
     if (theEvent.type === 'paste') {
         key = evt.clipboardData.getData('text/plain');

@@ -5,7 +5,7 @@ import NftCommitmentService from '../../services/nft-commitment.service';
 import NftService from '../../services/nft.service';
 import { UtilService } from '../../services/utils/util.service';
 import { NgSelectComponent } from '@ng-select/ng-select';
-import { toastrConfig } from '../../config/config'
+import { toastrConfig } from '../../config/config';
 
 /**
  *  Mint token component, which is used for rendering the page of Mint ERC-721 token commitment.
