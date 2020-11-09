@@ -15,7 +15,9 @@ import { LocalDataSource } from 'ng2-smart-table';
   selector: 'app-user-accounts',
   templateUrl: './user-accounts.component.html',
   styleUrls: ['./user-accounts.component.css'],
-  providers: [UserService]
+  providers: [
+    { provide: UserService, useValue: '<%= APP_BASE %>' }
+  ]
 })
 export class UserAccountsComponent extends Config implements OnInit {
 
