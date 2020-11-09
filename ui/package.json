@@ -26,6 +26,7 @@
   ],
   "license": "CC0-1.0",
   "dependencies": {
+    "@akveo/ng2-completer": "^9.0.1",
     "@angular-devkit/core": "^9.0.0",
     "@angular/animations": "9.0.0",
     "@angular/common": "9.0.0",
@@ -55,7 +56,7 @@
     "zone.js": "~0.10.2"
   },
   "devDependencies": {
-    "@angular-devkit/build-angular": "~0.900.0",
+    "@angular-devkit/build-angular": "^0.1002.0",
     "@angular/cli": "9.0.0",
     "@angular/compiler-cli": "9.0.0",
     "@angular/language-service": "9.0.0",
@@ -68,15 +69,15 @@
     "dotenv": "^8.2.0",
     "jasmine-core": "3.5.0",
     "jasmine-spec-reporter": "~4.2.1",
-    "karma": "~4.1.0",
+    "karma": "^5.2.3",
     "karma-chrome-launcher": "~2.2.0",
     "karma-coverage-istanbul-reporter": "^2.0.5",
     "karma-jasmine": "~2.0.1",
     "karma-jasmine-html-reporter": "^1.4.0",
-    "protractor": "6.0.0",
+    "protractor": "^7.0.0",
     "ts-node": "~4.1.0",
     "tslint": "^5.18.0",
-    "typescript": "3.7.5",
+    "typescript": "3.9.2",
     "yargs": "^15.3.1"
   }
 }
