@@ -62,7 +62,7 @@ export default class FtCommitmentTrasnferComponent implements OnInit , AfterCont
   /**
    * Reference of combo box
    */
-  @ViewChild('select', {static: false}) select: NgSelectComponent;
+  @ViewChild('select') select: NgSelectComponent;
 
   constructor(
     private toastr: ToastrService,

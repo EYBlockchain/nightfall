@@ -54,7 +54,7 @@ export default class NftTransferComponent implements OnInit, AfterContentInit {
   /**
    * Reference of combo box
    */
-  @ViewChild('select', {static: false}) select: NgSelectComponent;
+  @ViewChild('select') select: NgSelectComponent;
 
   constructor(
     private toastr: ToastrService,

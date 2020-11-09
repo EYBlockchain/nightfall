@@ -56,7 +56,7 @@ export default class NftCommitmentBurnComponent implements OnInit, AfterContentI
   /**
    * Reference of combo box
    */
-  @ViewChild('select', {static: false}) select: NgSelectComponent;
+  @ViewChild('select') select: NgSelectComponent;
 
   constructor(
     private toastr: ToastrService,
