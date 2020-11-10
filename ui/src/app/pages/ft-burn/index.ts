@@ -40,7 +40,7 @@ export default class FtBurnComponent implements OnInit {
     private toastr: ToastrService,
     private ftService: FtService,
     private userService: UserService,
-    private utilService: UtilService,
+    public utilService: UtilService,
     private router: Router
   ) {
 

@@ -33,10 +33,12 @@ export default class AdminComponent implements OnInit {
    */
   decryptedData: any;
 
+  transactionType: string;
+
   constructor(
     private toastr: ToastrService,
     private userService: UserService,
-    private utilService: UtilService,
+    public utilService: UtilService,
     private router: Router
   ) {
 

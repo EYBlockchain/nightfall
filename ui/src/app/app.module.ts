@@ -1,5 +1,5 @@
 import { InjectableRxStompConfig, RxStompService, rxStompServiceFactory } from '@stomp/ng2-stompjs';
-
+import '@angular/compiler';
 import { myRxStompConfig } from './rx-stomp.config';
 import { SpinnerComponent } from './shared/spinner/spinner.component';
 import { BrowserModule } from '@angular/platform-browser';

@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "ZKP Demo": {
+    "ZKP-Demo": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
@@ -11,6 +11,9 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "allowedCommonJsDependencies": [
+              "ng2-simple-global"
+            ],
             "aot": true,
             "outputPath": "dist",
             "index": "src/index.html",
@@ -59,18 +62,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "ZKP Demo:build"
+            "browserTarget": "ZKP-Demo:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "ZKP Demo:build:production"
+              "browserTarget": "ZKP-Demo:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "ZKP Demo:build"
+            "browserTarget": "ZKP-Demo:build"
           }
         },
         "test": {
@@ -103,7 +106,7 @@
         }
       }
     },
-    "ZKP Demo-e2e": {
+    "ZKP-Demo-e2e": {
       "root": "",
       "sourceRoot": "",
       "projectType": "application",
@@ -112,7 +115,7 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "./protractor.conf.js",
-            "devServerTarget": "ZKP Demo:serve"
+            "devServerTarget": "ZKP-Demo:serve"
           }
         },
         "lint": {
@@ -125,11 +128,11 @@
       }
     }
   },
-  "defaultProject": "ZKP Demo",
+  "defaultProject": "ZKP-Demo",
   "schematics": {
     "@schematics/angular:component": {
       "prefix": "app",
-      "styleext": "css"
+      "style": "css"
     },
     "@schematics/angular:directive": {
       "prefix": "app"

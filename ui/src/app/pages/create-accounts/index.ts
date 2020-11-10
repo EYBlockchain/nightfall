@@ -30,7 +30,7 @@ export default class CreateAccountsComponent implements OnInit {
       private userService: UserService,
       private router: Router,
       private toastr: ToastrService,
-      private utilService: UtilService) {
+      public utilService: UtilService) {
    }
 
    ngOnInit() {

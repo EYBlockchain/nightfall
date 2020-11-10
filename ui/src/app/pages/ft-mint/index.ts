@@ -32,7 +32,7 @@ export default class FtMintComponent implements OnInit {
   constructor(
     private toastr: ToastrService,
     private ftService: FtService,
-    private utilService: UtilService,
+    public utilService: UtilService,
     private router: Router
   ) {
 

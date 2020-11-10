@@ -109,6 +109,7 @@ services:
       - ./ui/src:/app/src
       - ./ui/angular.json:/app/angular.json
       - ./ui/tsconfig.json:/app/tsconfig.json
+      - ./ui/tsconfig.base.json:/app/tsconfig.base.json
     ports:
       - '8000:80'
     environment:
