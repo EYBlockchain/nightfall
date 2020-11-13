@@ -18,11 +18,11 @@ jobs:
           node-version: '14.15.0'
       - name: run npm install in all microservices
         run: |
-          npm i
-          cd accounts/ && npm i && cd ..
-          cd api-gateway/ && npm i && cd ..
-          cd database/ && npm i && cd ..
-          cd offchain/ && npm i && cd ..
+          npm ci
+          cd accounts/ && npm ci && cd ..
+          cd api-gateway/ && npm ci && cd ..
+          cd database/ && npm ci && cd ..
+          cd offchain/ && npm ci && cd ..
           cd zkp/ && npm i && cd ..
       - name: Run check for ESLint errors
         run: npm run lint
