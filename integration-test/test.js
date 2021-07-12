@@ -4,7 +4,7 @@ import { expect } from 'chai';
 import request from 'superagent';
 import prefix from 'superagent-prefix';
 import config from 'config';
-import { GN } from 'general-number';
+import { GN } from '@eyblockchain/general-number';
 
 import testData from './testData';
 

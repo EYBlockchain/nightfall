@@ -1,7 +1,7 @@
 import { exec } from 'child_process';
 import mongoose from 'mongoose';
 import config from 'config';
-import { randomHex, shaHash } from 'zkp-utils';
+import { randomHex, shaHash } from '@eyblockchain/zkp-utils';
 
 import { COLLECTIONS } from '../common/constants';
 import { dbConnections, userDBs } from '../common/dbConnections';

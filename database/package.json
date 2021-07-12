@@ -19,6 +19,7 @@
   ],
   "license": "CC0-1.0",
   "dependencies": {
+    "@eyblockchain/zkp-utils": "^1.0.9",
     "body-parser": "^1.19.0",
     "config": "^3.2.2",
     "cors": "^2.8.5",
@@ -26,8 +27,7 @@
     "minimist": ">=0.2.1",
     "mocha": "^6.1.4",
     "mongoose": "5.10.7",
-    "winston": "^3.1.0",
-    "zkp-utils": "^1.0.7"
+    "winston": "^3.1.0"
   },
   "devDependencies": {
     "@babel/core": "7.11.6",

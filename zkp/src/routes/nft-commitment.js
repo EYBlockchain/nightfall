@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { erc721 } from '@eyblockchain/nightlite';
-import { randomHex } from 'zkp-utils';
+import { randomHex } from '@eyblockchain/zkp-utils';
 
 import nfController from '../nf-token-controller';
 import { getContractAddress } from '../contractUtils';

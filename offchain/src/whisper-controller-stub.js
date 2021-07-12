@@ -8,7 +8,7 @@ the same node server though (nothing gets passed through the blockchain).
 @module whisper-controller-stub
 */
 
-import { strip0x, randomHex, ensure0x } from 'zkp-utils';
+import { strip0x, randomHex, ensure0x } from '@eyblockchain/zkp-utils';
 import EventEmitter from 'events';
 
 class MyEmitter extends EventEmitter {}

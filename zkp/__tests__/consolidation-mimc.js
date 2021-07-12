@@ -1,8 +1,8 @@
 /* eslint-disable import/no-unresolved */
 
 import { erc20 } from '@eyblockchain/nightlite';
-import { randomHex, shaHash } from 'zkp-utils';
-import { GN } from 'general-number';
+import { randomHex, shaHash } from '@eyblockchain/zkp-utils';
+import { GN } from '@eyblockchain/general-number';
 
 import Web3 from '../src/web3';
 import controller from '../src/f-token-controller';

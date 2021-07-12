@@ -1,5 +1,5 @@
-import { mimcHash, ensure0x } from 'zkp-utils';
-import { GN } from 'general-number';
+import { mimcHash, ensure0x } from '@eyblockchain/zkp-utils';
+import { GN } from '@eyblockchain/general-number';
 
 import {
   getWeb3ContractInstance,

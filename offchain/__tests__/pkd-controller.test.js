@@ -4,7 +4,7 @@
 Authors:
 */
 
-import { utf8ToHex, hexToUtf8, randomHex } from 'zkp-utils';
+import { utf8ToHex, hexToUtf8, randomHex } from '@eyblockchain/zkp-utils';
 
 import {
   isNameInUse,

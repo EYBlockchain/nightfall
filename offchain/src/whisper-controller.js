@@ -4,7 +4,7 @@
 @author Westlad
 */
 
-import { strip0x, hexToUtf8, ensure0x } from 'zkp-utils';
+import { strip0x, hexToUtf8, ensure0x } from '@eyblockchain/zkp-utils';
 import Web3 from './web3';
 import logger from './logger';
 

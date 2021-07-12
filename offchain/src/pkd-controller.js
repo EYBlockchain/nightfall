@@ -5,7 +5,7 @@ The functions are fairly self-documenting so not individually commented.
 */
 
 import fs from 'fs';
-import { utf8ToHex, hexToUtf8, ensure0x } from 'zkp-utils';
+import { utf8ToHex, hexToUtf8, ensure0x } from '@eyblockchain/zkp-utils';
 
 import Web3 from './web3';
 

@@ -1,6 +1,6 @@
 import { Router } from 'express';
 import { erc20, elgamal } from '@eyblockchain/nightlite';
-import { randomHex } from 'zkp-utils';
+import { randomHex } from '@eyblockchain/zkp-utils';
 
 import fTokenController from '../f-token-controller';
 import { getWeb3ContractInstance, getContractAddress } from '../contractUtils';
